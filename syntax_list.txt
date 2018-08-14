@@ -1,0 +1,18 @@
+\                   escape reserved symbols
+# or ;                   comments
+
+[]                  word group
+~[]                 alias
+%[]                 intent (generate them all)
+%[]()               intent (with number of generations asked)
+@[]                 slot
+
+[name#precision]    identifier of the word group is `name` but gives a `precision`
+                    for a word group: ignore `precision`
+                    for an alias: consider that the identifier is `name` => ~[name] identifies every ~[name#anything]
+                    for an intent: ignore `precision`
+                    for a slot: `name` is the slot identifier but `precision` maps to different values (same as alias)
+[any?]              word group `any` has 50% chance of being generated
+[any?id]            generation of `any` is identified as `id` and any word group with generation identified the same will be generated iff `any` was generated
+[any?/60]           word group `any` has 60% chance of being generated
+[any?id/70]         id.
