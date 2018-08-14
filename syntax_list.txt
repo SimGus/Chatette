@@ -4,7 +4,8 @@
 []                  word group
 ~[]                 alias
 %[]                 intent (generate them all)
-%[]()               intent (with number of generations asked)
+%[](2)              intent (with number of generations asked)
+%[]()
 @[]                 slot
 
 [name#precision]    identifier of the word group is `name` but gives a `precision`
@@ -16,3 +17,5 @@
 [any?id]            generation of `any` is identified as `id` and any word group with generation identified the same will be generated iff `any` was generated
 [any?/60]           word group `any` has 60% chance of being generated
 [any?id/70]         id.
+[any#precision?id/20]
+[&name]             `name` can start with a lowercase or uppercase letter (50% chance)
