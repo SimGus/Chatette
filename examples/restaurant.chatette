@@ -1,0 +1,44 @@
+; Fed this file, Chatette will generate a dataset of sentences with two intents:
+; greeting the interlocutor and telling them what kind of cuisine the speaker
+; would want
+
+;================== Intent definitions =======================
+%[&greet]
+    ~[greet]
+
+%[&restaurant_choice](3)
+    ~[greet?] ~[I] ~[want to eat] @[cuisine_type] cuisine
+
+;================== Alias definitions =======================
+~[greet]
+    hi
+    hello
+
+~[&I]
+    i
+
+~[want to eat]
+    ~[I] ~[want#space] eat
+    ~[I]~[want#no space] eat
+
+~[want#space]
+    want to
+    would [really?] like to   ; either `would really like to` or `would like to` will be generated
+~[want#no space]
+    'd like to
+
+~[italian]
+    italian
+
+~[french]
+    french
+    francaise
+
+~[mexican]
+    mexican
+
+;================== Slot definitions =========================
+@[cuisine_type]
+    ~[italian]
+    ~[french]
+    ~[mexican]
