@@ -17,4 +17,4 @@
 [any?/60]           word group `any` has 60% chance of being generated
 [any?id/70]         id.
 [any#precision?id/20]
-[&name]             `name` will be generated starting with a lowercase or uppercase letter (50% chance)
+[&name]             `name` will be generated starting with a lowercase or uppercase letter (50% chance) /!\ not usable in a top declaration

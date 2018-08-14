@@ -3,23 +3,20 @@
 ; would want
 
 ;================== Intent definitions =======================
-%[&greet]
-    ~[greet]
+%[greet]
+    ~[&greet]
 
 %[&restaurant_choice](3)
-    ~[greet?] ~[I] ~[want to eat] @[cuisine_type] cuisine
+    ~[&greet?] ~[i want to] eat @[cuisine_type] cuisine.
 
 ;================== Alias definitions =======================
 ~[greet]
     hi
     hello
 
-~[&I]
-    i
-
-~[want to eat]
-    ~[I] ~[want#space] eat
-    ~[I]~[want#no space] eat
+~[i want to]
+    [&i] ~[want#space]
+    [&I]~[want#no space]
 
 ~[want#space]
     want to
