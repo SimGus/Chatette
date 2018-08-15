@@ -58,17 +58,21 @@ def get_unit_type(unit):
             "something that was not a unit")
 
 
-def split_contents(text):
+def split_contents(text, accept_alt_solt_val=False):
     """
     Splits `text` into a list of words and units
     (word groups, aliases, slots and intents).
     Keeps also track of units that have no space between them (this info is
     placed in the returned list).
+    If `accept_alt_solt_val` is `True`, expressions after a `=` will be considered
+    to be the slot value name for the splitted expression. In this case, the
+    return value will be `(alt_name, list)`.
     """
     words_and_units_raw = []
     current = ""
     escaped = False
     space_just_seen = False
+    must_parse_alt_slot_val = False
     for c in text:
         # Manage character escapement
         if escaped:
@@ -101,12 +105,21 @@ def split_contents(text):
         elif space_just_seen and current == "" and is_start_unit_sym(c):
             words_and_units_raw.append(' ')
             current += c
+        elif accept_alt_solt_val and c == Parser.ALT_SLOT_VALUE_NAME_SYM:
+            must_parse_alt_slot_val = True
+            break
         # Any other character
         else:
             current += c
 
         if not c.isspace():
             space_just_seen = False
+
+    # Find the alternative slot value name if needed
+    alt_slot_val_name = None
+    if must_parse_alt_slot_val:
+        alt_slot_val_name = \
+            text[text.find(Parser.ALT_SLOT_VALUE_NAME_SYM):][1:].lstrip()
 
     # Make a list of unit from this parsing
     words_and_units = []
@@ -144,6 +157,8 @@ def split_contents(text):
                     "leading-space": not no_leading_space,
                 })
 
+    if accept_alt_solt_val:
+        return (alt_slot_val_name, words_and_units)
     return words_and_units
 
 
@@ -224,6 +239,8 @@ class Parser():
     UNIT_CLOSE_SYM = ']'
 
     PRECISION_SYM = '#'
+
+    ALT_SLOT_VALUE_NAME_SYM = '='
 
     # This regex finds patterns like this `[name#precision?randgen/percentgen]`
     # with `precision`, `randgen` and `percentgen` optional
@@ -346,7 +363,12 @@ class Parser():
             stripped_line = line.lstrip()
             indentation_nb = check_indentation(indentation_nb, line, stripped_line)
 
-            expressions.append(split_contents(stripped_line))
+            (alt_slot_val_name, expression) = \
+                split_contents(stripped_line, accept_alt_solt_val=True)
+            expressions.append({
+                "slot-value-name": alt_slot_val_name,
+                "expression": expression,
+            })
 
         # Put the new definition in the slot dict
         if slot_name in self.slots:
