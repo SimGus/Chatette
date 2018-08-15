@@ -20,3 +20,5 @@
 [&name]             `name` will be generated starting with a lowercase or uppercase letter (50% chance) /!\ not usable in a top declaration
 
 ... = slot_value    inside a slot declaration, when generating the string `...` for the slot, it will give it the value name `slot value` (everything that comes after `=` lstriped)
+
+|path/to/file       include the contents of that file inside the current file with the same indentation as this line
