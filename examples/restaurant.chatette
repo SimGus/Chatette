@@ -6,7 +6,7 @@
 %[greet]
     ~[&greet]
 
-%[&restaurant_choice](3)
+%[&restaurant_choice](3) ; Will generate three utterances
     ~[&greet?] ~[i want to] eat @[cuisine_type] cuisine.
 
 ;================== Alias definitions =======================

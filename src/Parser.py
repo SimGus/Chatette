@@ -162,7 +162,7 @@ def split_contents(text, accept_alt_solt_val=False):
     return words_and_units
 
 
-def parse_unit(unit):
+def parse_unit(unit):  # TODO remove comments before this
     """
     Parses a unit (left stripped) and returns
     (unit name, precision, randgen, percentgen) with `None` values for those
@@ -200,6 +200,25 @@ def parse_unit(unit):
                 (self.in_file.name, self.line_nb, start_index, unit))
 
     return (name, precision, randgen, percentgen)
+
+def find_nb_gen_asked(intent):  # TODO remove comments before this
+    """
+    Finds the number of generation asked for the provided intent string and
+    returns it (or `None` if it wasn't provided).
+    """
+    nb_gen_asked = None
+    one_found = False
+    for match in Parser.pattern_nb_gen_asked.finditer(intent):
+        start_index = match.start()
+        if one_found:
+            raise SyntaxError("Expected only one number of generation asked",
+                (self.in_file.name, self.line_nb, start_index, unit))
+        else:
+            one_found = True
+        match = match.groupdict()
+
+        nb_gen_asked = match["nbgen"]
+    return nb_gen_asked
 
 
 def check_indentation(indentation_nb, line, stripped_line):
@@ -246,6 +265,7 @@ class Parser():
     # with `precision`, `randgen` and `percentgen` optional
     # TODO make this reflect the state of the symbols defined before
     pattern_modifiers = re.compile(r"\[(?P<name>[^#\[\]\?]*)(?:#(?P<precision>[^#\[\]\?]*))?(?:\?(?P<randgen>[^#\[\]\?/]*)(?:/(?P<percentgen>[^#\[\]\?]*))?)?\]")
+    pattern_nb_gen_asked = re.compile(r"\]\((?P<nbgen>[0-9]+)\)")
 
 
     def __init__(self, input_file):
@@ -276,7 +296,7 @@ class Parser():
         line = None
         while line != "":
             line = self.read_line()
-            stripped_line = line.lstrip()
+            stripped_line = line.lstrip() # TODO Strip comments
             line_type = get_top_level_line_type(line, stripped_line)
 
             if line_type == LineType.empty or line_type == LineType.comment:
@@ -398,11 +418,51 @@ class Parser():
         and adds the relevant info to the list of intents.
         """
         printDBG("intent: "+first_line.strip())
+        # Manage the intent declaration
+        (intent_name, intent_precision, randgen, percentgen) = \
+            parse_unit(first_line)
+        if randgen is not None:
+            raise SyntaxError("Declarations cannot have a named random generation modifier",
+                    (self.in_file.name, self.line_nb, 0, line))
+        if percentgen is not None:
+            raise SyntaxError("Declarations cannot have a random generation modifier",
+                    (self.in_file.name, self.line_nb, 0, line))
+        nb_gen_asked = find_nb_gen_asked(first_line)
+
+        # Manage the contents
+        expressions = []
         indentation_nb = None
         while self.is_inside_decl():
             line = self.read_line()
             stripped_line = line.lstrip()
             indentation_nb = check_indentation(indentation_nb, line, stripped_line)
+
+            expressions.append(split_contents(stripped_line))
+
+        # Put the new definition in the intent dict
+        if intent_name in self.intents:
+            if intent_precision is None:
+                raise SyntaxError("Found a definition without precision for intent '"
+                    +intent_name+"' while another definition was already found",
+                    (self.in_file.name, self.line_nb, 0, first_line))
+            else:
+                self.intents[intent_name].append({
+                    "nb-gen-asked": nb_gen_asked,
+                    "precision": intent_precision,
+                    "expressions": expressions,
+                })
+        else:
+            if intent_precision is None:
+                self.intents[intent_name] = {
+                    "nb-gen-asked": nb_gen_asked,
+                    "expressions": expressions,
+                }
+            else:
+                self.intents[intent_name] = [{
+                    "nb-gen-asked": nb_gen_asked,
+                    "precision": intent_precision,
+                    "expressions": expressions,
+                }]
 
 
     def printDBG(self):
@@ -421,16 +481,33 @@ class Parser():
 
         print("\nSlots:")
         for name in self.slots:
-            current_alias_def = self.slots[name]
+            current_slot_def = self.slots[name]
             print("\t"+name+": ")
-            if isinstance(current_alias_def, list):
-                for precised_def in current_alias_def:
+            if isinstance(current_slot_def, list):
+                for precised_def in current_slot_def:
                     print("\t\tprecision: "+precised_def["precision"])
                     for expr in precised_def["expressions"]:
                         print("\t\t\texpression: "+str(expr))
             else:
-                for expr in current_alias_def["expressions"]:
+                for expr in current_slot_def["expressions"]:
                     print("\t\texpression: "+str(expr))
+
+        print("\nIntents:")
+        for name in self.intents:
+            current_intent_def = self.intents[name]
+            if isinstance(current_intent_def, list):
+                print("\t"+name+":")
+                for precised_def in current_intent_def:
+                    print("\t\tprecision: "+precised_def["precision"]
+                        +" to generate "+str(precised_def["nb-gen-asked"])+"x")
+                    for expr in precised_def["expressions"]:
+                        print("\t\t\texpression: "+str(expr))
+            else:
+                print("\t"+name+"(to generate "
+                    +str(current_intent_def["nb-gen-asked"])+"x): ")
+                for expr in current_intent_def["expressions"]:
+                    print("\t\texpression: "+str(expr))
+
 
 if __name__ == "__main__":
     import warnings
