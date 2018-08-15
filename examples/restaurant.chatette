@@ -31,11 +31,11 @@
     french
     francaise
 
-~[mexican nom nom]
+~[mexican (nom nom)]
     mexican
 
 ;================== Slot definitions =========================
 @[cuisine_type]
-    ~[italian]
-    ~[french]
-    ~[mexican nom nom] = mexican
+    ~[italian]  ; if this is generated, this slot will have the value named `italian`
+    ~[french]   ; if this is generated, this slot will have the value named `french`
+    ~[mexican (nom nom)] = mexican    ; if this is generated, this slot will have the value named `mexican`

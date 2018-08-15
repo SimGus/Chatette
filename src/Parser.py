@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from enum import Enum
+import re
 
 from utils import *
 
@@ -32,6 +33,13 @@ class Parser():
     INTENT_SYM = '%'
     UNIT_OPEN_SYM = '['
     UNIT_CLOSE_SYM = ']'
+
+    PRECISION_SYM = '#'
+
+    # This regex finds patterns like this `[name#precision?randgen/percentgen]`
+    # with `precision`, `randgen` and `percentgen` optional
+    # TODO make this reflect the state of the symbols defined before
+    pattern_modifiers = re.compile(r"\[(?P<name>[^#\[\]\?]*)(?:#(?P<precision>[^#\[\]\?]*))?(?:\?(?P<randgen>[^#\[\]\?/]*)(?:/(?P<percentgen>[^#\[\]\?]*))?)?\]")
 
 
     def __init__(self, input_file):
@@ -84,11 +92,11 @@ class Parser():
             if line_type == LineType.empty or line_type == LineType.comment:
                 continue
             elif line_type == LineType.alias_declaration:
-                self.parse_alias(line)
+                self.parse_alias_definition(line)
             elif line_type == LineType.slot_declaration:
-                self.parse_slot(line)
-            else: # intent declaration
-                self.parse_intent(line)
+                self.parse_slot_definition(line)
+            else:  # intent declaration
+                self.parse_intent_definition(line)
 
 
     def check_indentation(self, indentation_nb, line, stripped_line):
@@ -106,15 +114,59 @@ class Parser():
                 raise SyntaxError("Incorrect indentation",
                     (self.in_file.name, self.line_nb, indentation_nb, line))
 
-    def parse_alias(self, first_line):
+    def parse_alias_definition(self, first_line):
+        """
+        Parses the definition of an alias (declaration and contents)
+        and adds the relevant info to the list of aliases.
+        """
         printDBG("alias: "+first_line.strip())
+        #
+        (alias_name, alias_precision) = self.parse_alias_declaration(first_line)
+        printDBG("name: "+alias_name+" precision: "+str(alias_precision))
+
         indentation_nb = None
         while self.is_inside_decl():
             line = self.read_line()
             stripped_line = line.lstrip()
             indentation_nb = self.check_indentation(indentation_nb, line, stripped_line)
 
-    def parse_slot(self, first_line):
+    def parse_alias_declaration(self, declaration):
+        """
+        Parses the declaration of an alias (the first line) and
+        returns the alias name and its precision.
+        """
+        name = None
+        precision = None
+        decl_found = False
+        for match in Parser.pattern_modifiers.finditer(declaration):
+            match = match.groupdict()
+            # printDBG("matched:"+str(match))
+            if decl_found:
+                raise SyntaxError("More than one declaration per line",
+                    (self.in_file.name, self.line_nb, match.start(), line))
+            else:
+                decl_found = True
+
+            name = match["name"]
+            precision = match["precision"]
+            if name == "":
+                raise SyntaxError("Aliases must have a name (e.g. [name])",
+                    (self.in_file.name, self.line_nb, match.start(), line))
+            if precision == "":
+                raise SyntaxError("Precision modifiers must have a name (e.g. [name#precision])",
+                    (self.in_file.name, self.line_nb, match.start(), line))
+            if match["randgen"] == "" or match["percentgen"] == "":
+                raise SyntaxError("Alias declarations cannot have a random generation modifier",
+                    (self.in_file.name, self.line_nb, match.start(), line))
+
+        return (name, precision)
+
+
+    def parse_slot_definition(self, first_line):
+        """
+        Parses the definition of a slot (declaration and contents)
+        and adds the relevant info to the list of slots.
+        """
         printDBG("slot: "+first_line.strip())
         indentation_nb = None
         while self.is_inside_decl():
@@ -122,7 +174,11 @@ class Parser():
             stripped_line = line.lstrip()
             indentation_nb = self.check_indentation(indentation_nb, line, stripped_line)
 
-    def parse_intent(self, first_line):
+    def parse_intent_definition(self, first_line):
+        """
+        Parses the definition of an intent (declaration and contents)
+        and adds the relevant info to the list of intents.
+        """
         printDBG("intent: "+first_line.strip())
         indentation_nb = None
         while self.is_inside_decl():
