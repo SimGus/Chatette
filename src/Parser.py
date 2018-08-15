@@ -179,7 +179,6 @@ def parse_unit(unit):
     For a word group, the name will be its text.
     If an anonymous randgen is used '' will be its value.
     """
-    # TODO case sensitivity leading &
     name = None
     precision = None
     randgen = None
