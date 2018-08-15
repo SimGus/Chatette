@@ -31,11 +31,11 @@
     french
     francaise
 
-~[mexican]
+~[mexican nom nom]
     mexican
 
 ;================== Slot definitions =========================
 @[cuisine_type]
     ~[italian]
     ~[french]
-    ~[mexican]
+    ~[mexican nom nom] = mexican

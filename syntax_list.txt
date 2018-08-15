@@ -18,3 +18,5 @@
 [any?id/70]         id.
 [any#precision?id/20]
 [&name]             `name` will be generated starting with a lowercase or uppercase letter (50% chance) /!\ not usable in a top declaration
+
+... = slot_value    inside a slot declaration, when generating the string `...` for the slot, it will give it the value name `slot value` (everything that comes after `=` lstriped)
