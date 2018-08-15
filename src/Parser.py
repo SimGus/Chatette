@@ -19,6 +19,13 @@ class LineType(Enum):
     slot_declaration = 4
     intent_declaration = 5
 
+
+def strip_comments(text):
+    match = Parser.pattern_comment.search(text)
+    if match is None:
+        return text
+    return text[:match.start()].rstrip()
+
 def is_start_unit_sym(char):
     return (char == Parser.UNIT_OPEN_SYM or char == Parser.ALIAS_SYM or \
             char == Parser.SLOT_SYM or char == Parser.INTENT_SYM)
@@ -162,7 +169,7 @@ def split_contents(text, accept_alt_solt_val=False):
     return words_and_units
 
 
-def parse_unit(unit):  # TODO remove comments before this
+def parse_unit(unit):
     """
     Parses a unit (left stripped) and returns
     (unit name, precision, randgen, percentgen) with `None` values for those
@@ -201,7 +208,7 @@ def parse_unit(unit):  # TODO remove comments before this
 
     return (name, precision, randgen, percentgen)
 
-def find_nb_gen_asked(intent):  # TODO remove comments before this
+def find_nb_gen_asked(intent):
     """
     Finds the number of generation asked for the provided intent string and
     returns it (or `None` if it wasn't provided).
@@ -266,6 +273,7 @@ class Parser():
     # TODO make this reflect the state of the symbols defined before
     pattern_modifiers = re.compile(r"\[(?P<name>[^#\[\]\?]*)(?:#(?P<precision>[^#\[\]\?]*))?(?:\?(?P<randgen>[^#\[\]\?/]*)(?:/(?P<percentgen>[^#\[\]\?]*))?)?\]")
     pattern_nb_gen_asked = re.compile(r"\]\((?P<nbgen>[0-9]+)\)")
+    pattern_comment = re.compile(r"(?<!\\);")
 
 
     def __init__(self, input_file):
@@ -296,12 +304,13 @@ class Parser():
         line = None
         while line != "":
             line = self.read_line()
-            stripped_line = line.lstrip() # TODO Strip comments
+            stripped_line = line.lstrip()
             line_type = get_top_level_line_type(line, stripped_line)
 
             if line_type == LineType.empty or line_type == LineType.comment:
                 continue
-            elif line_type == LineType.alias_declaration:
+            stripped_line = strip_comments(stripped_line)  # Not done before to compute the indentation
+            if line_type == LineType.alias_declaration:
                 self.parse_alias_definition(stripped_line)
             elif line_type == LineType.slot_declaration:
                 self.parse_slot_definition(stripped_line)
@@ -376,7 +385,7 @@ class Parser():
                     (self.in_file.name, self.line_nb, 0, line))
 
         #Manage the contents
-        expressions = []  # TODO manage the slot value names
+        expressions = []
         indentation_nb = None
         while self.is_inside_decl():
             line = self.read_line()
