@@ -320,37 +320,6 @@ class Parser():  # TODO take out methods that manage only a couple of provided s
                     "expressions": expressions,
                 }]
 
-    def parse_alias_declaration(self, declaration):
-        """
-        Parses the declaration of an alias (the first line) and
-        returns the alias name and its precision.
-        """
-        name = None
-        precision = None
-        decl_found = False
-        for match in Parser.pattern_modifiers.finditer(declaration):
-            start_index = match.start()
-            if decl_found:
-                raise SyntaxError("More than one declaration per line",
-                    (self.in_file.name, self.line_nb, start_index, line))
-            else:
-                decl_found = True
-            match = match.groupdict()
-
-            name = match["name"]
-            precision = match["precision"]
-            if name == "":
-                raise SyntaxError("Aliases must have a name (e.g. [name])",
-                    (self.in_file.name, self.line_nb, start_index, line))
-            if precision == "":
-                raise SyntaxError("Precision modifiers must have a name (e.g. [name#precision])",
-                    (self.in_file.name, self.line_nb, start_index, line))
-            if match["randgen"] == "" or match["percentgen"] == "":
-                raise SyntaxError("Alias declarations cannot have a random generation modifier",
-                    (self.in_file.name, self.line_nb, start_index, line))
-
-        return (name, precision)
-
 
     def parse_slot_definition(self, first_line):
         """
