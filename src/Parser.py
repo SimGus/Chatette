@@ -27,6 +27,7 @@ class Parser():
     """
 
     COMMENT_SYM = ';'
+    ESCAPE_SYM = '\\'
 
     ALIAS_SYM = '~'
     SLOT_SYM = '@'
@@ -114,21 +115,85 @@ class Parser():
                 raise SyntaxError("Incorrect indentation",
                     (self.in_file.name, self.line_nb, indentation_nb, line))
 
+    def is_start_unit_sym(self, char):
+        return (char == Parser.UNIT_OPEN_SYM or char == Parser.ALIAS_SYM or \
+                char == Parser.SLOT_SYM or char == Parser.INTENT_SYM)
+    def is_unit(self, text):
+        return (len(text) > 0 and self.is_start_unit_sym(text[0]))
+
+    def split_contents(self, text):
+        """
+        Splits `text` into a list of words and units
+        (word groups, aliases, slots and intents).
+        Keeps also track of units that have no space between them (this info is
+        placed in the returned list).
+        """
+        words_and_units_raw = []
+        current = ""
+        escaped = False
+        space_just_seen = False
+        for c in text:
+            # Manage character escapement
+            if escaped:
+                current += c
+                escaped = False
+                continue
+            # Manage spaces
+            if c.isspace():
+                space_just_seen = True
+                if current == "":
+                    continue
+                elif not self.is_unit(current):
+                    # New word
+                    words_and_units_raw.append(current)
+                    current = ""
+                    continue
+                else:
+                    current += c
+                    continue
+            elif c == Parser.COMMENT_SYM:
+                break
+            elif c == Parser.ESCAPE_SYM:
+                escaped = True
+            # End unit
+            elif c == Parser.UNIT_CLOSE_SYM:
+                current += c
+                words_and_units_raw.append(current)
+                current = ""
+            # New unit
+            elif space_just_seen and current == "" and self.is_start_unit_sym(c):
+                words_and_units_raw.append(' ')
+                current += c
+            # Any other character
+            else:
+                current += c
+
+            if not c.isspace():
+                space_just_seen = False
+
+        print(str(words_and_units_raw))
+
+
     def parse_alias_definition(self, first_line):
         """
         Parses the definition of an alias (declaration and contents)
         and adds the relevant info to the list of aliases.
         """
         printDBG("alias: "+first_line.strip())
-        #
+        # Manage the alias declaration
         (alias_name, alias_precision) = self.parse_alias_declaration(first_line)
         printDBG("name: "+alias_name+" precision: "+str(alias_precision))
 
+        # Manage the contents
         indentation_nb = None
         while self.is_inside_decl():
             line = self.read_line()
             stripped_line = line.lstrip()
             indentation_nb = self.check_indentation(indentation_nb, line, stripped_line)
+
+            self.split_contents(stripped_line)
+
+        # Put the new definition in the alias list
 
     def parse_alias_declaration(self, declaration):
         """
