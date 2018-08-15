@@ -15,13 +15,13 @@
     hello
 
 ~[i want to]
-    [&i] ~[want#space]
-    [&I]~[want#no space]
+    [&i] ~[want#no elision]
+    [&I]~[want#elision]
 
-~[want#space]
+~[want#no elision]
     want to
     would [really?] like to   ; either `would really like to` or `would like to` will be generated
-~[want#no space]
+~[want#elision]
     'd like to
 
 ~[italian]
