@@ -163,8 +163,8 @@ def parse_unit(unit):
     one_found = False
     for match in Parser.pattern_modifiers.finditer(unit):
         start_index = match.start()
-        if one_found:
-            raise SyntaxError("Found several units inside one",
+        if one_found:  # this error would happen only when `unit` is a whole line (i.e. a declaration)
+            raise SyntaxError("Expected only one unit here: only one declaration is allowed per line",
                 (self.in_file.name, self.line_nb, start_index, unit))
         else:
             one_found = True
@@ -265,13 +265,11 @@ class Parser():  # TODO take out methods that manage only a couple of provided s
             if line_type == LineType.empty or line_type == LineType.comment:
                 continue
             elif line_type == LineType.alias_declaration:
-                self.parse_alias_definition(line)
+                self.parse_alias_definition(stripped_line)
             elif line_type == LineType.slot_declaration:
-                self.parse_slot_definition(line)
+                self.parse_slot_definition(stripped_line)
             else:  # intent declaration
-                self.parse_intent_definition(line)
-
-        self.printDBG()
+                self.parse_intent_definition(stripped_line)
 
 
     def parse_alias_definition(self, first_line):
@@ -281,8 +279,14 @@ class Parser():  # TODO take out methods that manage only a couple of provided s
         """
         printDBG("alias: "+first_line.strip())
         # Manage the alias declaration
-        (alias_name, alias_precision) = self.parse_alias_declaration(first_line)
-        printDBG("name: "+alias_name+" precision: "+str(alias_precision))
+        (alias_name, alias_precision, randgen, percentgen) = \
+            parse_unit(first_line)
+        if randgen is not None:
+            raise SyntaxError("Declarations cannot have a named random generation modifier",
+                    (self.in_file.name, self.line_nb, 0, line))
+        if percentgen is not None:
+            raise SyntaxError("Declarations cannot have a random generation modifier",
+                    (self.in_file.name, self.line_nb, 0, line))
 
         # Manage the contents
         expressions = []
