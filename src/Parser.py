@@ -20,7 +20,7 @@ class LineType(Enum):
     intent_declaration = 5
 
 
-class Parser():
+class Parser():  # TODO take out methods that manage only a couple of provided strings
     """
     This class will parse the input file(s)
     and create an internal representation of its contents.
@@ -47,9 +47,9 @@ class Parser():
         self.in_file = input_file
         self.line_nb = 0
 
-        self.aliases = []  # for each alias, stores a list of list of units
-        self.slots = []  # for each slot, stores a list of value name and unit
-        self.intents = []  # for each intent, stores a list of list of slots
+        self.aliases = dict()  # for each alias, stores a list of list of units
+        self.slots = dict()  # for each slot, stores a list of value name and unit
+        self.intents = dict()  # for each intent, stores a list of list of slots
 
 
     def read_line(self):
@@ -78,10 +78,29 @@ class Parser():
         else:
             SyntaxError("Invalid syntax",
                 (self.in_file.name, self.line_nb, 1, line))
+    def get_unit_type(self, unit):
+        if unit.startswith(Parser.UNIT_OPEN_SYM):
+            return Unit.word_group
+        elif unit.startswith(Parser.ALIAS_SYM):
+            return Unit.alias
+        elif unit.startswith(Parser.SLOT_SYM):
+            return Unit.slot
+        elif unit.startswith(Parser.INTENT_SYM):
+            return Unit.intent
+        else:
+            raise RuntimeError("Internal error: tried to get the unit type of "+
+                "something that was not a unit")
 
     def is_inside_decl(self):
         next_line = self.peek_line()
         return (next_line.startswith(' ') or next_line.startswith('\t'))
+
+    def is_start_unit_sym(self, char):
+        return (char == Parser.UNIT_OPEN_SYM or char == Parser.ALIAS_SYM or \
+                char == Parser.SLOT_SYM or char == Parser.INTENT_SYM)
+    def is_unit(self, text):
+        return (len(text) > 0 and self.is_start_unit_sym(text[0]))
+
 
     def parse(self):
         line = None
@@ -99,6 +118,48 @@ class Parser():
             else:  # intent declaration
                 self.parse_intent_definition(line)
 
+        self.printDBG()
+
+
+    def parse_unit(self, unit):
+        """
+        Parses a unit (left stripped) and returns
+        (unit name, precision, randgen, percentgen) with `None` values for those
+        not provided in the file.
+        For a word group, the name will be its text.
+        If an anonymous randgen is used '' will be its value.
+        """
+        # TODO case sensitivity leading &
+        name = None
+        precision = None
+        randgen = None
+        percentgen = None
+        one_found = False
+        for match in Parser.pattern_modifiers.finditer(unit):
+            start_index = match.start()
+            if one_found:
+                raise SyntaxError("Found several units inside one",
+                    (self.in_file.name, self.line_nb, start_index, unit))
+            else:
+                one_found = True
+            match = match.groupdict()
+
+            name = match["name"]
+            precision = match["precision"]
+            randgen = match["randgen"]
+            percentgen = match["percentgen"]
+            if name == "":
+                raise SyntaxError("Units must have a name (or a content for word groups)",
+                    (self.in_file.name, self.line_nb, start_index, unit))
+            if precision == "":
+                raise SyntaxError("Precision must be named (e.g. [text#precision])",
+                    (self.in_file.name, self.line_nb, start_index, unit))
+            if percentgen == "":
+                raise SyntaxError("Percentage for generation cannot be empty",
+                    (self.in_file.name, self.line_nb, start_index, unit))
+
+        return (name, precision, randgen, percentgen)
+
 
     def check_indentation(self, indentation_nb, line, stripped_line):
         """
@@ -114,12 +175,6 @@ class Parser():
             else:
                 raise SyntaxError("Incorrect indentation",
                     (self.in_file.name, self.line_nb, indentation_nb, line))
-
-    def is_start_unit_sym(self, char):
-        return (char == Parser.UNIT_OPEN_SYM or char == Parser.ALIAS_SYM or \
-                char == Parser.SLOT_SYM or char == Parser.INTENT_SYM)
-    def is_unit(self, text):
-        return (len(text) > 0 and self.is_start_unit_sym(text[0]))
 
     def split_contents(self, text):
         """
@@ -171,7 +226,43 @@ class Parser():
             if not c.isspace():
                 space_just_seen = False
 
-        print(str(words_and_units_raw))
+        # Make a list of unit from this parsing
+        words_and_units = []
+        for (i, string) in enumerate(words_and_units_raw):
+            if string == ' ':
+                continue
+            elif not self.is_unit(string):
+                words_and_units.append({
+                    "type": Unit.word,
+                    "word": string,
+                })
+            else:
+                no_leading_space = i == 0 or (i != 0 and words_and_units_raw[i-1] != ' ')
+                unit_type = self.get_unit_type(string)
+                if unit_type == Unit.word_group:
+                    (name, precision, randgen, percentgen) = self.parse_unit(string)
+                    if precision is not None:
+                        raise SyntaxError("Word groups cannot have a precision",
+                            (self.in_file.name, self.line_nb, 0, string))
+                    words_and_units.append({
+                        "type": Unit.word_group,
+                        "words": name,
+                        "randgen": randgen,
+                        "percentgen": percentgen,
+                        "leading-space": not no_leading_space,
+                    })
+                else:
+                    (name, precision, randgen, percentgen) = self.parse_unit(string)
+                    words_and_units.append({
+                        "type": unit_type,
+                        "name": name,
+                        "precision": precision,
+                        "randgen": randgen,
+                        "percentgen": percentgen,
+                        "leading-space": not no_leading_space,
+                    })
+
+        return words_and_units
 
 
     def parse_alias_definition(self, first_line):
@@ -185,15 +276,36 @@ class Parser():
         printDBG("name: "+alias_name+" precision: "+str(alias_precision))
 
         # Manage the contents
+        expressions = []
         indentation_nb = None
         while self.is_inside_decl():
             line = self.read_line()
             stripped_line = line.lstrip()
             indentation_nb = self.check_indentation(indentation_nb, line, stripped_line)
 
-            self.split_contents(stripped_line)
+            expressions.append(self.split_contents(stripped_line))
 
-        # Put the new definition in the alias list
+        # Put the new definition in the alias dict
+        if alias_name in self.aliases:
+            if alias_precision is None:
+                raise SyntaxError("Found a definition without precision for alias '"
+                    +alias_name+"' while another definition was already found",
+                    (self.in_file.name, self.line_nb, 0, first_line))
+            else:
+                self.aliases[alias_name].append({
+                    "precision": alias_precision,
+                    "expressions": expressions,
+                })
+        else:
+            if alias_precision is None:
+                self.aliases[alias_name] = {
+                    "expressions": expressions,
+                }
+            else:
+                self.aliases[alias_name] = [{
+                    "precision": alias_precision,
+                    "expressions": expressions,
+                }]
 
     def parse_alias_declaration(self, declaration):
         """
@@ -204,25 +316,25 @@ class Parser():
         precision = None
         decl_found = False
         for match in Parser.pattern_modifiers.finditer(declaration):
-            match = match.groupdict()
-            # printDBG("matched:"+str(match))
+            start_index = match.start()
             if decl_found:
                 raise SyntaxError("More than one declaration per line",
-                    (self.in_file.name, self.line_nb, match.start(), line))
+                    (self.in_file.name, self.line_nb, start_index, line))
             else:
                 decl_found = True
+            match = match.groupdict()
 
             name = match["name"]
             precision = match["precision"]
             if name == "":
                 raise SyntaxError("Aliases must have a name (e.g. [name])",
-                    (self.in_file.name, self.line_nb, match.start(), line))
+                    (self.in_file.name, self.line_nb, start_index, line))
             if precision == "":
                 raise SyntaxError("Precision modifiers must have a name (e.g. [name#precision])",
-                    (self.in_file.name, self.line_nb, match.start(), line))
+                    (self.in_file.name, self.line_nb, start_index, line))
             if match["randgen"] == "" or match["percentgen"] == "":
                 raise SyntaxError("Alias declarations cannot have a random generation modifier",
-                    (self.in_file.name, self.line_nb, match.start(), line))
+                    (self.in_file.name, self.line_nb, start_index, line))
 
         return (name, precision)
 
@@ -239,6 +351,7 @@ class Parser():
             stripped_line = line.lstrip()
             indentation_nb = self.check_indentation(indentation_nb, line, stripped_line)
 
+
     def parse_intent_definition(self, first_line):
         """
         Parses the definition of an intent (declaration and contents)
@@ -250,6 +363,21 @@ class Parser():
             line = self.read_line()
             stripped_line = line.lstrip()
             indentation_nb = self.check_indentation(indentation_nb, line, stripped_line)
+
+
+    def printDBG(self):
+        print("\nAliases:")
+        for name in self.aliases:
+            current_alias_def = self.aliases[name]
+            print("\t"+name+": ")
+            if isinstance(current_alias_def, list):
+                for precised_def in current_alias_def:
+                    print("\t\tprecision: "+precised_def["precision"])
+                    for expr in precised_def["expressions"]:
+                        print("\t\t\texpression: "+str(expr))
+            else:
+                for expr in current_alias_def["expressions"]:
+                    print("\t\texpression: "+str(expr))
 
 
 if __name__ == "__main__":
