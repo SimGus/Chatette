@@ -208,7 +208,7 @@ def check_indentation(indentation_nb, line, stripped_line):
 
 
 
-class Parser():  # TODO take out methods that manage only a couple of provided strings
+class Parser():
     """
     This class will parse the input file(s)
     and create an internal representation of its contents.
@@ -271,8 +271,10 @@ class Parser():  # TODO take out methods that manage only a couple of provided s
             else:  # intent declaration
                 self.parse_intent_definition(stripped_line)
 
+        self.printDBG()
 
-    def parse_alias_definition(self, first_line):
+
+    def parse_alias_definition(self, first_line):  # Lots of copy-paste in three methods
         """
         Parses the definition of an alias (declaration and contents)
         and adds the relevant info to the list of aliases.
@@ -320,19 +322,53 @@ class Parser():  # TODO take out methods that manage only a couple of provided s
                     "expressions": expressions,
                 }]
 
-
     def parse_slot_definition(self, first_line):
         """
         Parses the definition of a slot (declaration and contents)
         and adds the relevant info to the list of slots.
         """
         printDBG("slot: "+first_line.strip())
+        #Manage the slot declaration
+        (slot_name, slot_precision, randgen, percentgen) = \
+            parse_unit(first_line)
+        if randgen is not None:
+            raise SyntaxError("Declarations cannot have a named random generation modifier",
+                    (self.in_file.name, self.line_nb, 0, line))
+        if percentgen is not None:
+            raise SyntaxError("Declarations cannot have a random generation modifier",
+                    (self.in_file.name, self.line_nb, 0, line))
+
+        #Manage the contents
+        expressions = []  # TODO manage the slot value names
         indentation_nb = None
         while self.is_inside_decl():
             line = self.read_line()
             stripped_line = line.lstrip()
             indentation_nb = check_indentation(indentation_nb, line, stripped_line)
 
+            expressions.append(split_contents(stripped_line))
+
+        # Put the new definition in the slot dict
+        if slot_name in self.slots:
+            if slot_precision is None:
+                raise SyntaxError("Found a definition without precision for slot '"
+                    +slot_name+"' while another definition was already found",
+                    (self.in_file.name, self.line_nb, 0, first_line))
+            else:
+                self.aliases[alias_name].append({
+                    "precision": slot_precision,
+                    "expressions": expressions,
+                })
+        else:
+            if slot_precision is None:
+                self.slots[slot_name] = {
+                    "expressions": expressions,
+                }
+            else:
+                self.slots[slot_name] = [{
+                    "precision": slot_precision,
+                    "expressions": expressions,
+                }]
 
     def parse_intent_definition(self, first_line):
         """
@@ -361,6 +397,18 @@ class Parser():  # TODO take out methods that manage only a couple of provided s
                 for expr in current_alias_def["expressions"]:
                     print("\t\texpression: "+str(expr))
 
+        print("\nSlots:")
+        for name in self.slots:
+            current_alias_def = self.slots[name]
+            print("\t"+name+": ")
+            if isinstance(current_alias_def, list):
+                for precised_def in current_alias_def:
+                    print("\t\tprecision: "+precised_def["precision"])
+                    for expr in precised_def["expressions"]:
+                        print("\t\t\texpression: "+str(expr))
+            else:
+                for expr in current_alias_def["expressions"]:
+                    print("\t\texpression: "+str(expr))
 
 if __name__ == "__main__":
     import warnings
