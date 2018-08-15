@@ -19,6 +19,194 @@ class LineType(Enum):
     slot_declaration = 4
     intent_declaration = 5
 
+def is_start_unit_sym(char):
+    return (char == Parser.UNIT_OPEN_SYM or char == Parser.ALIAS_SYM or \
+            char == Parser.SLOT_SYM or char == Parser.INTENT_SYM)
+def is_unit(text):
+    return (len(text) > 0 and is_start_unit_sym(text[0]))
+
+def get_top_level_line_type(line, stripped_line):
+    """
+    Returns the type of a top-level line (Note: this is expected to never
+    be called for something else than a top-level line).
+    Raises an error if the top-level line is not valid
+    """
+    if stripped_line == "":
+        return LineType.empty
+    elif stripped_line.startswith(Parser.COMMENT_SYM):
+        return LineType.comment
+    elif line.startswith(Parser.ALIAS_SYM):
+        return LineType.alias_declaration
+    elif line.startswith(Parser.SLOT_SYM):
+        return LineType.slot_declaration
+    elif line.startswith(Parser.INTENT_SYM):
+        return LineType.intent_declaration
+    else:
+        SyntaxError("Invalid syntax",
+            (self.in_file.name, self.line_nb, 1, line))
+def get_unit_type(unit):
+    if unit.startswith(Parser.UNIT_OPEN_SYM):
+        return Unit.word_group
+    elif unit.startswith(Parser.ALIAS_SYM):
+        return Unit.alias
+    elif unit.startswith(Parser.SLOT_SYM):
+        return Unit.slot
+    elif unit.startswith(Parser.INTENT_SYM):
+        return Unit.intent
+    else:
+        raise RuntimeError("Internal error: tried to get the unit type of "+
+            "something that was not a unit")
+
+
+def split_contents(text):
+    """
+    Splits `text` into a list of words and units
+    (word groups, aliases, slots and intents).
+    Keeps also track of units that have no space between them (this info is
+    placed in the returned list).
+    """
+    words_and_units_raw = []
+    current = ""
+    escaped = False
+    space_just_seen = False
+    for c in text:
+        # Manage character escapement
+        if escaped:
+            current += c
+            escaped = False
+            continue
+        # Manage spaces
+        if c.isspace():
+            space_just_seen = True
+            if current == "":
+                continue
+            elif not is_unit(current):
+                # New word
+                words_and_units_raw.append(current)
+                current = ""
+                continue
+            else:
+                current += c
+                continue
+        elif c == Parser.COMMENT_SYM:
+            break
+        elif c == Parser.ESCAPE_SYM:
+            escaped = True
+        # End unit
+        elif c == Parser.UNIT_CLOSE_SYM:
+            current += c
+            words_and_units_raw.append(current)
+            current = ""
+        # New unit
+        elif space_just_seen and current == "" and is_start_unit_sym(c):
+            words_and_units_raw.append(' ')
+            current += c
+        # Any other character
+        else:
+            current += c
+
+        if not c.isspace():
+            space_just_seen = False
+
+    # Make a list of unit from this parsing
+    words_and_units = []
+    for (i, string) in enumerate(words_and_units_raw):
+        if string == ' ':
+            continue
+        elif not is_unit(string):
+            words_and_units.append({
+                "type": Unit.word,
+                "word": string,
+            })
+        else:
+            no_leading_space = i == 0 or (i != 0 and words_and_units_raw[i-1] != ' ')
+            unit_type = get_unit_type(string)
+            if unit_type == Unit.word_group:
+                (name, precision, randgen, percentgen) = parse_unit(string)
+                if precision is not None:
+                    raise SyntaxError("Word groups cannot have a precision",
+                        (self.in_file.name, self.line_nb, 0, string))
+                words_and_units.append({
+                    "type": Unit.word_group,
+                    "words": name,
+                    "randgen": randgen,
+                    "percentgen": percentgen,
+                    "leading-space": not no_leading_space,
+                })
+            else:
+                (name, precision, randgen, percentgen) = parse_unit(string)
+                words_and_units.append({
+                    "type": unit_type,
+                    "name": name,
+                    "precision": precision,
+                    "randgen": randgen,
+                    "percentgen": percentgen,
+                    "leading-space": not no_leading_space,
+                })
+
+    return words_and_units
+
+
+def parse_unit(unit):
+    """
+    Parses a unit (left stripped) and returns
+    (unit name, precision, randgen, percentgen) with `None` values for those
+    not provided in the file.
+    For a word group, the name will be its text.
+    If an anonymous randgen is used '' will be its value.
+    """
+    # TODO case sensitivity leading &
+    name = None
+    precision = None
+    randgen = None
+    percentgen = None
+    one_found = False
+    for match in Parser.pattern_modifiers.finditer(unit):
+        start_index = match.start()
+        if one_found:
+            raise SyntaxError("Found several units inside one",
+                (self.in_file.name, self.line_nb, start_index, unit))
+        else:
+            one_found = True
+        match = match.groupdict()
+
+        name = match["name"]
+        precision = match["precision"]
+        randgen = match["randgen"]
+        percentgen = match["percentgen"]
+        if name == "":
+            raise SyntaxError("Units must have a name (or a content for word groups)",
+                (self.in_file.name, self.line_nb, start_index, unit))
+        if precision == "":
+            raise SyntaxError("Precision must be named (e.g. [text#precision])",
+                (self.in_file.name, self.line_nb, start_index, unit))
+        if percentgen == "":
+            raise SyntaxError("Percentage for generation cannot be empty",
+                (self.in_file.name, self.line_nb, start_index, unit))
+
+    return (name, precision, randgen, percentgen)
+
+
+def check_indentation(indentation_nb, line, stripped_line):
+    """
+    Given the indentation of the previous line,
+    checks the indentation of the line is correct (raises a `SyntaxError`
+    otherwise) and returns the number of spaces its indented with.
+    If this is the first line (`indentation_nb` is `None`),
+    considers the indentation correct and returns the number of spaces
+    the line is indented with.
+    """
+    current_indentation_nb = len(line) - len(stripped_line)
+    if indentation_nb is None:
+        return current_indentation_nb
+    else:
+        if current_indentation_nb == indentation_nb:
+            return current_indentation_nb
+        else:
+            raise SyntaxError("Incorrect indentation",
+                (self.in_file.name, self.line_nb, indentation_nb, line))
+
+
 
 class Parser():  # TODO take out methods that manage only a couple of provided strings
     """
@@ -55,7 +243,6 @@ class Parser():  # TODO take out methods that manage only a couple of provided s
     def read_line(self):
         self.line_nb += 1
         return self.in_file.readline()
-
     def peek_line(self):
         """Returns the next line without moving forward in the file"""
         saved_pos = self.in_file.tell()
@@ -63,43 +250,9 @@ class Parser():  # TODO take out methods that manage only a couple of provided s
         self.in_file.seek(saved_pos)
         return line
 
-
-    def get_line_type(self, line, stripped_line):
-        if stripped_line == "":
-            return LineType.empty
-        elif stripped_line.startswith(Parser.COMMENT_SYM):
-            return LineType.comment
-        elif line.startswith(Parser.ALIAS_SYM):
-            return LineType.alias_declaration
-        elif line.startswith(Parser.SLOT_SYM):
-            return LineType.slot_declaration
-        elif line.startswith(Parser.INTENT_SYM):
-            return LineType.intent_declaration
-        else:
-            SyntaxError("Invalid syntax",
-                (self.in_file.name, self.line_nb, 1, line))
-    def get_unit_type(self, unit):
-        if unit.startswith(Parser.UNIT_OPEN_SYM):
-            return Unit.word_group
-        elif unit.startswith(Parser.ALIAS_SYM):
-            return Unit.alias
-        elif unit.startswith(Parser.SLOT_SYM):
-            return Unit.slot
-        elif unit.startswith(Parser.INTENT_SYM):
-            return Unit.intent
-        else:
-            raise RuntimeError("Internal error: tried to get the unit type of "+
-                "something that was not a unit")
-
     def is_inside_decl(self):
         next_line = self.peek_line()
         return (next_line.startswith(' ') or next_line.startswith('\t'))
-
-    def is_start_unit_sym(self, char):
-        return (char == Parser.UNIT_OPEN_SYM or char == Parser.ALIAS_SYM or \
-                char == Parser.SLOT_SYM or char == Parser.INTENT_SYM)
-    def is_unit(self, text):
-        return (len(text) > 0 and self.is_start_unit_sym(text[0]))
 
 
     def parse(self):
@@ -107,7 +260,7 @@ class Parser():  # TODO take out methods that manage only a couple of provided s
         while line != "":
             line = self.read_line()
             stripped_line = line.lstrip()
-            line_type = self.get_line_type(line, stripped_line)
+            line_type = get_top_level_line_type(line, stripped_line)
 
             if line_type == LineType.empty or line_type == LineType.comment:
                 continue
@@ -119,150 +272,6 @@ class Parser():  # TODO take out methods that manage only a couple of provided s
                 self.parse_intent_definition(line)
 
         self.printDBG()
-
-
-    def parse_unit(self, unit):
-        """
-        Parses a unit (left stripped) and returns
-        (unit name, precision, randgen, percentgen) with `None` values for those
-        not provided in the file.
-        For a word group, the name will be its text.
-        If an anonymous randgen is used '' will be its value.
-        """
-        # TODO case sensitivity leading &
-        name = None
-        precision = None
-        randgen = None
-        percentgen = None
-        one_found = False
-        for match in Parser.pattern_modifiers.finditer(unit):
-            start_index = match.start()
-            if one_found:
-                raise SyntaxError("Found several units inside one",
-                    (self.in_file.name, self.line_nb, start_index, unit))
-            else:
-                one_found = True
-            match = match.groupdict()
-
-            name = match["name"]
-            precision = match["precision"]
-            randgen = match["randgen"]
-            percentgen = match["percentgen"]
-            if name == "":
-                raise SyntaxError("Units must have a name (or a content for word groups)",
-                    (self.in_file.name, self.line_nb, start_index, unit))
-            if precision == "":
-                raise SyntaxError("Precision must be named (e.g. [text#precision])",
-                    (self.in_file.name, self.line_nb, start_index, unit))
-            if percentgen == "":
-                raise SyntaxError("Percentage for generation cannot be empty",
-                    (self.in_file.name, self.line_nb, start_index, unit))
-
-        return (name, precision, randgen, percentgen)
-
-
-    def check_indentation(self, indentation_nb, line, stripped_line):
-        """
-        Checks the indentation of the line is correct (raises a `SyntaxError`
-        otherwise) and returns the number of spaces its indented with.
-        """
-        current_indentation_nb = len(line) - len(stripped_line)
-        if indentation_nb is None:
-            return current_indentation_nb
-        else:
-            if current_indentation_nb == indentation_nb:
-                return current_indentation_nb
-            else:
-                raise SyntaxError("Incorrect indentation",
-                    (self.in_file.name, self.line_nb, indentation_nb, line))
-
-    def split_contents(self, text):
-        """
-        Splits `text` into a list of words and units
-        (word groups, aliases, slots and intents).
-        Keeps also track of units that have no space between them (this info is
-        placed in the returned list).
-        """
-        words_and_units_raw = []
-        current = ""
-        escaped = False
-        space_just_seen = False
-        for c in text:
-            # Manage character escapement
-            if escaped:
-                current += c
-                escaped = False
-                continue
-            # Manage spaces
-            if c.isspace():
-                space_just_seen = True
-                if current == "":
-                    continue
-                elif not self.is_unit(current):
-                    # New word
-                    words_and_units_raw.append(current)
-                    current = ""
-                    continue
-                else:
-                    current += c
-                    continue
-            elif c == Parser.COMMENT_SYM:
-                break
-            elif c == Parser.ESCAPE_SYM:
-                escaped = True
-            # End unit
-            elif c == Parser.UNIT_CLOSE_SYM:
-                current += c
-                words_and_units_raw.append(current)
-                current = ""
-            # New unit
-            elif space_just_seen and current == "" and self.is_start_unit_sym(c):
-                words_and_units_raw.append(' ')
-                current += c
-            # Any other character
-            else:
-                current += c
-
-            if not c.isspace():
-                space_just_seen = False
-
-        # Make a list of unit from this parsing
-        words_and_units = []
-        for (i, string) in enumerate(words_and_units_raw):
-            if string == ' ':
-                continue
-            elif not self.is_unit(string):
-                words_and_units.append({
-                    "type": Unit.word,
-                    "word": string,
-                })
-            else:
-                no_leading_space = i == 0 or (i != 0 and words_and_units_raw[i-1] != ' ')
-                unit_type = self.get_unit_type(string)
-                if unit_type == Unit.word_group:
-                    (name, precision, randgen, percentgen) = self.parse_unit(string)
-                    if precision is not None:
-                        raise SyntaxError("Word groups cannot have a precision",
-                            (self.in_file.name, self.line_nb, 0, string))
-                    words_and_units.append({
-                        "type": Unit.word_group,
-                        "words": name,
-                        "randgen": randgen,
-                        "percentgen": percentgen,
-                        "leading-space": not no_leading_space,
-                    })
-                else:
-                    (name, precision, randgen, percentgen) = self.parse_unit(string)
-                    words_and_units.append({
-                        "type": unit_type,
-                        "name": name,
-                        "precision": precision,
-                        "randgen": randgen,
-                        "percentgen": percentgen,
-                        "leading-space": not no_leading_space,
-                    })
-
-        return words_and_units
 
 
     def parse_alias_definition(self, first_line):
@@ -281,9 +290,9 @@ class Parser():  # TODO take out methods that manage only a couple of provided s
         while self.is_inside_decl():
             line = self.read_line()
             stripped_line = line.lstrip()
-            indentation_nb = self.check_indentation(indentation_nb, line, stripped_line)
+            indentation_nb = check_indentation(indentation_nb, line, stripped_line)
 
-            expressions.append(self.split_contents(stripped_line))
+            expressions.append(split_contents(stripped_line))
 
         # Put the new definition in the alias dict
         if alias_name in self.aliases:
@@ -349,7 +358,7 @@ class Parser():  # TODO take out methods that manage only a couple of provided s
         while self.is_inside_decl():
             line = self.read_line()
             stripped_line = line.lstrip()
-            indentation_nb = self.check_indentation(indentation_nb, line, stripped_line)
+            indentation_nb = check_indentation(indentation_nb, line, stripped_line)
 
 
     def parse_intent_definition(self, first_line):
@@ -362,7 +371,7 @@ class Parser():  # TODO take out methods that manage only a couple of provided s
         while self.is_inside_decl():
             line = self.read_line()
             stripped_line = line.lstrip()
-            indentation_nb = self.check_indentation(indentation_nb, line, stripped_line)
+            indentation_nb = check_indentation(indentation_nb, line, stripped_line)
 
 
     def printDBG(self):
