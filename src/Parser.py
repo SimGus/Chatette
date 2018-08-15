@@ -142,7 +142,7 @@ def split_contents(text, accept_alt_solt_val=False):
             no_leading_space = i == 0 or (i != 0 and words_and_units_raw[i-1] != ' ')
             unit_type = get_unit_type(string)
             if unit_type == Unit.word_group:
-                (name, precision, randgen, percentgen) = parse_unit(string)
+                (name, precision, randgen, percentgen, casegen) = parse_unit(string)
                 if precision is not None:
                     raise SyntaxError("Word groups cannot have a precision",
                         (self.in_file.name, self.line_nb, 0, string))
@@ -151,16 +151,18 @@ def split_contents(text, accept_alt_solt_val=False):
                     "words": name,
                     "randgen": randgen,
                     "percentgen": percentgen,
+                    "casegen": casegen,
                     "leading-space": not no_leading_space,
                 })
             else:
-                (name, precision, randgen, percentgen) = parse_unit(string)
+                (name, precision, randgen, percentgen, casegen) = parse_unit(string)
                 words_and_units.append({
                     "type": unit_type,
                     "name": name,
                     "precision": precision,
                     "randgen": randgen,
                     "percentgen": percentgen,
+                    "casegen": casegen,
                     "leading-space": not no_leading_space,
                 })
 
@@ -172,8 +174,8 @@ def split_contents(text, accept_alt_solt_val=False):
 def parse_unit(unit):
     """
     Parses a unit (left stripped) and returns
-    (unit name, precision, randgen, percentgen) with `None` values for those
-    not provided in the file.
+    (unit name, precision, randgen, percentgen, casegen) with `None` values for
+    those not provided in the file. NB: `casegen` is a boolean.
     For a word group, the name will be its text.
     If an anonymous randgen is used '' will be its value.
     """
@@ -182,6 +184,7 @@ def parse_unit(unit):
     precision = None
     randgen = None
     percentgen = None
+    casegen = False
     one_found = False
     for match in Parser.pattern_modifiers.finditer(unit):
         start_index = match.start()
@@ -196,6 +199,7 @@ def parse_unit(unit):
         precision = match["precision"]
         randgen = match["randgen"]
         percentgen = match["percentgen"]
+        casegen = (match["casegen"] is not None)
         if name == "":
             raise SyntaxError("Units must have a name (or a content for word groups)",
                 (self.in_file.name, self.line_nb, start_index, unit))
@@ -206,7 +210,7 @@ def parse_unit(unit):
             raise SyntaxError("Percentage for generation cannot be empty",
                 (self.in_file.name, self.line_nb, start_index, unit))
 
-    return (name, precision, randgen, percentgen)
+    return (name, precision, randgen, percentgen, casegen)
 
 def find_nb_gen_asked(intent):
     """
@@ -271,7 +275,7 @@ class Parser():
     # This regex finds patterns like this `[name#precision?randgen/percentgen]`
     # with `precision`, `randgen` and `percentgen` optional
     # TODO make this reflect the state of the symbols defined before
-    pattern_modifiers = re.compile(r"\[(?P<name>[^#\[\]\?]*)(?:#(?P<precision>[^#\[\]\?]*))?(?:\?(?P<randgen>[^#\[\]\?/]*)(?:/(?P<percentgen>[^#\[\]\?]*))?)?\]")
+    pattern_modifiers = re.compile(r"\[(?P<casegen>&)?(?P<name>[^#\[\]\?]*)(?:#(?P<precision>[^#\[\]\?]*))?(?:\?(?P<randgen>[^#\[\]\?/]*)(?:/(?P<percentgen>[^#\[\]\?]*))?)?\]")
     pattern_nb_gen_asked = re.compile(r"\]\((?P<nbgen>[0-9]+)\)")
     pattern_comment = re.compile(r"(?<!\\);")
 
@@ -327,7 +331,7 @@ class Parser():
         """
         printDBG("alias: "+first_line.strip())
         # Manage the alias declaration
-        (alias_name, alias_precision, randgen, percentgen) = \
+        (alias_name, alias_precision, randgen, percentgen, casegen) = \
             parse_unit(first_line)
         if randgen is not None:
             raise SyntaxError("Declarations cannot have a named random generation modifier",
@@ -335,6 +339,9 @@ class Parser():
         if percentgen is not None:
             raise SyntaxError("Declarations cannot have a random generation modifier",
                     (self.in_file.name, self.line_nb, 0, line))
+        if casegen:
+            raise SyntaxError("Case generation modifier not accepted in declarations",
+                    (self.in_file.name, self.line_nb, indentation_nb, line))
 
         # Manage the contents
         expressions = []
@@ -375,7 +382,7 @@ class Parser():
         """
         printDBG("slot: "+first_line.strip())
         #Manage the slot declaration
-        (slot_name, slot_precision, randgen, percentgen) = \
+        (slot_name, slot_precision, randgen, percentgen, casegen) = \
             parse_unit(first_line)
         if randgen is not None:
             raise SyntaxError("Declarations cannot have a named random generation modifier",
@@ -383,6 +390,9 @@ class Parser():
         if percentgen is not None:
             raise SyntaxError("Declarations cannot have a random generation modifier",
                     (self.in_file.name, self.line_nb, 0, line))
+        if casegen:
+            raise SyntaxError("Case generation modifier not accepted in declarations",
+                    (self.in_file.name, self.line_nb, indentation_nb, line))
 
         #Manage the contents
         expressions = []
@@ -428,7 +438,7 @@ class Parser():
         """
         printDBG("intent: "+first_line.strip())
         # Manage the intent declaration
-        (intent_name, intent_precision, randgen, percentgen) = \
+        (intent_name, intent_precision, randgen, percentgen, casegen) = \
             parse_unit(first_line)
         if randgen is not None:
             raise SyntaxError("Declarations cannot have a named random generation modifier",
@@ -436,6 +446,9 @@ class Parser():
         if percentgen is not None:
             raise SyntaxError("Declarations cannot have a random generation modifier",
                     (self.in_file.name, self.line_nb, 0, line))
+        if casegen:
+            raise SyntaxError("Case generation modifier not accepted in declarations",
+                    (self.in_file.name, self.line_nb, indentation_nb, line))
         nb_gen_asked = find_nb_gen_asked(first_line)
 
         # Manage the contents
