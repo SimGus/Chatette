@@ -104,6 +104,7 @@ def split_contents(text, accept_alt_solt_val=False):
     to be the slot value name for the splitted expression. In this case, the
     return value will be `(alt_name, list)`.
     """
+    # Split string in list of words and raw units (as strings)
     words_and_units_raw = []
     current = ""
     escaped = False
@@ -138,8 +139,12 @@ def split_contents(text, accept_alt_solt_val=False):
             words_and_units_raw.append(current)
             current = ""
         # New unit
-        elif space_just_seen and current == "" and is_start_unit_sym(c):
-            words_and_units_raw.append(' ')
+        elif is_start_unit_sym(c):
+            if space_just_seen and current == "":
+                words_and_units_raw.append(' ')  # TODO do this even for words
+            elif current != "" and  not is_start_unit_sym(current):
+                words_and_units_raw.append(current)
+                current = ""
             current += c
         elif accept_alt_solt_val and c == ALT_SLOT_VALUE_NAME_SYM:
             must_parse_alt_slot_val = True
@@ -150,6 +155,8 @@ def split_contents(text, accept_alt_solt_val=False):
 
         if not c.isspace():
             space_just_seen = False
+
+    print(words_and_units_raw)
 
     # Find the alternative slot value name if needed
     alt_slot_val_name = None
@@ -173,8 +180,8 @@ def split_contents(text, accept_alt_solt_val=False):
             if unit_type == Unit.word_group:
                 (name, variation, randgen, percentgen, casegen) = parse_unit(string)
                 if variation is not None:
-                    raise SyntaxError("Word groups cannot have a variation",
-                        (self.in_file.name, self.line_nb, 0, string))
+                    raise SyntaxError("Word groups cannot have a variation as found with word group '"+
+                        name+"'")
                 words_and_units.append({
                     "type": Unit.word_group,
                     "words": name,
