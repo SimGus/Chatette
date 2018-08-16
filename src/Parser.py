@@ -21,6 +21,8 @@ class Parser():
         self.slots = dict()  # for each slot, stores a list of value name and unit
         self.intents = dict()  # for each intent, stores a list of list of slots
 
+        self.parsing_finished = False
+
 
     def read_line(self):
         self.line_nb += 1
@@ -66,7 +68,9 @@ class Parser():
                 self.parse_slot_definition(stripped_line)
             else:  # intent declaration
                 self.parse_intent_definition(stripped_line)
+
         printDBG("Parsing of file: "+self.in_file.name+" finished")
+        self.parsing_finished = True
 
 
     def parse_alias_definition(self, first_line):  # Lots of copy-paste in three methods
@@ -230,6 +234,10 @@ class Parser():
                     "precision": intent_precision,
                     "expressions": expressions,
                 }]
+
+
+    def has_parsed(self):
+        return self.parsing_finished
 
 
     def printDBG(self):
