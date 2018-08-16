@@ -14,7 +14,7 @@ INTENT_SYM = '%'
 UNIT_OPEN_SYM = '['
 UNIT_CLOSE_SYM = ']'
 
-PRECISION_SYM = '#'
+VARIATION_SYM = '#'
 RAND_GEN_SYM = '?'
 PERCENT_GEN_SYM = '/'
 CASE_GEN_SYM = '&'
@@ -23,10 +23,10 @@ ALT_SLOT_VALUE_NAME_SYM = '='
 
 INCLUDE_FILE_SYM = '|'
 
-# This regex finds patterns like this `[name#precision?randgen/percentgen]`
-# with `precision`, `randgen` and `percentgen` optional
+# This regex finds patterns like this `[name#variation?randgen/percentgen]`
+# with `variation`, `randgen` and `percentgen` optional
 # TODO make this reflect the state of the symbols defined before
-pattern_modifiers = re.compile(r"\[(?P<casegen>&)?(?P<name>[^#\[\]\?]*)(?:#(?P<precision>[^#\[\]\?]*))?(?:\?(?P<randgen>[^#\[\]\?/]*)(?:/(?P<percentgen>[^#\[\]\?]*))?)?\]")
+pattern_modifiers = re.compile(r"\[(?P<casegen>&)?(?P<name>[^#\[\]\?]*)(?:#(?P<variation>[^#\[\]\?]*))?(?:\?(?P<randgen>[^#\[\]\?/]*)(?:/(?P<percentgen>[^#\[\]\?]*))?)?\]")
 pattern_nb_gen_asked = re.compile(r"\]\((?P<nbgen>[0-9]+)\)")
 pattern_comment = re.compile(r"(?<!\\);")
 
@@ -171,9 +171,9 @@ def split_contents(text, accept_alt_solt_val=False):
             no_leading_space = i == 0 or (i != 0 and words_and_units_raw[i-1] != ' ')
             unit_type = get_unit_type(string)
             if unit_type == Unit.word_group:
-                (name, precision, randgen, percentgen, casegen) = parse_unit(string)
-                if precision is not None:
-                    raise SyntaxError("Word groups cannot have a precision",
+                (name, variation, randgen, percentgen, casegen) = parse_unit(string)
+                if variation is not None:
+                    raise SyntaxError("Word groups cannot have a variation",
                         (self.in_file.name, self.line_nb, 0, string))
                 words_and_units.append({
                     "type": Unit.word_group,
@@ -184,11 +184,11 @@ def split_contents(text, accept_alt_solt_val=False):
                     "leading-space": not no_leading_space,
                 })
             else:
-                (name, precision, randgen, percentgen, casegen) = parse_unit(string)
+                (name, variation, randgen, percentgen, casegen) = parse_unit(string)
                 words_and_units.append({
                     "type": unit_type,
                     "name": name,
-                    "precision": precision,
+                    "variation": variation,
                     "randgen": randgen,
                     "percentgen": percentgen,
                     "casegen": casegen,
@@ -203,13 +203,13 @@ def split_contents(text, accept_alt_solt_val=False):
 def parse_unit(unit):
     """
     Parses a unit (left stripped) and returns
-    (unit name, precision, randgen, percentgen, casegen) with `None` values for
+    (unit name, variation, randgen, percentgen, casegen) with `None` values for
     those not provided in the file. NB: `casegen` is a boolean.
     For a word group, the name will be its text.
     If an anonymous randgen is used '' will be its value.
     """
     name = None
-    precision = None
+    variation = None
     randgen = None
     percentgen = None
     casegen = False
@@ -224,21 +224,21 @@ def parse_unit(unit):
         match = match.groupdict()
 
         name = match["name"]
-        precision = match["precision"]
+        variation = match["variation"]
         randgen = match["randgen"]
         percentgen = match["percentgen"]
         casegen = (match["casegen"] is not None)
         if name == "":
             raise SyntaxError("Units must have a name (or a content for word groups)",
                 (self.in_file.name, self.line_nb, start_index, unit))
-        if precision == "":
-            raise SyntaxError("Precision must be named (e.g. [text#precision])",
+        if variation == "":
+            raise SyntaxError("Precision must be named (e.g. [text#variation])",
                 (self.in_file.name, self.line_nb, start_index, unit))
         if percentgen == "":
             raise SyntaxError("Percentage for generation cannot be empty",
                 (self.in_file.name, self.line_nb, start_index, unit))
 
-    return (name, precision, randgen, percentgen, casegen)
+    return (name, variation, randgen, percentgen, casegen)
 
 def find_nb_gen_asked(intent):
     """

@@ -80,7 +80,7 @@ class Parser():
         """
         printDBG("alias: "+first_line.strip())
         # Manage the alias declaration
-        (alias_name, alias_precision, randgen, percentgen, casegen) = \
+        (alias_name, alias_variation, randgen, percentgen, casegen) = \
             parse_unit(first_line)
         if randgen is not None:
             raise SyntaxError("Declarations cannot have a named random generation modifier",
@@ -104,23 +104,23 @@ class Parser():
 
         # Put the new definition in the alias dict
         if alias_name in self.aliases:
-            if alias_precision is None:
-                raise SyntaxError("Found a definition without precision for alias '"
+            if alias_variation is None:
+                raise SyntaxError("Found a definition without variation for alias '"
                     +alias_name+"' while another definition was already found",
                     (self.in_file.name, self.line_nb, 0, first_line))
             else:
                 self.aliases[alias_name].append({
-                    "precision": alias_precision,
+                    "variation": alias_variation,
                     "expressions": expressions,
                 })
         else:
-            if alias_precision is None:
+            if alias_variation is None:
                 self.aliases[alias_name] = {
                     "expressions": expressions,
                 }
             else:
                 self.aliases[alias_name] = [{
-                    "precision": alias_precision,
+                    "variation": alias_variation,
                     "expressions": expressions,
                 }]
 
@@ -131,7 +131,7 @@ class Parser():
         """
         printDBG("slot: "+first_line.strip())
         #Manage the slot declaration
-        (slot_name, slot_precision, randgen, percentgen, casegen) = \
+        (slot_name, slot_variation, randgen, percentgen, casegen) = \
             parse_unit(first_line)
         if randgen is not None:
             raise SyntaxError("Declarations cannot have a named random generation modifier",
@@ -160,23 +160,23 @@ class Parser():
 
         # Put the new definition in the slot dict
         if slot_name in self.slots:
-            if slot_precision is None:
-                raise SyntaxError("Found a definition without precision for slot '"
+            if slot_variation is None:
+                raise SyntaxError("Found a definition without variation for slot '"
                     +slot_name+"' while another definition was already found",
                     (self.in_file.name, self.line_nb, 0, first_line))
             else:
                 self.aliases[alias_name].append({
-                    "precision": slot_precision,
+                    "variation": slot_variation,
                     "expressions": expressions,
                 })
         else:
-            if slot_precision is None:
+            if slot_variation is None:
                 self.slots[slot_name] = {
                     "expressions": expressions,
                 }
             else:
                 self.slots[slot_name] = [{
-                    "precision": slot_precision,
+                    "variation": slot_variation,
                     "expressions": expressions,
                 }]
 
@@ -187,7 +187,7 @@ class Parser():
         """
         printDBG("intent: "+first_line.strip())
         # Manage the intent declaration
-        (intent_name, intent_precision, randgen, percentgen, casegen) = \
+        (intent_name, intent_variation, randgen, percentgen, casegen) = \
             parse_unit(first_line)
         if randgen is not None:
             raise SyntaxError("Declarations cannot have a named random generation modifier",
@@ -212,18 +212,18 @@ class Parser():
 
         # Put the new definition in the intent dict
         if intent_name in self.intents:
-            if intent_precision is None:
-                raise SyntaxError("Found a definition without precision for intent '"
+            if intent_variation is None:
+                raise SyntaxError("Found a definition without variation for intent '"
                     +intent_name+"' while another definition was already found",
                     (self.in_file.name, self.line_nb, 0, first_line))
             else:
                 self.intents[intent_name].append({
                     "nb-gen-asked": nb_gen_asked,
-                    "precision": intent_precision,
+                    "variation": intent_variation,
                     "expressions": expressions,
                 })
         else:
-            if intent_precision is None:
+            if intent_variation is None:
                 self.intents[intent_name] = {
                     "nb-gen-asked": nb_gen_asked,
                     "expressions": expressions,
@@ -231,7 +231,7 @@ class Parser():
             else:
                 self.intents[intent_name] = [{
                     "nb-gen-asked": nb_gen_asked,
-                    "precision": intent_precision,
+                    "variation": intent_variation,
                     "expressions": expressions,
                 }]
 
@@ -247,7 +247,7 @@ class Parser():
             print("\t"+name+": ")
             if isinstance(current_alias_def, list):
                 for precised_def in current_alias_def:
-                    print("\t\tprecision: "+precised_def["precision"])
+                    print("\t\tvariation: "+precised_def["variation"])
                     for expr in precised_def["expressions"]:
                         print("\t\t\texpression: "+str(expr))
             else:
@@ -260,7 +260,7 @@ class Parser():
             print("\t"+name+": ")
             if isinstance(current_slot_def, list):
                 for precised_def in current_slot_def:
-                    print("\t\tprecision: "+precised_def["precision"])
+                    print("\t\tvariation: "+precised_def["variation"])
                     for expr in precised_def["expressions"]:
                         print("\t\t\texpression: "+str(expr))
             else:
@@ -273,7 +273,7 @@ class Parser():
             if isinstance(current_intent_def, list):
                 print("\t"+name+":")
                 for precised_def in current_intent_def:
-                    print("\t\tprecision: "+precised_def["precision"]
+                    print("\t\tvariation: "+precised_def["variation"]
                         +" to generate "+str(precised_def["nb-gen-asked"])+"x")
                     for expr in precised_def["expressions"]:
                         print("\t\t\texpression: "+str(expr))
