@@ -67,7 +67,7 @@ class Generator():
         given a list of rules.
         """
         printDBG("Generating intent: "+intent_name)
-        if isinstance(intent_rules, list):  # Different flavors (variations)
+        if isinstance(intent_rules, list):  # TODO Different flavors (variations) + fix detection
             pass  # TODO
         else:
             if intent_rules["nb-gen-asked"] is not None:
@@ -82,7 +82,7 @@ class Generator():
                     intent_rule = intent_rules["rules"][rule_index]
                     # Generate each unit in the rule
                     for unit_rule in intent_rule:
-                        current_example += self.generate_unit(unit_rule).replace("  ", ' ')  # TODO it would be better to not have bad spaces in generations
+                        current_example += self.generate_unit(unit_rule)#.replace("  ", ' ')  # TODO it would be better to not have bad spaces in generations
                     printDBG("Generated: "+current_example)
                     self.generated_examples.append(current_example)
                     nb_examples_gen += 1
@@ -123,35 +123,79 @@ class Generator():
                 if generate_different_case:
                     return randomly_change_case(generated_str)
                 return generated_str
-            elif unit_type == Unit.alias:
-                if unit_rule["name"] not in self.parser.aliases:
-                    raise SyntaxError("Alias '"+unit_rule["name"]+"' wasn't defined")
-                unit_def = self.parser.aliases[unit_rule["name"]]
-            elif unit_type == Unit.slot:
-                if unit_rule["name"] not in self.parser.slots:
-                    raise SyntaxError("Alias '"+unit_rule["name"]+"' wasn't defined")
-                unit_def = self.parser.slots[unit_rule["name"]]
+
+            elif unit_type == Unit.alias or unit_type == Unit.slot:
+                unit_def = None
+                if unit_type == Unit.alias:
+                    if unit_rule["name"] not in self.parser.aliases:
+                        raise SyntaxError("Alias '"+unit_rule["name"]+"' wasn't defined")
+                    unit_def = self.parser.aliases[unit_rule["name"]]
+                else:
+                    if unit_rule["name"] not in self.parser.slots:
+                        raise SyntaxError("Slot '"+unit_rule["name"]+"' wasn't defined")
+                    unit_def = self.parser.slots[unit_rule["name"]]
+
+                # Manage variations
+                variation = unit_rule["variation"]
+                if variation is not None:
+                    if isinstance(unit_def, dict) and variation in unit_def:
+                        unit_def = unit_def[variation]
+                    elif unit_type == Unit.alias:
+                        raise SyntaxError(
+                            "Couldn't find variation '" + unit_rule["variation"] +
+                            "' for alias named '" + unit_rule["name"] + "'"
+                        )
+                    else:
+                        raise SyntaxError(
+                            "Couldn't find variation '" + unit_rule["variation"] +
+                            "' for slot named '" + unit_rule["name"] + "'"
+                        )
+                elif isinstance(unit_def, dict):
+                    unit_def = unit_def[next(iter(unit_def))]  # TODO no variation when variation given is not supported yet
+
+                # Choose rule
+                rule_index = randint(0, len(unit_def)-1)
+                chosen_rule = unit_def[rule_index]
+                if isinstance(chosen_rule, dict):  # TODO manage alt slot name
+                    chosen_rule = chosen_rule["rule"]
+                # Generate each unit of the rule
+                for sub_unit_rule in chosen_rule:
+                    generated_str += self.generate_unit(sub_unit_rule)
+
             elif unit_type == Unit.intent:
                 if unit_rule["name"] not in self.parser.intents:
-                    raise SyntaxError("Alias '"+unit_rule["name"]+"' wasn't defined")
+                    raise SyntaxError("Intent '"+unit_rule["name"]+"' wasn't defined")
                 unit_def = self.parser.intents[unit_rule["name"]]
+
+                # Manage variations
+                variation = unit_rule["variation"]
+                if variation is not None:
+                    if "nb-gen-asked" not in unit_def or "rules" not in unit_def or \
+                        len(unit_def) != 2 and variation in unit_def:
+                            unit_def = unit_def[variation]["rules"]
+                    else:
+                        raise SyntaxError(
+                            "Couldn't find variation '" + unit_rule["variation"] +
+                            "' for intent named '" + unit_rule["name"] + "'"
+                        )
+                elif "rules" in unit_def:
+                    unit_def = unit_def["rules"]  # TODO no variation when variation given is not supported yet
+                else:
+                    unit_def = unit_def[next(iter(unit_def))]["rules"]
+
+                # Choose rule
+                rule_index = randint(0, len(unit_def)-1)
+                chosen_rule = unit_def[rule_index]
+                # Generate each unit of the rule
+                for sub_unit_rule in chosen_rule:
+                    generated_str += self.generate_unit(sub_unit_rule)
+
             else:
                 raise RuntimeError("Tried to generate a unit of unknown type")
 
-            if isinstance(unit_def, list):  # TODO tmp variation not supported
-                unit_def = unit_def[0]
-
-            if unit_rule["leading-space"]:
-                generated_str += ' '
-
-            # Choose rule
-            rule_index = randint(0, len(unit_def["rules"])-1)
-            chosen_rule = unit_def["rules"][rule_index]
-            if isinstance(chosen_rule, dict):
-                chosen_rule = chosen_rule["rule"]
-            # Generate each unit of the rule
-            for sub_unit_rule in chosen_rule:
-                generated_str += self.generate_unit(sub_unit_rule)
+            if generated_str != "" and unit_rule["leading-space"] and \
+                not generated_str.startswith(' '):
+                    generated_str = ' '+generated_str
 
             if generate_different_case:
                 return randomly_change_case(generated_str)

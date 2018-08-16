@@ -109,20 +109,20 @@ class Parser():
                     +alias_name+"' while another definition was already found",
                     (self.in_file.name, self.line_nb, 0, first_line))
             else:
-                self.aliases[alias_name].append({
-                    "variation": alias_variation,
-                    "rules": rules,
-                })
+                if alias_variation not in self.aliases[alias_name]:
+                    self.aliases[alias_name][alias_variation] = rules
+                else:  # TODO might be interesting to add it to existing rules
+                    raise SyntaxError("Found a definition with variation"
+                        +alias_variation+" for alias '"+alias_name+
+                        "' while another definition with the same variation name was already found",
+                        (self.in_file.name, self.line_nb, 0, first_line))
         else:
             if alias_variation is None:
-                self.aliases[alias_name] = {
-                    "rules": rules,
-                }
+                self.aliases[alias_name] = rules
             else:
-                self.aliases[alias_name] = [{
-                    "variation": alias_variation,
-                    "rules": rules,
-                }]
+                self.aliases[alias_name] = {
+                    alias_variation: rules,
+                }
 
     def parse_slot_definition(self, first_line):
         """
@@ -165,20 +165,20 @@ class Parser():
                     +slot_name+"' while another definition was already found",
                     (self.in_file.name, self.line_nb, 0, first_line))
             else:
-                self.aliases[alias_name].append({
-                    "variation": slot_variation,
-                    "rules": rules,
-                })
+                if slot_variation not in self.aliases[slot_name]:
+                    self.aliases[slot_name][slot_variation] = rules
+                else:
+                    raise SyntaxError("Found a definition with variation"
+                        +slot_variation+" for slot '"+slot_name+
+                        "' while another definition with the same variation name was already found",
+                        (self.in_file.name, self.line_nb, 0, first_line))
         else:
             if slot_variation is None:
-                self.slots[slot_name] = {
-                    "rules": rules,
-                }
+                self.slots[slot_name] = rules
             else:
-                self.slots[slot_name] = [{
-                    "variation": slot_variation,
-                    "rules": rules,
-                }]
+                self.slots[slot_name] = {
+                    slot_variation: rules,
+                }
 
     def parse_intent_definition(self, first_line):
         """
@@ -217,11 +217,16 @@ class Parser():
                     +intent_name+"' while another definition was already found",
                     (self.in_file.name, self.line_nb, 0, first_line))
             else:
-                self.intents[intent_name].append({
-                    "nb-gen-asked": nb_gen_asked,
-                    "variation": intent_variation,
-                    "rules": rules,
-                })
+                if intent_variation not in self.intents[name]:
+                    self.intents[intent_name][intent_variation] = {
+                        "nb-gen-asked": nb_gen_asked,
+                        "rules": rules,
+                    }
+                else:
+                    raise SyntaxError("Found a definition with variation"
+                        +intent_variation+" for intent '"+intent_name+
+                        "' while another definition with the same variation name was already found",
+                        (self.in_file.name, self.line_nb, 0, first_line))
         else:
             if intent_variation is None:
                 self.intents[intent_name] = {
@@ -229,11 +234,12 @@ class Parser():
                     "rules": rules,
                 }
             else:
-                self.intents[intent_name] = [{
-                    "nb-gen-asked": nb_gen_asked,
-                    "variation": intent_variation,
-                    "rules": rules,
-                }]
+                self.intents[intent_name] = {
+                    intent_variation: {
+                        "nb-gen-asked": nb_gen_asked,
+                        "rules": rules,
+                    },
+                }
 
 
     def has_parsed(self):
@@ -246,42 +252,46 @@ class Parser():
             current_alias_def = self.aliases[name]
             print("\t"+name+": ")
             if isinstance(current_alias_def, list):
-                for precised_def in current_alias_def:
-                    print("\t\tvariation: "+precised_def["variation"])
-                    for expr in precised_def["rules"]:
-                        print("\t\t\trule: "+str(expr))
+                for rule in current_alias_def:
+                    print("\t\trule: "+str(rule))
             else:
-                for expr in current_alias_def["rules"]:
-                    print("\t\trule: "+str(expr))
+                for variation in current_alias_def:
+                    print("\t\tvariation: "+variation)
+                    for rule in current_alias_def[variation]:
+                        print("\t\t\trule: "+str(rule))
 
         print("\nSlots:")
         for name in self.slots:
             current_slot_def = self.slots[name]
             print("\t"+name+": ")
             if isinstance(current_slot_def, list):
-                for precised_def in current_slot_def:
-                    print("\t\tvariation: "+precised_def["variation"])
-                    for expr in precised_def["rules"]:
-                        print("\t\t\trule: "+str(expr))
+                for rule in current_slot_def:
+                    print("\t\trule: "+str(rule))
             else:
-                for expr in current_slot_def["rules"]:
-                    print("\t\trule: "+str(expr))
+                for variation in current_slot_def:
+                    print("\t\tvariation: "+variation)
+                    for rule in current_slot_def[variation]:
+                        print("\t\t\trule: "+str(rule))
 
         print("\nIntents:")
         for name in self.intents:
             current_intent_def = self.intents[name]
-            if isinstance(current_intent_def, list):
-                print("\t"+name+":")
-                for precised_def in current_intent_def:
-                    print("\t\tvariation: "+precised_def["variation"]
-                        +" to generate "+str(precised_def["nb-gen-asked"])+"x")
-                    for expr in precised_def["rules"]:
-                        print("\t\t\trule: "+str(expr))
+            if "nb-gen-asked" in current_intent_def and \
+                "rules" in current_intent_def and \
+                len(current_intent_def) == 2:
+                    print("\t"+name+"(to generate "
+                        +str(current_intent_def["nb-gen-asked"])+"x): ")
+                    for rule in current_intent_def["rules"]:
+                        print("\t\trule: "+str(rule))
             else:
-                print("\t"+name+"(to generate "
-                    +str(current_intent_def["nb-gen-asked"])+"x): ")
-                for expr in current_intent_def["rules"]:
-                    print("\t\trule: "+str(expr))
+                print("\t"+name+":")
+                for variation in current_intent_def:
+                    current_variation = current_intent_def[variation]
+                    print("\t\tvariation: "+variation+
+                        " to generate "+str(current_variation["nb-gen-asked"])+"x")
+                    for rule in current_variation["rules"]:
+                        print("\t\t\trule: "+str(rule))
+
 
 
 if __name__ == "__main__":
