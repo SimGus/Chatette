@@ -73,7 +73,7 @@ class Generator():
                     intent_rule = intent_rules["rules"][rule_index]
                     # Generate each unit in the rule
                     for unit_rule in intent_rule:
-                        current_example += self.generate_unit(unit_rule)
+                        current_example += self.generate_unit(unit_rule).replace("  ", ' ')  # TODO it would be better to not have bad spaces in generations
                     printDBG("Generated: "+current_example)
                     self.generated_examples.append(current_example)
                     nb_examples_gen += 1
@@ -99,32 +99,42 @@ class Generator():
                 if randint(0, 99) > percentage_gen:
                     return ''
 
+            unit_def = None
             if unit_type == Unit.word_group:
+                # print("WORD GROUP: "+str(unit_rule))
                 return " NotSupported"
             elif unit_type == Unit.alias:
                 if unit_rule["name"] not in self.parser.aliases:
                     raise SyntaxError("Alias '"+unit_rule["name"]+"' wasn't defined")
-                alias_def = self.parser.aliases[unit_rule["name"]]
-                if isinstance(alias_def, list):  # TODO tmp variation not supported
-                    alias_def = alias_def[0]
-
-                generated_str = ''
-                if unit_rule["leading-space"]:
-                    generated_str += ' '
-
-                # Choose rule
-                rule_index = randint(0, len(alias_def["rules"])-1)
-                chosen_rule = alias_def["rules"][rule_index]
-                # Generate each unit of the rule
-                for sub_unit_rule in chosen_rule:
-                    generated_str += self.generate_unit(sub_unit_rule)
-
-                return generated_str
+                unit_def = self.parser.aliases[unit_rule["name"]]
             elif unit_type == Unit.slot:
-                return " NotSupported"
+                if unit_rule["name"] not in self.parser.slots:
+                    raise SyntaxError("Alias '"+unit_rule["name"]+"' wasn't defined")
+                unit_def = self.parser.slots[unit_rule["name"]]
             elif unit_type == Unit.intent:
-                return " NotSupported"
-            raise RuntimeError("Tried to generate a unit of unknown type")
+                if unit_rule["name"] not in self.parser.intents:
+                    raise SyntaxError("Alias '"+unit_rule["name"]+"' wasn't defined")
+                unit_def = self.parser.intents[unit_rule["name"]]
+            else:
+                raise RuntimeError("Tried to generate a unit of unknown type")
+
+            if isinstance(unit_def, list):  # TODO tmp variation not supported
+                unit_def = unit_def[0]
+
+            generated_str = ''
+            if unit_rule["leading-space"]:
+                generated_str += ' '
+
+            # Choose rule
+            rule_index = randint(0, len(unit_def["rules"])-1)
+            chosen_rule = unit_def["rules"][rule_index]
+            if isinstance(chosen_rule, dict):
+                chosen_rule = chosen_rule["rule"]
+            # Generate each unit of the rule
+            for sub_unit_rule in chosen_rule:
+                generated_str += self.generate_unit(sub_unit_rule)
+
+            return generated_str
 
 
     def write_JSON(self):
