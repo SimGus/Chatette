@@ -86,32 +86,41 @@ class Generator():
         unit_type = unit_rule["type"]
         if unit_type == Unit.word:
             return ' '+unit_rule["word"]
-        elif unit_type == Unit.word_group:
-            return " NotSupported"
-        elif unit_type == Unit.alias:
-            if unit_rule["name"] not in self.parser.aliases:
-                raise SyntaxError("Alias '"+unit_rule["name"]+"' wasn't defined")
-            alias_def = self.parser.aliases[unit_rule["name"]]
-            if isinstance(alias_def, list):  # TODO tmp variation not supported
-                alias_def = alias_def[0]
+        else:
+            # Manage random generation
+            if unit_rule["randgen"] is not None:
+                percentage_gen = 50
+                if unit_rule["percentgen"] is not None:
+                    percentage_gen = int(unit_rule["percentgen"])
+                if randint(0, 99) > percentage_gen:
+                    return ''
 
-            generated_str = ''
-            if unit_rule["leading-space"]:
-                generated_str += ' '
+            if unit_type == Unit.word_group:
+                return " NotSupported"
+            elif unit_type == Unit.alias:
+                if unit_rule["name"] not in self.parser.aliases:
+                    raise SyntaxError("Alias '"+unit_rule["name"]+"' wasn't defined")
+                alias_def = self.parser.aliases[unit_rule["name"]]
+                if isinstance(alias_def, list):  # TODO tmp variation not supported
+                    alias_def = alias_def[0]
 
-            # Choose rule
-            rule_index = randint(0, len(alias_def["rules"])-1)
-            chosen_rule = alias_def["rules"][rule_index]
-            # Generate each unit of the rule
-            for sub_unit_rule in chosen_rule:
-                generated_str += self.generate_unit(sub_unit_rule)
+                generated_str = ''
+                if unit_rule["leading-space"]:
+                    generated_str += ' '
 
-            return generated_str
-        elif unit_type == Unit.slot:
-            return " NotSupported"
-        elif unit_type == Unit.intent:
-            return " NotSupported"
-        raise RuntimeError("Tried to generate a unit of unknown type")
+                # Choose rule
+                rule_index = randint(0, len(alias_def["rules"])-1)
+                chosen_rule = alias_def["rules"][rule_index]
+                # Generate each unit of the rule
+                for sub_unit_rule in chosen_rule:
+                    generated_str += self.generate_unit(sub_unit_rule)
+
+                return generated_str
+            elif unit_type == Unit.slot:
+                return " NotSupported"
+            elif unit_type == Unit.intent:
+                return " NotSupported"
+            raise RuntimeError("Tried to generate a unit of unknown type")
 
 
     def write_JSON(self):
