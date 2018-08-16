@@ -31,6 +31,15 @@ def cast_to_unicode(any):
         return any
 
 
+def randomly_change_case(text):
+    """Randomly set the case of the first letter of `text`"""
+    if randint(0, 99) >= 50:
+        return text
+    for (i, c) in enumerate(text):
+        if not c.isspace():
+            return text[:i] + text[i].upper() + text[(i+1):]
+
+
 class Generator():
     """
     Using the info parsed from the input file, this class will generate
@@ -69,7 +78,7 @@ class Generator():
                 while nb_examples_gen < max_gen_nb:
                     current_example = ""
                     # Choose rule to generate
-                    rule_index = randint(0,nb_intent_rules-1)
+                    rule_index = randint(0, nb_intent_rules-1)
                     intent_rule = intent_rules["rules"][rule_index]
                     # Generate each unit in the rule
                     for unit_rule in intent_rule:
@@ -97,16 +106,23 @@ class Generator():
                 percentage_gen = 50
                 if unit_rule["percentgen"] is not None:
                     percentage_gen = int(unit_rule["percentgen"])
-                if randint(0, 99) > percentage_gen:
+                if randint(0, 99) >= percentage_gen:
                     return ''
+
+            generate_different_case = False
+            if "casegen" in unit_rule and unit_rule["casegen"]:
+                generate_different_case = True
 
             generated_str = ''
             unit_def = None
-            if unit_type == Unit.word_group:  # TODO they don't have recall of case gen
+            if unit_type == Unit.word_group:
                 # print("WORD GROUP: "+str(unit_rule))
                 if unit_rule["leading-space"]:
                     generated_str += ' '
                 generated_str += unit_rule["words"]
+
+                if generate_different_case:
+                    return randomly_change_case(generated_str)
                 return generated_str
             elif unit_type == Unit.alias:
                 if unit_rule["name"] not in self.parser.aliases:
@@ -138,6 +154,8 @@ class Generator():
             for sub_unit_rule in chosen_rule:
                 generated_str += self.generate_unit(sub_unit_rule)
 
+            if generate_different_case:
+                return randomly_change_case(generated_str)
             return generated_str
 
 
