@@ -93,14 +93,14 @@ class Parser():
                     (self.in_file.name, self.line_nb, indentation_nb, line))
 
         # Manage the contents
-        expressions = []
+        rules = []
         indentation_nb = None
         while self.is_inside_decl():
             line = self.read_line()
             stripped_line = line.lstrip()
             indentation_nb = check_indentation(indentation_nb, line, stripped_line)
 
-            expressions.append(split_contents(stripped_line))
+            rules.append(split_contents(stripped_line))
 
         # Put the new definition in the alias dict
         if alias_name in self.aliases:
@@ -111,17 +111,17 @@ class Parser():
             else:
                 self.aliases[alias_name].append({
                     "variation": alias_variation,
-                    "expressions": expressions,
+                    "rules": rules,
                 })
         else:
             if alias_variation is None:
                 self.aliases[alias_name] = {
-                    "expressions": expressions,
+                    "rules": rules,
                 }
             else:
                 self.aliases[alias_name] = [{
                     "variation": alias_variation,
-                    "expressions": expressions,
+                    "rules": rules,
                 }]
 
     def parse_slot_definition(self, first_line):
@@ -144,18 +144,18 @@ class Parser():
                     (self.in_file.name, self.line_nb, indentation_nb, line))
 
         #Manage the contents
-        expressions = []
+        rules = []
         indentation_nb = None
         while self.is_inside_decl():
             line = self.read_line()
             stripped_line = line.lstrip()
             indentation_nb = check_indentation(indentation_nb, line, stripped_line)
 
-            (alt_slot_val_name, expression) = \
+            (alt_slot_val_name, rule) = \
                 split_contents(stripped_line, accept_alt_solt_val=True)
-            expressions.append({
+            rules.append({
                 "slot-value-name": alt_slot_val_name,
-                "expression": expression,
+                "rule": rule,
             })
 
         # Put the new definition in the slot dict
@@ -167,17 +167,17 @@ class Parser():
             else:
                 self.aliases[alias_name].append({
                     "variation": slot_variation,
-                    "expressions": expressions,
+                    "rules": rules,
                 })
         else:
             if slot_variation is None:
                 self.slots[slot_name] = {
-                    "expressions": expressions,
+                    "rules": rules,
                 }
             else:
                 self.slots[slot_name] = [{
                     "variation": slot_variation,
-                    "expressions": expressions,
+                    "rules": rules,
                 }]
 
     def parse_intent_definition(self, first_line):
@@ -201,14 +201,14 @@ class Parser():
         nb_gen_asked = find_nb_gen_asked(first_line)
 
         # Manage the contents
-        expressions = []
+        rules = []
         indentation_nb = None
         while self.is_inside_decl():
             line = self.read_line()
             stripped_line = line.lstrip()
             indentation_nb = check_indentation(indentation_nb, line, stripped_line)
 
-            expressions.append(split_contents(stripped_line))
+            rules.append(split_contents(stripped_line))
 
         # Put the new definition in the intent dict
         if intent_name in self.intents:
@@ -220,19 +220,19 @@ class Parser():
                 self.intents[intent_name].append({
                     "nb-gen-asked": nb_gen_asked,
                     "variation": intent_variation,
-                    "expressions": expressions,
+                    "rules": rules,
                 })
         else:
             if intent_variation is None:
                 self.intents[intent_name] = {
                     "nb-gen-asked": nb_gen_asked,
-                    "expressions": expressions,
+                    "rules": rules,
                 }
             else:
                 self.intents[intent_name] = [{
                     "nb-gen-asked": nb_gen_asked,
                     "variation": intent_variation,
-                    "expressions": expressions,
+                    "rules": rules,
                 }]
 
 
@@ -248,11 +248,11 @@ class Parser():
             if isinstance(current_alias_def, list):
                 for precised_def in current_alias_def:
                     print("\t\tvariation: "+precised_def["variation"])
-                    for expr in precised_def["expressions"]:
-                        print("\t\t\texpression: "+str(expr))
+                    for expr in precised_def["rules"]:
+                        print("\t\t\trule: "+str(expr))
             else:
-                for expr in current_alias_def["expressions"]:
-                    print("\t\texpression: "+str(expr))
+                for expr in current_alias_def["rules"]:
+                    print("\t\trule: "+str(expr))
 
         print("\nSlots:")
         for name in self.slots:
@@ -261,11 +261,11 @@ class Parser():
             if isinstance(current_slot_def, list):
                 for precised_def in current_slot_def:
                     print("\t\tvariation: "+precised_def["variation"])
-                    for expr in precised_def["expressions"]:
-                        print("\t\t\texpression: "+str(expr))
+                    for expr in precised_def["rules"]:
+                        print("\t\t\trule: "+str(expr))
             else:
-                for expr in current_slot_def["expressions"]:
-                    print("\t\texpression: "+str(expr))
+                for expr in current_slot_def["rules"]:
+                    print("\t\trule: "+str(expr))
 
         print("\nIntents:")
         for name in self.intents:
@@ -275,13 +275,13 @@ class Parser():
                 for precised_def in current_intent_def:
                     print("\t\tvariation: "+precised_def["variation"]
                         +" to generate "+str(precised_def["nb-gen-asked"])+"x")
-                    for expr in precised_def["expressions"]:
-                        print("\t\t\texpression: "+str(expr))
+                    for expr in precised_def["rules"]:
+                        print("\t\t\trule: "+str(expr))
             else:
                 print("\t"+name+"(to generate "
                     +str(current_intent_def["nb-gen-asked"])+"x): ")
-                for expr in current_intent_def["expressions"]:
-                    print("\t\texpression: "+str(expr))
+                for expr in current_intent_def["rules"]:
+                    print("\t\trule: "+str(expr))
 
 
 if __name__ == "__main__":
