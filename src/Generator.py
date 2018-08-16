@@ -2,6 +2,7 @@
 
 # TODO shouldn't generate twice the same statement
 
+import sys
 import json
 from random import randint
 
@@ -10,6 +11,8 @@ from parser_utils import Unit
 
 
 def cast_to_unicode(any):
+    if sys.version_info[0] == 3:
+        return any
     if isinstance(any, str):
         return unicode(any, "utf-8")
     elif isinstance(any, dict):
