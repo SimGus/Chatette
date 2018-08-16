@@ -91,6 +91,7 @@ class Generator():
             return ' '+unit_rule["word"]
         else:
             # TODO keep track of already generated sentences (+max nb of attempts)
+            # TODO manage case gen
             # Manage random generation
             if unit_rule["randgen"] is not None:
                 percentage_gen = 50
@@ -99,10 +100,14 @@ class Generator():
                 if randint(0, 99) > percentage_gen:
                     return ''
 
+            generated_str = ''
             unit_def = None
-            if unit_type == Unit.word_group:
+            if unit_type == Unit.word_group:  # TODO they don't have recall of case gen
                 # print("WORD GROUP: "+str(unit_rule))
-                return " NotSupported"
+                if unit_rule["leading-space"]:
+                    generated_str += ' '
+                generated_str += unit_rule["words"]
+                return generated_str
             elif unit_type == Unit.alias:
                 if unit_rule["name"] not in self.parser.aliases:
                     raise SyntaxError("Alias '"+unit_rule["name"]+"' wasn't defined")
@@ -121,7 +126,6 @@ class Generator():
             if isinstance(unit_def, list):  # TODO tmp variation not supported
                 unit_def = unit_def[0]
 
-            generated_str = ''
             if unit_rule["leading-space"]:
                 generated_str += ' '
 
