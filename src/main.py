@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import sys, io
-from Parser import Parser
+from Parser import Parser, Unit
 from Generator import Generator
 
 DEFAULT_OUTPUT_FILENAME = "output.json"
@@ -26,7 +26,9 @@ if __name__ == "__main__":
         with open(template_filename, 'r') as in_file:
             parser = Parser(in_file)
             parser.parse()
-            # parser.printDBG()
+            parser.printDBG()
+        print("")
+        print(parser.intents)
 
         with io.open(output_filename, 'w+', encoding="utf-8") as out_file:  # TODO create if not already existing (same with dirs)
             generator = Generator(out_file, parser)
