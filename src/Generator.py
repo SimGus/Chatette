@@ -87,6 +87,7 @@ class Generator():
         if unit_type == Unit.word:
             return ' '+unit_rule["word"]
         else:
+            # TODO keep track of already generated sentences (+max nb of attempts)
             # Manage random generation
             if unit_rule["randgen"] is not None:
                 percentage_gen = 50
