@@ -100,7 +100,6 @@ class Generator():
             return ' '+unit_rule["word"]
         else:
             # TODO keep track of already generated sentences (+max nb of attempts)
-            # TODO manage case gen
             # Manage random generation
             if unit_rule["randgen"] is not None:
                 percentage_gen = 50
