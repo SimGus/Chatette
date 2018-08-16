@@ -7,7 +7,7 @@
     ~[&greet]
 
 %[restaurant_choice](3) ; Will generate three utterances
-    ~[&greet?] ~[i want to] eat @[cuisine_type] cuisine [today?].  ; TODO fix dot
+    ~[&greet?] ~[i want to] eat @[cuisine_type] cuisine[ today?].  ; TODO fix dot
 
 ;================== Slot definitions =========================
 |included.chatette  ; the slot definition is in the file `included.chatette` which will be included here
