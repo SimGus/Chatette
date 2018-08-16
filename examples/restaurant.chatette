@@ -9,6 +9,9 @@
 %[restaurant_choice](3) ; Will generate three utterances
     ~[&greet?] ~[i want to] eat @[cuisine_type] cuisine.
 
+;================== Slot definitions =========================
+|included.chatette  ; the slot definition is in the file `included.chatette` which will be included here
+
 ;================== Alias definitions =======================
 ~[greet]
     hi
@@ -33,9 +36,3 @@
 
 ~[mexican (nom nom)]
     mexican
-
-;================== Slot definitions =========================
-@[cuisine_type]
-    ~[italian]  ; if this is generated, this slot will have the value named `italian`
-    ~[french]   ; if this is generated, this slot will have the value named `french`
-    ~[mexican (nom nom)] = mexican    ; if this is generated, this slot will have the value named `mexican`

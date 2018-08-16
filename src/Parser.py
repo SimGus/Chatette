@@ -2,6 +2,7 @@
 
 from enum import Enum
 import re
+import os
 
 from utils import *
 
@@ -18,6 +19,7 @@ class LineType(Enum):
     alias_declaration = 3
     slot_declaration = 4
     intent_declaration = 5
+    include_file = 6
 
 
 def strip_comments(text):
@@ -48,6 +50,8 @@ def get_top_level_line_type(line, stripped_line):
         return LineType.slot_declaration
     elif line.startswith(Parser.INTENT_SYM):
         return LineType.intent_declaration
+    elif line.startswith(Parser.INCLUDE_FILE_SYM):
+        return LineType.include_file
     else:
         SyntaxError("Invalid syntax",
             (self.in_file.name, self.line_nb, 1, line))
@@ -268,8 +272,13 @@ class Parser():
     UNIT_CLOSE_SYM = ']'
 
     PRECISION_SYM = '#'
+    RAND_GEN_SYM = '?'
+    PERCENT_GEN_SYM = '/'
+    CASE_GEN_SYM = '&'
 
     ALT_SLOT_VALUE_NAME_SYM = '='
+
+    INCLUDE_FILE_SYM = '|'
 
     # This regex finds patterns like this `[name#precision?randgen/percentgen]`
     # with `precision`, `randgen` and `percentgen` optional
@@ -281,6 +290,7 @@ class Parser():
 
     def __init__(self, input_file):
         self.in_file = input_file
+        self.opened_files = []
         self.line_nb = 0
 
         self.aliases = dict()  # for each alias, stores a list of list of units
@@ -303,7 +313,18 @@ class Parser():
         return (next_line.startswith(' ') or next_line.startswith('\t'))
 
 
+    def parse_file(self, filename):
+        """Runs the parsing of the file `filename` within the same parser"""
+        self.opened_files.append(self.in_file)
+        file_path = os.path.join(os.path.dirname(self.in_file.name), filename)
+        with open(file_path, 'r') as in_file:
+            self.in_file = in_file
+            self.parse()
+        self.in_file = self.opened_files.pop()
+
+
     def parse(self):
+        printDBG("Parsing file: "+self.in_file.name)
         line = None
         while line != "":
             line = self.read_line()
@@ -313,14 +334,15 @@ class Parser():
             if line_type == LineType.empty or line_type == LineType.comment:
                 continue
             stripped_line = strip_comments(stripped_line)  # Not done before to compute the indentation
-            if line_type == LineType.alias_declaration:
+            if line_type == LineType.include_file:
+                self.parse_file(stripped_line[1:])
+            elif line_type == LineType.alias_declaration:
                 self.parse_alias_definition(stripped_line)
             elif line_type == LineType.slot_declaration:
                 self.parse_slot_definition(stripped_line)
             else:  # intent declaration
                 self.parse_intent_definition(stripped_line)
-
-        self.printDBG()
+        printDBG("Parsing of file: "+self.in_file.name+" finished")
 
 
     def parse_alias_definition(self, first_line):  # Lots of copy-paste in three methods

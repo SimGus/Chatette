@@ -25,6 +25,7 @@ if __name__ == "__main__":
         with open(template_filename, 'r') as in_file:
             parser = Parser(in_file)
             parser.parse()
+            parser.printDBG()
 
         # with open(output_filename, 'w+') as out_file:  # TODO create if not already existing (same with dirs)
         #     pass
