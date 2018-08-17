@@ -14,8 +14,8 @@ INTENT_SYM = '%'
 UNIT_OPEN_SYM = '['
 UNIT_CLOSE_SYM = ']'
 
-CHOICE_OPEN_SYM = '{'
-CHOICE_CLOSE_SYM = '}'
+CHOICE_OPEN_SYM = r'{' #'<'
+CHOICE_CLOSE_SYM = r'}' #'>'
 CHOICE_SEP = '/'
 
 VARIATION_SYM = '#'

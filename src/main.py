@@ -28,7 +28,6 @@ if __name__ == "__main__":
             parser.parse()
             parser.printDBG()
         print("")
-        print(parser.intents)
 
         with io.open(output_filename, 'w+', encoding="utf-8") as out_file:  # TODO create if not already existing (same with dirs)
             generator = Generator(out_file, parser)

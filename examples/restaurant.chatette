@@ -22,6 +22,7 @@
     [&I]~[want#elision]
 
 ~[want#no elision]
+    {this is/[a test]}
     want to
     would [really?] like to   ; either `would really like to` or `would like to` will be generated
 ~[want#elision]

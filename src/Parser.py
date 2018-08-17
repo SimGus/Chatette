@@ -407,6 +407,7 @@ class Parser():
                     inside_choice = False
                     words_and_units_raw.append(current+CHOICE_CLOSE_SYM)
                     current = ""
+                continue
             # Manage spaces
             if c.isspace():
                 space_just_seen = True
@@ -430,6 +431,14 @@ class Parser():
             elif accept_alt_solt_val and c == ALT_SLOT_VALUE_NAME_SYM:
                 must_parse_alt_slot_val = True
                 break
+            # New choice
+            elif c == CHOICE_OPEN_SYM:
+                if current != "":
+                    words_and_units_raw.append(current)
+                elif space_just_seen:
+                    words_and_units_raw.append(' ')
+                current = CHOICE_OPEN_SYM
+                inside_choice = True
             # New unit
             elif is_start_unit_sym(c) or current == "":
                 if space_just_seen and current == "":
@@ -438,12 +447,6 @@ class Parser():
                     words_and_units_raw.append(current)
                     current = ""
                 current += c
-            # New choice
-            elif c == CHOICE_OPEN_SYM:
-                if current != "":
-                    words_and_units_raw.append(current)
-                    current = CHOICE_OPEN_SYM
-                inside_choice = True
             # Any other character
             else:
                 current += c
@@ -452,8 +455,6 @@ class Parser():
                 space_just_seen = False
         if current != "":
             words_and_units_raw.append(current)
-
-        print(words_and_units_raw)
 
         # Find the alternative slot value name if needed
         alt_slot_val_name = None
@@ -476,13 +477,15 @@ class Parser():
             elif is_choice(string):  # choice
                 no_leading_space = i == 0 or (i != 0 and words_and_units_raw[i-1] != ' ')
                 choices = []
-                for choice_str in re.split(r'(?<!\\):', CHOICE_SEP):  # TODO improve the regex here
+                splits = re.split(r"(?<!\\)/", string[1:-1])  # TODO improve the regex here
+                for choice_str in splits:
                     if choice_str != "":
                         choices.append(self.split_contents(choice_str))
-                words_and_units.append({
-                    "type": Unit.choice,
-                    "choices": choices,
-                })
+                if choices != []:
+                    words_and_units.append({
+                        "type": Unit.choice,
+                        "choices": choices,
+                    })
             else:  # unit
                 no_leading_space = i == 0 or (i != 0 and words_and_units_raw[i-1] != ' ')
                 unit_type = get_unit_type(string)
