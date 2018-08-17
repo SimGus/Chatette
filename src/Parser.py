@@ -131,7 +131,7 @@ class Parser():
         if percentgen is not None:
             raise SyntaxError("Declarations cannot have a random generation modifier",
                     (self.in_file.name, self.line_nb, 0, line))
-        if casegen:
+        if casegen:  # TODO change this
             raise SyntaxError("Case generation modifier not accepted in declarations",
                     (self.in_file.name, self.line_nb, indentation_nb, line))
 
