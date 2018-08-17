@@ -433,6 +433,10 @@ class Parser():
 
             if not c.isspace():
                 space_just_seen = False
+        if current != "":
+            words_and_units_raw.append(current)
+
+        print(words_and_units_raw)
 
         # Find the alternative slot value name if needed
         alt_slot_val_name = None
