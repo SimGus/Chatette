@@ -14,6 +14,10 @@ INTENT_SYM = '%'
 UNIT_OPEN_SYM = '['
 UNIT_CLOSE_SYM = ']'
 
+CHOICE_OPEN_SYM = '{'
+CHOICE_CLOSE_SYM = '}'
+CHOICE_SEP = '/'
+
 VARIATION_SYM = '#'
 RAND_GEN_SYM = '?'
 PERCENT_GEN_SYM = '/'
@@ -39,6 +43,7 @@ class Unit(Enum):
     alias = 3  # alias with modifiers
     slot = 4  # slot with modifiers
     intent = 5  # intent with modifiers and generation number
+    choice = 6  # choice with contained units
 
 class LineType(Enum):
     empty = 1
@@ -60,6 +65,8 @@ def is_start_unit_sym(char):
             char == SLOT_SYM or char == INTENT_SYM)
 def is_unit_start(text):
     return (len(text) > 0 and is_start_unit_sym(text[0]))
+def is_choice(text):
+    return (len(text) > 0 and text.startswith(CHOICE_OPEN_SYM))
 
 def get_unit_type(unit):
     if unit.startswith(UNIT_OPEN_SYM):

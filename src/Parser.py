@@ -376,7 +376,7 @@ class Parser():
 
     def split_contents(self, text, accept_alt_solt_val=False):
         """
-        Splits `text` into a list of words and units
+        Splits `text` into a list of words and units (and choices)
         (word groups, aliases, slots and intents).
         Keeps also track of units that have no space between them (this info is
         placed in the returned list).
@@ -390,12 +390,23 @@ class Parser():
         escaped = False
         space_just_seen = False
         must_parse_alt_slot_val = False
+        inside_choice = False
         for c in text:
             # Manage character escapement
             if escaped:
                 current += c
                 escaped = False
                 continue
+            if c == COMMENT_SYM:
+                break
+            # Manage choices
+            if inside_choice:
+                if c != CHOICE_CLOSE_SYM:
+                    current += c
+                else:  # End of choice
+                    inside_choice = False
+                    words_and_units_raw.append(current+CHOICE_CLOSE_SYM)
+                    current = ""
             # Manage spaces
             if c.isspace():
                 space_just_seen = True
@@ -409,8 +420,6 @@ class Parser():
                 else:
                     current += c
                     continue
-            elif c == COMMENT_SYM:
-                break
             elif c == ESCAPE_SYM:
                 escaped = True
             # End unit
@@ -429,6 +438,12 @@ class Parser():
                     words_and_units_raw.append(current)
                     current = ""
                 current += c
+            # New choice
+            elif c == CHOICE_OPEN_SYM:
+                if current != "":
+                    words_and_units_raw.append(current)
+                    current = CHOICE_OPEN_SYM
+                inside_choice = True
             # Any other character
             else:
                 current += c
@@ -451,14 +466,23 @@ class Parser():
         for (i, string) in enumerate(words_and_units_raw):
             if string == ' ':
                 continue
-            elif not is_unit_start(string):
+            elif not is_unit_start(string) and not is_choice(string):
                 no_leading_space = i == 0 or (i != 0 and words_and_units_raw[i-1] != ' ')
                 words_and_units.append({
                     "type": Unit.word,
                     "word": string,
                     "leading-space": not no_leading_space,
                 })
-            else:
+            elif is_choice(string):  # choice
+                no_leading_space = i == 0 or (i != 0 and words_and_units_raw[i-1] != ' ')
+                choices = []
+                for choice_str in re.split(r'(?<!\\):', CHOICE_SEP):  # TODO improve the regex here
+                    choices.append(self.split_contents(choice_str))
+                words_and_units.append({
+                    "type": Unit.choice,
+                    "choices": choices,
+                })
+            else:  # unit
                 no_leading_space = i == 0 or (i != 0 and words_and_units_raw[i-1] != ' ')
                 unit_type = get_unit_type(string)
                 if unit_type == Unit.word_group:

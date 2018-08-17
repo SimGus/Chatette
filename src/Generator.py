@@ -255,6 +255,13 @@ class Generator():
                     generated_entities.extend(sub_generation["entities"])
                     generated_str += sub_generation["text"]
 
+            elif unit_type == Unit.choice:  # TODO
+                print("Choices not supported yet")
+                return {
+                    "text": '',
+                    "entities": [],
+                }
+
             else:
                 raise RuntimeError("Tried to generate a unit of unknown type")
 
