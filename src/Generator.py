@@ -99,7 +99,7 @@ class Generator():
                     current_example += generation["text"]
                     current_entities.extend(generation["entities"])
                 current_example = current_example.lstrip()
-                printDBG("Generated: "+current_example)
+                printDBG("Generated: '"+current_example+"'")
                 printDBG("Entities: "+str(current_entities))
                 self.generated_examples.append(
                     to_Rasa_format(intent_name, current_example, current_entities)
