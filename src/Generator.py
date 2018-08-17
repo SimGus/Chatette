@@ -10,6 +10,11 @@ from utils import *
 from parser_utils import Unit
 from rasa_adapter import to_Rasa_format
 
+EMPTY_GEN = {
+    "text": '',
+    "entities": [],
+}
+
 
 def cast_to_unicode(any):
     if sys.version_info[0] == 3:
@@ -127,6 +132,10 @@ class Generator():
                 "entities": [],
             }
         elif unit_type == Unit.choice:  # TODO casegen
+            if unit_rule["randgen"]:
+                if randint(0, 99) >= 50:
+                    return EMPTY_GEN
+
             chosen_index = randint(0, len(unit_rule["choices"])-1)
             chosen_rule = unit_rule["choices"][chosen_index]
             generated_str = ""
@@ -152,17 +161,11 @@ class Generator():
                     if randint(0, 99) >= percentage_gen:
                         if randgen_name != "":
                             self.generated_randgens[randgen_name] = False  # TODO do it by level
-                        return {
-                            "text": '',
-                            "entities": [],
-                        }
+                        return EMPTY_GEN
                     elif randgen_name != "":
                         self.generated_randgens[randgen_name] = True
                 elif not self.generated_randgens[randgen_name]:  # Should not be generated
-                    return {
-                        "text": '',
-                        "entities": [],
-                    }
+                    return EMPTY_GEN
                 else:  # Must be generated
                     pass
 
