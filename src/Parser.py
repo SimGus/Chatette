@@ -222,8 +222,8 @@ class Parser():
                     +slot_name+"' while another definition was already found",
                     (self.in_file.name, self.line_nb, 0, first_line))
             else:
-                if slot_variation not in self.aliases[slot_name]:
-                    self.aliases[slot_name][slot_variation] = rules
+                if slot_variation not in self.slots[slot_name]:
+                    self.slots[slot_name][slot_variation] = rules
                 else:
                     raise SyntaxError("Found a definition with variation"
                         +slot_variation+" for slot '"+slot_name+
