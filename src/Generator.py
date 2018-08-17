@@ -98,7 +98,7 @@ class Generator():
                     generation = self.generate_unit(unit_rule)
                     current_example += generation["text"]
                     current_entities.extend(generation["entities"])
-                current_example = current_example.lstrip()
+                current_example = current_example.strip()  # strip for safety
                 printDBG("Generated: '"+current_example+"'")
                 printDBG("Entities: "+str(current_entities))
                 self.generated_examples.append(
