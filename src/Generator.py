@@ -179,7 +179,7 @@ class Generator():
                             "' for intent named '" + unit_rule["name"] + "'"
                         )
                 elif "rules" in unit_def:
-                    unit_def = unit_def["rules"]  # TODO no variation when variation given is not supported yet
+                    unit_def = unit_def["rules"]
                 else:  # No variation asked but the unit is defined with variations
                     unit_def = unit_def["all-variations-aggregation"]["rules"]
 
