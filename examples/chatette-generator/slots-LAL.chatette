@@ -1,0 +1,37 @@
+; This file shouldn't be fed directly to the Chatette generator
+; (it will be included inside the master file)
+; Contains the slots definitions
+; !!! Client: La Louvière !!!
+
+;=============== Slots definitions =====================
+;--------------- Production lines ---------------------
+@[production line]
+  ~[GLO_SSP]
+  ~[LAL_HSM]
+  ~[LAL_SKP]
+  ~[EXT_SKP]
+  ~[LAL_PCK]
+  ~[EXT_PCK]
+  ~[LAL_CRM]
+  ~[EXT_CRM]
+  ~[LAL_PAC]
+  ~[LAL_SHP]
+  ~[STR_GLV]
+  ~[EXT_GLV]
+  ~[STR_PNT]
+  ~[EXT_PNT]
+  ~[STR_SLT]
+  ~[STR_PAC]
+  ~[STR_SHP]
+  ~[GLO_CLI]
+
+@[line number]
+  ~[number][ ?]1
+  ~[number][ ?]2
+  ~[number][ ?]3
+  ~[number][ ?]4
+  ~[number][ ?]5
+  ~[number][ ?]6
+  ~[number][ ?]7
+  ~[number][ ?]8
+  ~[number][ ?]9

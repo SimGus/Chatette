@@ -1,0 +1,17 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; File to feed to the Chatette generator (https://github.com/SimGus/Chatette) ;
+; Contains templates to generate datasets for Rasa NLU                        ;
+; Master file                                                                 ;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;=============== Includes ===================
+|client-info-LAL.chatette
+|aliases.chatette
+|slots-LAL.chatette
+
+;=============== Intents definitions ======================
+;--------------- Queries ----------------------
+%[query_machine_planning](200)
+  ~[&greet?] ~[what is#singular] the ~[planning of] @[production line] @[line number?][ ?mark]~[question mark?mark]
+  ~[&greet?] ~[what is#singular] the ~[planning of] @[production line] @[line number?][ ?mark]~[question mark?mark]
+  ~[&greet?] ~[ask?] the ~[planning of] @[production line] @[line number][ ?mark]~[question mark?mark]

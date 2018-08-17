@@ -1,0 +1,108 @@
+; This file shouldn't be fed directly to the Chatette generator
+; (it will be included inside the master file)
+; Contains the aliases definitions
+
+;=============== Aliases definitions =====================
+;-------------- Usual utilities ------------------
+~[greet]
+  hi
+  hello
+  hey
+~[question mark]
+  \?
+  \?\?
+  \?\?\?
+  \?!
+
+~[is#no elision]
+  is
+  will be
+  would be
+~[is#elision]
+  's
+  'll be
+  'd be
+~[are#no elision]
+  are
+  will be
+  would be
+~[are#elision]
+  're
+  'll be
+  'd be
+
+;------------- Question utilities -----------------
+~[what is#singular]
+  what ~[is#no elision]
+  what~[is#elision]
+~[what is#plural]
+  what ~[are#no elision]
+  what~[are#elision]
+
+~[ask]
+  ~[could you?] ~[tell me#infinitive]
+  how about ~[tell me#ing]
+
+~[could you]
+  could you
+  would you
+  can you
+
+~[tell me#infinitive]
+  tell me [about?]
+  show me [about?]
+  report
+~[tell me#ing]
+  telling me [about?]
+  showing me
+  reporting
+
+;------------- Other utilities ---------------
+~[named#singular]
+  {which is/that is?} named
+  {which is/that is?} called
+  {which is/that is?} labeled
+  {which is/that is?} labelled
+  whose name is
+~[named#plural]
+  {which are/that are?} named
+  {which are/that are?} called
+  {which are/that are?} labeled
+  {which are/that are?} labelled
+  whose name is
+
+;------------- Planning ---------------------
+~[planning]
+  planning
+  schedule
+~[planning of]
+  ~[planning] {of/for}
+
+;------------ Production lines ----------------
+~[production line]
+  {prod/production?} line
+
+~[number]
+  number
+  \#
+
+~[line name#hot strip mill]
+  hot [strip?] mill
+~[line name#pickling]
+  pickling
+~[line name#cold rolling mill]
+  cold [rolling?] mill
+~[line name#galvanization]
+  galvanization
+  galvanisation
+~[line name#paint]
+  paint
+~[line name#slitting]
+  slitting
+~[line name#packing]  ; Note: is it packing or packaging?
+  packing
+~[line name#shipping]
+  shipping
+~[line name#client]
+
+|prod-lines-LAL.chatette

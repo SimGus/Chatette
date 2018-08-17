@@ -1,0 +1,11 @@
+; This file shouldn't be fed directly to the Chatette generator
+; (it will be included inside the master file)
+; Contains information about the client
+; !!! Client: La Louvière !!!
+
+~[client factory name]
+  [&La] [&Louvière]
+  [&La] [&Louviere]
+
+~[partner factory name]
+  [&Strasbourg]
