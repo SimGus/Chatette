@@ -483,8 +483,9 @@ class Parser():
                 # Manage randgen
                 randgen = False
                 if len(splits[-1]) >= 1 and splits[-1][-1] == RAND_GEN_SYM:
-                    splits[-1] = splits[-1][:-1]
-                    randgen = True
+                    if not (len(splits[-1]) >= 2 and splits[-1][-2] == ESCAPE_SYM):
+                        splits[-1] = splits[-1][:-1]
+                        randgen = True
                 for choice_str in splits:
                     if choice_str != "":  # TODO check the type of each choice?
                         choices.append(self.split_contents(choice_str))
