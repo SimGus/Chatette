@@ -82,7 +82,7 @@ class Generator():
                     intent_rule = intent_rules["rules"][rule_index]
                     # Generate each unit in the rule
                     for unit_rule in intent_rule:
-                        current_example += self.generate_unit(unit_rule)#.replace("  ", ' ')  # TODO it would be better to not have bad spaces in generations
+                        current_example += self.generate_unit(unit_rule)
                     printDBG("Generated: "+current_example)
                     self.generated_examples.append(current_example)
                     nb_examples_gen += 1
@@ -157,6 +157,7 @@ class Generator():
                 # Choose rule
                 rule_index = randint(0, len(unit_def)-1)
                 chosen_rule = unit_def[rule_index]
+                # print("CHOSEN RULE: "+str(chosen_rule))
                 if isinstance(chosen_rule, dict):  # TODO manage alt slot name
                     chosen_rule = chosen_rule["rule"]
                 # Generate each unit of the rule
