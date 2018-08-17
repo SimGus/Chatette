@@ -56,7 +56,7 @@ def strip_comments(text):
 def is_start_unit_sym(char):
     return (char == UNIT_OPEN_SYM or char == ALIAS_SYM or \
             char == SLOT_SYM or char == INTENT_SYM)
-def is_unit(text):
+def is_unit_start(text):
     return (len(text) > 0 and is_start_unit_sym(text[0]))
 
 def get_top_level_line_type(line, stripped_line):
@@ -121,7 +121,7 @@ def split_contents(text, accept_alt_solt_val=False):
             space_just_seen = True
             if current == "":
                 continue
-            elif not is_unit(current):
+            elif not is_unit_start(current):  # Parsing a word
                 # New word
                 words_and_units_raw.append(current)
                 current = ""
@@ -138,17 +138,17 @@ def split_contents(text, accept_alt_solt_val=False):
             current += c
             words_and_units_raw.append(current)
             current = ""
-        # New unit
-        elif is_start_unit_sym(c):
-            if space_just_seen and current == "":
-                words_and_units_raw.append(' ')  # TODO do this even for words
-            elif current != "" and  not is_start_unit_sym(current):
-                words_and_units_raw.append(current)
-                current = ""
-            current += c
         elif accept_alt_solt_val and c == ALT_SLOT_VALUE_NAME_SYM:
             must_parse_alt_slot_val = True
             break
+        # New unit
+        elif is_start_unit_sym(c) or current == "":
+            if space_just_seen and current == "":
+                words_and_units_raw.append(' ')
+            elif current != "" and not is_start_unit_sym(current):
+                words_and_units_raw.append(current)
+                current = ""
+            current += c
         # Any other character
         else:
             current += c
@@ -156,23 +156,23 @@ def split_contents(text, accept_alt_solt_val=False):
         if not c.isspace():
             space_just_seen = False
 
-    print(words_and_units_raw)
-
     # Find the alternative slot value name if needed
     alt_slot_val_name = None
     if must_parse_alt_slot_val:
         alt_slot_val_name = \
             text[text.find(ALT_SLOT_VALUE_NAME_SYM):][1:].lstrip()
 
-    # Make a list of unit from this parsing
+    # Make a list of units from this parsing
     words_and_units = []
     for (i, string) in enumerate(words_and_units_raw):
         if string == ' ':
             continue
-        elif not is_unit(string):
+        elif not is_unit_start(string):
+            no_leading_space = i == 0 or (i != 0 and words_and_units_raw[i-1] != ' ')
             words_and_units.append({
                 "type": Unit.word,
                 "word": string,
+                "leading-space": not no_leading_space,
             })
         else:
             no_leading_space = i == 0 or (i != 0 and words_and_units_raw[i-1] != ' ')

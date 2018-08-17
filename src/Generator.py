@@ -97,7 +97,9 @@ class Generator():
         """
         unit_type = unit_rule["type"]
         if unit_type == Unit.word:
-            return ' '+unit_rule["word"]
+            if unit_rule["leading-space"]:
+                return ' '+unit_rule["word"]
+            return unit_rule["word"]
         else:
             # TODO keep track of already generated sentences (+max nb of attempts)
             # Manage random generation
