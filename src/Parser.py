@@ -118,7 +118,7 @@ class Parser():
         Parses the definition of an alias (declaration and contents)
         and adds the relevant info to the list of aliases.
         """
-        printDBG("alias: "+first_line.strip())
+        # printDBG("alias: "+first_line.strip())
         # Manage the alias declaration
         (alias_name, alias_variation, randgen, percentgen, casegen) = \
             self.parse_unit(first_line)
@@ -173,7 +173,7 @@ class Parser():
         Parses the definition of a slot (declaration and contents)
         and adds the relevant info to the list of slots.
         """
-        printDBG("slot: "+first_line.strip())
+        # printDBG("slot: "+first_line.strip())
         #Manage the slot declaration
         (slot_name, slot_variation, randgen, percentgen, casegen) = \
             self.parse_unit(first_line)
@@ -237,7 +237,7 @@ class Parser():
         Parses the definition of an intent (declaration and contents)
         and adds the relevant info to the list of intents.
         """
-        printDBG("intent: "+first_line.strip())
+        # printDBG("intent: "+first_line.strip())
         # Manage the intent declaration
         (intent_name, intent_variation, randgen, percentgen, casegen) = \
             self.parse_unit(first_line)
