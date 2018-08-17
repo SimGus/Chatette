@@ -77,13 +77,17 @@ class Generator():
 
                 while nb_examples_gen < max_gen_nb:
                     current_example = ""
+                    current_entities = []
                     # Choose rule to generate
                     rule_index = randint(0, nb_intent_rules-1)
                     intent_rule = intent_rules["rules"][rule_index]
                     # Generate each unit in the rule
                     for unit_rule in intent_rule:
-                        current_example += self.generate_unit(unit_rule)
+                        generation = self.generate_unit(unit_rule)
+                        current_example += generation["text"]
+                        current_entities.extend(generation["entities"])
                     printDBG("Generated: "+current_example)
+                    printDBG("Entities: "+str(current_entities))
                     self.generated_examples.append(current_example)
                     nb_examples_gen += 1
             else:  #TODO
@@ -91,15 +95,25 @@ class Generator():
 
     def generate_unit(self, unit_rule):
         """
-        Generates a unit from its rule
-        and returns the generated string (potentially with a leading space).
-        Returns an empty string if the generation can randomly not be done.
+        Generates a unit from its rule and returns
+        a dict with the generated string (potentially with a leading space)
+        and potentially info about generated entities
+        (their slot name, value and text into a list of dicts).
+        The string can be empty if the generation can randomly not be done.
+        The return value indexes are 'text' and 'entities'.
+        'entities' will be an empty list if no enitity was generated.
         """
         unit_type = unit_rule["type"]
         if unit_type == Unit.word:
             if unit_rule["leading-space"]:
-                return ' '+unit_rule["word"]
-            return unit_rule["word"]
+                return {
+                    "text": ' '+unit_rule["word"],
+                    "entities": [],
+                }
+            return {
+                "text": unit_rule["word"],
+                "entities": [],
+            }
         else:
             # TODO keep track of already generated sentences (+max nb of attempts)
             # Manage random generation
@@ -108,13 +122,17 @@ class Generator():
                 if unit_rule["percentgen"] is not None:
                     percentage_gen = int(unit_rule["percentgen"])
                 if randint(0, 99) >= percentage_gen:
-                    return ''
+                    return {
+                        "text": '',
+                        "entities": [],
+                    }
 
             generate_different_case = False
             if "casegen" in unit_rule and unit_rule["casegen"]:
                 generate_different_case = True
 
             generated_str = ''
+            generated_entities = []
             unit_def = None
             if unit_type == Unit.word_group:
                 if unit_rule["leading-space"]:
@@ -122,8 +140,14 @@ class Generator():
                 generated_str += unit_rule["words"]
 
                 if generate_different_case:
-                    return randomly_change_case(generated_str)
-                return generated_str
+                    return {
+                        "text": randomly_change_case(generated_str),
+                        "entities": [],
+                    }
+                return {
+                    "text": generated_str,
+                    "entities": [],
+                }
 
             elif unit_type == Unit.alias or unit_type == Unit.slot:
                 unit_def = None
@@ -157,12 +181,23 @@ class Generator():
                 # Choose rule
                 rule_index = randint(0, len(unit_def)-1)
                 chosen_rule = unit_def[rule_index]
-                # print("CHOSEN RULE: "+str(chosen_rule))
+                alt_slot_val_name = None
                 if isinstance(chosen_rule, dict):  # TODO manage alt slot name
+                    alt_slot_val_name = chosen_rule["slot-value-name"]
                     chosen_rule = chosen_rule["rule"]
                 # Generate each unit of the rule
                 for sub_unit_rule in chosen_rule:
-                    generated_str += self.generate_unit(sub_unit_rule)
+                    sub_generation = self.generate_unit(sub_unit_rule)
+                    generated_entities.extend(sub_generation["entities"])
+                    generated_str += sub_generation["text"]
+
+                # Manage entities
+                if unit_type == Unit.slot:
+                    generated_entities.extend([{
+                        "slot-name": unit_rule["name"],
+                        "text": generated_str,
+                        "value": alt_slot_val_name,
+                    }])
 
             elif unit_type == Unit.intent:
                 if unit_rule["name"] not in self.parser.intents:
@@ -189,7 +224,9 @@ class Generator():
                 chosen_rule = unit_def[rule_index]
                 # Generate each unit of the rule
                 for sub_unit_rule in chosen_rule:
-                    generated_str += self.generate_unit(sub_unit_rule)
+                    sub_generation = self.generate_unit(sub_unit_rule)
+                    generated_entities.extend(sub_generation["entities"])
+                    generated_str += sub_generation["text"]
 
             else:
                 raise RuntimeError("Tried to generate a unit of unknown type")
@@ -199,8 +236,14 @@ class Generator():
                     generated_str = ' '+generated_str
 
             if generate_different_case:
-                return randomly_change_case(generated_str)
-            return generated_str
+                return {
+                    "text": randomly_change_case(generated_str),
+                    "entities": generated_entities,
+                }
+            return {
+                "text": generated_str,
+                "entities": generated_entities,
+            }
 
 
     def write_JSON(self):

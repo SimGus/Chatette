@@ -269,26 +269,6 @@ def find_nb_gen_asked(intent):
     return nb_gen_asked
 
 
-def check_indentation(indentation_nb, line, stripped_line):
-    """
-    Given the indentation of the previous line,
-    checks the indentation of the line is correct (raises a `SyntaxError`
-    otherwise) and returns the number of spaces its indented with.
-    If this is the first line (`indentation_nb` is `None`),
-    considers the indentation correct and returns the number of spaces
-    the line is indented with.
-    """
-    current_indentation_nb = len(line) - len(stripped_line)
-    if indentation_nb is None:
-        return current_indentation_nb
-    else:
-        if current_indentation_nb == indentation_nb:
-            return current_indentation_nb
-        else:
-            raise SyntaxError("Incorrect indentation",
-                (self.in_file.name, self.line_nb, indentation_nb, line))
-
-
 def get_all_rules_in_variations(definition):
     """
     Returns a list of all the rules for all variations of `definition`

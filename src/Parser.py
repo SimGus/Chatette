@@ -49,6 +49,26 @@ class Parser():
         self.in_file = self.opened_files.pop()
 
 
+    def check_indentation(self, indentation_nb, line, stripped_line):
+        """
+        Given the indentation of the previous line,
+        checks the indentation of the line is correct (raises a `SyntaxError`
+        otherwise) and returns the number of spaces its indented with.
+        If this is the first line (`indentation_nb` is `None`),
+        considers the indentation correct and returns the number of spaces
+        the line is indented with.
+        """
+        current_indentation_nb = len(line) - len(stripped_line)
+        if indentation_nb is None:
+            return current_indentation_nb
+        else:
+            if current_indentation_nb == indentation_nb:
+                return current_indentation_nb
+            else:
+                raise SyntaxError("Incorrect indentation",
+                    (self.in_file.name, self.line_nb, indentation_nb, line))
+
+
     def parse(self):
         printDBG("Parsing file: "+self.in_file.name)
         line = None
@@ -102,7 +122,8 @@ class Parser():
         while self.is_inside_decl():
             line = self.read_line()
             stripped_line = line.lstrip()
-            indentation_nb = check_indentation(indentation_nb, line, stripped_line)
+            indentation_nb = self.check_indentation(indentation_nb, line, stripped_line)
+            stripped_line = strip_comments(stripped_line)
 
             rules.append(split_contents(stripped_line))
 
@@ -156,7 +177,8 @@ class Parser():
         while self.is_inside_decl():
             line = self.read_line()
             stripped_line = line.lstrip()
-            indentation_nb = check_indentation(indentation_nb, line, stripped_line)
+            indentation_nb = self.check_indentation(indentation_nb, line, stripped_line)
+            stripped_line = strip_comments(stripped_line)
 
             (alt_slot_val_name, rule) = \
                 split_contents(stripped_line, accept_alt_solt_val=True)
@@ -216,7 +238,8 @@ class Parser():
         while self.is_inside_decl():
             line = self.read_line()
             stripped_line = line.lstrip()
-            indentation_nb = check_indentation(indentation_nb, line, stripped_line)
+            indentation_nb = self.check_indentation(indentation_nb, line, stripped_line)
+            stripped_line = strip_comments(stripped_line)
 
             rules.append(split_contents(stripped_line))
 
