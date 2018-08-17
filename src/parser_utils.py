@@ -65,7 +65,7 @@ class LineType(Enum):
 def strip_comments(text):
     match = pattern_comment.search(text)
     if match is None:
-        return text
+        return text.rstrip()
     return text[:match.start()].rstrip()
 
 def is_start_unit_sym(char):
