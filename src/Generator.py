@@ -67,31 +67,38 @@ class Generator():
         given a list of rules.
         """
         printDBG("Generating intent: "+intent_name)
-        if isinstance(intent_rules, list):  # TODO Different flavors (variations) + fix detection
-            pass  # TODO
+        max_gen_nb = None
+        if "nb-gen-asked" not in intent_rules:  # Different flavors (variations)
+            for variation in intent_rules:
+                self.generate_intent(intent_name, intent_rules[variation])
+                # TODO return here
         else:
-            if intent_rules["nb-gen-asked"] is not None:
-                max_gen_nb = int(intent_rules["nb-gen-asked"])
-                nb_examples_gen = 0
-                nb_intent_rules = len(intent_rules["rules"])
+            max_gen_nb = intent_rules["nb-gen-asked"]
 
-                while nb_examples_gen < max_gen_nb:
-                    current_example = ""
-                    current_entities = []
-                    # Choose rule to generate
-                    rule_index = randint(0, nb_intent_rules-1)
-                    intent_rule = intent_rules["rules"][rule_index]
-                    # Generate each unit in the rule
-                    for unit_rule in intent_rule:
-                        generation = self.generate_unit(unit_rule)
-                        current_example += generation["text"]
-                        current_entities.extend(generation["entities"])
-                    printDBG("Generated: "+current_example)
-                    printDBG("Entities: "+str(current_entities))
-                    self.generated_examples.append(current_example)
-                    nb_examples_gen += 1
-            else:  #TODO
-                print("No nb gen asked not yet supported")
+        if max_gen_nb is not None:
+            max_gen_nb = int(max_gen_nb)
+            nb_examples_gen = 0
+            nb_intent_rules = len(intent_rules["rules"])
+
+            while nb_examples_gen < max_gen_nb:
+                current_example = ""
+                current_entities = []
+                # Choose rule to generate
+                rule_index = randint(0, nb_intent_rules-1)
+                intent_rule = intent_rules["rules"][rule_index]
+                # Generate each unit in the rule
+                for unit_rule in intent_rule:
+                    generation = self.generate_unit(unit_rule)
+                    current_example += generation["text"]
+                    current_entities.extend(generation["entities"])
+                printDBG("Generated: "+current_example)
+                printDBG("Entities: "+str(current_entities))
+                self.generated_examples.append(current_example)
+                nb_examples_gen += 1
+                # TODO return here
+        else:  #TODO
+            print("No nb gen asked not yet supported")
+            # TODO return here
 
     def generate_unit(self, unit_rule):
         """
@@ -182,7 +189,7 @@ class Generator():
                 rule_index = randint(0, len(unit_def)-1)
                 chosen_rule = unit_def[rule_index]
                 alt_slot_val_name = None
-                if isinstance(chosen_rule, dict):  # TODO manage alt slot name
+                if isinstance(chosen_rule, dict):
                     alt_slot_val_name = chosen_rule["slot-value-name"]
                     chosen_rule = chosen_rule["rule"]
                 # Generate each unit of the rule
