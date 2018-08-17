@@ -152,7 +152,7 @@ class Generator():
                             "' for slot named '" + unit_rule["name"] + "'"
                         )
                 elif isinstance(unit_def, dict):  # No variation asked but the unit is defined with variations
-                    unit_def = unit_def[next(iter(unit_def))]  # TODO no variation when variation given is not supported yet
+                    unit_def = unit_def["all-variations-aggregation"]
 
                 # Choose rule
                 rule_index = randint(0, len(unit_def)-1)
@@ -182,7 +182,7 @@ class Generator():
                 elif "rules" in unit_def:
                     unit_def = unit_def["rules"]  # TODO no variation when variation given is not supported yet
                 else:  # No variation asked but the unit is defined with variations
-                    unit_def = unit_def[next(iter(unit_def))]["rules"]
+                    unit_def = unit_def["all-variations-aggregation"]["rules"]
 
                 # Choose rule
                 rule_index = randint(0, len(unit_def)-1)
