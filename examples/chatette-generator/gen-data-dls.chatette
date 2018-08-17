@@ -12,6 +12,6 @@
 ;=============== Intents definitions ======================
 ;--------------- Queries ----------------------
 %[query_machine_planning](200)
-  ~[&greet?greet][,?greet] ~[what is#singular] the ~[planning of] @[production line] @[line number?][ ?mark]~[question mark?mark]
-  ~[&greet?greet][,?greet] ~[what is#singular] the ~[planning of] @[production line] @[line number?][ ?mark]~[question mark?mark]
+  ~[&greet?greet][,?greet] ~[what is#singular] the ~[planning of] @[production line]{[ @[line number#long]]/@[line number#short]?}[ ?mark]~[question mark?mark]
+  ~[&greet?greet][,?greet] ~[what is#singular] the ~[planning of] @[production line]{[ @[line number#long]]/@[line number#short]?}[ ?mark]~[question mark?mark]
   ~[&greet?greet][,?greet] ~[ask?] the ~[planning of] @[production line] @[line number][ ?mark]~[question mark?mark]
