@@ -93,8 +93,8 @@ class Generator():
                 rule_index = randint(0, nb_intent_rules-1)
                 intent_rule = intent_rules["rules"][rule_index]
                 # Generate each unit in the rule
+                self.generated_randgens = dict()
                 for unit_rule in intent_rule:
-                    self.generated_randgens = dict()
                     generation = self.generate_unit(unit_rule)
                     current_example += generation["text"]
                     current_entities.extend(generation["entities"])
