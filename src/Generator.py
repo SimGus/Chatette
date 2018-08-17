@@ -225,28 +225,33 @@ class Generator():
                 elif isinstance(unit_def, dict):  # No variation asked but the unit is defined with variations
                     unit_def = unit_def["all-variations-aggregation"]
 
-                # Choose rule
-                rule_index = randint(0, len(unit_def)-1)
-                chosen_rule = unit_def[rule_index]
-                alt_slot_val_name = None
-                if isinstance(chosen_rule, dict):
-                    alt_slot_val_name = chosen_rule["slot-value-name"]
-                    chosen_rule = chosen_rule["rule"]
-                # Generate each unit of the rule
-                for sub_unit_rule in chosen_rule:
-                    sub_generation = self.generate_unit(sub_unit_rule)
-                    generated_entities.extend(sub_generation["entities"])
-                    generated_str += sub_generation["text"]
+                if len(unit_def) > 0:
+                    # Choose rule
+                    rule_index = 0
+                    if len(unit_def) > 1:
+                        rule_index = randint(0, len(unit_def)-1)
+                    chosen_rule = unit_def[rule_index]
+                    alt_slot_val_name = None
+                    if isinstance(chosen_rule, dict):
+                        alt_slot_val_name = chosen_rule["slot-value-name"]
+                        chosen_rule = chosen_rule["rule"]
+                    # Generate each unit of the rule
+                    for sub_unit_rule in chosen_rule:
+                        sub_generation = self.generate_unit(sub_unit_rule)
+                        generated_entities.extend(sub_generation["entities"])
+                        generated_str += sub_generation["text"]
 
-                # Manage entities
-                if unit_type == Unit.slot:
-                    if alt_slot_val_name == '/':
-                        alt_slot_val_name = generated_str
-                    generated_entities.extend([{
-                        "slot-name": unit_rule["name"],
-                        "text": generated_str,
-                        "value": alt_slot_val_name,
-                    }])
+                    # Manage entities
+                    if unit_type == Unit.slot:
+                        if alt_slot_val_name == '/':
+                            alt_slot_val_name = generated_str
+                        generated_entities.extend([{
+                            "slot-name": unit_rule["name"],
+                            "text": generated_str,
+                            "value": alt_slot_val_name,
+                        }])
+                else:  # TODO this should be an error
+                    pass
 
             elif unit_type == Unit.intent:
                 if unit_rule["name"] not in self.parser.intents:
