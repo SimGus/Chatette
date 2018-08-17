@@ -493,6 +493,7 @@ class Parser():
                         "type": Unit.choice,
                         "randgen": randgen,
                         "choices": choices,
+                        "leading-space": not no_leading_space,
                     })
             else:  # unit
                 no_leading_space = i == 0 or (i != 0 and words_and_units_raw[i-1] != ' ')

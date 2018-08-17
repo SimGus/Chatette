@@ -145,6 +145,11 @@ class Generator():
                 sub_generation = self.generate_unit(sub_unit_rule)
                 generated_entities.extend(sub_generation["entities"])
                 generated_str += sub_generation["text"]
+            # Add a space at the front if needed
+            if generated_str != "" and unit_rule["leading-space"] and \
+                not generated_str.startswith(' '):
+                    generated_str = ' '+generated_str
+
             return {
                 "text": generated_str,
                 "entities": generated_entities,
