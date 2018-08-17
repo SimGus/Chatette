@@ -61,7 +61,7 @@ class Parser():
                 continue
             stripped_line = strip_comments(stripped_line)  # Not done before to compute the indentation
             if line_type == LineType.include_file:
-                self.parse_file(stripped_line[1:])
+                self.parse_file(stripped_line[1:].rstrip())
             elif line_type == LineType.alias_declaration:
                 self.parse_alias_definition(stripped_line)
             elif line_type == LineType.slot_declaration:

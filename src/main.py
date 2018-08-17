@@ -17,7 +17,7 @@ if __name__ == "__main__":
     if len(sys.argv) <= 1 or len(sys.argv) > 3:
         print_usage()
     else:
-        template_file_path = sys.argv[1].rstrip()
+        template_file_path = sys.argv[1]
         output_filename = DEFAULT_OUTPUT_FILENAME
         if len(sys.argv) == 3:
             output_filename = sys.argv[2]
