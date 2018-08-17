@@ -126,6 +126,20 @@ class Generator():
                 "text": unit_rule["word"],
                 "entities": [],
             }
+        elif unit_type == Unit.choice:  # TODO casegen
+            chosen_index = randint(0, len(unit_rule["choices"])-1)
+            chosen_rule = unit_rule["choices"][chosen_index]
+            generated_str = ""
+            generated_entities = []
+            # Generate each unit of the rule
+            for sub_unit_rule in chosen_rule:
+                sub_generation = self.generate_unit(sub_unit_rule)
+                generated_entities.extend(sub_generation["entities"])
+                generated_str += sub_generation["text"]
+            return {
+                "text": generated_str,
+                "entities": generated_entities,
+            }
         else:
             # TODO keep track of already generated sentences (+max nb of attempts)
             # Manage random generation
@@ -156,7 +170,7 @@ class Generator():
             if "casegen" in unit_rule and unit_rule["casegen"]:
                 generate_different_case = True
 
-            generated_str = ''
+            generated_str = ""
             generated_entities = []
             unit_def = None
             if unit_type == Unit.word_group:
@@ -254,13 +268,6 @@ class Generator():
                     sub_generation = self.generate_unit(sub_unit_rule)
                     generated_entities.extend(sub_generation["entities"])
                     generated_str += sub_generation["text"]
-
-            elif unit_type == Unit.choice:  # TODO
-                print("Choices not supported yet")
-                return {
-                    "text": '',
-                    "entities": [],
-                }
 
             else:
                 raise RuntimeError("Tried to generate a unit of unknown type")

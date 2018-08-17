@@ -479,7 +479,7 @@ class Parser():
                 choices = []
                 splits = re.split(r"(?<!\\)/", string[1:-1])  # TODO improve the regex here
                 for choice_str in splits:
-                    if choice_str != "":
+                    if choice_str != "":  # TODO check the type of each choice?
                         choices.append(self.split_contents(choice_str))
                 if choices != []:
                     words_and_units.append({

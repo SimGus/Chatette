@@ -14,15 +14,13 @@
 
 ;================== Alias definitions =======================
 ~[greet]
-    hi
-    hello
+    {hi/hello}
 
 ~[i want to]
     [&i] ~[want#no elision]
     [&I]~[want#elision]
 
 ~[want#no elision]
-    {this is/[a test]}
     want to
     would [really?] like to   ; either `would really like to` or `would like to` will be generated
 ~[want#elision]
@@ -41,5 +39,3 @@
 ~[homemade]
   homemade [test?test/90] [test?test/90]
   mom's
-
-; TODO choose between several values: [text1/text2/text3]
