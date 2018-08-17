@@ -26,3 +26,8 @@
 |path/to/file       include the contents of that file inside the current file with the same indentation as this line (only as a top-level line)
 
 {~[some]/words to/~[choose]}  generate one of the units joined by '/'
+
+TODO add arguments to aliases:
+~[machine name:ARG]
+  the ARG machine
+  the machine named ARG
