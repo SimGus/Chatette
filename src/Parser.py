@@ -456,6 +456,8 @@ class Parser():
         if current != "":
             words_and_units_raw.append(current)
 
+        print(words_and_units_raw)
+
         # Find the alternative slot value name if needed
         alt_slot_val_name = None
         if must_parse_alt_slot_val:
@@ -478,12 +480,18 @@ class Parser():
                 no_leading_space = i == 0 or (i != 0 and words_and_units_raw[i-1] != ' ')
                 choices = []
                 splits = re.split(r"(?<!\\)/", string[1:-1])  # TODO improve the regex here
+                # Manage randgen
+                randgen = False
+                if len(splits[-1]) >= 1 and splits[-1][-1] == RAND_GEN_SYM:
+                    splits[-1] = splits[-1][:-1]
+                    randgen = True
                 for choice_str in splits:
                     if choice_str != "":  # TODO check the type of each choice?
                         choices.append(self.split_contents(choice_str))
                 if choices != []:
                     words_and_units.append({
                         "type": Unit.choice,
+                        "randgen": randgen,
                         "choices": choices,
                     })
             else:  # unit
