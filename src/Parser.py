@@ -198,6 +198,8 @@ class Parser():
             stripped_line = line.lstrip()
             indentation_nb = self.check_indentation(indentation_nb, line, stripped_line)
             stripped_line = strip_comments(stripped_line)
+            if stripped_line == "":
+                continue
 
             (alt_slot_val_name, rule) = \
                 self.split_contents(stripped_line, accept_alt_solt_val=True)

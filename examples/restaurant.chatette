@@ -38,7 +38,7 @@
     mexican
 
 ~[homemade]
-  homemade
+  homemade [test?test/90] [test?test/90]
   mom's
 
 ; TODO choose between several values: [text1/text2/text3]

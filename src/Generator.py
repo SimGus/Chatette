@@ -52,6 +52,7 @@ class Generator():
         self.out_file = output_file
         self.parser = parser
         self.generated_examples = []
+        self.generated_randgens = dict()
 
     def generate(self):
         print("")
@@ -88,6 +89,7 @@ class Generator():
                 intent_rule = intent_rules["rules"][rule_index]
                 # Generate each unit in the rule
                 for unit_rule in intent_rule:
+                    self.generated_randgens = dict()
                     generation = self.generate_unit(unit_rule)
                     current_example += generation["text"]
                     current_entities.extend(generation["entities"])
@@ -110,6 +112,8 @@ class Generator():
         The string can be empty if the generation can randomly not be done.
         The return value indexes are 'text' and 'entities'.
         'entities' will be an empty list if no enitity was generated.
+        'generated_randgens' is a dict with keys the name of the randgen and
+        a boolean if they were generated or not before.
         """
         unit_type = unit_rule["type"]
         if unit_type == Unit.word:
@@ -124,17 +128,29 @@ class Generator():
             }
         else:
             # TODO keep track of already generated sentences (+max nb of attempts)
-            # TODO randgen name
             # Manage random generation
-            if unit_rule["randgen"] is not None:
-                percentage_gen = 50
-                if unit_rule["percentgen"] is not None:
-                    percentage_gen = int(unit_rule["percentgen"])
-                if randint(0, 99) >= percentage_gen:
+            randgen_name = unit_rule["randgen"]
+            if randgen_name is not None:
+                if randgen_name not in self.generated_randgens:  # not yet tested
+                    percentage_gen = 50
+                    if unit_rule["percentgen"] is not None:  # TODO seems to be a problem with this
+                        percentage_gen = int(unit_rule["percentgen"])
+                    if randint(0, 99) >= percentage_gen:
+                        if randgen_name != "":
+                            self.generated_randgens[randgen_name] = False  # TODO do it by level
+                        return {
+                            "text": '',
+                            "entities": [],
+                        }
+                    elif randgen_name != "":
+                        self.generated_randgens[randgen_name] = True
+                elif not self.generated_randgens[randgen_name]:  # Should not be generated
                     return {
                         "text": '',
                         "entities": [],
                     }
+                else:  # Must be generated
+                    pass
 
             generate_different_case = False
             if "casegen" in unit_rule and unit_rule["casegen"]:
