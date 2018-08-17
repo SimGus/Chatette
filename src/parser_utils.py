@@ -285,3 +285,26 @@ def check_indentation(indentation_nb, line, stripped_line):
         else:
             raise SyntaxError("Incorrect indentation",
                 (self.in_file.name, self.line_nb, indentation_nb, line))
+
+
+def get_all_rules_in_variations(definition):
+    """
+    Returns a list of all the rules for all variations of `definition`
+    which is a definition for an alias or a slot (nothing else).
+    """
+    # `definition` is a dict indexed by the names of the variation, each
+    # containing a list of rules
+    all_rules = []
+    for variation in definition:
+        all_rules.extend(definition[variation])
+    return all_rules
+
+def get_all_rules_in_intent_variations(definition):
+    """As `get_all_rules_in_variations` for intents"""
+    # `definition` is a dict indexed by the names of the variation, each
+    # containing a dict with the nb of generations to do for this intent
+    # and the rules in `rules`
+    all_rules = []
+    for variation in definition:
+        all_rules.extend(definition[variation]["rules"])
+    return all_rules

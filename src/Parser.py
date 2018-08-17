@@ -69,6 +69,7 @@ class Parser():
             else:  # intent declaration
                 self.parse_intent_definition(stripped_line)
 
+        self.aggregate_variations()
         printDBG("Parsing of file: "+self.in_file.name+" finished")
         self.parsing_finished = True
 
@@ -239,6 +240,36 @@ class Parser():
                         "nb-gen-asked": nb_gen_asked,
                         "rules": rules,
                     },
+                }
+
+    def aggregate_variations(self):  # TODO check variation names are not reserved
+        """
+        For all units parsed, this aggregates all the rules for units defined
+        with variations into one 'variation' called `all-variations-aggregation`.
+        """
+        for name in self.aliases:
+            current_alias_def = self.aliases[name]
+            if isinstance(current_alias_def, list):
+                continue
+            else:
+                all_rules = get_all_rules_in_variations(current_alias_def)
+                self.aliases[name]["all-variations-aggregation"] = all_rules
+        for name in self.slots:
+            current_slot_def = self.slots[name]
+            if isinstance(current_slot_def, list):
+                continue
+            else:
+                all_rules = get_all_rules_in_variations(current_slot_def)
+                self.slots[name]["all-variations-aggregation"] = all_rules
+        for name in self.intents:
+            current_intent_def = self.intents[name]
+            if "nb-gen-asked" in current_intent_def:
+                continue
+            else:
+                all_rules = get_all_rules_in_intent_variations(current_intent_def)
+                self.intents[name]["all-variations-aggregation"] = {
+                    "nb-gen-asked": 0,
+                    "rules": all_rules,
                 }
 
 

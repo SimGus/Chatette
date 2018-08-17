@@ -117,7 +117,6 @@ class Generator():
             generated_str = ''
             unit_def = None
             if unit_type == Unit.word_group:
-                # print("WORD GROUP: "+str(unit_rule))
                 if unit_rule["leading-space"]:
                     generated_str += ' '
                 generated_str += unit_rule["words"]
@@ -152,7 +151,7 @@ class Generator():
                             "Couldn't find variation '" + unit_rule["variation"] +
                             "' for slot named '" + unit_rule["name"] + "'"
                         )
-                elif isinstance(unit_def, dict):
+                elif isinstance(unit_def, dict):  # No variation asked but the unit is defined with variations
                     unit_def = unit_def[next(iter(unit_def))]  # TODO no variation when variation given is not supported yet
 
                 # Choose rule
@@ -182,7 +181,7 @@ class Generator():
                         )
                 elif "rules" in unit_def:
                     unit_def = unit_def["rules"]  # TODO no variation when variation given is not supported yet
-                else:
+                else:  # No variation asked but the unit is defined with variations
                     unit_def = unit_def[next(iter(unit_def))]["rules"]
 
                 # Choose rule
