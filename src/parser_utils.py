@@ -22,6 +22,7 @@ VARIATION_SYM = '#'
 RAND_GEN_SYM = '?'
 PERCENT_GEN_SYM = '/'
 CASE_GEN_SYM = '&'
+ARG_SYM = ':'
 
 ALT_SLOT_VALUE_NAME_SYM = '='
 
@@ -32,7 +33,14 @@ RESERVED_VARIATION_NAMES = ["all-variations-aggregation", "rules", "nb-gen-asked
 # This regex finds patterns like this `[name#variation?randgen/percentgen]`
 # with `variation`, `randgen` and `percentgen` optional
 # TODO make this reflect the state of the symbols defined before
-pattern_modifiers = re.compile(r"\[(?P<casegen>&)?(?P<name>[^#\[\]\?]*)(?:#(?P<variation>[^#\[\]\?]*))?(?:\?(?P<randgen>[^#\[\]\?/]*)(?:/(?P<percentgen>[^#\[\]\?]*))?)?\]")
+pattern_modifiers = \
+    re.compile(
+        r"\[(?P<casegen>&)?"+
+        r"(?P<name>[^#\[\]\?/:]*)"+
+        r"(?::(?P<arg>[^#\[\]?/:]*))?"+
+        r"(?:#(?P<variation>[^#\[\]\?/:]*))?"+
+        r"(?:\?(?P<randgen>[^#\[\]\?/:]*)(?:/(?P<percentgen>[^#\[\]\?/:]*))?)?\]"
+    )
 pattern_nb_gen_asked = re.compile(r"\]\((?P<nbgen>[0-9]+)\)")
 pattern_comment = re.compile(r"(?<!\\);")
 

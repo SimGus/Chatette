@@ -76,8 +76,9 @@ class Parser():
     def parse_unit(self, unit):
         """
         Parses a unit (left stripped) and returns
-        (unit name, variation, randgen, percentgen, casegen) with `None` values for
-        those not provided in the file. NB: `casegen` is a boolean.
+        (unit name, arg, variation, randgen, percentgen, casegen)
+        with `None` values for those not provided in the file.
+        NB: `casegen` is a boolean.
         For a word group, the name will be its text.
         If an anonymous randgen is used '' will be its value.
         """
@@ -97,12 +98,16 @@ class Parser():
             match = match.groupdict()
 
             name = match["name"]
+            arg = match["arg"]
             variation = match["variation"]
             randgen = match["randgen"]
             percentgen = match["percentgen"]
             casegen = (match["casegen"] is not None)
             if name == "":
                 raise SyntaxError("Units must have a name (or a content for word groups)",
+                    (self.in_file.name, self.line_nb, start_index, unit))
+            if arg == "":
+                raise SyntaxError("Unnamed argument or unescaped colon (:)",
                     (self.in_file.name, self.line_nb, start_index, unit))
             if variation == "":
                 raise SyntaxError("Precision must be named (e.g. [text#variation])",
@@ -111,7 +116,7 @@ class Parser():
                 raise SyntaxError("Percentage for generation cannot be empty",
                     (self.in_file.name, self.line_nb, start_index, unit))
 
-        return (name, variation, randgen, percentgen, casegen)
+        return (name, arg, variation, randgen, percentgen, casegen)
 
     def parse_alias_definition(self, first_line):  # Lots of copy-paste in three methods
         """
@@ -120,7 +125,7 @@ class Parser():
         """
         # printDBG("alias: "+first_line.strip())
         # Manage the alias declaration
-        (alias_name, alias_variation, randgen, percentgen, casegen) = \
+        (alias_name, alias_arg, alias_variation, randgen, percentgen, casegen) = \
             self.parse_unit(first_line)
         if alias_variation in RESERVED_VARIATION_NAMES:
             raise SyntaxError("You cannot use the reserved variation names: "+str(RESERVED_VARIATION_NAMES),
@@ -175,7 +180,7 @@ class Parser():
         """
         # printDBG("slot: "+first_line.strip())
         #Manage the slot declaration
-        (slot_name, slot_variation, randgen, percentgen, casegen) = \
+        (slot_name, slot_arg, slot_variation, randgen, percentgen, casegen) = \
             self.parse_unit(first_line)
         if slot_variation in RESERVED_VARIATION_NAMES:
             raise SyntaxError("You cannot use the reserved variation names: "+str(RESERVED_VARIATION_NAMES),
@@ -239,7 +244,7 @@ class Parser():
         """
         # printDBG("intent: "+first_line.strip())
         # Manage the intent declaration
-        (intent_name, intent_variation, randgen, percentgen, casegen) = \
+        (intent_name, intent_arg, intent_variation, randgen, percentgen, casegen) = \
             self.parse_unit(first_line)
         if intent_variation in RESERVED_VARIATION_NAMES:
             raise SyntaxError("You cannot use the reserved variation names: "+str(RESERVED_VARIATION_NAMES),
@@ -500,10 +505,13 @@ class Parser():
                 no_leading_space = i == 0 or (i != 0 and words_and_units_raw[i-1] != ' ')
                 unit_type = get_unit_type(string)
                 if unit_type == Unit.word_group:
-                    (name, variation, randgen, percentgen, casegen) = self.parse_unit(string)
+                    (name, arg, variation, randgen, percentgen, casegen) = self.parse_unit(string)
+                    if arg is not None:
+                        raise SyntaxError("Word groups cannot have an argument",
+                            (self.in_file.name, self.line_nb, 0, name))
                     if variation is not None:
-                        raise SyntaxError("Word groups cannot have a variation as found with word group '"+
-                            name+"'")
+                        raise SyntaxError("Word groups cannot have a variation",
+                            (self.in_file.name, self.line_nb, 0, name))
                     words_and_units.append({
                         "type": Unit.word_group,
                         "words": name,
@@ -513,10 +521,11 @@ class Parser():
                         "leading-space": not no_leading_space,
                     })
                 else:
-                    (name, variation, randgen, percentgen, casegen) = self.parse_unit(string)
+                    (name, arg, variation, randgen, percentgen, casegen) = self.parse_unit(string)
                     words_and_units.append({
                         "type": unit_type,
                         "name": name,
+                        "arg": arg,
                         "variation": variation,
                         "randgen": randgen,
                         "percentgen": percentgen,
