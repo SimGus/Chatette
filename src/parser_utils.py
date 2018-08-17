@@ -23,6 +23,8 @@ ALT_SLOT_VALUE_NAME_SYM = '='
 
 INCLUDE_FILE_SYM = '|'
 
+RESERVED_VARIATION_NAMES = ["all-variations-aggregation", "rules", "nb-gen-asked"]
+
 # This regex finds patterns like this `[name#variation?randgen/percentgen]`
 # with `variation`, `randgen` and `percentgen` optional
 # TODO make this reflect the state of the symbols defined before

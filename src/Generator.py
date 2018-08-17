@@ -171,8 +171,7 @@ class Generator():
                 # Manage variations
                 variation = unit_rule["variation"]
                 if variation is not None:
-                    if "nb-gen-asked" not in unit_def or "rules" not in unit_def or \
-                        len(unit_def) != 2 and variation in unit_def:
+                    if "nb-gen-asked" not in unit_def:
                             unit_def = unit_def[variation]["rules"]
                     else:
                         raise SyntaxError(

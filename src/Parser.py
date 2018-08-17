@@ -83,6 +83,9 @@ class Parser():
         # Manage the alias declaration
         (alias_name, alias_variation, randgen, percentgen, casegen) = \
             parse_unit(first_line)
+        if alias_variation in RESERVED_VARIATION_NAMES:
+            raise SyntaxError("You cannot use the reserved variation names: "+str(RESERVED_VARIATION_NAMES),
+                    (self.in_file.name, self.line_nb, 0, line))
         if randgen is not None:
             raise SyntaxError("Declarations cannot have a named random generation modifier",
                     (self.in_file.name, self.line_nb, 0, line))
@@ -134,6 +137,9 @@ class Parser():
         #Manage the slot declaration
         (slot_name, slot_variation, randgen, percentgen, casegen) = \
             parse_unit(first_line)
+        if slot_variation in RESERVED_VARIATION_NAMES:
+            raise SyntaxError("You cannot use the reserved variation names: "+str(RESERVED_VARIATION_NAMES),
+                    (self.in_file.name, self.line_nb, 0, line))
         if randgen is not None:
             raise SyntaxError("Declarations cannot have a named random generation modifier",
                     (self.in_file.name, self.line_nb, 0, line))
@@ -190,6 +196,9 @@ class Parser():
         # Manage the intent declaration
         (intent_name, intent_variation, randgen, percentgen, casegen) = \
             parse_unit(first_line)
+        if intent_variation in RESERVED_VARIATION_NAMES:
+            raise SyntaxError("You cannot use the reserved variation names: "+str(RESERVED_VARIATION_NAMES),
+                    (self.in_file.name, self.line_nb, 0, line))
         if randgen is not None:
             raise SyntaxError("Declarations cannot have a named random generation modifier",
                     (self.in_file.name, self.line_nb, 0, line))
@@ -307,9 +316,7 @@ class Parser():
         print("\nIntents:")
         for name in self.intents:
             current_intent_def = self.intents[name]
-            if "nb-gen-asked" in current_intent_def and \
-                "rules" in current_intent_def and \
-                len(current_intent_def) == 2:
+            if "nb-gen-asked" in current_intent_def:
                     print("\t"+name+"(to generate "
                         +str(current_intent_def["nb-gen-asked"])+"x): ")
                     for rule in current_intent_def["rules"]:
