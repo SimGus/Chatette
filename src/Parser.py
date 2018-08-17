@@ -201,6 +201,8 @@ class Parser():
 
             (alt_slot_val_name, rule) = \
                 self.split_contents(stripped_line, accept_alt_solt_val=True)
+            if alt_slot_val_name is None:  # Take the name of the first unit
+                alt_slot_val_name = rule[0]["name"]
             rules.append({
                 "slot-value-name": alt_slot_val_name,
                 "rule": rule,
