@@ -201,6 +201,8 @@ class Generator():
 
                 # Manage entities
                 if unit_type == Unit.slot:
+                    if alt_slot_val_name == '/':
+                        alt_slot_val_name = generated_str
                     generated_entities.extend([{
                         "slot-name": unit_rule["name"],
                         "text": generated_str,

@@ -5,3 +5,4 @@
     ~[italian]  ; if this is generated, this slot will have the value named `italian`
     ~[french]   ; if this is generated, this slot will have the value named `french`
     ~[mexican (nom nom)] = mexican    ; if this is generated, this slot will have the value named `mexican`
+    ~[homemade] = /  ; if this is generated, this slot will have the same value as the generated text
