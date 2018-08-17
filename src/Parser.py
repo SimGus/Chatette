@@ -467,7 +467,7 @@ class Parser():
         alt_slot_val_name = None
         if must_parse_alt_slot_val:
             alt_slot_val_name = \
-                text[text.find(ALT_SLOT_VALUE_NAME_SYM):][1:].lstrip()
+                text[text.find(ALT_SLOT_VALUE_NAME_SYM):][1:].strip()
 
         # Make a list of units from this parsing
         words_and_units = []
