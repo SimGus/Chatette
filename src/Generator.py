@@ -124,6 +124,7 @@ class Generator():
             }
         else:
             # TODO keep track of already generated sentences (+max nb of attempts)
+            # TODO randgen name
             # Manage random generation
             if unit_rule["randgen"] is not None:
                 percentage_gen = 50

@@ -14,6 +14,7 @@
                     for a slot: `name` is the slot identifier but `precision` maps to different values (same as alias)
 [any?]              word group `any` has 50% chance of being generated
 [any?id]            generation of `any` is identified as `id` and any word group with generation identified the same will be generated iff `any` was generated
+                    TODO add the possibility to mark it as opposite (if other units marked 'id' are generated, don't generate this one)
 [any?/60]           word group `any` has 60% chance of being generated
 [any?id/70]         id.
 [any#precision?id/20]
