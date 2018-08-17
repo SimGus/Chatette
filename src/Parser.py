@@ -49,33 +49,13 @@ class Parser():
         self.in_file = self.opened_files.pop()
 
 
-    def check_indentation(self, indentation_nb, line, stripped_line):
-        """
-        Given the indentation of the previous line,
-        checks the indentation of the line is correct (raises a `SyntaxError`
-        otherwise) and returns the number of spaces its indented with.
-        If this is the first line (`indentation_nb` is `None`),
-        considers the indentation correct and returns the number of spaces
-        the line is indented with.
-        """
-        current_indentation_nb = len(line) - len(stripped_line)
-        if indentation_nb is None:
-            return current_indentation_nb
-        else:
-            if current_indentation_nb == indentation_nb:
-                return current_indentation_nb
-            else:
-                raise SyntaxError("Incorrect indentation",
-                    (self.in_file.name, self.line_nb, indentation_nb, line))
-
-
     def parse(self):
         printDBG("Parsing file: "+self.in_file.name)
         line = None
         while line != "":
             line = self.read_line()
             stripped_line = line.lstrip()
-            line_type = get_top_level_line_type(line, stripped_line)
+            line_type = self.get_top_level_line_type(line, stripped_line)
 
             if line_type == LineType.empty or line_type == LineType.comment:
                 continue
@@ -93,6 +73,45 @@ class Parser():
         printDBG("Parsing of file: "+self.in_file.name+" finished")
         self.parsing_finished = True
 
+    def parse_unit(unit):
+        """
+        Parses a unit (left stripped) and returns
+        (unit name, variation, randgen, percentgen, casegen) with `None` values for
+        those not provided in the file. NB: `casegen` is a boolean.
+        For a word group, the name will be its text.
+        If an anonymous randgen is used '' will be its value.
+        """
+        name = None
+        variation = None
+        randgen = None
+        percentgen = None
+        casegen = False
+        one_found = False
+        for match in pattern_modifiers.finditer(unit):
+            start_index = match.start()
+            if one_found:  # this error would happen only when `unit` is a whole line (i.e. a declaration)
+                raise SyntaxError("Expected only one unit here: only one declaration is allowed per line",
+                    (self.in_file.name, self.line_nb, start_index, unit))
+            else:
+                one_found = True
+            match = match.groupdict()
+
+            name = match["name"]
+            variation = match["variation"]
+            randgen = match["randgen"]
+            percentgen = match["percentgen"]
+            casegen = (match["casegen"] is not None)
+            if name == "":
+                raise SyntaxError("Units must have a name (or a content for word groups)",
+                    (self.in_file.name, self.line_nb, start_index, unit))
+            if variation == "":
+                raise SyntaxError("Precision must be named (e.g. [text#variation])",
+                    (self.in_file.name, self.line_nb, start_index, unit))
+            if percentgen == "":
+                raise SyntaxError("Percentage for generation cannot be empty",
+                    (self.in_file.name, self.line_nb, start_index, unit))
+
+        return (name, variation, randgen, percentgen, casegen)
 
     def parse_alias_definition(self, first_line):  # Lots of copy-paste in three methods
         """
@@ -102,7 +121,7 @@ class Parser():
         printDBG("alias: "+first_line.strip())
         # Manage the alias declaration
         (alias_name, alias_variation, randgen, percentgen, casegen) = \
-            parse_unit(first_line)
+            self.parse_unit(first_line)
         if alias_variation in RESERVED_VARIATION_NAMES:
             raise SyntaxError("You cannot use the reserved variation names: "+str(RESERVED_VARIATION_NAMES),
                     (self.in_file.name, self.line_nb, 0, line))
@@ -157,7 +176,7 @@ class Parser():
         printDBG("slot: "+first_line.strip())
         #Manage the slot declaration
         (slot_name, slot_variation, randgen, percentgen, casegen) = \
-            parse_unit(first_line)
+            self.parse_unit(first_line)
         if slot_variation in RESERVED_VARIATION_NAMES:
             raise SyntaxError("You cannot use the reserved variation names: "+str(RESERVED_VARIATION_NAMES),
                     (self.in_file.name, self.line_nb, 0, line))
@@ -217,7 +236,7 @@ class Parser():
         printDBG("intent: "+first_line.strip())
         # Manage the intent declaration
         (intent_name, intent_variation, randgen, percentgen, casegen) = \
-            parse_unit(first_line)
+            self.parse_unit(first_line)
         if intent_variation in RESERVED_VARIATION_NAMES:
             raise SyntaxError("You cannot use the reserved variation names: "+str(RESERVED_VARIATION_NAMES),
                     (self.in_file.name, self.line_nb, 0, line))
@@ -308,6 +327,48 @@ class Parser():
     def has_parsed(self):
         return self.parsing_finished
 
+
+    #=========== Util methods =================
+    def check_indentation(self, indentation_nb, line, stripped_line):
+        """
+        Given the indentation of the previous line,
+        checks the indentation of the line is correct (raises a `SyntaxError`
+        otherwise) and returns the number of spaces its indented with.
+        If this is the first line (`indentation_nb` is `None`),
+        considers the indentation correct and returns the number of spaces
+        the line is indented with.
+        """
+        current_indentation_nb = len(line) - len(stripped_line)
+        if indentation_nb is None:
+            return current_indentation_nb
+        else:
+            if current_indentation_nb == indentation_nb:
+                return current_indentation_nb
+            else:
+                raise SyntaxError("Incorrect indentation",
+                    (self.in_file.name, self.line_nb, indentation_nb, line))
+
+    def get_top_level_line_type(line, stripped_line):
+        """
+        Returns the type of a top-level line (Note: this is expected to never
+        be called for something else than a top-level line).
+        Raises an error if the top-level line is not valid
+        """
+        if stripped_line == "":
+            return LineType.empty
+        elif stripped_line.startswith(COMMENT_SYM):
+            return LineType.comment
+        elif line.startswith(ALIAS_SYM):
+            return LineType.alias_declaration
+        elif line.startswith(SLOT_SYM):
+            return LineType.slot_declaration
+        elif line.startswith(INTENT_SYM):
+            return LineType.intent_declaration
+        elif line.startswith(INCLUDE_FILE_SYM):
+            return LineType.include_file
+        else:
+            SyntaxError("Invalid syntax",
+                (self.in_file.name, self.line_nb, 1, line))
 
     def printDBG(self):
         print("\nAliases:")

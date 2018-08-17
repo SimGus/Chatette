@@ -61,27 +61,6 @@ def is_start_unit_sym(char):
 def is_unit_start(text):
     return (len(text) > 0 and is_start_unit_sym(text[0]))
 
-def get_top_level_line_type(line, stripped_line):
-    """
-    Returns the type of a top-level line (Note: this is expected to never
-    be called for something else than a top-level line).
-    Raises an error if the top-level line is not valid
-    """
-    if stripped_line == "":
-        return LineType.empty
-    elif stripped_line.startswith(COMMENT_SYM):
-        return LineType.comment
-    elif line.startswith(ALIAS_SYM):
-        return LineType.alias_declaration
-    elif line.startswith(SLOT_SYM):
-        return LineType.slot_declaration
-    elif line.startswith(INTENT_SYM):
-        return LineType.intent_declaration
-    elif line.startswith(INCLUDE_FILE_SYM):
-        return LineType.include_file
-    else:
-        SyntaxError("Invalid syntax",
-            (self.in_file.name, self.line_nb, 1, line))
 def get_unit_type(unit):
     if unit.startswith(UNIT_OPEN_SYM):
         return Unit.word_group
@@ -209,46 +188,6 @@ def split_contents(text, accept_alt_solt_val=False):
     return words_and_units
 
 
-def parse_unit(unit):
-    """
-    Parses a unit (left stripped) and returns
-    (unit name, variation, randgen, percentgen, casegen) with `None` values for
-    those not provided in the file. NB: `casegen` is a boolean.
-    For a word group, the name will be its text.
-    If an anonymous randgen is used '' will be its value.
-    """
-    name = None
-    variation = None
-    randgen = None
-    percentgen = None
-    casegen = False
-    one_found = False
-    for match in pattern_modifiers.finditer(unit):
-        start_index = match.start()
-        if one_found:  # this error would happen only when `unit` is a whole line (i.e. a declaration)
-            raise SyntaxError("Expected only one unit here: only one declaration is allowed per line",
-                (self.in_file.name, self.line_nb, start_index, unit))
-        else:
-            one_found = True
-        match = match.groupdict()
-
-        name = match["name"]
-        variation = match["variation"]
-        randgen = match["randgen"]
-        percentgen = match["percentgen"]
-        casegen = (match["casegen"] is not None)
-        if name == "":
-            raise SyntaxError("Units must have a name (or a content for word groups)",
-                (self.in_file.name, self.line_nb, start_index, unit))
-        if variation == "":
-            raise SyntaxError("Precision must be named (e.g. [text#variation])",
-                (self.in_file.name, self.line_nb, start_index, unit))
-        if percentgen == "":
-            raise SyntaxError("Percentage for generation cannot be empty",
-                (self.in_file.name, self.line_nb, start_index, unit))
-
-    return (name, variation, randgen, percentgen, casegen)
-
 def find_nb_gen_asked(intent):
     """
     Finds the number of generation asked for the provided intent string and
@@ -259,8 +198,8 @@ def find_nb_gen_asked(intent):
     for match in pattern_nb_gen_asked.finditer(intent):
         start_index = match.start()
         if one_found:
-            raise SyntaxError("Expected only one number of generation asked",
-                (self.in_file.name, self.line_nb, start_index, unit))
+            raise SyntaxError("Expected only one number of generation asked in "+
+                intent)
         else:
             one_found = True
         match = match.groupdict()
