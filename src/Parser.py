@@ -83,6 +83,7 @@ class Parser():
         If an anonymous randgen is used '' will be its value.
         """
         name = None
+        arg = None
         variation = None
         randgen = None
         percentgen = None
@@ -492,7 +493,7 @@ class Parser():
                         splits[-1] = splits[-1][:-1]
                         randgen = True
                 for choice_str in splits:
-                    if choice_str != "":  # TODO check the type of each choice?
+                    if choice_str is not None and choice_str != "":  # TODO check the type of each choice?
                         choices.append(self.split_contents(choice_str))
                 if choices != []:
                     words_and_units.append({
@@ -506,6 +507,8 @@ class Parser():
                 unit_type = get_unit_type(string)
                 if unit_type == Unit.word_group:
                     (name, arg, variation, randgen, percentgen, casegen) = self.parse_unit(string)
+                    if name is None:
+                        continue
                     if arg is not None:
                         raise SyntaxError("Word groups cannot have an argument",
                             (self.in_file.name, self.line_nb, 0, name))

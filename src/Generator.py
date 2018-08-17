@@ -184,6 +184,8 @@ class Generator():
             if unit_type == Unit.word_group:
                 if unit_rule["leading-space"]:
                     generated_str += ' '
+                if unit_rule["words"] is None:
+                    print("rule: "+str(unit_rule["words"])+" has no words")
                 generated_str += unit_rule["words"]
 
                 if generate_different_case:
