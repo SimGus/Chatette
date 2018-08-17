@@ -72,7 +72,6 @@ class Generator():
         if "nb-gen-asked" not in intent_rules:  # Different flavors (variations)
             for variation in intent_rules:
                 self.generate_intent(intent_name, intent_rules[variation])
-                # TODO return here
         else:
             max_gen_nb = intent_rules["nb-gen-asked"]
 
@@ -99,10 +98,8 @@ class Generator():
                     to_Rasa_format(intent_name, current_example, current_entities)
                 )
                 nb_examples_gen += 1
-                # TODO return here
         else:  #TODO
             print("Generation without max number is currently not supported")
-            # TODO return here
 
     def generate_unit(self, unit_rule):
         """
