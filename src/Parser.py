@@ -477,7 +477,8 @@ class Parser():
                 no_leading_space = i == 0 or (i != 0 and words_and_units_raw[i-1] != ' ')
                 choices = []
                 for choice_str in re.split(r'(?<!\\):', CHOICE_SEP):  # TODO improve the regex here
-                    choices.append(self.split_contents(choice_str))
+                    if choice_str != "":
+                        choices.append(self.split_contents(choice_str))
                 words_and_units.append({
                     "type": Unit.choice,
                     "choices": choices,
