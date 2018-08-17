@@ -8,6 +8,7 @@ from random import randint
 
 from utils import *
 from parser_utils import Unit
+from rasa_adapter import to_Rasa_format
 
 
 def cast_to_unicode(any):
@@ -93,11 +94,13 @@ class Generator():
                     current_entities.extend(generation["entities"])
                 printDBG("Generated: "+current_example)
                 printDBG("Entities: "+str(current_entities))
-                self.generated_examples.append(current_example)
+                self.generated_examples.append(
+                    to_Rasa_format(intent_name, current_example, current_entities)
+                )
                 nb_examples_gen += 1
                 # TODO return here
         else:  #TODO
-            print("No nb gen asked not yet supported")
+            print("Generation without max number is currently not supported")
             # TODO return here
 
     def generate_unit(self, unit_rule):
