@@ -5,110 +5,110 @@
 
 ~[GLO_SSP]
     [the?] ~[production line?line] ~[named?line] GLO_SSP
-    [the?] GLO_SSP ~[production line?]
+    [the?decorator] GLO_SSP ~[production line?decorator]
     [the?] ~[production line?line] ~[named?line] glo_ssp
-    [the?] glo_ssp ~[production line?]
+    [the?decorator] glo_ssp ~[production line?decorator]
 ~[LAL_HSM]
     [the?] ~[production line?line] ~[named?line] LAL_HSM
-    [the?] LAL_HSM ~[production line?]
+    [the?decorator] LAL_HSM ~[production line?decorator]
     [the?] ~[production line?line] ~[named?line] lal_hsm
-    [the?] lal_hsm ~[production line?]
+    [the?decorator] lal_hsm ~[production line?decorator]
     {our/the [internal?]} ~[line name#hot strip mill] ~[production line?]
     the ~[line name#hot strip mill] ~[production line?] of ~[client factory name]
 ~[LAL_SKP]
     [the?] ~[production line?line] ~[named?line] LAL_SKP
-    [the?] LAL_SKP ~[production line?]
+    [the?decorator] LAL_SKP ~[production line?decorator]
     [the?] ~[production line?line] ~[named?line] lal_skp
-    [the?] lal_skp ~[production line?]
+    [the?decorator] lal_skp ~[production line?decorator]
 ~[EXT_SKP]
     [the?] ~[production line?line] ~[named?line] EXT_SKP
-    [the?] EXT_SKP ~[production line?]
+    [the?decorator] EXT_SKP ~[production line?decorator]
     [the?] ~[production line?line] ~[named?line] ext_skp
-    [the?] ext_skp ~[production line?]
+    [the?decorator] ext_skp ~[production line?decorator]
 ~[LAL_PCK]
     [the?] ~[production line?line] ~[named?line] LAL_PCK
-    [the?] LAL_PCK ~[production line?]
+    [the?decorator] LAL_PCK ~[production line?decorator]
     [the?] ~[production line?line] ~[named?line] lal_pck
-    [the?] lal_pck ~[production line?]
+    [the?decorator] lal_pck ~[production line?decorator]
     {our/the [internal?]} ~[line name#pickling] ~[production line?]
     the ~[line name#pickling] ~[production line?] of ~[client factory name]
 ~[EXT_PCK]
     [the?] ~[production line?line] ~[named?line] EXT_PCK
-    [the?] EXT_PCK ~[production line?]
+    [the?decorator] EXT_PCK ~[production line?decorator]
     [the?] ~[production line?line] ~[named?line] ext_pck
-    [the?] ext_pck ~[production line?]
+    [the?decorator] ext_pck ~[production line?decorator]
     the external ~[line name#pickling] ~[production line?]
 ~[LAL_CRM]
     [the?] ~[production line?line] ~[named?line] LAL_CRM
-    [the?] LAL_CRM ~[production line?]
+    [the?decorator] LAL_CRM ~[production line?decorator]
     [the?] ~[production line?line] ~[named?line] lal_crm
-    [the?] lal_crm ~[production line?]
+    [the?decorator] lal_crm ~[production line?decorator]
     {our/the [internal?]} ~[line name#cold rolling mill] ~[production line?]
     the ~[line name#cold rolling mill] ~[production line?] of ~[client factory name]
 ~[EXT_CRM]
     [the?] ~[production line?line] ~[named?line] EXT_CRM
-    [the?] EXT_CRM ~[production line?]
+    [the?decorator] EXT_CRM ~[production line?decorator]
     [the?] ~[production line?line] ~[named?line] ext_crm
-    [the?] ext_crm ~[production line?]
+    [the?decorator] ext_crm ~[production line?decorator]
     the external ~[line name#cold rolling mill] ~[production line?]
 ~[LAL_PAC]
     [the?] ~[production line?line] ~[named?line] LAL_PAC
-    [the?] LAL_PAC ~[production line?]
+    [the?decorator] LAL_PAC ~[production line?decorator]
     [the?] ~[production line?line] ~[named?line] lal_pac
-    [the?] lal_pac ~[production line?]
+    [the?decorator] lal_pac ~[production line?decorator]
     {our/the [internal?]} ~[line name#packing] ~[production line?]
     the ~[line name#packing] ~[production line?] of ~[client factory name]
 ~[LAL_SHP]
     [the?] ~[production line?line] ~[named?line] LAL_SHP
-    [the?] LAL_SHP ~[production line?]
+    [the?decorator] LAL_SHP ~[production line?decorator]
     [the?] ~[production line?line] ~[named?line] lal_shp
-    [the?] lal_shp ~[production line?]
+    [the?decorator] lal_shp ~[production line?decorator]
     {our/the [internal?]} ~[line name#shipping] ~[production line?]
     the ~[line name#shipping] ~[production line?] of ~[client factory name]
 ~[STR_GLV]
     [the?] ~[production line?line] ~[named?line] STR_GLV
-    [the?] STR_GLV ~[production line?]
+    [the?decorator] STR_GLV ~[production line?decorator]
     [the?] ~[production line?line] ~[named?line] str_glv
-    [the?] str_glv ~[production line?]
+    [the?decorator] str_glv ~[production line?decorator]
     the ~[line name#galvanization] ~[production line?]
 ~[EXT_GLV]
     [the?] ~[production line?line] ~[named?line] EXT_GLV
-    [the?] EXT_GLV ~[production line?]
+    [the?decorator] EXT_GLV ~[production line?decorator]
     [the?] ~[production line?line] ~[named?line] ext_glv
-    [the?] ext_glv ~[production line?]
+    [the?decorator] ext_glv ~[production line?decorator]
     the external ~[line name#galvanization] ~[production line?]
 ~[STR_PNT]
     [the?] ~[production line?line] ~[named?line] STR_PNT
-    [the?] STR_PNT ~[production line?]
+    [the?decorator] STR_PNT ~[production line?decorator]
     [the?] ~[production line?line] ~[named?line] str_pnt
-    [the?] str_pnt ~[production line?]
+    [the?decorator] str_pnt ~[production line?decorator]
     the ~[line name#paint] ~[production line?] of ~[partner factory name]
 ~[EXT_PNT]
     [the?] ~[production line?line] ~[named?line] EXT_PNT
-    [the?] EXT_PNT ~[production line?]
+    [the?decorator] EXT_PNT ~[production line?decorator]
     [the?] ~[production line?line] ~[named?line] ext_pnt
-    [the?] ext_pnt ~[production line?]
+    [the?decorator] ext_pnt ~[production line?decorator]
 ~[STR_SLT]
     [the?] ~[production line?] ~[named?] STR_SLT
-    [the?] STR_SLT ~[production line?]
+    [the?decorator] STR_SLT ~[production line?decorator]
     [the?] ~[production line?] ~[named?] str_slt
-    [the?] str_slt ~[production line?]
+    [the?decorator] str_slt ~[production line?decorator]
     the ~[line name#slitting] ~[production line?] of ~[partner factory name]
 ~[STR_PAC]
     [the?] ~[production line?] ~[named?] STR_PAC
-    [the?] STR_PAC ~[production line?]
+    [the?decorator] STR_PAC ~[production line?decorator]
     [the?] ~[production line?] ~[named?] str_pac
-    [the?] str_pac ~[production line?]
+    [the?decorator] str_pac ~[production line?decorator]
     the ~[line name#packing] ~[production line?] of ~[partner factory name]
 ~[STR_SHP]
     [the?] ~[production line?] ~[named?] STR_SHP
-    [the?] STR_SHP ~[production line?]
+    [the?decorator] STR_SHP ~[production line?decorator]
     [the?] ~[production line?] ~[named?] str_shp
-    [the?] str_shp ~[production line?]
+    [the?decorator] str_shp ~[production line?decorator]
     the ~[line name#shipping] ~[production line?] of ~[partner factory name]
 ~[GLO_CLI]
     [the?] ~[production line?] ~[named?] GLO_CLI
-    [the?] GLO_CLI ~[production line?]
+    [the?decorator] GLO_CLI ~[production line?decorator]
     [the?] ~[production line?] ~[named?] glo_cli
-    [the?] glo_cli ~[production line?]
+    [the?decorator] glo_cli ~[production line?decorator]
     the ~[line name#client] ~[production line]

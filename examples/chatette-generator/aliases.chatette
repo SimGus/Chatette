@@ -82,10 +82,6 @@
 ~[production line]
   {prod/production?} line
 
-~[number]
-  number
-  \#
-
 ~[line name#hot strip mill]
   hot [strip?] mill
 ~[line name#pickling]
