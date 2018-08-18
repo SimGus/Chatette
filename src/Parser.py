@@ -2,6 +2,7 @@
 
 import re
 import os
+import warnings
 
 from utils import *
 from parser_utils import *
@@ -393,74 +394,145 @@ class Parser():
         # Split string in list of words and raw units (as strings)
         words_and_units_raw = []
         current = ""
+
         escaped = False
-        space_just_seen = False
-        must_parse_alt_slot_val = False
         inside_choice = False
+        must_parse_alt_slot_val = False
         for c in text:
-            # Manage character escapement
+            # Manage escapement
             if escaped:
                 current += c
                 escaped = False
                 continue
-            if c == COMMENT_SYM:
+            elif c == COMMENT_SYM:
                 break
-            # Manage choices
-            if inside_choice:
-                if c != CHOICE_CLOSE_SYM:
-                    current += c
-                else:  # End of choice
+            elif inside_choice:
+                if c == CHOICE_CLOSE_SYM:
+                    words_and_units_raw.append(current+c)
+                    current = ""
                     inside_choice = False
-                    words_and_units_raw.append(current+CHOICE_CLOSE_SYM)
-                    current = ""
-                continue
-            # Manage spaces
-            if c.isspace():
-                space_just_seen = True
-                if current == "":
-                    continue
-                elif not is_unit_start(current):  # Parsing a word
-                    # New word
-                    words_and_units_raw.append(current)
-                    current = ""
-                    continue
                 else:
                     current += c
-                    continue
             elif c == ESCAPE_SYM:
                 escaped = True
-            # End unit
-            elif c == UNIT_CLOSE_SYM:
                 current += c
-                words_and_units_raw.append(current)
-                current = ""
-            elif accept_alt_solt_val and c == ALT_SLOT_VALUE_NAME_SYM:
-                must_parse_alt_slot_val = True
-                break
-            # New choice
+            elif c.isspace():
+                if not is_unit_start(current) and not is_choice(current):  # End of word
+                    if current != "":
+                        words_and_units_raw.append(current)
+                    words_and_units_raw.append(' ')
+                    current = ""
+                elif current == "" and \
+                    len(words_and_units_raw) > 0 and words_and_units_raw[-1] == ' ':
+                        continue  # Double space in-between words
+                else:
+                    current += c
+            elif c == UNIT_CLOSE_SYM:
+                if is_unit_start(current):
+                    words_and_units_raw.append(current+c)
+                    current = ""
+                else:
+                    warnings.warn("Inconsistent use of the unit close symbol ("+
+                        UNIT_CLOSE_SYM+") at line "+str(self.line_nb)+" of file '"+
+                        self.in_file.name+"'. Consider escaping them if they are "+
+                        "not supposed to close a unit.\nThe generation will "+
+                        "however continue, considering it as a normal character.")
+                    current += c
+            elif c == CHOICE_CLOSE_SYM:
+                warnings.warn("Inconsistent use of the choice close symbol ("+
+                    CHOICE_CLOSE_SYM+") at line "+str(self.line_nb)+" of file '"+
+                    self.in_file.name+"'. Consider escaping them if they are "+
+                    "not supposed to close a unit.\nThe generation will "+
+                    "however continue, considering it as a normal character.")
+                current += c
             elif c == CHOICE_OPEN_SYM:
                 if current != "":
                     words_and_units_raw.append(current)
-                elif space_just_seen:
-                    words_and_units_raw.append(' ')
-                current = CHOICE_OPEN_SYM
                 inside_choice = True
-            # New unit
-            elif is_start_unit_sym(c) or current == "":
-                if space_just_seen and current == "":
-                    words_and_units_raw.append(' ')
-                elif current != "" and not is_start_unit_sym(current):
-                    words_and_units_raw.append(current)
-                    current = ""
+                current = c
+            elif is_start_unit_sym(c) and current != ALIAS_SYM and \
+                current != SLOT_SYM and current != INTENT_SYM:
+                    if current != "":
+                        words_and_units_raw.append(current)
+                    current = c
+            elif accept_alt_solt_val and c == ALT_SLOT_VALUE_NAME_SYM:
+                must_parse_alt_slot_val = True
+                break
+            else:  # Any other character
                 current += c
-            # Any other character
-            else:
-                current += c
-
-            if not c.isspace():
-                space_just_seen = False
         if current != "":
             words_and_units_raw.append(current)
+
+        # escaped = False
+        # space_just_seen = False
+        # must_parse_alt_slot_val = False
+        # inside_choice = False
+        # for c in text:
+        #     # Manage character escapement
+        #     if escaped:
+        #         current += c
+        #         escaped = False
+        #         continue
+        #     if c == COMMENT_SYM:
+        #         break
+        #     # Manage choices
+        #     if inside_choice:
+        #         if c != CHOICE_CLOSE_SYM:
+        #             current += c
+        #         else:  # End of choice
+        #             inside_choice = False
+        #             words_and_units_raw.append(current+CHOICE_CLOSE_SYM)
+        #             current = ""
+        #         continue
+        #     # Manage spaces
+        #     if c.isspace():
+        #         space_just_seen = True
+        #         if current == "":
+        #             continue
+        #         elif not is_unit_start(current):  # Parsing a word
+        #             # New word
+        #             print("not unit start: "+current)
+        #             words_and_units_raw.append(current)
+        #             current = ""
+        #             continue
+        #         else:
+        #             current += c
+        #             continue
+        #     elif c == ESCAPE_SYM:
+        #         escaped = True
+        #         current += c
+        #     # End unit
+        #     elif c == UNIT_CLOSE_SYM:
+        #         current += c
+        #         words_and_units_raw.append(current)
+        #         current = ""
+        #     elif accept_alt_solt_val and c == ALT_SLOT_VALUE_NAME_SYM:
+        #         must_parse_alt_slot_val = True
+        #         break
+        #     # New choice
+        #     elif c == CHOICE_OPEN_SYM:
+        #         if current != "":
+        #             words_and_units_raw.append(current)
+        #         elif space_just_seen:
+        #             words_and_units_raw.append(' ')
+        #         current = CHOICE_OPEN_SYM
+        #         inside_choice = True
+        #     # New unit
+        #     elif is_start_unit_sym(c) or current == "":
+        #         if space_just_seen and current == "":
+        #             words_and_units_raw.append(' ')
+        #         elif current != "" and not is_start_unit_sym(current):
+        #             words_and_units_raw.append(current)
+        #             current = ""
+        #         current += c
+        #     # Any other character
+        #     else:
+        #         current += c
+        #
+        #     if not c.isspace():
+        #         space_just_seen = False
+        # if current != "":
+        #     words_and_units_raw.append(current)
 
         print(words_and_units_raw)
 
@@ -479,7 +551,7 @@ class Parser():
                 no_leading_space = i == 0 or (i != 0 and words_and_units_raw[i-1] != ' ')
                 words_and_units.append({
                     "type": Unit.word,
-                    "word": string,
+                    "word": remove_escapement(string),
                     "leading-space": not no_leading_space,
                 })
             elif is_choice(string):  # choice
@@ -517,7 +589,7 @@ class Parser():
                             (self.in_file.name, self.line_nb, 0, name))
                     words_and_units.append({
                         "type": Unit.word_group,
-                        "words": name,
+                        "words": remove_escapement(name),
                         "randgen": randgen,
                         "percentgen": percentgen,
                         "casegen": casegen,
@@ -527,7 +599,7 @@ class Parser():
                     (name, arg, variation, randgen, percentgen, casegen) = self.parse_unit(string)
                     words_and_units.append({
                         "type": unit_type,
-                        "name": name,
+                        "name": name,  # TODO should escapement be removed from there?
                         "arg": arg,
                         "variation": variation,
                         "randgen": randgen,

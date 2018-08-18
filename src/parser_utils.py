@@ -131,3 +131,24 @@ def get_all_rules_in_intent_variations(definition):
     for variation in definition:
         all_rules.extend(definition[variation]["rules"])
     return all_rules
+
+
+def remove_escapement(text):
+    """
+    Returns `text` were all escaped characters
+    have been removed their escapement character
+    """
+    if ESCAPE_SYM not in text:
+        return text
+    # Note there might be better ways to do this with regexes (but they have fixed-length negative lookback)
+    result = ""
+    escaped = False
+    for c in text:
+        if escaped:
+            result += c
+            escaped = False
+        elif c == ESCAPE_SYM:
+            escaped = True
+        else:
+            result += c
+    return result

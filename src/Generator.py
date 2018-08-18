@@ -156,6 +156,9 @@ class Generator():
             if '[' in generated_str:
                 print("PROBLEM in choice: "+generated_str)  # TODO remove this
 
+            if generated_str == "":
+                print("AAAA choice generated empty string")  # TODO remove this
+
             return {
                 "text": generated_str,
                 "entities": generated_entities,
