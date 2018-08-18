@@ -40,10 +40,13 @@ def cast_to_unicode(any):
 def randomly_change_case(text):
     """Randomly set the case of the first letter of `text`"""
     if randint(0, 99) >= 50:
-        return text
-    for (i, c) in enumerate(text):
-        if not c.isspace():
-            return text[:i] + text[i].upper() + text[(i+1):]
+        for (i, c) in enumerate(text):
+            if not c.isspace():
+                return text[:i] + text[i].lower() + text[(i+1):]
+    else:
+        for (i, c) in enumerate(text):
+            if not c.isspace():
+                return text[:i] + text[i].upper() + text[(i+1):]
 
 
 class Generator():
@@ -150,6 +153,9 @@ class Generator():
                 not generated_str.startswith(' '):
                     generated_str = ' '+generated_str
 
+            if '[' in generated_str:
+                print("PROBLEM in choice: "+generated_str)  # TODO remove this
+
             return {
                 "text": generated_str,
                 "entities": generated_entities,
@@ -184,9 +190,10 @@ class Generator():
             if unit_type == Unit.word_group:
                 if unit_rule["leading-space"]:
                     generated_str += ' '
-                if unit_rule["words"] is None:
-                    print("rule: "+str(unit_rule["words"])+" has no words")
                 generated_str += unit_rule["words"]
+
+                if '[' in generated_str:
+                    print("PROBLEM in wg: "+generated_str)  # TODO remove this
 
                 if generate_different_case:
                     return {
@@ -255,6 +262,9 @@ class Generator():
                 else:  # TODO this should be an error
                     pass
 
+                if '[' in generated_str:
+                    print("PROBLEM in alias or slot: "+generated_str)  # TODO remove this
+
             elif unit_type == Unit.intent:
                 if unit_rule["name"] not in self.parser.intents:
                     raise SyntaxError("Intent '"+unit_rule["name"]+"' wasn't defined")
@@ -283,6 +293,9 @@ class Generator():
                     sub_generation = self.generate_unit(sub_unit_rule)
                     generated_entities.extend(sub_generation["entities"])
                     generated_str += sub_generation["text"]
+
+                if '[' in generated_str:
+                    print("PROBLEM in intent: "+generated_str)
 
             else:
                 raise RuntimeError("Tried to generate a unit of unknown type")
