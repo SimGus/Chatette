@@ -91,24 +91,24 @@
 ~[STR_SLT]
     [the?] ~[production line?line] ~[named?line] STR_SLT
     [the?decorator] STR_SLT ~[production line?decorator]
-    [the?] ~[production line?] ~[named?] str_slt
+    [the?] ~[production line?line] ~[named?line] str_slt
     [the?decorator] str_slt ~[production line?decorator]
     the ~[line name#slitting] ~[production line?] of ~[partner factory name]
 ~[STR_PAC]
     [the?] ~[production line?line] ~[named?line] STR_PAC
     [the?decorator] STR_PAC ~[production line?decorator]
-    [the?] ~[production line?] ~[named?] str_pac
+    [the?] ~[production line?line] ~[named?line] str_pac
     [the?decorator] str_pac ~[production line?decorator]
     the ~[line name#packing] ~[production line?] of ~[partner factory name]
 ~[STR_SHP]
     [the?] ~[production line?line] ~[named?line] STR_SHP
     [the?decorator] STR_SHP ~[production line?decorator]
-    [the?] ~[production line?] ~[named?] str_shp
+    [the?] ~[production line?line] ~[named?line] str_shp
     [the?decorator] str_shp ~[production line?decorator]
     the ~[line name#shipping] ~[production line?] of ~[partner factory name]
 ~[GLO_CLI]
     [the?] ~[production line?line] ~[named?line] GLO_CLI
     [the?decorator] GLO_CLI ~[production line?decorator]
-    [the?] ~[production line?] ~[named?] glo_cli
+    [the?] ~[production line?line] ~[named?line] glo_cli
     [the?decorator] glo_cli ~[production line?decorator]
     the ~[line name#client] ~[production line]
