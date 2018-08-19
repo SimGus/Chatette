@@ -24,7 +24,7 @@ if __name__ == "__main__":
         output_file_path = os.path.join(os.path.dirname(template_file_path), output_filename)
 
         parser = None
-        with open(template_file_path, 'r') as in_file:
+        with io.open(template_file_path, 'r') as in_file:
             parser = Parser(in_file)
             parser.parse()
             parser.printDBG()
