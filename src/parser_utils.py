@@ -22,13 +22,13 @@ VARIATION_SYM = '#'
 RAND_GEN_SYM = '?'
 PERCENT_GEN_SYM = '/'
 CASE_GEN_SYM = '&'
-ARG_SYM = ':'
+ARG_SYM = '$'
 
 ALT_SLOT_VALUE_NAME_SYM = '='
 
 INCLUDE_FILE_SYM = '|'
 
-RESERVED_VARIATION_NAMES = ["all-variations-aggregation", "rules", "nb-gen-asked"]
+RESERVED_VARIATION_NAMES = ["all-variations-aggregation", "rules", "nb-gen-asked", "arg"]
 
 # This regex finds patterns like this `[name#variation?randgen/percentgen]`
 # with `variation`, `randgen` and `percentgen` optional
@@ -36,10 +36,10 @@ RESERVED_VARIATION_NAMES = ["all-variations-aggregation", "rules", "nb-gen-asked
 pattern_modifiers = \
     re.compile(
         r"\[(?P<casegen>&)?"+
-        r"(?P<name>[^#\[\]\?/:]*)"+
-        r"(?::(?P<arg>[^#\[\]?/:]*))?"+
-        r"(?:#(?P<variation>[^#\[\]\?/:]*))?"+
-        r"(?:\?(?P<randgen>[^#\[\]\?/:]*)(?:/(?P<percentgen>[^#\[\]\?/:]*))?)?\]"
+        r"(?P<name>[^#\[\]\?/\$]*)"+
+        r"(?:\$(?P<arg>[^#\[\]?/\$]*))?"+
+        r"(?:#(?P<variation>[^#\[\]\?/\$]*))?"+
+        r"(?:\?(?P<randgen>[^#\[\]\?/\$]*)(?:/(?P<percentgen>[^#\[\]\?/\$]*))?)?\]"
     )
 pattern_nb_gen_asked = re.compile(r"\]\((?P<nbgen>[0-9]+)\)")
 pattern_comment = re.compile(r"(?<!\\);")

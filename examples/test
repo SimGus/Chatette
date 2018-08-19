@@ -1,2 +1,10 @@
 %[test](4)
-    This is a \[test] [test group]
+    This is a ~[test$XLS_FRG 5] @[slot$test]
+
+~[test$to enter]
+    arg was: $to enter
+
+@[slot$ARG]
+    (ARG is $ARG)
+    escaped: \$ARG
+    {choice1: $ARG/choice2: $ARG}

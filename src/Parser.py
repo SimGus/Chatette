@@ -138,6 +138,9 @@ class Parser():
         if alias_name is None or alias_name == "":
             raise SyntaxError("Aliases must be named",
                     (self.in_file.name, self.line_nb, 0, first_line))
+        if alias_arg == "":
+            raise SyntaxError("Arguments must be named",
+                    (self.in_file.name, self.line_nb, 0, first_line))
         if alias_variation in RESERVED_VARIATION_NAMES:
             raise SyntaxError("You cannot use the reserved variation names: "+str(RESERVED_VARIATION_NAMES),
                     (self.in_file.name, self.line_nb, 0, first_line))
@@ -170,7 +173,10 @@ class Parser():
                     (self.in_file.name, self.line_nb, 0, first_line))
             else:
                 if alias_variation not in self.aliases[alias_name]:
-                    self.aliases[alias_name][alias_variation] = rules
+                    self.aliases[alias_name][alias_variation] = {
+                        "arg": alias_arg,
+                        "rules": rules,
+                    }
                 else:  # TODO might be interesting to add it to existing rules
                     raise SyntaxError("Found a definition with variation"
                         +alias_variation+" for alias '"+alias_name+
@@ -178,10 +184,16 @@ class Parser():
                         (self.in_file.name, self.line_nb, 0, first_line))
         else:
             if alias_variation is None:
-                self.aliases[alias_name] = rules
+                self.aliases[alias_name] = {
+                    "arg": alias_arg,
+                    "rules": rules,
+                }
             else:
                 self.aliases[alias_name] = {
-                    alias_variation: rules,
+                    alias_variation: {
+                        "arg": alias_arg,
+                        "rules": rules,
+                    }
                 }
 
     def parse_slot_definition(self, first_line):
@@ -195,6 +207,9 @@ class Parser():
             self.parse_unit(first_line)
         if slot_name is None or slot_name == "":
             raise SyntaxError("Slots must be named",
+                    (self.in_file.name, self.line_nb, 0, first_line))
+        if slot_arg == "":
+            raise SyntaxError("Arguments must be named",
                     (self.in_file.name, self.line_nb, 0, first_line))
         if slot_variation in RESERVED_VARIATION_NAMES:
             raise SyntaxError("You cannot use the reserved variation names: "+str(RESERVED_VARIATION_NAMES),
@@ -223,7 +238,14 @@ class Parser():
             (alt_slot_val_name, rule) = \
                 self.split_contents(stripped_line, accept_alt_solt_val=True)
             if alt_slot_val_name is None:  # Take the name of the first unit
-                alt_slot_val_name = rule[0]["name"]
+                print("rule0: "+str(rule[0]))
+                current_rule = rule[0]
+                while current_rule["type"] == Unit.choice:
+                    current_rule = current_rule["choices"][0][0]
+                if current_rule["type"] == Unit.word:
+                    alt_slot_val_name = current_rule["word"]
+                else:
+                    alt_slot_val_name = current_rule["name"]
             rules.append({
                 "slot-value-name": alt_slot_val_name,
                 "rule": rule,
@@ -245,10 +267,16 @@ class Parser():
                         (self.in_file.name, self.line_nb, 0, first_line))
         else:
             if slot_variation is None:
-                self.slots[slot_name] = rules
+                self.slots[slot_name] = {
+                    "arg": slot_arg,
+                    "rules": rules,
+                }
             else:
                 self.slots[slot_name] = {
-                    slot_variation: rules,
+                    slot_variation: {
+                        "arg": arg,
+                        "rules": rules,
+                    }
                 }
 
     def parse_intent_definition(self, first_line):
@@ -262,6 +290,9 @@ class Parser():
             self.parse_unit(first_line)
         if intent_name is None or intent_name == "":
             raise SyntaxError("Intents must be named",
+                    (self.in_file.name, self.line_nb, 0, first_line))
+        if intent_arg == "":
+            raise SyntaxError("Arguments must be named",
                     (self.in_file.name, self.line_nb, 0, first_line))
         if intent_variation in RESERVED_VARIATION_NAMES:
             raise SyntaxError("You cannot use the reserved variation names: "+str(RESERVED_VARIATION_NAMES),
@@ -298,6 +329,7 @@ class Parser():
                 if intent_variation not in self.intents[name]:
                     self.intents[intent_name][intent_variation] = {
                         "nb-gen-asked": nb_gen_asked,
+                        "arg": intent_arg,
                         "rules": rules,
                     }
                 else:
@@ -309,12 +341,14 @@ class Parser():
             if intent_variation is None:
                 self.intents[intent_name] = {
                     "nb-gen-asked": nb_gen_asked,
+                    "arg": intent_arg,
                     "rules": rules,
                 }
             else:
                 self.intents[intent_name] = {
                     intent_variation: {
                         "nb-gen-asked": nb_gen_asked,
+                        "arg": intent_arg,
                         "rules": rules,
                     },
                 }
@@ -582,6 +616,9 @@ class Parser():
                 for choice_str in splits:
                     if choice_str is not None and choice_str != "":  # TODO check the type of each choice?
                         choices.append(self.split_contents(choice_str))
+                    else:
+                        raise SyntaxError("Empty choice not allowed in choices",
+                            (self.in_file.name, self.line_nb, 0, name))
                 if choices != []:
                     words_and_units.append({
                         "type": Unit.choice,
@@ -632,26 +669,32 @@ class Parser():
         print("\nAliases:")
         for name in self.aliases:
             current_alias_def = self.aliases[name]
-            print("\t"+name+": ")
-            if isinstance(current_alias_def, list):
-                for rule in current_alias_def:
+            if "rules" in current_alias_def:  # No variations
+                print("\t"+name+" (arg: "+str(current_alias_def["arg"])+"):")
+                rules = current_alias_def["rules"]
+                for rule in rules:
                     print("\t\trule: "+str(rule))
-            else:
+            else:  # Variations
+                print("\t"+name+":")
                 for variation in current_alias_def:
-                    print("\t\tvariation: "+variation)
-                    for rule in current_alias_def[variation]:
+                    print("\t\tvariation: "+variation+" (arg: "+str(current_alias_def[variation]["arg"])+"):")
+                    rules = current_alias_def[variation]["rules"]
+                    for rule in rules:
                         print("\t\t\trule: "+str(rule))
 
         print("\nSlots:")
         for name in self.slots:
             current_slot_def = self.slots[name]
-            print("\t"+name+": ")
-            if isinstance(current_slot_def, list):
-                for rule in current_slot_def:
+            if "rules" in current_slot_def:
+                print("\t"+name+" (arg: "+str(current_slot_def["arg"])+"):")
+                rules = current_slot_def["rules"]
+                for rule in rules:
                     print("\t\trule: "+str(rule))
             else:
+                print("\t"+name+": ")
                 for variation in current_slot_def:
-                    print("\t\tvariation: "+variation)
+                    print("\t\tvariation: "+variation+" (arg: "+str(current_slot_def[variation]["arg"]+"):"))
+                    rules = current_slot_def["rules"]
                     for rule in current_slot_def[variation]:
                         print("\t\t\trule: "+str(rule))
 
@@ -660,7 +703,8 @@ class Parser():
             current_intent_def = self.intents[name]
             if "nb-gen-asked" in current_intent_def:
                     print("\t"+name+"(to generate "
-                        +str(current_intent_def["nb-gen-asked"])+"x): ")
+                        +str(current_intent_def["nb-gen-asked"])+"x, arg: "+
+                        str(current_intent_def["arg"])+"):")
                     for rule in current_intent_def["rules"]:
                         print("\t\trule: "+str(rule))
             else:
@@ -668,7 +712,8 @@ class Parser():
                 for variation in current_intent_def:
                     current_variation = current_intent_def[variation]
                     print("\t\tvariation: "+variation+
-                        " to generate "+str(current_variation["nb-gen-asked"])+"x")
+                        " to generate "+str(current_variation["nb-gen-asked"])+
+                        "x (arg: "+current_variation["arg"]+"):")
                     for rule in current_variation["rules"]:
                         print("\t\t\trule: "+str(rule))
 

@@ -28,8 +28,7 @@
 {~[some]/words to/~[choose]}  generate one of the units joined by '/'
 
 TODO add arguments to aliases:
-~[machine name:ARG]
-  the ARG machine
-  the machine named ARG
-
-TODO add casegen inside declarations
+~[machine name$ARG]
+  the $ARG machine
+  the machine named $ARG
+  ARG are escapable
