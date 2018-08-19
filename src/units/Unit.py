@@ -2,22 +2,22 @@
 
 from random import randint
 
+from Generator import randomly_change_case
+
 
 class UnitDefinition():
-    """Super class representing a unit definition"""
-    def __init__(self, name, rules=[], casegen=False, randgen=False,
-        randgen_id=None, randgen_percentage=None):
-            self.type = "unit"
+    """Superclass representing a unit definition"""
+    def __init__(self, name, rules=[], arg=None, casegen=False):
+        self.type = "unit"
 
-            self.name = name
-            self.rules = rules
+        self.name = name
+        self.rules = rules
+        self.argument_identifier = arg
 
-            self.variations = dict()
+        self.variations = dict()
 
-            self.casegen = casegen
-            self.randgen = randgen
-            self.randgen_id = randgen_id
-            self.randgen_percentage = randgen_percentage
+        self.casegen = casegen
+
 
     def add_rule(self, rule, variation_name=None):
         if variation_name is None:
@@ -32,7 +32,7 @@ class UnitDefinition():
                 self.variations[variation_name].append(rule)
             self.rules.append(rule)
 
-    def generate_random(self, variation_name=None):
+    def generate_random(self, variation_name=None, arg_value=None):
         """
         Generates one of your rule at random and
         returns the string generated and the entities inside it
@@ -46,6 +46,10 @@ class UnitDefinition():
                     variation_name+"' for "+self.type+" '"+self.name+"'")
             chosen_rule = \
                 self.rules[randint(0, len(self.variations[variation_name])-1)]
-        return chosen_rule.generate()
+        (text, entities) = chosen_rule.generate(arg_value)
+        if self.casegen:
+            text = randomly_change_case(text)
+        return (text, entities)
+
     def generate_all(self):
         pass  # TODO
