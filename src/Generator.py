@@ -124,7 +124,6 @@ class Generator():
         'generated_randgens' is a dict with keys the name of the randgen and
         a boolean if they were generated or not before.
         """
-        print("unit rule: "+str(unit_rule))
         unit_type = unit_rule["type"]
         if unit_type == Unit.word:
             if unit_rule["leading-space"]:
@@ -321,11 +320,8 @@ class Generator():
             # Manage arguments
             if current_arg_name is not None:
                 pattern_arg = r"(?<!\\)\$"+current_arg_name
-                print("argname: "+current_arg_name+" arg: "+unit_rule["arg"])
-                print("bf: "+generated_str)
                 generated_str = re.sub(pattern_arg, unit_rule["arg"], generated_str)
                 generated_str = generated_str.replace("\$", "$")
-                print("af: "+generated_str)
 
             if generate_different_case:
                 return {
