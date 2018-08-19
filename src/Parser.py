@@ -135,18 +135,21 @@ class Parser():
         # Manage the alias declaration
         (alias_name, alias_arg, alias_variation, randgen, percentgen, casegen) = \
             self.parse_unit(first_line)
+        if alias_name is None or alias_name == "":
+            raise SyntaxError("Aliases must be named",
+                    (self.in_file.name, self.line_nb, 0, first_line))
         if alias_variation in RESERVED_VARIATION_NAMES:
             raise SyntaxError("You cannot use the reserved variation names: "+str(RESERVED_VARIATION_NAMES),
-                    (self.in_file.name, self.line_nb, 0, line))
+                    (self.in_file.name, self.line_nb, 0, first_line))
         if randgen is not None:
             raise SyntaxError("Declarations cannot have a named random generation modifier",
-                    (self.in_file.name, self.line_nb, 0, line))
+                    (self.in_file.name, self.line_nb, 0, first_line))
         if percentgen is not None:
             raise SyntaxError("Declarations cannot have a random generation modifier",
-                    (self.in_file.name, self.line_nb, 0, line))
+                    (self.in_file.name, self.line_nb, 0, first_line))
         if casegen:  # TODO change this
             raise SyntaxError("Case generation modifier not accepted in declarations",
-                    (self.in_file.name, self.line_nb, indentation_nb, line))
+                    (self.in_file.name, self.line_nb, indentation_nb, first_line))
 
         # Manage the contents
         rules = []
@@ -190,18 +193,21 @@ class Parser():
         #Manage the slot declaration
         (slot_name, slot_arg, slot_variation, randgen, percentgen, casegen) = \
             self.parse_unit(first_line)
+        if slot_name is None or slot_name == "":
+            raise SyntaxError("Slots must be named",
+                    (self.in_file.name, self.line_nb, 0, first_line))
         if slot_variation in RESERVED_VARIATION_NAMES:
             raise SyntaxError("You cannot use the reserved variation names: "+str(RESERVED_VARIATION_NAMES),
-                    (self.in_file.name, self.line_nb, 0, line))
+                    (self.in_file.name, self.line_nb, 0, first_line))
         if randgen is not None:
             raise SyntaxError("Declarations cannot have a named random generation modifier",
-                    (self.in_file.name, self.line_nb, 0, line))
+                    (self.in_file.name, self.line_nb, 0, first_line))
         if percentgen is not None:
             raise SyntaxError("Declarations cannot have a random generation modifier",
-                    (self.in_file.name, self.line_nb, 0, line))
+                    (self.in_file.name, self.line_nb, 0, first_line))
         if casegen:
             raise SyntaxError("Case generation modifier not accepted in declarations",
-                    (self.in_file.name, self.line_nb, indentation_nb, line))
+                    (self.in_file.name, self.line_nb, indentation_nb, first_line))
 
         #Manage the contents
         rules = []
@@ -254,18 +260,21 @@ class Parser():
         # Manage the intent declaration
         (intent_name, intent_arg, intent_variation, randgen, percentgen, casegen) = \
             self.parse_unit(first_line)
+        if intent_name is None or intent_name == "":
+            raise SyntaxError("Intents must be named",
+                    (self.in_file.name, self.line_nb, 0, first_line))
         if intent_variation in RESERVED_VARIATION_NAMES:
             raise SyntaxError("You cannot use the reserved variation names: "+str(RESERVED_VARIATION_NAMES),
-                    (self.in_file.name, self.line_nb, 0, line))
+                    (self.in_file.name, self.line_nb, 0, first_line))
         if randgen is not None:
             raise SyntaxError("Declarations cannot have a named random generation modifier",
-                    (self.in_file.name, self.line_nb, 0, line))
+                    (self.in_file.name, self.line_nb, 0, first_line))
         if percentgen is not None:
             raise SyntaxError("Declarations cannot have a random generation modifier",
-                    (self.in_file.name, self.line_nb, 0, line))
+                    (self.in_file.name, self.line_nb, 0, first_line))
         if casegen:
             raise SyntaxError("Case generation modifier not accepted in declarations",
-                    (self.in_file.name, self.line_nb, indentation_nb, line))
+                    (self.in_file.name, self.line_nb, indentation_nb, first_line))
         nb_gen_asked = find_nb_gen_asked(first_line)
 
         # Manage the contents
