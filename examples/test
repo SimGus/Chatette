@@ -6,5 +6,5 @@
 
 @[slot$ARG]
     (ARG is $ARG)
-    escaped: \$ARG
     {choice1: $ARG/choice2: $ARG}
+;    escaped: \$ARG  ; TODO this doesn't work yet

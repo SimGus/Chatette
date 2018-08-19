@@ -20,6 +20,7 @@ class Parser():
         self.line_counts_per_file = []
 
         self.aliases = dict()  # for each alias, stores a list of list of units
+        # self.alias_definitions = []  # TODO redo as OOP
         self.slots = dict()  # for each slot, stores a list of value name and unit
         self.intents = dict()  # for each intent, stores a list of list of slots
 

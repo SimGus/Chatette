@@ -1,6 +1,8 @@
 # TODOs
 
+- TODO: redo as OOP
 - TODO: add argument support
+- TODO: make arguments several layers deep?
 - TODO: don't generate twice the same sentence
 - TODO: generate all possible sentences when asked (tied to a maximum)
 - TODO: add casegen inside declarations

@@ -115,11 +115,13 @@ def get_all_rules_in_variations(definition):
     Returns a list of all the rules for all variations of `definition`
     which is a definition for an alias or a slot (nothing else).
     """
-    # `definition` is a dict indexed by the names of the variation, each
-    # containing a list of rules
     all_rules = []
-    for variation in definition:
-        all_rules.extend(definition[variation])
+    if "rules" in definition:  # No variation
+        all_rules.extend(definition["rules"])
+    else:
+        for variation in definition:
+            print("defvar: "+str(definition[variation]))
+            all_rules.extend(definition[variation]["rules"])  # TODO manage arg
     return all_rules
 
 def get_all_rules_in_intent_variations(definition):

@@ -4,6 +4,7 @@
 
 import sys
 import json
+import re
 from random import randint
 
 from utils import *
@@ -123,6 +124,7 @@ class Generator():
         'generated_randgens' is a dict with keys the name of the randgen and
         a boolean if they were generated or not before.
         """
+        print("unit rule: "+str(unit_rule))
         unit_type = unit_rule["type"]
         if unit_type == Unit.word:
             if unit_rule["leading-space"]:
@@ -165,6 +167,8 @@ class Generator():
             }
         else:
             # TODO keep track of already generated sentences (+max nb of attempts)
+            current_arg_name = None
+
             # Manage random generation
             randgen_name = unit_rule["randgen"]
             if randgen_name is not None:
@@ -222,7 +226,7 @@ class Generator():
                 # Manage variations
                 variation = unit_rule["variation"]
                 if variation is not None:
-                    if isinstance(unit_def, dict) and variation in unit_def:
+                    if variation in unit_def:
                         unit_def = unit_def[variation]
                     elif unit_type == Unit.alias:
                         raise SyntaxError(
@@ -234,8 +238,15 @@ class Generator():
                             "Couldn't find variation '" + unit_rule["variation"] +
                             "' for slot named '" + unit_rule["name"] + "'"
                         )
-                elif isinstance(unit_def, dict):  # No variation asked but the unit is defined with variations
-                    unit_def = unit_def["all-variations-aggregation"]
+                elif "rules" not in unit_def:  # No variation asked but the unit is defined with variations
+                    unit_def = unit_def["all-variations-aggregation"]  # TODO check this with arg
+
+                # Get argument
+                current_arg_name = unit_def["arg"]
+                if current_arg_name == "":
+                    current_arg_name = None
+
+                unit_def = unit_def["rules"]
 
                 if len(unit_def) > 0:
                     # Choose rule
@@ -306,6 +317,14 @@ class Generator():
             if generated_str != "" and unit_rule["leading-space"] and \
                 not generated_str.startswith(' '):
                     generated_str = ' '+generated_str
+
+            # Manage arguments
+            if current_arg_name is not None:
+                pattern_arg = r"(?<!\\)\$"+current_arg_name
+                print("argname: "+current_arg_name+" arg: "+unit_rule["arg"])
+                print("bf: "+generated_str)
+                generated_str = re.sub(pattern_arg, unit_rule["arg"], generated_str)
+                print("af: "+generated_str)
 
             if generate_different_case:
                 return {
