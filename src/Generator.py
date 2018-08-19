@@ -324,6 +324,7 @@ class Generator():
                 print("argname: "+current_arg_name+" arg: "+unit_rule["arg"])
                 print("bf: "+generated_str)
                 generated_str = re.sub(pattern_arg, unit_rule["arg"], generated_str)
+                generated_str = generated_str.replace("\$", "$")
                 print("af: "+generated_str)
 
             if generate_different_case:

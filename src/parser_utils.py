@@ -146,7 +146,10 @@ def remove_escapement(text):
     result = ""
     escaped = False
     for c in text:
-        if escaped:
+        if escaped and c == ARG_SYM:  # Keep \$ until generation
+            result += ESCAPE_SYM + ARG_SYM
+            escaped = False
+        elif escaped:
             result += c
             escaped = False
         elif c == ESCAPE_SYM:
