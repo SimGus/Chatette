@@ -17,6 +17,7 @@
 
 - BUG: There seems to be a bug with choices not appearing even when they have to (rarely happens)
 - fixed?: Fix bug with ']' generated in some rules
+- BUG: can't parse when a content line is commented out
 
 ## Fixed bugs
 
