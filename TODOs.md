@@ -1,10 +1,13 @@
 # TODOs
 
-- TODO: fix line number count for different files
 - TODO: add argument support
 - TODO: add unicode support for all files
 - TODO: don't generate twice the same sentence
 - TODO: generate all possible sentences when asked (tied to a maximum)
+
+## Done
+
+- done: fix line number count for different files
 
 # Bugs
 

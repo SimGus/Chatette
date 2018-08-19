@@ -17,6 +17,7 @@ class Parser():
         self.in_file = input_file
         self.opened_files = []
         self.line_nb = 0
+        self.line_counts_per_file = []
 
         self.aliases = dict()  # for each alias, stores a list of list of units
         self.slots = dict()  # for each slot, stores a list of value name and unit
@@ -42,11 +43,16 @@ class Parser():
 
     def parse_file(self, filename):
         """Runs the parsing of the file `filename` within the same parser"""
+        # Save current file info
         self.opened_files.append(self.in_file)
+        self.line_counts_per_file.append(self.line_nb)
+        # Open and parse new file
+        self.line_nb = 0
         file_path = os.path.join(os.path.dirname(self.in_file.name), filename)
         with open(file_path, 'r') as in_file:
             self.in_file = in_file
             self.parse()
+        # Restore last file info
         self.in_file = self.opened_files.pop()
 
 
