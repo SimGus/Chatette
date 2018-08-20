@@ -239,7 +239,6 @@ class Parser():
             (alt_slot_val_name, rule) = \
                 self.split_contents(stripped_line, accept_alt_solt_val=True)
             if alt_slot_val_name is None:  # Take the name of the first unit
-                print("rule0: "+str(rule[0]))
                 current_rule = rule[0]
                 while current_rule["type"] == Unit.choice:
                     current_rule = current_rule["choices"][0][0]
@@ -260,7 +259,10 @@ class Parser():
                     (self.in_file.name, self.line_nb, 0, first_line))
             else:
                 if slot_variation not in self.slots[slot_name]:
-                    self.slots[slot_name][slot_variation] = rules
+                    self.slots[slot_name][slot_variation] = {
+                        "arg": slot_arg,
+                        "rules": rules,
+                    }
                 else:
                     raise SyntaxError("Found a definition with variation"
                         +slot_variation+" for slot '"+slot_name+
@@ -275,7 +277,7 @@ class Parser():
             else:
                 self.slots[slot_name] = {
                     slot_variation: {
-                        "arg": arg,
+                        "arg": slot_arg,
                         "rules": rules,
                     }
                 }
@@ -677,9 +679,14 @@ class Parser():
                     print("\t\trule: "+str(rule))
             else:  # Variations
                 print("\t"+name+":")
+                rules = None
                 for variation in current_alias_def:
-                    print("\t\tvariation: "+variation+" (arg: "+str(current_alias_def[variation]["arg"])+"):")
-                    rules = current_alias_def[variation]["rules"]
+                    if variation != "all-variations-aggregation":
+                        print("\t\tvariation: "+variation+" (arg: "+str(current_alias_def[variation]["arg"])+"):")
+                        rules = current_alias_def[variation]["rules"]
+                    else:
+                        print("\t\tvariation: "+variation+":")
+                        rules = current_alias_def[variation]
                     for rule in rules:
                         print("\t\t\trule: "+str(rule))
 
@@ -694,8 +701,12 @@ class Parser():
             else:
                 print("\t"+name+": ")
                 for variation in current_slot_def:
-                    print("\t\tvariation: "+variation+" (arg: "+str(current_slot_def[variation]["arg"]+"):"))
-                    rules = current_slot_def["rules"]
+                    if variation != "all-variations-aggregation":
+                        print("\t\tvariation: "+variation+" (arg: "+str(current_slot_def[variation]["arg"])+"):")
+                        rules = current_slot_def[variation]["rules"]
+                    else:
+                        print("\t\tvariation: "+variation+":")
+                        rules = current_slot_def
                     for rule in current_slot_def[variation]:
                         print("\t\t\trule: "+str(rule))
 

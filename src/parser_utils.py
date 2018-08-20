@@ -116,12 +116,14 @@ def get_all_rules_in_variations(definition):
     which is a definition for an alias or a slot (nothing else).
     """
     all_rules = []
+    print("def: "+str(definition))
     if "rules" in definition:  # No variation
         all_rules.extend(definition["rules"])
     else:
         for variation in definition:
-            print("defvar: "+str(definition[variation]))
-            all_rules.extend(definition[variation]["rules"])  # TODO manage arg
+            if variation != "all-variations-aggregation":
+                print("defvar: "+str(definition[variation]))
+                all_rules.extend(definition[variation]["rules"])  # TODO manage arg
     return all_rules
 
 def get_all_rules_in_intent_variations(definition):
@@ -131,7 +133,8 @@ def get_all_rules_in_intent_variations(definition):
     # and the rules in `rules`
     all_rules = []
     for variation in definition:
-        all_rules.extend(definition[variation]["rules"])
+        if variation != "all-variations-aggregation":
+            all_rules.extend(definition[variation]["rules"])
     return all_rules
 
 

@@ -91,7 +91,7 @@ class Generator():
             nb_intent_rules = len(intent_rules["rules"])
 
             while nb_examples_gen < max_gen_nb:
-                current_example = ""
+                current_example = u""
                 current_entities = []
                 # Choose rule to generate
                 rule_index = randint(0, nb_intent_rules-1)
@@ -100,7 +100,7 @@ class Generator():
                 self.generated_randgens = dict()
                 for unit_rule in intent_rule:
                     generation = self.generate_unit(unit_rule)
-                    current_example += generation["text"]
+                    current_example += cast_to_unicode(generation["text"])
                     current_entities.extend(generation["entities"])
                 current_example = current_example.strip()  # strip for safety
                 printDBG("Generated: '"+current_example+"'")
@@ -241,11 +241,13 @@ class Generator():
                     unit_def = unit_def["all-variations-aggregation"]  # TODO check this with arg
 
                 # Get argument
-                current_arg_name = unit_def["arg"]
-                if current_arg_name == "":
-                    current_arg_name = None
+                current_arg_name = None
+                if isinstance(unit_def, dict):
+                    current_arg_name = unit_def["arg"]
+                    if current_arg_name == "":
+                        current_arg_name = None
 
-                unit_def = unit_def["rules"]
+                    unit_def = unit_def["rules"]
 
                 if len(unit_def) > 0:
                     # Choose rule
