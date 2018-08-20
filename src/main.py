@@ -27,7 +27,7 @@ if __name__ == "__main__":
         with io.open(template_file_path, 'r') as in_file:
             parser = Parser(in_file)
             parser.parse()
-            parser.printDBG()
+            # parser.printDBG()
         print("")
 
         with io.open(output_file_path, 'w+', encoding="utf-8") as out_file:  # TODO create if not already existing (same with dirs)

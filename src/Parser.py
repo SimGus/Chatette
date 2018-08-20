@@ -590,8 +590,6 @@ class Parser():
         # if current != "":
         #     words_and_units_raw.append(current)
 
-        print(words_and_units_raw)
-
         # Find the alternative slot value name if needed
         alt_slot_val_name = None
         if must_parse_alt_slot_val:

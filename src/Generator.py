@@ -103,8 +103,8 @@ class Generator():
                     current_example += cast_to_unicode(generation["text"])
                     current_entities.extend(generation["entities"])
                 current_example = current_example.strip()  # strip for safety
-                printDBG("Generated: '"+current_example+"'")
-                printDBG("Entities: "+str(current_entities))
+                # printDBG("Generated: '"+current_example+"'")
+                # printDBG("Entities: "+str(current_entities))
                 self.generated_examples.append(
                     to_Rasa_format(intent_name, current_example, current_entities)
                 )
