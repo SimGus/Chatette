@@ -6,20 +6,13 @@ from utils import *
 def to_Rasa_format(intent_name, example, entities):
     rasa_entities = []
     for entity in entities:
-        first_index = example.find(entity["text"])
-        if first_index == -1:
-            import warnings
-            warnings.warn("Couldn't find '"+entity["text"]+"' inside '"+
-                example+"'. This is a bug in the generator, the example "+
-                "will be discarded.")
-            return None
-        else:
-            rasa_entities.append({
-                "value": entity["value"],
-                "entity": entity["slot-name"],
-                "start": first_index,
-                "end": first_index+len(entity["text"]),
-            })
+        first_index = example.find(entity["text"].strip())  # Always finds something
+        rasa_entities.append({
+            "value": entity["value"],
+            "entity": entity["slot-name"],
+            "start": first_index,
+            "end": first_index+len(entity["text"]),
+        })
 
     return {
         "text": example,

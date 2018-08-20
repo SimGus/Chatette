@@ -17,7 +17,6 @@
 # Bugs
 
 - BUG: Fix bug with ']' generated in word groups within choices ({[test ~[this]]/[and ~[this]]})
-- BUG: Sometimes the adapter can't find the text entity inside the example
 
 ## To confirm
 
@@ -29,3 +28,4 @@
 - fixed: escapment not currently working
 - fixed: slots starting with a word crash the script
 - fixed: can't parse when a content line is commented out
+- fixed: Sometimes the adapter can't find the text entity inside the example
