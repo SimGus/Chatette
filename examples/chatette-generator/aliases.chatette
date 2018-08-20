@@ -30,6 +30,9 @@
   're
   'll be
   'd be
+~[auxiliary#no elision]
+  would
+  will
 
 ;------------- Question utilities -----------------
 ~[what is#singular]
@@ -38,6 +41,18 @@
 ~[what is#plural]
   what ~[are#no elision]
   what~[are#elision]
+
+~[why]
+  why
+  for {what/which} reason
+
+~[what caused]
+  what caused
+  what causes
+  what would cause
+  what'd cause
+  what will cause
+  what'll cause
 
 ~[which]
   what
@@ -155,3 +170,15 @@
   on time
   in [good?] time
   {on/to} schedule
+
+;----------- Utilization -------------------
+~[fully used]
+  ~[fully] used
+  ~[fully] utilized
+
+~[not used]
+  not used
+  not utilized
+
+~[used at$percent]
+  {used/utilized} at $percent\%

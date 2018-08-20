@@ -22,5 +22,14 @@
   ~[&greet?greeted][,?greeted] ~[ask?] [all?] the ~[order#plural] ~[such that are] {@[filter_time]/@[filter_completion]}[ please?]~[question mark?]
 
 ;--------------- Analysis ----------------------
+%[why_machine_utilization](150)
+  ~[&greet?greeted][,?greeted] ~[why] is @[production_line#long] @[line_number#long?] @[utilization]~[question mark?]
+  ~[&greet?greeted][,?greeted] ~[why] is @[production_line#acronym]@[line_number#short?] @[utilization]~[question mark?]
+  ~[&greet?greeted][,?greeted] ~[why] ~[auxiliary#no elision] @[production_line#long] @[line_number#long?] be @[utilization]~[question mark?]
+  ~[&greet?greeted][,?greeted] ~[why] ~[auxiliary#no elision] @[production_line#acronym] @[line_number#short?] be @[utilization]~[question mark?]
+  ~[&greet?greeted][,?greeted] ~[ask] ~[why] @[production_line#long] @[line_number#long?] ~[is#no elision] @[utilization#positive]~[question mark?]
+  ~[&greet?greeted][,?greeted] ~[ask] ~[why] @[production_line#acronym]@[line_number#short?] ~[is#no elision] @[utilization#positive]~[question mark?]
+  ~[&greet?greeted][,?greeted] ~[what caused] @[production_line#long] @[line_number#long] to be @[utilization]~[question mark?]
+  ~[&greet?greeted][,?greeted] ~[what caused] @[production_line#acronym]@[line_number#short] to be @[utilization]~[question mark?]
 
-;--------------- Recommandations ----------------
+;--------------- Recommendations ----------------
