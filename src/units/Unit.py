@@ -53,3 +53,26 @@ class UnitDefinition():
 
     def generate_all(self):
         pass  # TODO
+
+
+class TokenModel():
+    """
+    Represents anything that can be inside a rule:
+    for words and word groups, it generates as is;
+    for units, it is a link to a definition that can be generated.
+    """
+    def __init__(self, name, leading_space=False, variation=None, arg_value=None,
+        casegen=False, randgen=False, percentage_gen=50, parser=None):
+            self.name = name
+            self.variation = variation
+            self.arg_value = arg_value
+
+            self.casegen = casegen
+            self.randgen = randgen
+            self.percentgen = percentage_gen
+
+            self.parser = parser
+
+    def generate_random(self):
+        """Returns the generated string and entities"""
+        pass
