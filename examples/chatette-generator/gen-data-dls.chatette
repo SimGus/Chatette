@@ -11,8 +11,16 @@
 
 ;=============== Intents definitions ======================
 ;--------------- Queries ----------------------
-%[query_machine_planning](200)
-  ~[&greet?greeted][,?greeted] ~[what is#singular] the ~[planning of] @[production line#long] @[line number#long?]~[question mark?mark]
-  ~[&greet?greeted][,?greeted] ~[what is#singular] the ~[planning of] @[production line#acronym]@[line number#short?]~[question mark?mark]
-  ~[&greet?greeted][,?greeted] ~[ask?] the ~[planning of] @[production line#long] @[line number#long]~[question mark?mark]
-  ~[&greet?greeted][,?greeted] ~[ask?] the ~[planning of] @[production line#acronym]@[line number#short]~[question mark?mark]
+%[query_machine_planning](150)
+  ~[&greet?greeted][,?greeted] ~[what is#singular] the ~[planning of] @[production_line#long] @[line_number#long?]~[question mark?]
+  ~[&greet?greeted][,?greeted] ~[what is#singular] the ~[planning of] @[production_line#acronym]@[line_number#short?]~[question mark?]
+  ~[&greet?greeted][,?greeted] ~[ask?] the ~[planning of] @[production_line#long] @[line_number#long][ please?]~[question mark?]
+  ~[&greet?greeted][,?greeted] ~[ask?] the ~[planning of] @[production_line#acronym]@[line_number#short][ please?]~[question mark?]
+
+  %[query_filter_orders](150)
+    ~[&greet?greeted][,?greeted] ~[which] ~[order#plural] ~[are#no elision] {@[filter_time]/@[filter_completion]}~[question mark?]
+    ~[&greet?greeted][,?greeted] ~[ask?] [all?] the ~[order#plural] ~[such that are] {@[filter_time]/@[filter_completion]}[ please?]~[question mark?]
+
+;--------------- Analysis ----------------------
+
+;--------------- Recommandations ----------------

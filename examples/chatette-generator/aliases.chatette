@@ -39,6 +39,10 @@
   what ~[are#no elision]
   what~[are#elision]
 
+~[which]
+  what
+  which
+
 ~[ask]
   ~[could you?] ~[tell me#infinitive]
   how about ~[tell me#ing]
@@ -71,12 +75,36 @@
   {which are/that are?} labelled
   whose name is
 
+~[such that]
+  that
+  which
+~[such that are]
+  ~[such that] are
+  ~[such that]'re
+  ~[such that] will be
+  ~[such that]'ll be
+  ~[such that] would be
+  ~[such that]'d be
+
 ;------------- Planning ---------------------
 ~[planning]
   planning
   schedule
 ~[planning of]
   ~[planning] {of/for}
+
+~[fully]
+  fully
+  entirely
+  completely
+~[fully planned]
+  ~[fully] planned
+
+~[not planned]
+  not planned
+
+~[planned at$percent]
+  planned at $percent\%
 
 ;------------ Production lines ----------------
 ~[production line]
@@ -103,3 +131,27 @@
   client
 
 |prod-lines-LAL.chatette
+
+;-------------- Orders --------------------
+~[order#singular]
+  order
+  command
+~[order#plural]
+  orders
+  commands
+
+;------------- Time ------------------------
+~[late]
+  [too?] late
+  [long-?]overdue
+  [long-?]delayed
+  [long-?]behindhand
+  [long-?]belated
+  tardy
+  behind schedule
+  not on time
+
+~[on time]
+  on time
+  in [good?] time
+  {on/to} schedule
