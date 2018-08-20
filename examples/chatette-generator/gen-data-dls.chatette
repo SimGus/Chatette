@@ -17,9 +17,9 @@
   ~[&greet?greeted][,?greeted] ~[ask?] the ~[planning of] @[production_line#long] @[line_number#long][ please?]~[question mark?]
   ~[&greet?greeted][,?greeted] ~[ask?] the ~[planning of] @[production_line#acronym]@[line_number#short][ please?]~[question mark?]
 
-  %[query_filter_orders](150)
-    ~[&greet?greeted][,?greeted] ~[which] ~[order#plural] ~[are#no elision] {@[filter_time]/@[filter_completion]}~[question mark?]
-    ~[&greet?greeted][,?greeted] ~[ask?] [all?] the ~[order#plural] ~[such that are] {@[filter_time]/@[filter_completion]}[ please?]~[question mark?]
+%[query_filter_orders](150)
+  ~[&greet?greeted][,?greeted] ~[which] ~[order#plural] ~[are#no elision] {@[filter_time]/@[filter_completion]}~[question mark?]
+  ~[&greet?greeted][,?greeted] ~[ask?] [all?] the ~[order#plural] ~[such that are] {@[filter_time]/@[filter_completion]}[ please?]~[question mark?]
 
 ;--------------- Analysis ----------------------
 
