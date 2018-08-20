@@ -4,8 +4,9 @@
 ; !!! Client: La Louvière !!!
 
 ~[prodline$ACRONYM]
-  [the?] ~[production line] ~[named?] $ACRONYM
-  [the] $ACRONYM ~[production line]
+  ~[production line] $ACRONYM
+  the ~[production line] ~[named] $ACRONYM
+  the $ACRONYM ~[production line]
 
 ~[GLO_SSP#long]
     ~[prodline$GLO_SSP]

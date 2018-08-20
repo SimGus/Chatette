@@ -72,34 +72,48 @@
 
 ;---------------- Completion ------------------
 @[filter_completion]
-  ~[fully planned] = 100
-  ~[planned at$100] = 100
-  ~[planned at$90] = 90
-  ~[planned at$80] = 80
-  ~[planned at$70] = 70
-  ~[planned at$60] = 60
-  ~[planned at$50] = 50
-  ~[planned at$40] = 40
-  ~[planned at$30] = 30
-  ~[planned at$20] = 20
-  ~[planned at$10] = 10
-  ~[planned at$0] = 0
-  ~[not planned] = 0
+  ~[fully planned] = 100\%
+  ~[planned at$100] = 100\%
+  ~[planned at$90] = 90\%
+  ~[planned at$80] = 80\%
+  ~[planned at$70] = 70\%
+  ~[planned at$60] = 60\%
+  ~[planned at$50] = 50\%
+  ~[planned at$40] = 40\%
+  ~[planned at$30] = 30\%
+  ~[planned at$20] = 20\%
+  ~[planned at$10] = 10\%
+  ~[planned at$0] = 0\%
+  ~[not planned] = 0\%
 
 ;------------------ Utilization ------------------
 @[utilization#positive]
-  ~[fully used] = 100
-  ~[used at$100] = 100
-  ~[used at$90] = 90
-  ~[used at$80] = 80
-  ~[used at$70] = 70
-  ~[used at$60] = 60
-  ~[used at$50] = 50
-  ~[used at$40] = 40
-  ~[used at$30] = 30
-  ~[used at$20] = 20
-  ~[used at$10] = 10
-  ~[used at$0] = 0
-  ~[not used] = 0
+  ~[fully used] = 100\%
+  ~[used at$100] = 100\%
+  ~[used at$90] = 90\%
+  ~[used at$80] = 80\%
+  ~[used at$70] = 70\%
+  ~[used at$60] = 60\%
+  ~[used at$50] = 50\%
+  ~[used at$40] = 40\%
+  ~[used at$30] = 30\%
+  ~[used at$20] = 20\%
+  ~[used at$10] = 10\%
+  ~[used at$0] = 0\%
+  ~[not used] = 0\%
 @[utilization#negative]
   not ~[fully used] = not fully
+@[utilization#number only]
+  ~[fully used] = 100\%
+  ~[utilization$100] = 100\%
+  ~[utilization$90] = 90\%
+  ~[utilization$80] = 80\%
+  ~[utilization$70] = 70\%
+  ~[utilization$60] = 60\%
+  ~[utilization$50] = 50\%
+  ~[utilization$40] = 40\%
+  ~[utilization$30] = 30\%
+  ~[utilization$20] = 20\%
+  ~[utilization$10] = 10\%
+  ~[utilization$0] = 0\%
+  ~[not used] = 0\%

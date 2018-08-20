@@ -10,26 +10,42 @@
 |slots-LAL.chatette
 
 ;=============== Intents definitions ======================
-;--------------- Queries ----------------------
-%[query_machine_planning](150)
-  ~[&greet?greeted][,?greeted] ~[what is#singular] the ~[planning of] @[production_line#long] @[line_number#long?]~[question mark?]
-  ~[&greet?greeted][,?greeted] ~[what is#singular] the ~[planning of] @[production_line#acronym]@[line_number#short?]~[question mark?]
-  ~[&greet?greeted][,?greeted] ~[ask?] the ~[planning of] @[production_line#long] @[line_number#long][ please?]~[question mark?]
-  ~[&greet?greeted][,?greeted] ~[ask?] the ~[planning of] @[production_line#acronym]@[line_number#short][ please?]~[question mark?]
+;-------------- Intermediate answers -----------------
+%[inform_machine](90)
+  {~[&yes],/~[&no],?} ~[i said?] @[production_line#long] @[line_number#long?]
+  {~[&yes],/~[&no],?} ~[i said?] @[production_line#acronym] @[line_number#short?]
+%[inform_machine_number](60)
+  {~[&yes],/~[&no],?} ~[i said?] @[line_number]
 
-%[query_filter_orders](150)
-  ~[&greet?greeted][,?greeted] ~[which] ~[order#plural] ~[are#no elision] {@[filter_time]/@[filter_completion]}~[question mark?]
-  ~[&greet?greeted][,?greeted] ~[ask?] [all?] the ~[order#plural] ~[such that are] {@[filter_time]/@[filter_completion]}[ please?]~[question mark?]
+%[inform_time_filter](110)
+  {~[&yes],/~[&no],?} ~[i said?] @[filter_time]
+%[inform_utilization](90)
+  {~[&yes],/~[&no],?} ~[i said?] @[utilization#number only]
+
+;--------------- Queries ----------------------
+%[query_machine_planning](500)
+  ~[&what is#singular] the ~[planning of] @[production_line#long] @[line_number#long?]~[question mark?]
+  ~[&what is#singular] the ~[planning of] @[production_line#acronym] @[line_number#short?]~[question mark?]
+  ~[&ask?] the ~[planning of] @[production_line#long] @[line_number#long][ please?]~[question mark?]
+  ~[&ask?] the ~[planning of] @[production_line#acronym] @[line_number#short][ please?]~[question mark?]
+
+%[query_filter_orders_time](500)
+  ~[&which] ~[order#plural] ~[are#no elision] @[filter_time]~[question mark?]
+  ~[&ask?] [all?] the ~[order#plural] ~[such that are] @[filter_completion][ please?]~[question mark?]
+%[query_filter_orders_completion](500)
+  ~[&which] ~[order#plural] ~[are#no elision] @[filter_completion]~[question mark?]
+  ~[&ask?] [all?] the ~[order#plural] ~[such that are] @[filter_completion][ please?]~[question mark?]
+
 
 ;--------------- Analysis ----------------------
-%[why_machine_utilization](150)
-  ~[&greet?greeted][,?greeted] ~[why] is @[production_line#long] @[line_number#long?] @[utilization]~[question mark?]
-  ~[&greet?greeted][,?greeted] ~[why] is @[production_line#acronym]@[line_number#short?] @[utilization]~[question mark?]
-  ~[&greet?greeted][,?greeted] ~[why] ~[auxiliary#no elision] @[production_line#long] @[line_number#long?] be @[utilization]~[question mark?]
-  ~[&greet?greeted][,?greeted] ~[why] ~[auxiliary#no elision] @[production_line#acronym] @[line_number#short?] be @[utilization]~[question mark?]
-  ~[&greet?greeted][,?greeted] ~[ask] ~[why] @[production_line#long] @[line_number#long?] ~[is#no elision] @[utilization#positive]~[question mark?]
-  ~[&greet?greeted][,?greeted] ~[ask] ~[why] @[production_line#acronym]@[line_number#short?] ~[is#no elision] @[utilization#positive]~[question mark?]
-  ~[&greet?greeted][,?greeted] ~[what caused] @[production_line#long] @[line_number#long] to be @[utilization]~[question mark?]
-  ~[&greet?greeted][,?greeted] ~[what caused] @[production_line#acronym]@[line_number#short] to be @[utilization]~[question mark?]
+%[why_machine_utilization](600)
+  ~[&why] is @[production_line#long] @[line_number#long?] @[utilization]~[question mark?]
+  ~[&why] is @[production_line#acronym]@[line_number#short?] @[utilization]~[question mark?]
+  ~[&why] ~[auxiliary#no elision] @[production_line#long] @[line_number#long?] be @[utilization]~[question mark?]
+  ~[&why] ~[auxiliary#no elision] @[production_line#acronym]@[line_number#short?] be @[utilization]~[question mark?]
+  ~[&ask] ~[why] @[production_line#long] @[line_number#long?] ~[is#no elision] @[utilization#positive]~[question mark?]
+  ~[&ask] ~[why] @[production_line#acronym]@[line_number#short?] ~[is#no elision] @[utilization#positive]~[question mark?]
+  ~[&what caused] @[production_line#long] @[line_number#long] to be @[utilization]~[question mark?]
+  ~[&what caused] @[production_line#acronym]@[line_number#short] to be @[utilization]~[question mark?]
 
 ;--------------- Recommendations ----------------

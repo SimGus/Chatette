@@ -34,6 +34,14 @@
   would
   will
 
+~[yes]
+  yes
+  ok
+  okay
+  ;alright
+~[no]
+  no
+
 ;------------- Question utilities -----------------
 ~[what is#singular]
   what ~[is#no elision]
@@ -75,6 +83,18 @@
   telling me [about?]
   showing me
   reporting
+
+;------------- Inform utilities --------------
+~[i]
+  i
+  I
+~[i said]
+  ~[i] said
+  ;~[i] {am/was} saying
+  it was
+  it is
+  it's
+
 
 ;------------- Other utilities ---------------
 ~[named#singular]
@@ -118,8 +138,19 @@
 ~[not planned]
   not planned
 
-~[planned at$percent]
-  planned at $percent\%
+~[planned at$PERCENT]
+  planned at [only?] $PERCENT\%
+  planned up to [only?] $PERCENT\%
+  ~[completed] {at/up to} [only?] $PERCENT\%
+
+~[finished]
+  finished
+  ;over
+  done
+  completed
+~[completed]
+  done
+  completed
 
 ;------------ Production lines ----------------
 ~[production line]
@@ -157,28 +188,30 @@
 
 ;------------- Time ------------------------
 ~[late]
-  [too?] late
+  ~[finished?] [too?] late
+  ~[finished?] behind schedule
+  not on time
   [long-?]overdue
   [long-?]delayed
-  [long-?]behindhand
-  [long-?]belated
-  tardy
-  behind schedule
-  not on time
+  ;[long-?]behindhand
+  ;[long-?]belated
+  ;tardy
 
 ~[on time]
-  on time
-  in [good?] time
-  {on/to} schedule
+  ~[finished?] on time
+  ~[finished?] in [good?] time
+  ~[finished?] {on/to} schedule
 
 ;----------- Utilization -------------------
 ~[fully used]
   ~[fully] used
   ~[fully] utilized
-
 ~[not used]
   not used
   not utilized
 
-~[used at$percent]
-  {used/utilized} at $percent\%
+~[used at$PERCENT]
+  {used/utilized} {at/up to} [only?] $PERCENT\%
+
+~[utilization$PERCENT]
+  [up to?] [only?] $PERCENT[\%?]
