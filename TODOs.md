@@ -17,6 +17,7 @@
 # Bugs
 
 - BUG: Fix bug with ']' generated in word groups within choices ({[test ~[this]]/[and ~[this]]})
+- BUG: Sometimes the adapter can't find the text entity inside the example
 
 ## To confirm
 

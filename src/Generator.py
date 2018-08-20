@@ -105,9 +105,10 @@ class Generator():
                 current_example = current_example.strip()  # strip for safety
                 # printDBG("Generated: '"+current_example+"'")
                 # printDBG("Entities: "+str(current_entities))
-                self.generated_examples.append(
+                rasa_example = \
                     to_Rasa_format(intent_name, current_example, current_entities)
-                )
+                if rasa_example is not None:
+                    self.generated_examples.append(rasa_example)
                 nb_examples_gen += 1
         else:  #TODO
             print("Generation without max number is currently not supported")
