@@ -9,10 +9,10 @@
   hello
   hey
 ~[question mark]
-  \?
-  \?\?
-  \?\?\?
-  \?!
+  [ ?]\?
+  [ ?]\?\?
+  [ ?]\?\?\?
+  [ ?]\?!
 
 ~[is#no elision]
   is
@@ -100,5 +100,6 @@
 ~[line name#shipping]
   shipping
 ~[line name#client]
+  client
 
 |prod-lines-LAL.chatette

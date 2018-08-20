@@ -5,25 +5,44 @@
 
 ;=============== Slots definitions =====================
 ;--------------- Production lines ---------------------
-@[production line]
-  ~[GLO_SSP]
-  ~[LAL_HSM]
-  ~[LAL_SKP]
-  ~[EXT_SKP]
-  ~[LAL_PCK]
-  ~[EXT_PCK]
-  ~[LAL_CRM]
-  ~[EXT_CRM]
-  ~[LAL_PAC]
-  ~[LAL_SHP]
-  ~[STR_GLV]
-  ~[EXT_GLV]
-  ~[STR_PNT]
-  ~[EXT_PNT]
-  ~[STR_SLT]
-  ~[STR_PAC]
-  ~[STR_SHP]
-  ~[GLO_CLI]
+@[production line#long]
+  ~[GLO_SSP#long]
+  ~[LAL_HSM#long]
+  ~[LAL_SKP#long]
+  ~[EXT_SKP#long]
+  ~[LAL_PCK#long]
+  ~[EXT_PCK#long]
+  ~[LAL_CRM#long]
+  ~[EXT_CRM#long]
+  ~[LAL_PAC#long]
+  ~[LAL_SHP#long]
+  ~[STR_GLV#long]
+  ~[EXT_GLV#long]
+  ~[STR_PNT#long]
+  ~[EXT_PNT#long]
+  ~[STR_SLT#long]
+  ~[STR_PAC#long]
+  ~[STR_SHP#long]
+  ~[GLO_CLI#long]
+@[production line#acronym]
+  ~[GLO_SSP#acronym]
+  ~[LAL_HSM#acronym]
+  ~[LAL_SKP#acronym]
+  ~[EXT_SKP#acronym]
+  ~[LAL_PCK#acronym]
+  ~[EXT_PCK#acronym]
+  ~[LAL_CRM#acronym]
+  ~[EXT_CRM#acronym]
+  ~[LAL_PAC#acronym]
+  ~[LAL_SHP#acronym]
+  ~[STR_GLV#acronym]
+  ~[EXT_GLV#acronym]
+  ~[STR_PNT#acronym]
+  ~[EXT_PNT#acronym]
+  ~[STR_SLT#acronym]
+  ~[STR_PAC#acronym]
+  ~[STR_SHP#acronym]
+  ~[GLO_CLI#acronym]
 
 @[line number#long]
   {[number ]/\#}1 = 1
@@ -36,12 +55,12 @@
   {[number ]/\#}8 = 8
   {[number ]/\#}9 = 9
 @[line number#short]
-    1 = 1
-    2 = 2
-    3 = 3
-    4 = 4
-    5 = 5
-    6 = 6
-    7 = 7
-    8 = 8
-    9 = 9
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+    8
+    9
