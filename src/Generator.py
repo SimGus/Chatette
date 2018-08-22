@@ -352,7 +352,6 @@ class Generator():
         as a list of dict.
         """
         # {} or [] -> [{"text": str, "entities": [...]}]
-        print("\nGenerating all possibilities for "+str(unit_rule))
         if isinstance(unit_rule, list):
             generated_texts = []
             examples_from_sub_rules = []
@@ -424,7 +423,6 @@ class Generator():
                 examples_from_sub_rules = []
                 tmp_buffer = []
                 for sub_unit_rule in choice:
-                    print("SUBUNIT CH "+str(sub_unit_rule))
                     sub_unit_possibilities = self.generate_all_possibilities(sub_unit_rule)
                     tmp_buffer = []
                     if len(examples_from_sub_rules) == 0:
@@ -492,7 +490,6 @@ class Generator():
                         examples_from_sub_rules = []
                         tmp_buffer = []
                         for sub_unit_rule in rule:
-                            print("SUBUNIT ALSL "+str(sub_unit_rule))
                             sub_unit_possibilities = self.generate_all_possibilities(sub_unit_rule)
                             tmp_buffer = []
                             if len(examples_from_sub_rules) == 0:
@@ -532,7 +529,6 @@ class Generator():
                     examples_from_sub_rules = []
                     tmp_buffer = []
                     for sub_unit_rule in rule:
-                        print("SUBUNIT IN "+str(sub_unit_rule))
                         sub_unit_possibilities = self.generate_all_possibilities(sub_unit_rule)
                         tmp_buffer = []
                         if len(examples_from_sub_rules) == 0:
@@ -576,10 +572,8 @@ class Generator():
             synonyms[slot_name] = []
             slot_val = self.parser.slots[slot_name]
             current_all_possibilities = self.generate_all_possibilities(slot_val["rules"])
-            print("for slot "+slot_name+" possibilities are "+str(current_all_possibilities))
             for possibility in current_all_possibilities:
                 synonyms[slot_name].append(possibility["text"])
-            print("for slot "+slot_name+" synonyms are "+str(synonyms[slot_name]))
         return synonyms
 
 
