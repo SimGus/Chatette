@@ -527,12 +527,25 @@ class Generator():
                 generated_texts = casegen_examples
             return generated_texts
 
+
+    def get_slots_synonyms(self):
+        synonyms = dict()
+        for slot_name in self.parser.slots:
+            synonyms[slot_name] = []
+            slot_val = self.parser.slots[slot_name]
+            current_all_possibilities = self.generate_all_possibilities(slot_val)
+            for possibility in current_all_possibilities:
+                synonyms[slot_name].append(possibility["text"])
+        return synonyms
+
+
     def write_JSON(self):
         raw_json_data = {
             "rasa_nlu_data": {
                 "common_examples": self.generated_examples,
                 "regex_features" : [],
-                "entity_synonyms": []
+                "entity_synonyms":
+                    to_Rasa_synonym_format(self.get_slots_synonyms()),
             }
         }
         json_data = cast_to_unicode(raw_json_data)
