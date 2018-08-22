@@ -361,9 +361,9 @@ class Generator():
             }]
         elif unit_type == Unit.word_group:
             # TODO manage `arg`
-            generated_examples = []
+            generated_texts = []
             if unit_rule["randgen"] is not None:
-                generated_examples.append(EMPTY_GEN)
+                generated_texts.append(EMPTY_GEN)
 
             generated_str = ""
             if unit_rule["leading-space"]:
@@ -371,24 +371,24 @@ class Generator():
             generated_str += unit_rule["words"]
 
             if "casegen" in unit_rule and unit_rule["casegen"]:
-                generated_examples.append({
+                generated_texts.append({
                     "text": with_leading_lower(generated_str),
                     "entities": [],
                 })
-                generated_examples.append({
+                generated_texts.append({
                     "text": with_leading_upper(generated_str),
                     "entities": [],
                 })
             else:
-                generated_examples.append({
+                generated_texts.append({
                     "text": generated_str,
                     "entities": [],
                 })
-            return generated_examples
+            return generated_texts
         elif unit_type == Unit.choice:
-            generated_examples = []
+            generated_texts = []
             if unit_rule["randgen"] is not None:
-                generated_examples.append(EMPTY_GEN)
+                generated_texts.append(EMPTY_GEN)
 
             for choice in unit_rule["choices"]:
                 examples_from_sub_rules = []
@@ -403,20 +403,20 @@ class Generator():
                                 "entities": ex["entities"]+possibility["entities"]
                             })
                     examples_from_sub_rules = tmp_buffer
-                generated_examples.extend(examples_from_sub_rules)
+                generated_texts.extend(examples_from_sub_rules)
 
             if unit_rule["leading-space"]
-            for ex in generated_examples:
+            for ex in generated_texts:
                 text = ex["text"]
                 if text != "" and not text.startswith(' '):
                     ex["text"] = ' '+text
 
-            return generated_examples
+            return generated_texts
         else:
             # TODO manage `arg`
-            generated_examples = []
+            generated_texts = []
             if unit_rule["randgen"] is not None:
-                generated_examples.append(EMPTY_GEN)
+                generated_texts.append(EMPTY_GEN)
 
             if unit_type == Unit.alias or unit_typ == Unit.slot:
                 unit_def = None
@@ -467,7 +467,7 @@ class Generator():
                                         "entities": ex["entities"]+possibility["entities"]
                                     })
                             examples_from_sub_rules = tmp_buffer
-                        generated_examples.extend(examples_from_sub_rules)
+                        generated_texts.extend(examples_from_sub_rules)
                 else:  # TODO this should be an error
                     pass
             elif unit_type == Unit.intent:
@@ -503,19 +503,19 @@ class Generator():
                                     "entities": ex["entities"]+possibility["entities"]
                                 })
                         examples_from_sub_rules = tmp_buffer
-                    generated_examples.extend(examples_from_sub_rules)
+                    generated_texts.extend(examples_from_sub_rules)
             else:
                 raise RuntimeError("Tried to generate a unit of unknown type")
 
             if unit_rule["leading-space"]:
-                for ex in generated_examples:
+                for ex in generated_texts:
                     text = ex["text"]
                     if text != "" and not text.startswith(' '):
                         ex["text"] = ' '+text
 
             if "casegen" in unit_rule and unit_rule["casegen"]:
                 casegen_examples = []
-                for ex in generated_examples:
+                for ex in generated_texts:
                     casegen_examples.append({
                         "text": with_leading_lower(ex["text"]),
                         "entities": ex["entities"],
@@ -524,8 +524,8 @@ class Generator():
                         "text": with_leading_upper(ex["text"]),
                         "entities": ex["entities"],
                     })
-                generated_examples = casegen_examples
-            return generated_examples
+                generated_texts = casegen_examples
+            return generated_texts
 
     def write_JSON(self):
         raw_json_data = {
