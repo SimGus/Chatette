@@ -1,12 +1,16 @@
 # TODOs
 
 - TODO: redo as OOP
+
 - TODO: add casegen inside declarations
+- TODO: add synonyms into the synonym object of rasa JSON file
+- TODO: add regex to rasa JSON file
+
+- TODO: generate all possible sentences when asked (tied to a maximum)
+- TODO: don't generate twice the same sentence
+
 - TODO: replace modifier regex by several one to allow for escaping special characters everywhere
 - TODO: make arguments several layers deep?
-- TODO: don't generate twice the same sentence
-- TODO: generate all possible sentences when asked (tied to a maximum)
-- TODO: add synonyms into the synonym object of rasa JSON file
 
 ## Done
 
