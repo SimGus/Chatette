@@ -19,17 +19,3 @@ def to_Rasa_format(intent_name, example, entities):
         "intent": intent_name,
         "entities": rasa_entities,
     }
-
-
-{
-        "entities": [
-          {
-            "end": 8,
-            "entity": "utilization",
-            "start": -1,
-            "value": "60"
-          }
-        ],
-        "intent": "inform_utilization",
-        "text": "only 60%"
-      },
