@@ -41,13 +41,19 @@ def cast_to_unicode(any):
 def randomly_change_case(text):
     """Randomly set the case of the first letter of `text`"""
     if randint(0, 99) >= 50:
-        for (i, c) in enumerate(text):
-            if not c.isspace():
-                return text[:i] + text[i].lower() + text[(i+1):]
+        return with_leading_lower(text)
     else:
-        for (i, c) in enumerate(text):
-            if not c.isspace():
-                return text[:i] + text[i].upper() + text[(i+1):]
+        return with_leading_upper(text)
+def with_leading_upper(text):
+    """Returns `text` with a leading uppercase letter"""
+    for (i, c) in enumerate(text):
+        if not c.isspace():
+            return text[:i] + text[i].upper() + text[(i+1):]
+def with_leading_lower(text):
+    """Returns `text` with a leading lowercase letter"""
+    for (i, c) in enumerate(text):
+        if not c.isspace():
+            return text[:i] + text[i].upper() + text[(i+1):]
 
 
 class Generator():
@@ -136,7 +142,7 @@ class Generator():
                 "entities": [],
             }
         elif unit_type == Unit.choice:  # TODO casegen
-            if unit_rule["randgen"]:
+            if unit_rule["randgen"] is not None:
                 if randint(0, 99) >= 50:
                     return EMPTY_GEN
 
@@ -335,6 +341,191 @@ class Generator():
                 "entities": generated_entities,
             }
 
+    def generate_all_possibilities(self, unit_rule):
+        """
+        Generates all the possible values that the rule 'unit_rule' can generate
+        (including the empty generation if possible) and returns them all
+        as a list of dict.
+        """
+        # {} -> [{"text": str, "entities": [...]}]
+        unit_type = unit_rule["type"]
+        if unit_type == Unit.word:
+            if unit_rule["leading-space"]:
+                return [{
+                    "text": ' '+unit_rule["word"],
+                    "entities": [],
+                }]
+            return [{
+                "text": unit_rule["word"],
+                "entities": [],
+            }]
+        elif unit_type == Unit.word_group:
+            # TODO manage `arg`
+            generated_examples = []
+            if unit_rule["randgen"] is not None:
+                generated_examples.append(EMPTY_GEN)
+
+            generated_str = ""
+            if unit_rule["leading-space"]:
+                generated_str += ' '
+            generated_str += unit_rule["words"]
+
+            if "casegen" in unit_rule and unit_rule["casegen"]:
+                generated_examples.append({
+                    "text": with_leading_lower(generated_str),
+                    "entities": [],
+                })
+                generated_examples.append({
+                    "text": with_leading_upper(generated_str),
+                    "entities": [],
+                })
+            else:
+                generated_examples.append({
+                    "text": generated_str,
+                    "entities": [],
+                })
+            return generated_examples
+        elif unit_type == Unit.choice:
+            generated_examples = []
+            if unit_rule["randgen"] is not None:
+                generated_examples.append(EMPTY_GEN)
+
+            for choice in unit_rule["choices"]:
+                examples_from_sub_rules = []
+                tmp_buffer = []
+                for sub_unit_rule in choice:
+                    sub_unit_possibilities = self.generate_all_possibilities(sub_unit_rule):
+                    tmp_buffer = []
+                    for ex in examples_from_sub_rules:
+                        for possibility in sub_unit_possibilities:
+                            tmp_buffer.append({
+                                "text": ex["text"]+possibility["text"],
+                                "entities": ex["entities"]+possibility["entities"]
+                            })
+                    examples_from_sub_rules = tmp_buffer
+                generated_examples.extend(examples_from_sub_rules)
+
+            if unit_rule["leading-space"]
+            for ex in generated_examples:
+                text = ex["text"]
+                if text != "" and not text.startswith(' '):
+                    ex["text"] = ' '+text
+
+            return generated_examples
+        else:
+            # TODO manage `arg`
+            generated_examples = []
+            if unit_rule["randgen"] is not None:
+                generated_examples.append(EMPTY_GEN)
+
+            if unit_type == Unit.alias or unit_typ == Unit.slot:
+                unit_def = None
+                if unit_type == Unit.alias:
+                    if unit_rule["name"] not in self.parser.aliases:
+                        raise SyntaxError("Alias '"+unit_rule["name"]+"' wasn't defined")
+                    unit_def = self.parser.aliases[unit_rule["name"]]
+                else:
+                    if unit_rule["name"] not in self.parser.slots:
+                        raise SyntaxError("Slot '"+unit_rule["name"]+"' wasn't defined")
+                    unit_def = self.parser.slots[unit_rule["name"]]
+
+                # Manage variations
+                variation = unit_rule["variation"]
+                if variation is not None:
+                    if variation in unit_def:
+                        unit_def = unit_def[variation]
+                    elif unit_type == Unit.alias:
+                        raise SyntaxError(
+                            "Couldn't find variation '" + unit_rule["variation"] +
+                            "' for alias named '" + unit_rule["name"] + "'"
+                        )
+                    else:
+                        raise SyntaxError(
+                            "Couldn't find variation '" + unit_rule["variation"] +
+                            "' for slot named '" + unit_rule["name"] + "'"
+                        )
+                elif "rules" not in unit_def:  # No variation asked but the unit is defined with variations
+                    unit_def = unit_def["all-variations-aggregation"]  # TODO check this with arg
+
+                if isinstance(unit_def, dict):
+                    unit_def = unit_def["rules"]
+
+                if len(unit_def) > 0:
+                    for rule in unit_def:
+                        if isinstance(rule, dict):
+                            rule = rule["rule"]
+
+                        examples_from_sub_rules = []
+                        tmp_buffer = []
+                        for sub_unit_rule in rule:
+                            sub_unit_possibilities = self.generate_all_possibilities(sub_unit_rule):
+                            tmp_buffer = []
+                            for ex in examples_from_sub_rules:
+                                for possibility in sub_unit_possibilities:
+                                    tmp_buffer.append({
+                                        "text": ex["text"]+possibility["text"],
+                                        "entities": ex["entities"]+possibility["entities"]
+                                    })
+                            examples_from_sub_rules = tmp_buffer
+                        generated_examples.extend(examples_from_sub_rules)
+                else:  # TODO this should be an error
+                    pass
+            elif unit_type == Unit.intent:
+                if unit_rule["name"] not in self.parser.intents:
+                    raise SyntaxError("Intent '"+unit_rule["name"]+"' wasn't defined")
+                unit_def = self.parser.intents[unit_rule["name"]]
+
+                # Manage variations
+                variation = unit_rule["variation"]
+                if variation is not None:
+                    if "nb-gen-asked" not in unit_def:
+                            unit_def = unit_def[variation]["rules"]
+                    else:
+                        raise SyntaxError(
+                            "Couldn't find variation '" + unit_rule["variation"] +
+                            "' for intent named '" + unit_rule["name"] + "'"
+                        )
+                elif "rules" in unit_def:
+                    unit_def = unit_def["rules"]
+                else:  # No variation asked but the unit is defined with variations
+                    unit_def = unit_def["all-variations-aggregation"]["rules"]
+
+                for rule in unit_def:
+                    examples_from_sub_rules = []
+                    tmp_buffer = []
+                    for sub_unit_rule in rule:
+                        sub_unit_possibilities = self.generate_all_possibilities(sub_unit_rule):
+                        tmp_buffer = []
+                        for ex in examples_from_sub_rules:
+                            for possibility in sub_unit_possibilities:
+                                tmp_buffer.append({
+                                    "text": ex["text"]+possibility["text"],
+                                    "entities": ex["entities"]+possibility["entities"]
+                                })
+                        examples_from_sub_rules = tmp_buffer
+                    generated_examples.extend(examples_from_sub_rules)
+            else:
+                raise RuntimeError("Tried to generate a unit of unknown type")
+
+            if unit_rule["leading-space"]:
+                for ex in generated_examples:
+                    text = ex["text"]
+                    if text != "" and not text.startswith(' '):
+                        ex["text"] = ' '+text
+
+            if "casegen" in unit_rule and unit_rule["casegen"]:
+                casegen_examples = []
+                for ex in generated_examples:
+                    casegen_examples.append({
+                        "text": with_leading_lower(ex["text"]),
+                        "entities": ex["entities"],
+                    })
+                    casegen_examples.append({
+                        "text": with_leading_upper(ex["text"]),
+                        "entities": ex["entities"],
+                    })
+                generated_examples = casegen_examples
+            return generated_examples
 
     def write_JSON(self):
         raw_json_data = {

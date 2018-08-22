@@ -6,8 +6,9 @@
 - **TODO**: add synonyms into the synonym object of rasa JSON file
 - **TODO**: add regex to rasa JSON file
 
-- **TODO**: generate all possible sentences when asked (tied to a maximum)
 - **TODO**: don't generate twice the same sentence
+- **TODO**: tie the "all possibilities" generation to a maximum
+- **TODO**: do something with `arg` when generating all the possibilities
 - **TODO**: support generation without a max number given
 
 - **TODO**: replace modifier regex by several one to allow for escaping special characters everywhere
@@ -20,6 +21,7 @@
 - **done**: fix line number count for different files
 - **done**: add unicode support for all files (`io.open` autodetects encoding i think)
 - **done**: add argument support
+- **done**: generate all possible sentences when asked
 
 # Bugs
 
