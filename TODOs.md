@@ -15,6 +15,8 @@
 
 - **TODO**: add a *changelog*
 
+- **TODO**: improve the overall command line experience (cf. `click` library)
+
 ## Done
 
 - **done**: fix line number count for different files
