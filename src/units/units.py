@@ -4,6 +4,56 @@ from random import randint
 
 from Generator import randomly_change_case
 
+EMPTY_GEN = {
+    "text": "",
+    "entities": [],
+}
+
+
+def cast_to_unicode(any):
+    if sys.version_info[0] == 3:
+        return any
+    if isinstance(any, str):
+        return unicode(any, "utf-8")
+    elif isinstance(any, dict):
+        cast_dict = dict()
+        for key in any:
+            cast_key = cast_to_unicode(key)
+            cast_value = cast_to_unicode(any[key])
+            cast_dict[cast_key] = cast_value
+        return cast_dict
+    elif isinstance(any, list):
+        cast_list = []
+        for e in any:
+            cast_list.append(cast_to_unicode(e))
+        return cast_list
+    else:
+        return any
+
+
+def randomly_change_case(text):
+    """Randomly set the case of the first letter of `text`"""
+    if randint(0, 99) >= 50:
+        return with_leading_lower(text)
+    else:
+        return with_leading_upper(text)
+def with_leading_upper(text):
+    """Returns `text` with a leading uppercase letter"""
+    for (i, c) in enumerate(text):
+        if not c.isspace():
+            return text[:i] + text[i].upper() + text[(i+1):]
+    return text
+def with_leading_lower(text):
+    """Returns `text` with a leading lowercase letter"""
+    for (i, c) in enumerate(text):
+        if not c.isspace():
+            return text[:i] + text[i].upper() + text[(i+1):]
+    return text
+
+
+def may_get_leading_space(text):
+    return (text != "" and not text.startswith(' '))
+
 
 class UnitDefinition():
     """Superclass representing a unit definition"""
@@ -74,5 +124,9 @@ class TokenModel():
             self.parser = parser
 
     def generate_random(self):
-        """Returns the generated string and entities"""
+        """
+        Returns a string and its entities randomly generated from the rules the
+        object represents. May return an empty string if `randgen` is enabled.
+        """
+        # () -> {"text": str, "entities": [str]}
         pass
