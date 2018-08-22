@@ -3,7 +3,6 @@
 - **TODO**: redo as OOP
 
 - **TODO**: add *casegen* inside declarations
-- **TODO**: add synonyms into the synonym object of rasa JSON file
 - **TODO**: add regex to rasa JSON file
 
 - **TODO**: don't generate twice the same sentence
@@ -22,6 +21,7 @@
 - **done**: add unicode support for all files (`io.open` autodetects encoding i think)
 - **done**: add argument support
 - **done**: generate all possible sentences when asked
+- **done**: add synonyms into the synonym object of rasa JSON file
 
 # Bugs
 

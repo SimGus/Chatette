@@ -42,6 +42,21 @@
 ~[no]
   no
 
+~[agree]
+  yes ~[that's it?]
+  ~[that's it]
+  exactly
+~[that's it]
+  that is {it/correct/right}
+  that's {it/correct/right}
+
+~[disagree]
+  no ~[that's wrong?]
+  ~[that's wrong]
+~[that's wrong]
+  that is {not it/wrong/incorrect}
+  that's {not it wrong/incorrect}
+
 ;------------- Question utilities -----------------
 ~[what is#singular]
   what ~[is#no elision]

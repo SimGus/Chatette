@@ -567,16 +567,41 @@ class Generator():
     def get_slots_synonyms(self):
         synonyms = dict()
         for slot_name in self.parser.slots:
-            for rule in self.parser.slots[slot_name]["rules"]:
-                current_val = rule["slot-value-name"]
-                rule = rule["rule"]
-                current_all_possibilities = self.generate_all_possibilities(rule)
-                if current_val not in synonyms:
-                    synonyms[current_val] = []
-                for possibility in current_all_possibilities:
-                    text = possibility["text"]
-                    if text not in synonyms[current_val]:
-                        synonyms[current_val].append(possibility["text"])
+            if "rules" in self.parser.slots[slot_name]:  # No variations
+                for rule in self.parser.slots[slot_name]["rules"]:
+                    current_val = rule["slot-value-name"]
+                    rule = rule["rule"]
+                    current_all_possibilities = self.generate_all_possibilities(rule)
+                    if current_val not in synonyms:
+                        synonyms[current_val] = []
+                    for possibility in current_all_possibilities:
+                        text = possibility["text"]
+                        if text not in synonyms[current_val]:
+                            synonyms[current_val].append(possibility["text"].strip())
+            else:  # Variations
+                for variation in self.parser.slots[slot_name]:
+                    if "rules" in self.parser.slots[slot_name][variation]:
+                        for rule in self.parser.slots[slot_name][variation]["rules"]:
+                            current_val = rule["slot-value-name"]
+                            rule = rule["rule"]
+                            current_all_possibilities = self.generate_all_possibilities(rule)
+                            if current_val not in synonyms:
+                                synonyms[current_val] = []
+                            for possibility in current_all_possibilities:
+                                text = possibility["text"]
+                                if text not in synonyms[current_val]:
+                                    synonyms[current_val].append(possibility["text"].strip())
+                    else:
+                        for rule in self.parser.slots[slot_name][variation]:
+                            current_val = rule["slot-value-name"]
+                            rule = rule["rule"]
+                            current_all_possibilities = self.generate_all_possibilities(rule)
+                            if current_val not in synonyms:
+                                synonyms[current_val] = []
+                            for possibility in current_all_possibilities:
+                                text = possibility["text"]
+                                if text not in synonyms[current_val]:
+                                    synonyms[current_val].append(possibility["text"].strip())
         return synonyms
 
 
