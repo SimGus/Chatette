@@ -357,9 +357,7 @@ class Generator():
             examples_from_sub_rules = []
             tmp_buffer = []
             for sub_unit_rule in unit_rule:
-                print("SUBUNIT SLOT "+str(sub_unit_rule))
                 sub_unit_possibilities = self.generate_all_possibilities(sub_unit_rule)
-                print(" ==> "+str(sub_unit_possibilities))
                 tmp_buffer = []
                 if len(examples_from_sub_rules) == 0:
                     examples_from_sub_rules = sub_unit_possibilities
@@ -569,11 +567,16 @@ class Generator():
     def get_slots_synonyms(self):
         synonyms = dict()
         for slot_name in self.parser.slots:
-            synonyms[slot_name] = []
-            slot_val = self.parser.slots[slot_name]
-            current_all_possibilities = self.generate_all_possibilities(slot_val["rules"])
-            for possibility in current_all_possibilities:
-                synonyms[slot_name].append(possibility["text"])
+            for rule in self.parser.slots[slot_name]["rules"]:
+                current_val = rule["slot-value-name"]
+                rule = rule["rule"]
+                current_all_possibilities = self.generate_all_possibilities(rule)
+                if current_val not in synonyms:
+                    synonyms[current_val] = []
+                for possibility in current_all_possibilities:
+                    text = possibility["text"]
+                    if text not in synonyms[current_val]:
+                        synonyms[current_val].append(possibility["text"])
         return synonyms
 
 
@@ -582,8 +585,8 @@ class Generator():
             "rasa_nlu_data": {
                 "common_examples": self.generated_examples,
                 "regex_features" : [],
-                "entity_synonyms": []
-                    # to_Rasa_synonym_format(self.get_slots_synonyms()),
+                "entity_synonyms": #[]
+                    to_Rasa_synonym_format(self.get_slots_synonyms()),
             }
         }
         json_data = cast_to_unicode(raw_json_data)
