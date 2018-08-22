@@ -597,13 +597,6 @@ class Generator():
             json.dumps(json_data, ensure_ascii=False, indent=2, sort_keys=True)
         )
 
-        print("\nTEST:")
-        print(str(self.generate_all_possibilities([{
-            "word": u"italian",
-            "leading-space": False,
-            "type": Unit.word,
-        }])))
-
 
 if __name__ == "__main__":
     import warnings
