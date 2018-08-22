@@ -9,7 +9,7 @@ from random import randint
 
 from utils import *
 from parser_utils import Unit
-from rasa_adapter import to_Rasa_format
+from rasa_adapter import to_Rasa_format, to_Rasa_synonym_format
 
 EMPTY_GEN = {
     "text": '',
@@ -49,11 +49,13 @@ def with_leading_upper(text):
     for (i, c) in enumerate(text):
         if not c.isspace():
             return text[:i] + text[i].upper() + text[(i+1):]
+    return text
 def with_leading_lower(text):
     """Returns `text` with a leading lowercase letter"""
     for (i, c) in enumerate(text):
         if not c.isspace():
             return text[:i] + text[i].upper() + text[(i+1):]
+    return text
 
 
 class Generator():
@@ -106,6 +108,8 @@ class Generator():
                 self.generated_randgens = dict()
                 for unit_rule in intent_rule:
                     generation = self.generate_unit(unit_rule)
+                    if generation["text"] is None:
+                        print("gen text is None for "+str(unit_rule))
                     current_example += cast_to_unicode(generation["text"])
                     current_entities.extend(generation["entities"])
                 current_example = current_example.strip()  # strip for safety
@@ -347,7 +351,33 @@ class Generator():
         (including the empty generation if possible) and returns them all
         as a list of dict.
         """
-        # {} -> [{"text": str, "entities": [...]}]
+        # {} or [] -> [{"text": str, "entities": [...]}]
+        print("\nGenerating all possibilities for "+str(unit_rule))
+        if isinstance(unit_rule, list):
+            generated_texts = []
+            examples_from_sub_rules = []
+            tmp_buffer = []
+            for sub_unit_rule in unit_rule:
+                print("SUBUNIT SLOT "+str(sub_unit_rule))
+                sub_unit_possibilities = self.generate_all_possibilities(sub_unit_rule)
+                print(" ==> "+str(sub_unit_possibilities))
+                tmp_buffer = []
+                if len(examples_from_sub_rules) == 0:
+                    examples_from_sub_rules = sub_unit_possibilities
+                else:
+                    for ex in examples_from_sub_rules:
+                        for possibility in sub_unit_possibilities:
+                            tmp_buffer.append({
+                                "text": ex["text"]+possibility["text"],
+                                "entities": ex["entities"]+possibility["entities"]
+                            })
+                    examples_from_sub_rules = tmp_buffer
+            generated_texts.extend(examples_from_sub_rules)
+            return generated_texts
+
+        if "type" not in unit_rule:
+            return self.generate_all_possibilities(unit_rule["rule"])
+
         unit_type = unit_rule["type"]
         if unit_type == Unit.word:
             if unit_rule["leading-space"]:
@@ -394,22 +424,26 @@ class Generator():
                 examples_from_sub_rules = []
                 tmp_buffer = []
                 for sub_unit_rule in choice:
-                    sub_unit_possibilities = self.generate_all_possibilities(sub_unit_rule):
+                    print("SUBUNIT CH "+str(sub_unit_rule))
+                    sub_unit_possibilities = self.generate_all_possibilities(sub_unit_rule)
                     tmp_buffer = []
-                    for ex in examples_from_sub_rules:
-                        for possibility in sub_unit_possibilities:
-                            tmp_buffer.append({
-                                "text": ex["text"]+possibility["text"],
-                                "entities": ex["entities"]+possibility["entities"]
-                            })
-                    examples_from_sub_rules = tmp_buffer
+                    if len(examples_from_sub_rules) == 0:
+                        examples_from_sub_rules = sub_unit_possibilities
+                    else:
+                        for ex in examples_from_sub_rules:
+                            for possibility in sub_unit_possibilities:
+                                tmp_buffer.append({
+                                    "text": ex["text"]+possibility["text"],
+                                    "entities": ex["entities"]+possibility["entities"]
+                                })
+                        examples_from_sub_rules = tmp_buffer
                 generated_texts.extend(examples_from_sub_rules)
 
-            if unit_rule["leading-space"]
-            for ex in generated_texts:
-                text = ex["text"]
-                if text != "" and not text.startswith(' '):
-                    ex["text"] = ' '+text
+            if unit_rule["leading-space"]:
+                for ex in generated_texts:
+                    text = ex["text"]
+                    if text != "" and not text.startswith(' '):
+                        ex["text"] = ' '+text
 
             return generated_texts
         else:
@@ -458,15 +492,19 @@ class Generator():
                         examples_from_sub_rules = []
                         tmp_buffer = []
                         for sub_unit_rule in rule:
-                            sub_unit_possibilities = self.generate_all_possibilities(sub_unit_rule):
+                            print("SUBUNIT ALSL "+str(sub_unit_rule))
+                            sub_unit_possibilities = self.generate_all_possibilities(sub_unit_rule)
                             tmp_buffer = []
-                            for ex in examples_from_sub_rules:
-                                for possibility in sub_unit_possibilities:
-                                    tmp_buffer.append({
-                                        "text": ex["text"]+possibility["text"],
-                                        "entities": ex["entities"]+possibility["entities"]
-                                    })
-                            examples_from_sub_rules = tmp_buffer
+                            if len(examples_from_sub_rules) == 0:
+                                examples_from_sub_rules = sub_unit_possibilities
+                            else:
+                                for ex in examples_from_sub_rules:
+                                    for possibility in sub_unit_possibilities:
+                                        tmp_buffer.append({
+                                            "text": ex["text"]+possibility["text"],
+                                            "entities": ex["entities"]+possibility["entities"]
+                                        })
+                                examples_from_sub_rules = tmp_buffer
                         generated_texts.extend(examples_from_sub_rules)
                 else:  # TODO this should be an error
                     pass
@@ -494,15 +532,19 @@ class Generator():
                     examples_from_sub_rules = []
                     tmp_buffer = []
                     for sub_unit_rule in rule:
-                        sub_unit_possibilities = self.generate_all_possibilities(sub_unit_rule):
+                        print("SUBUNIT IN "+str(sub_unit_rule))
+                        sub_unit_possibilities = self.generate_all_possibilities(sub_unit_rule)
                         tmp_buffer = []
-                        for ex in examples_from_sub_rules:
-                            for possibility in sub_unit_possibilities:
-                                tmp_buffer.append({
-                                    "text": ex["text"]+possibility["text"],
-                                    "entities": ex["entities"]+possibility["entities"]
-                                })
-                        examples_from_sub_rules = tmp_buffer
+                        if len(examples_from_sub_rules) == 0:
+                            examples_from_sub_rules = sub_unit_possibilities
+                        else:
+                            for ex in examples_from_sub_rules:
+                                for possibility in sub_unit_possibilities:
+                                    tmp_buffer.append({
+                                        "text": ex["text"]+possibility["text"],
+                                        "entities": ex["entities"]+possibility["entities"]
+                                    })
+                            examples_from_sub_rules = tmp_buffer
                     generated_texts.extend(examples_from_sub_rules)
             else:
                 raise RuntimeError("Tried to generate a unit of unknown type")
@@ -533,9 +575,11 @@ class Generator():
         for slot_name in self.parser.slots:
             synonyms[slot_name] = []
             slot_val = self.parser.slots[slot_name]
-            current_all_possibilities = self.generate_all_possibilities(slot_val)
+            current_all_possibilities = self.generate_all_possibilities(slot_val["rules"])
+            print("for slot "+slot_name+" possibilities are "+str(current_all_possibilities))
             for possibility in current_all_possibilities:
                 synonyms[slot_name].append(possibility["text"])
+            print("for slot "+slot_name+" synonyms are "+str(synonyms[slot_name]))
         return synonyms
 
 
@@ -544,14 +588,21 @@ class Generator():
             "rasa_nlu_data": {
                 "common_examples": self.generated_examples,
                 "regex_features" : [],
-                "entity_synonyms":
-                    to_Rasa_synonym_format(self.get_slots_synonyms()),
+                "entity_synonyms": []
+                    # to_Rasa_synonym_format(self.get_slots_synonyms()),
             }
         }
         json_data = cast_to_unicode(raw_json_data)
         self.out_file.write(
             json.dumps(json_data, ensure_ascii=False, indent=2, sort_keys=True)
         )
+
+        print("\nTEST:")
+        print(str(self.generate_all_possibilities([{
+            "word": u"italian",
+            "leading-space": False,
+            "type": Unit.word,
+        }])))
 
 
 if __name__ == "__main__":
