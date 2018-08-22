@@ -8,9 +8,12 @@
 
 - **TODO**: generate all possible sentences when asked (tied to a maximum)
 - **TODO**: don't generate twice the same sentence
+- **TODO**: support generation without a max number given
 
 - **TODO**: replace modifier regex by several one to allow for escaping special characters everywhere
 - **TODO**: make arguments several layers deep?
+
+- **TODO**: add a *changelog*
 
 ## Done
 
