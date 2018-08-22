@@ -130,3 +130,12 @@ class TokenModel():
         """
         # () -> {"text": str, "entities": [str]}
         pass
+
+    def generate_all(self):
+        """
+        Returns a list of all the strings and entities that can be generated
+        from the rules this object represents. May include the empty string if
+        it can be generated.
+        """
+        # () -> [{"text": str, "entities": [str]}]
+        pass
