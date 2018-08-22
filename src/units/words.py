@@ -1,4 +1,7 @@
-from Unit import TokenModel
+from Unit import *
+
+from random import randint
+
 
 class WordModel(TokenModel):
     """Represents a word inside a rule"""
@@ -19,4 +22,17 @@ class WordGroupModel(TokenModel):
                 casegen=casegen, randgen=randgen, percentage_gen=percentage_gen)
 
     def generate_random(self):
-        pass  # TODO manage randgen and stuff inside the super class
+        if self.randgen and randint(0,99) >= self.percentgen:
+            return EMPTY_GEN
+
+        # Generate the string according to the parameters of the object
+        generated_str = self.words_str
+        if self.casegen:
+            generated_str = andomly_change_case(generated_str)
+        if self.leading_space and may_get_leading_space(generated_str):
+            generated_str = ' '+generated_str
+
+        return {
+            "text": generated_str,
+            "entities": [],
+        }
