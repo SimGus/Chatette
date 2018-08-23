@@ -57,4 +57,19 @@ class AliasRule(UnitModel):
         generated_examples.extend(self.parser.get_definition(self.name, Unit.alias) \
                                              .generate_all(self.arg_value)
                                  )
+
+        if self.leading_space:
+            for (i, ex) in enumerate(generated_examples):
+                generated_examples[i]["text"] = ' '+ex["text"]
+        if self.casegen:
+            tmp_buffer = []
+            for ex in generated_examples:
+                tmp.buffer.append({
+                    "text": with_leading_lower(ex["text"]),
+                    "entities": ex["entities"],
+                })
+                tmp.buffer.append({
+                    "text": with_leading_upper(ex["text"]),
+                    "entities": ex["entities"],
+                })
         return generated_examples
