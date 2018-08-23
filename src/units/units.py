@@ -70,10 +70,11 @@ class UnitDefinition():
 
         self.variations = dict()
 
-        self.casegen = casegen
+        self.casegen = casegen # IDEA: don't make the casegen variation agnostic
 
 
     def add_rule(self, rule, variation_name=None):
+        # (Rule, str) -> ()
         if variation_name is None:
             self.rules.append(rule)
         else:
@@ -85,6 +86,19 @@ class UnitDefinition():
             else:
                 self.variations[variation_name].append(rule)
             self.rules.append(rule)
+    def add_rules(self, rules, variation_name=None):
+        # ([Rule], str) -> ()
+        if variation_name is None
+            self.rules.extend(rules)
+        else:
+            if variation_name == "":
+                raise SyntaxError("Defining a "+self.type+" with an empty name"+
+                    "is not allowed")
+            if variation_name not in self.variations:
+                self.variations[variation_name] = rules
+            else:
+                self.variations[variation_name].extend(rules)
+            self.rules.extend(rules)
 
     def generate_random(self, variation_name=None, arg_value=None):
         """
