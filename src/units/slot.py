@@ -98,3 +98,8 @@ class DummySlotValRuleContent(RuleContent):
 
     def generate_all(self):
         return EMPTY_GEN
+
+
+    def printDBG(self, nb_indent):
+        indentation = nb_indent*'\t'
+        print(indentation+"Slot val: "+self.name)

@@ -1,3 +1,10 @@
 %[test](4)
-    This is a test
-    Also a test
+    This is a ~[test] @[name]
+
+~[test]
+  test
+  TEST
+
+@[name]
+  John = 2016
+  Jack = /

@@ -247,13 +247,14 @@ class Parser(object):
             if stripped_line == "":
                 continue
 
-            (slot_val, rules) = \
+            (slot_val, rule) = \
                 self.split_contents(stripped_line, accept_slot_val=True)
-            if len(rules) <= 0:
+            if len(rule) <= 0:
                 return
-            if slot_val is None:  # Take the name of the first unit
+            if slot_val is None or slot_val == '/':  # Take the name of the first unit
                 slot_val = rule[0].name
-            rules.insert(0, DummySlotValRuleContent(slot_val))
+            rule.insert(0, DummySlotValRuleContent(slot_val))
+            rules.append(rule)
 
         # Put the new definition inside the dict with slots definitions
         if slot_name not in self.slot_definitions:
@@ -555,10 +556,16 @@ class Parser(object):
 
     def printDBG(self):
         print("\nAliases:")
+        for alias_name in self.alias_definitions:
+            self.alias_definitions[alias_name].printDBG()
 
         print("\nSlots:")
+        for slot_name in self.slot_definitions:
+            self.slot_definitions[slot_name].printDBG()
 
         print("\nIntents:")
+        for intent_name in self.intent_definitions:
+            self.intent_definitions[intent_name].printDBG()
 
 
 if __name__ == "__main__":

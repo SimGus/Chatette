@@ -62,7 +62,7 @@ class UnitDefinition(object):
         self.type = "unit"
 
         self.name = name
-        self.rules = rules
+        self.rules = rules  # list of list of `RulesContent`s => [[RulesContent]]
 
         self.argument_identifier = arg
         if arg is not None:
@@ -169,6 +169,24 @@ class UnitDefinition(object):
         return generated_examples
 
 
+    def printDBG(self):
+        print("\t"+self.type+": "+self.name)
+        print("\t\targument: "+str(self.argument_identifier))
+        print("\t\tcasegen: "+str(self.casegen))
+        print("\t\trules:")
+        for rule in self.rules:
+            print("\t\t\trule:")
+            for content in rule:
+                content.printDBG(4)
+        for variation in self.variations:
+            print("\t\tvariation "+variation)
+            for rule in self.variations[variation]:
+                print("\t\t\trule:")
+                for content in rule:
+                    content.printDBG(3)
+        print("")
+
+
 class RuleContent(object):
     """
     Represents anything that can be inside a rule:
@@ -213,3 +231,13 @@ class RuleContent(object):
         it can be generated.
         """
         return EMPTY_GEN
+
+
+    def printDBG(self, nb_indent):
+        indentation = nb_indent*'\t'
+        print(indentation+self.name)
+        print(indentation+"\tvariation name: "+str(self.variation_name))
+        print(indentation+"\targ value: "+str(self.arg_value))
+        print(indentation+"\tcasegen: "+str(self.casegen))
+        print(indentation+"\trandgen: "+str(self.randgen)+" with percentage: "
+            +str(self.percentgen))
