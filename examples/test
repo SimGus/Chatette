@@ -1,10 +1,3 @@
 %[test](4)
-    This is a ~[test$XLS_FRG 5] @[slot$test]
-
-~[test$to enter]
-    arg was: $to enter
-
-@[slot$ARG]
-    (ARG is $ARG)
-    {choice1: $ARG/choice2: $ARG}
-    escaped: \$ARG  ; TODO this doesn't work yet
+    This is a test
+    Also a test

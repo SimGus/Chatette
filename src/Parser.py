@@ -7,6 +7,11 @@ import warnings
 from utils import *
 from parser_utils import *
 
+from units.words import WordRuleContent, WordGroupRuleContent
+from units.alias import AliasDefinition, AliasRuleContent
+from units.slot import SlotDefinition, SlotRuleContent, DummySlotValRuleContent
+from units.intent import IntentDefinition, IntentRuleContent
+
 
 class Parser():
     """
@@ -20,9 +25,12 @@ class Parser():
         self.line_counts_per_file = []
 
         self.aliases = dict()  # for each alias, stores a list of list of units
-        # self.alias_definitions = []  # TODO redo as OOP
         self.slots = dict()  # for each slot, stores a list of value name and unit
         self.intents = dict()  # for each intent, stores a list of list of slots
+
+        self.alias_definitions = []  # TODO redo as OOP
+        self.slots_definitions = []
+        self.intents_definitions = []
 
         self.parsing_finished = False
 
@@ -77,7 +85,6 @@ class Parser():
             else:  # intent declaration
                 self.parse_intent_definition(stripped_line)
 
-        self.aggregate_variations()
         printDBG("Parsing of file: "+self.in_file.name+" finished")
         self.parsing_finished = True
 
@@ -124,8 +131,38 @@ class Parser():
             if percentgen == "":
                 raise SyntaxError("Percentage for generation cannot be empty",
                     (self.in_file.name, self.line_nb, start_index, unit))
+            if match["casegen"] != '&':
+                raise SyntaxError("Unable to understand the symbols you used "+
+                    "for case generation (should be '&')",
+                    (self.in_file.name, self.line_nb, start_index, unit))
 
         return (name, arg, variation, randgen, percentgen, casegen)
+
+    def parse_choice(self, text):
+        """Parses a choice (as a str) and returns a list of inside str"""
+        # TODO this code is broken
+        no_leading_space = i == 0 or (i != 0 and words_and_units_raw[i-1] != ' ')
+        choices = []
+        splits = re.split(r"(?<!\\)/", string[1:-1])  # TODO improve the regex here
+        # Manage randgen
+        randgen = False
+        if len(splits[-1]) >= 1 and splits[-1][-1] == RAND_GEN_SYM:
+            if not (len(splits[-1]) >= 2 and splits[-1][-2] == ESCAPE_SYM):
+                splits[-1] = splits[-1][:-1]
+                randgen = True
+        for choice_str in splits:
+            if choice_str is not None and choice_str != "":  # TODO check the type of each choice?
+                choices.append(self.split_contents(choice_str))
+            else:
+                raise SyntaxError("Empty choice not allowed in choices",
+                    (self.in_file.name, self.line_nb, 0, name))
+        if choices != []:
+            words_and_units.append({
+                "type": Unit.choice,
+                "randgen": randgen,
+                "choices": choices,
+                "leading-space": not no_leading_space,
+            })
 
     def parse_alias_definition(self, first_line):  # Lots of copy-paste in three methods
         """
@@ -143,7 +180,8 @@ class Parser():
             raise SyntaxError("Arguments must be named",
                     (self.in_file.name, self.line_nb, 0, first_line))
         if alias_variation in RESERVED_VARIATION_NAMES:
-            raise SyntaxError("You cannot use the reserved variation names: "+str(RESERVED_VARIATION_NAMES),
+            raise SyntaxError("You cannot use the reserved variation names: "+
+                    str(RESERVED_VARIATION_NAMES),
                     (self.in_file.name, self.line_nb, 0, first_line))
         if randgen is not None:
             raise SyntaxError("Declarations cannot have a named random generation modifier",
@@ -151,9 +189,6 @@ class Parser():
         if percentgen is not None:
             raise SyntaxError("Declarations cannot have a random generation modifier",
                     (self.in_file.name, self.line_nb, 0, first_line))
-        if casegen:  # TODO change this
-            raise SyntaxError("Case generation modifier not accepted in declarations",
-                    (self.in_file.name, self.line_nb, indentation_nb, first_line))
 
         # Manage the contents
         rules = []
@@ -166,36 +201,18 @@ class Parser():
 
             rules.append(self.split_contents(stripped_line))
 
-        # Put the new definition in the alias dict
-        if alias_name in self.aliases:
-            if alias_variation is None:
-                raise SyntaxError("Found a definition without variation for alias '"
-                    +alias_name+"' while another definition was already found",
-                    (self.in_file.name, self.line_nb, 0, first_line))
+        # Put the new definition inside the dict with aliases definitions
+        if alias_name not in self.alias_definitions:
+            if alias_variation is not None:
+                self.alias_definitions[alias_name] = \
+                    AliasDefinition(alias_name, rules, alias_arg, casegen)
             else:
-                if alias_variation not in self.aliases[alias_name]:
-                    self.aliases[alias_name][alias_variation] = {
-                        "arg": alias_arg,
-                        "rules": rules,
-                    }
-                else:  # TODO might be interesting to add it to existing rules
-                    raise SyntaxError("Found a definition with variation"
-                        +alias_variation+" for alias '"+alias_name+
-                        "' while another definition with the same variation name was already found",
-                        (self.in_file.name, self.line_nb, 0, first_line))
+                new_definition = \
+                    AliasDefinition(alias_name, [], alias_arg, casegen)
+                new_definition.add_rules(rules, alias_variation)
+                self.alias_definitions[alias_name] = new_definition
         else:
-            if alias_variation is None:
-                self.aliases[alias_name] = {
-                    "arg": alias_arg,
-                    "rules": rules,
-                }
-            else:
-                self.aliases[alias_name] = {
-                    alias_variation: {
-                        "arg": alias_arg,
-                        "rules": rules,
-                    }
-                }
+            self.alias_definitions[alias_name].add_rules(rules, alias_variation)
 
     def parse_slot_definition(self, first_line):
         """
@@ -221,9 +238,6 @@ class Parser():
         if percentgen is not None:
             raise SyntaxError("Declarations cannot have a random generation modifier",
                     (self.in_file.name, self.line_nb, 0, first_line))
-        if casegen:
-            raise SyntaxError("Case generation modifier not accepted in declarations",
-                    (self.in_file.name, self.line_nb, indentation_nb, first_line))
 
         #Manage the contents
         rules = []
@@ -236,49 +250,26 @@ class Parser():
             if stripped_line == "":
                 continue
 
-            (alt_slot_val_name, rule) = \
-                self.split_contents(stripped_line, accept_alt_solt_val=True)
-            if alt_slot_val_name is None:  # Take the name of the first unit
-                print("rule0: "+str(rule[0]))
-                current_rule = rule[0]
-                while current_rule["type"] == Unit.choice:
-                    current_rule = current_rule["choices"][0][0]
-                if current_rule["type"] == Unit.word:
-                    alt_slot_val_name = current_rule["word"]
-                else:
-                    alt_slot_val_name = current_rule["name"]
-            rules.append({
-                "slot-value-name": alt_slot_val_name,
-                "rule": rule,
-            })
+            (slot_val, rules) = \
+                self.split_contents(stripped_line, accept_slot_val=True)
+            if len(rules) <= 0:
+                return
+            if slot_val is None:  # Take the name of the first unit
+                slot_val = rule[0].name
+            rules.insert(0, DummySlotValRuleContent(slot_val))
 
-        # Put the new definition in the slot dict
-        if slot_name in self.slots:
-            if slot_variation is None:
-                raise SyntaxError("Found a definition without variation for slot '"
-                    +slot_name+"' while another definition was already found",
-                    (self.in_file.name, self.line_nb, 0, first_line))
+        # Put the new definition inside the dict with slots definitions
+        if slot_name not in self.slot_definitions:
+            if slot_variation is not None:
+                self.slot_definitions[slot_name] = \
+                    SlotDefinition(slot_name, rules, slot_arg, casegen)
             else:
-                if slot_variation not in self.slots[slot_name]:
-                    self.slots[slot_name][slot_variation] = rules
-                else:
-                    raise SyntaxError("Found a definition with variation"
-                        +slot_variation+" for slot '"+slot_name+
-                        "' while another definition with the same variation name was already found",
-                        (self.in_file.name, self.line_nb, 0, first_line))
+                new_definition = \
+                    SlotDefinition(slot_name, [], slot_arg, casegen)
+                new_definition.add_rules(rules, slot_variation)
+                self.slot_definitions[slot_name] = new_definition
         else:
-            if slot_variation is None:
-                self.slots[slot_name] = {
-                    "arg": slot_arg,
-                    "rules": rules,
-                }
-            else:
-                self.slots[slot_name] = {
-                    slot_variation: {
-                        "arg": arg,
-                        "rules": rules,
-                    }
-                }
+            self.slot_definitions[slot_name].add_rules(rules, slot_variation)
 
     def parse_intent_definition(self, first_line):
         """
@@ -304,9 +295,7 @@ class Parser():
         if percentgen is not None:
             raise SyntaxError("Declarations cannot have a random generation modifier",
                     (self.in_file.name, self.line_nb, 0, first_line))
-        if casegen:
-            raise SyntaxError("Case generation modifier not accepted in declarations",
-                    (self.in_file.name, self.line_nb, indentation_nb, first_line))
+
         nb_gen_asked = find_nb_gen_asked(first_line)
 
         # Manage the contents
@@ -320,69 +309,18 @@ class Parser():
 
             rules.append(self.split_contents(stripped_line))
 
-        # Put the new definition in the intent dict
-        if intent_name in self.intents:
-            if intent_variation is None:
-                raise SyntaxError("Found a definition without variation for intent '"
-                    +intent_name+"' while another definition was already found",
-                    (self.in_file.name, self.line_nb, 0, first_line))
+        # Put the new definition inside the dict with intents definitions
+        if intent_name not in self.intent_definitions:
+            if intent_variation is not None:
+                self.intent_definitions[intent_name] = \
+                    IntentDefinition(intent_name, rules, intent_arg, casegen)
             else:
-                if intent_variation not in self.intents[name]:
-                    self.intents[intent_name][intent_variation] = {
-                        "nb-gen-asked": nb_gen_asked,
-                        "arg": intent_arg,
-                        "rules": rules,
-                    }
-                else:
-                    raise SyntaxError("Found a definition with variation"
-                        +intent_variation+" for intent '"+intent_name+
-                        "' while another definition with the same variation name was already found",
-                        (self.in_file.name, self.line_nb, 0, first_line))
+                new_definition = \
+                    IntentDefinition(intent_name, [], intent_arg, casegen)
+                new_definition.add_rules(rules, intent_variation)
+                self.intent_definitions[intent_name] = new_definition
         else:
-            if intent_variation is None:
-                self.intents[intent_name] = {
-                    "nb-gen-asked": nb_gen_asked,
-                    "arg": intent_arg,
-                    "rules": rules,
-                }
-            else:
-                self.intents[intent_name] = {
-                    intent_variation: {
-                        "nb-gen-asked": nb_gen_asked,
-                        "arg": intent_arg,
-                        "rules": rules,
-                    },
-                }
-
-    def aggregate_variations(self):  # TODO check variation names are not reserved
-        """
-        For all units parsed, this aggregates all the rules for units defined
-        with variations into one 'variation' called `all-variations-aggregation`.
-        """
-        for name in self.aliases:
-            current_alias_def = self.aliases[name]
-            if isinstance(current_alias_def, list):
-                continue
-            else:
-                all_rules = get_all_rules_in_variations(current_alias_def)
-                self.aliases[name]["all-variations-aggregation"] = all_rules
-        for name in self.slots:
-            current_slot_def = self.slots[name]
-            if isinstance(current_slot_def, list):
-                continue
-            else:
-                all_rules = get_all_rules_in_variations(current_slot_def)
-                self.slots[name]["all-variations-aggregation"] = all_rules
-        for name in self.intents:
-            current_intent_def = self.intents[name]
-            if "nb-gen-asked" in current_intent_def:
-                continue
-            else:
-                all_rules = get_all_rules_in_intent_variations(current_intent_def)
-                self.intents[name]["all-variations-aggregation"] = {
-                    "nb-gen-asked": 0,
-                    "rules": all_rules,
-                }
+            self.intent_definitions[intent_name].add_rules(rules, intent_variation)
 
 
     #=========== Getters =================
@@ -401,7 +339,7 @@ class Parser():
             raise ValueError("Tried to get a definition with wrong type (expected"+
                              "alias, slot or intent)")
 
-        if def_name not def_list:
+        if def_name not in def_list:
             type_str = "alias"
             if type == Unit.slot:
                 type_str = "slot"
@@ -455,13 +393,11 @@ class Parser():
             SyntaxError("Invalid syntax",
                 (self.in_file.name, self.line_nb, 1, line))
 
-    def split_contents(self, text, accept_alt_solt_val=False):
+    def split_contents(self, text, accept_slot_val=False):
         """
-        Splits `text` into a list of words and units (and choices)
-        (word groups, aliases, slots and intents).
-        Keeps also track of units that have no space between them (this info is
-        placed in the returned list).
-        If `accept_alt_solt_val` is `True`, expressions after a `=` will be considered
+        Splits `text` into a list of `RuleContent`s (thus, only used on rules and
+        not on defintions).
+        If `accept_slot_val` is `True`, expressions after a `=` will be considered
         to be the slot value name for the splitted expression. In this case, the
         return value will be `(alt_name, list)`.
         """
@@ -529,7 +465,7 @@ class Parser():
                     if current != "":
                         words_and_units_raw.append(current)
                     current = c
-            elif accept_alt_solt_val and c == ALT_SLOT_VALUE_NAME_SYM:
+            elif accept_slot_val and c == ALT_SLOT_VALUE_NAME_SYM:
                 must_parse_alt_slot_val = True
                 break
             else:  # Any other character
@@ -537,86 +473,86 @@ class Parser():
         if current != "":
             words_and_units_raw.append(current)
 
-        print(words_and_units_raw)
-
         # Find the alternative slot value name if needed
-        alt_slot_val_name = None
+        slot_val = None
         if must_parse_alt_slot_val:
-            alt_slot_val_name = \
+            slot_val = \
                 text[text.find(ALT_SLOT_VALUE_NAME_SYM):][1:].strip()
 
-        # Make a list of units from this parsing
-        words_and_units = []
+        # Make a list of `RuleContent`s from this parsing
+        rules = []
         for (i, string) in enumerate(words_and_units_raw):
             if string == ' ':
                 continue
-            elif not is_unit_start(string) and not is_choice(string):
-                no_leading_space = i == 0 or (i != 0 and words_and_units_raw[i-1] != ' ')
-                words_and_units.append({
-                    "type": Unit.word,
-                    "word": remove_escapement(string),
-                    "leading-space": not no_leading_space,
-                })
-            elif is_choice(string):  # choice
-                no_leading_space = i == 0 or (i != 0 and words_and_units_raw[i-1] != ' ')
-                choices = []
-                splits = re.split(r"(?<!\\)/", string[1:-1])  # TODO improve the regex here
-                # Manage randgen
-                randgen = False
-                if len(splits[-1]) >= 1 and splits[-1][-1] == RAND_GEN_SYM:
-                    if not (len(splits[-1]) >= 2 and splits[-1][-2] == ESCAPE_SYM):
-                        splits[-1] = splits[-1][:-1]
-                        randgen = True
-                for choice_str in splits:
-                    if choice_str is not None and choice_str != "":  # TODO check the type of each choice?
-                        choices.append(self.split_contents(choice_str))
-                    else:
-                        raise SyntaxError("Empty choice not allowed in choices",
-                            (self.in_file.name, self.line_nb, 0, name))
-                if choices != []:
-                    words_and_units.append({
-                        "type": Unit.choice,
-                        "randgen": randgen,
-                        "choices": choices,
-                        "leading-space": not no_leading_space,
-                    })
-            else:  # unit
-                no_leading_space = i == 0 or (i != 0 and words_and_units_raw[i-1] != ' ')
-                unit_type = get_unit_type(string)
-                if unit_type == Unit.word_group:
-                    (name, arg, variation, randgen, percentgen, casegen) = self.parse_unit(string)
-                    if name is None:
-                        continue
-                    if arg is not None:
-                        raise SyntaxError("Word groups cannot have an argument",
-                            (self.in_file.name, self.line_nb, 0, name))
-                    if variation is not None:
-                        raise SyntaxError("Word groups cannot have a variation",
-                            (self.in_file.name, self.line_nb, 0, name))
-                    words_and_units.append({
-                        "type": Unit.word_group,
-                        "words": remove_escapement(name),
-                        "randgen": randgen,
-                        "percentgen": percentgen,
-                        "casegen": casegen,
-                        "leading-space": not no_leading_space,
-                    })
-                else:
-                    (name, arg, variation, randgen, percentgen, casegen) = self.parse_unit(string)
-                    words_and_units.append({
-                        "type": unit_type,
-                        "name": name,  # TODO should escapement be removed from there?
-                        "arg": arg,
-                        "variation": variation,
-                        "randgen": randgen,
-                        "percentgen": percentgen,
-                        "casegen": casegen,
-                        "leading-space": not no_leading_space,
-                    })
 
-        if accept_alt_solt_val:
-            return (alt_slot_val_name, words_and_units)
-        return words_and_units
+            no_leading_space = (i == 0 or \
+                (i != 0 and words_and_units_raw[i-1] != ' '))
+
+            if is_word(string):
+                rules.append(
+                    WordRuleContent(remove_escapement(string), not no_leading_space)
+                )
+
+            unit_type = get_unit_type(string)
+            if unit_type == Unit.word_group:
+                (name, arg_value, variation, randgen, percentgen, casegen) = \
+                    self.parse_unit(string)
+                if name is None:
+                    continue
+                if arg_value is not None:
+                    raise SyntaxError("Word groups cannot have an argument",
+                        (self.in_file.name, self.line_nb, 0, name))
+                if variation is not None:
+                    raise SyntaxError("Word groups cannot have a variation",
+                        (self.in_file.name, self.line_nb, 0, name))
+
+                rules.append(
+                    WordGroupRuleContent(remove_escapement(string),
+                                  not no_leading_space, casegen=casegen,
+                                  randgen=randgen, percentage_gen=percentgen)
+                )
+            elif unit_type == Unit.choice:
+                choices = []
+                print("choices not yet supported")
+                continue
+                rules.append(self.parse_choice(string))
+            elif unit_type == Unit.alias:
+                (name, arg_value, variation, randgen, percentgen, casegen) = \
+                    self.parse_unit(string)
+                if name is None:
+                    raise SyntaxError("Aliases must have a name",
+                        (self.in_file.name, self.line_nb, 0, name))
+
+                rules.append(
+                    AliasRuleContent(name, not no_leading_space, variation, arg_value,
+                              casegen, randgen, percentgen, self)
+                )
+            elif unit_type == Unit.slot:
+                (name, arg_value, variation, randgen, percentgen, casegen) = \
+                    self.parse_unit(string)
+                if name is None:
+                    raise SyntaxError("Slots must have a name",
+                        (self.in_file.name, self.line_nb, 0, name))
+
+                rules.append(
+                    SlotRuleContent(name, not no_leading_space, variation, arg_value,
+                              casegen, randgen, percentgen, self)
+                )
+            else:  # Unit.intent
+                (name, arg_value, variation, randgen, percentgen, casegen) = \
+                    self.parse_unit(string)
+                if name is None:
+                    raise SyntaxError("Intents must have a name",
+                        (self.in_file.name, self.line_nb, 0, name))
+
+                rules.append(
+                    IntentRuleContent(name, not no_leading_space, variation, arg_value,
+                              casegen, randgen, percentgen, self)
+                )
+
+        if accept_slot_val:
+            return (slot_val, rules)  # QUESTION: is it a problem to return two different things (defined by the arguments)?
+        return rules
 
 
     def printDBG(self):

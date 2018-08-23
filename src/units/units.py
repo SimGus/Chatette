@@ -89,7 +89,7 @@ class UnitDefinition():
             self.rules.append(rule)
     def add_rules(self, rules, variation_name=None, slot_val=None):
         # ([RuleContent], str, str) -> ()
-        if variation_name is None
+        if variation_name is None:
             self.rules.extend(rules)
         else:
             if variation_name == "":
@@ -114,7 +114,7 @@ class UnitDefinition():
             if variation_name not in self.variations:
                 raise SyntaxError("Couldn't find a variation named '"+
                     variation_name+"' for "+self.type+" '"+self.name+"'")
-            max_index = len(self.variations[variation_name])-1)
+            max_index = len(self.variations[variation_name])-1
             chosen_rule = \
                 self.variations[variation_name][randint(0, max_index)]
 

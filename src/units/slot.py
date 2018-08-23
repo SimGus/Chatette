@@ -88,7 +88,7 @@ class DummySlotValRuleContent(RuleContent):
         casegen=False, randgen=None, percentage_gen=None, parser=None):
             self.name = name
             if leading_space or variation_name is not None or \
-                arg_value is not None or casegen or randgen is not None or
+                arg_value is not None or casegen or randgen is not None or \
                 percentage_gen is not None or parser is not None:
                     raise RuntimeError("Internal error: tried to create a dummy"+
                         " slot value rule with another argument than just a value")

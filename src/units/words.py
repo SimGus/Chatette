@@ -1,4 +1,4 @@
-from units.units import *
+from .units import *
 
 from random import randint
 
@@ -9,7 +9,6 @@ class WordRuleContent(RuleContent):
     Accepted modifiers:
         - leading-space: bool
     """
-    def __init__(self, word, leading_space=False):
     def __init__(self, name, leading_space=False, variation_name=None, arg_value=None,
         casegen=False, randgen=None, percentage_gen=None, parser=None):
             if variation_name is not None:
