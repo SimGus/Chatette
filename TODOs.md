@@ -1,6 +1,6 @@
 # TODOs
 
-- TODO: redo as OOP
+- TODO: remake as OOP
 - TODO: add argument support
 - TODO: make arguments several layers deep?
 - TODO: don't generate twice the same sentence
