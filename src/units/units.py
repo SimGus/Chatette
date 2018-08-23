@@ -101,18 +101,28 @@ class UnitDefinition():
             text = randomly_change_case(text)
         return (text, entities)
 
-    def generate_all(self):
+    def generate_all(self, arg_val=None):
         pass  # TODO
 
 
-class TokenModel():
+class TokenRule():
     """
     Represents anything that can be inside a rule:
     for words and word groups, it generates as is;
     for units, it is a link to a definition that can be generated.
+    The rule also contains modifier used during the generation, such as:
+        - leading-space: bool (a leading space will be added to the generated str)
+        - casegen: bool (the first letter may be in upper- or lowercase)
+        - randgen: str (if not `None` it might not be generated,
+                        and if it is the same string than for another rule,
+                        it will generate iff the other rule generated (and vice-versa))
+        - percentgen: int (if `randgen` is enable, this is the percentage of
+                           of chances that this rule will generate something)
+        - arg: str (represents the identifier of an argument inside the rule,
+                    which will be replaced by a value given upon generation)
     """
     def __init__(self, name, leading_space=False, variation=None, arg_value=None,
-        casegen=False, randgen=False, percentage_gen=50, parser=None):
+        casegen=False, randgen=None, percentage_gen=50, parser=None):
             self.name = name
             self.variation = variation
             self.arg_value = arg_value
@@ -123,7 +133,7 @@ class TokenModel():
 
             self.parser = parser
 
-    def generate_random(self):
+    def generate_random(self, arg_val=None):
         """
         Returns a string and its entities randomly generated from the rules the
         object represents. May return an empty string if `randgen` is enabled.
@@ -131,7 +141,7 @@ class TokenModel():
         # () -> {"text": str, "entities": [str]}
         pass
 
-    def generate_all(self):
+    def generate_all(self, arg_val=None):
         """
         Returns a list of all the strings and entities that can be generated
         from the rules this object represents. May include the empty string if

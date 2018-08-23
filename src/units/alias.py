@@ -8,7 +8,7 @@ class AliasDefinition(UnitDefinition):
     pass  # TODO
 
 
-class AliasModel(UnitModel):
+class AliasRule(UnitModel):
     """
     This class represent an alias as it can be contained
     in a rule with its modifiers.
