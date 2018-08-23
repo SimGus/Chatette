@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from random import randint
+import re
 
 from parser_utils import Unit
 from Generator import randomly_change_case
@@ -63,7 +64,10 @@ class UnitDefinition():
 
         self.name = name
         self.rules = rules
+
         self.argument_identifier = arg
+        pattern_arg = r"(?<!\\)\$"+arg
+        self.arg_regex = re.compile(pattern_arg)
 
         self.variations = dict()
 
@@ -102,8 +106,34 @@ class UnitDefinition():
             text = randomly_change_case(text)
         return (text, entities)
 
-    def generate_all(self, arg_value=None):
-        pass  # TODO
+    def generate_all(self, arg_value=None):  # TODO should i manage variations in here?
+        generated_examples = []
+
+        for rule in self.rules:
+            examples_from_sub_rules = []
+            tmp_buffer = []
+            for sub_unit_rule in rule:
+                sub_unit_possibilities = \
+                    sub_unit_rule.generate_all()
+                if len(examples_from_sub_rules) == 0:
+                    examples_from_sub_rules = sub_unit_possibilities
+                else:
+                    tmp_buffer = []
+                    for ex in examples_from_sub_rules:
+                        for possibility in sub_unit_possibilities:
+                            tmp_buffer.append({
+                                "text": ex["text"]+possibility["text"],
+                                "entities": ex["entities"]+possibility["entities"]
+                            })
+                    examples_from_sub_rules = tmp_buffer
+            generated_examples.extend(examples_from_sub_rules)
+
+        # Replace `arg` inside generated sentences
+        if arg_value is not None and self.argument_identifier is not None:
+            for (i, ex) in enumerate(generated_examples):
+                ex["text"] = self.arg_regex.sub(arg_value, ex["text"])
+                generated_examples[i] = ex["text"].replace("\$", "$")
+        return generated_examples
 
 
 class TokenRule():
