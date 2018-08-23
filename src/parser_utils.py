@@ -78,15 +78,18 @@ def is_choice(text):
 def is_word(text):
     return not (text.startswith(CHOICE_OPEN_SYM) or is_unit_start(text))
 
-def get_unit_type(unit):
-    if unit.startswith(UNIT_OPEN_SYM):
+def get_unit_type(text):
+    """This function expects a string representing a unit"""
+    if text.startswith(UNIT_OPEN_SYM):
         return Unit.word_group
-    elif unit.startswith(ALIAS_SYM):
+    elif text.startswith(ALIAS_SYM):
         return Unit.alias
-    elif unit.startswith(SLOT_SYM):
+    elif text.startswith(SLOT_SYM):
         return Unit.slot
-    elif unit.startswith(INTENT_SYM):
+    elif text.startswith(INTENT_SYM):
         return Unit.intent
+    elif text.startswith(CHOICE_OPEN_SYM):
+        return Unit.choice
     else:
         raise RuntimeError("Internal error: tried to get the unit type of "+
             "something that was not a unit")
