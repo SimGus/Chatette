@@ -13,7 +13,7 @@ class IntentDefinition(UnitDefinition):
         self.type = "intent"
         self.nb_examples_asked = None  # All possibilities will be generated TODO
 
-    def set_nb_examples(nb_examples_asked):
+    def set_nb_examples(self, nb_examples_asked):
         # int -> ()
         self.nb_examples_asked = nb_examples_asked
 
@@ -30,7 +30,7 @@ class IntentDefinition(UnitDefinition):
         generated_examples = []
         for _ in range(self.nb_examples_asked):
             # TODO check that this example hasn't been generated already
-            generated_examples.append(self.generated_random())
+            generated_examples.append(self.generate_random())
         return generated_examples
 
     # Everything else is in the superclass

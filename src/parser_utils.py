@@ -78,35 +78,35 @@ def is_choice(text):
 def is_word(text):
     return not (text.startswith(CHOICE_OPEN_SYM) or is_unit_start(text))
 
-def get_unit_type(text):
+def get_unit_type(unit_text):
     """This function expects a string representing a unit"""
-    if text.startswith(UNIT_OPEN_SYM):
+    if unit_text.startswith(UNIT_OPEN_SYM):
         return Unit.word_group
-    elif text.startswith(ALIAS_SYM):
+    elif unit_text.startswith(ALIAS_SYM):
         return Unit.alias
-    elif text.startswith(SLOT_SYM):
+    elif unit_text.startswith(SLOT_SYM):
         return Unit.slot
-    elif text.startswith(INTENT_SYM):
+    elif unit_text.startswith(INTENT_SYM):
         return Unit.intent
-    elif text.startswith(CHOICE_OPEN_SYM):
+    elif unit_text.startswith(CHOICE_OPEN_SYM):
         return Unit.choice
     else:
         raise RuntimeError("Internal error: tried to get the unit type of "+
-            "something that was not a unit")
+            "something that was not a unit: '"+unit_text+"'")
 
 
-def find_nb_gen_asked(intent):
+def find_nb_examples_asked(intent_text):
     """
-    Finds the number of generation asked for the provided intent string and
+    Finds the number of examples asked for the provided intent string and
     returns it (or `None` if it wasn't provided).
     """
     nb_gen_asked = None
     one_found = False
-    for match in pattern_nb_gen_asked.finditer(intent):
+    for match in pattern_nb_gen_asked.finditer(intent_text):
         start_index = match.start()
         if one_found:
             raise SyntaxError("Expected only one number of generation asked in "+
-                intent)
+                intent_text)
         else:
             one_found = True
         match = match.groupdict()

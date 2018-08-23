@@ -294,7 +294,12 @@ class Parser(object):
             raise SyntaxError("Declarations cannot have a random generation modifier",
                     (self.in_file.name, self.line_nb, 0, first_line))
 
-        nb_gen_asked = find_nb_gen_asked(first_line)
+        nb_examples_asked = None
+        try:
+            nb_examples_asked = int(find_nb_examples_asked(first_line))
+        except ValueError:
+            raise SyntaxError("Number of examples asked is not a number",
+                    (self.in_file.name, self.line_nb, 0, first_line))
 
         # Manage the contents
         rules = []
@@ -310,12 +315,15 @@ class Parser(object):
         # Put the new definition inside the dict with intents definitions
         if intent_name not in self.intent_definitions:
             if intent_variation is not None:
-                self.intent_definitions[intent_name] = \
+                new_definition = \
                     IntentDefinition(intent_name, rules, intent_arg, casegen)
+                new_definition.set_nb_examples(nb_examples_asked)
+                self.intent_definitions[intent_name] = new_definition
             else:
                 new_definition = \
                     IntentDefinition(intent_name, [], intent_arg, casegen)
                 new_definition.add_rules(rules, intent_variation)
+                new_definition.set_nb_examples(nb_examples_asked)
                 self.intent_definitions[intent_name] = new_definition
         else:
             self.intent_definitions[intent_name].add_rules(rules, intent_variation)

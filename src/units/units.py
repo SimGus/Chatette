@@ -110,6 +110,7 @@ class UnitDefinition(object):
         returns the string generated and the entities inside it as a dict.
         """
         # (str, str) -> {"text": str, "entities": [str]}
+        generated_example = EMPTY_GEN
         chosen_rule = None
         if variation_name is None:
             chosen_rule = self.rules[randint(0,len(self.rules)-1)]

@@ -66,10 +66,13 @@ class Generator(object):
     def generate(self):
         print("")
         printDBG("Start generation")
-        for intent_name in self.parser.intents:
-            gen_rule = self.parser.intents[intent_name]
-            self.generate_intent(intent_name, gen_rule)
+        for intent_name in self.parser.intent_definitions:
+            print("generating: "+intent_name)
+            self.generated_examples.extend(
+                self.parser.intent_definitions[intent_name].generate()
+            )
 
+        printDBG("Generation over, writing to file...")
         self.write_JSON()
 
     def generate_intent(self, intent_name, intent_rules):

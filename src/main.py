@@ -30,6 +30,6 @@ if __name__ == "__main__":
             parser.printDBG()
         print("")
 
-        # with io.open(output_file_path, 'w+', encoding="utf-8") as out_file:  # TODO create if not already existing (same with dirs)
-        #     generator = Generator(out_file, parser)
-        #     generator.generate()
+        with io.open(output_file_path, 'w+', encoding="utf-8") as out_file:  # TODO create if not already existing (same with dirs)
+            generator = Generator(out_file, parser)
+            generator.generate()
