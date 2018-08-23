@@ -17,9 +17,9 @@ class AliasDefinition(UnitDefinition):
 
 class AliasRule(Rule):
     """
-    This class represents an alias as it can be contained
-    in a rule with its modifiers.
-    Accepted modifier:
+    This class represents an alias as it can be contained in a rule,
+    with its modifiers.
+    Accepted modifiers:
         - leading-space: bool
         - casegen: bool
         - randgen: str
