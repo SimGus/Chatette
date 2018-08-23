@@ -57,7 +57,7 @@ def may_get_leading_space(text):
 
 
 class UnitDefinition():
-    """Superclass representing a unit definition"""
+    """Superclass representing a unit definition."""
     def __init__(self, name, rules=[], arg=None, casegen=False):
         self.type = "unit"
 
@@ -89,8 +89,9 @@ class UnitDefinition():
     def generate_random(self, variation_name=None, arg_value=None):
         """
         Generates one of your rule at random and
-        returns the string generated and the entities inside it
-        """  # TODO I think there is a bug in here
+        returns the string generated and the entities inside it as a dict.
+        """
+        # (str, str) -> {"text": str, "entities": [str]}
         chosen_rule = None
         if variation_name is None:
             chosen_rule = self.rules[randint(0,len(self.rules)-1)]
@@ -98,12 +99,20 @@ class UnitDefinition():
             if variation_name not in self.variations:
                 raise SyntaxError("Couldn't find a variation named '"+
                     variation_name+"' for "+self.type+" '"+self.name+"'")
+            max_index = len(self.variations[variation_name])-1)
             chosen_rule = \
-                self.rules[randint(0, len(self.variations[variation_name])-1)]
-        (text, entities) = chosen_rule.generate(arg_value)
+                self.variations[variation_name][randint(0, max_index)]
+
+            generated_example = EMPTY_GEN
+            for token in chosen_rule:
+                generated_token = token.generate_random()
+                generated_example["text"] += generated_token["text"]
+                generated_example["entities"].extend(generated_token["entities"])
+
         if self.casegen:
-            text = randomly_change_case(text)
-        return (text, entities)
+            generated_example["text"] = randomly_change_case(generated_example["text"])
+
+        return generated_example
 
     def generate_all(self, arg_value=None):  # TODO should i manage variations in here?
         generated_examples = []
