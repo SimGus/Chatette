@@ -30,9 +30,7 @@ class IntentDefinition(UnitDefinition):
         generated_examples = []
         for _ in range(self.nb_examples_asked):
             # TODO check that this example hasn't been generated already
-            print("generating intent #")
             generated_examples.append(self.generate_random())
-            print("done: "+str(generated_examples))
         return generated_examples
 
     # Everything else is in the superclass
@@ -58,7 +56,7 @@ class IntentRuleContent(RuleContent):
 
     def generate_random(self):
         if self.randgen is not None and randint(0,99) >= self.percentgen:
-            return EMPTY_GEN  # TODO keep track of which randgen have been generated
+            return EMPTY_GEN()  # TODO keep track of which randgen have been generated
 
         generated_example = self.parser.get_definition(self.name, Unit.intent) \
                                        .generate_random(self.variation_name, \
@@ -74,7 +72,7 @@ class IntentRuleContent(RuleContent):
     def generate_all(self):
         generated_examples = []
         if randgen is not None:
-            generated_examples.append(EMPTY_GEN)
+            generated_examples.append(EMPTY_GEN())
 
         generated_examples.extend(self.parser.get_definition(self.name, Unit.intent) \
                                              .generate_all(self.arg_value))

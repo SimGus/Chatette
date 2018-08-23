@@ -2,13 +2,15 @@
 
 from random import randint
 import re
+from copy import deepcopy
 
 from parser_utils import Unit
 
-EMPTY_GEN = {
-    "text": "",
-    "entities": [],
-}
+def EMPTY_GEN():
+    return deepcopy({  # NOTE: deepcopy is needed to avoid rewriting on old data
+        "text": "",
+        "entities": [],
+    })
 
 
 def cast_to_unicode(any):
@@ -110,7 +112,6 @@ class UnitDefinition(object):
         returns the string generated and the entities inside it as a dict.
         """
         # (str, str) -> {"text": str, "entities": [str]}
-        generated_example = EMPTY_GEN
         chosen_rule = None
         if variation_name is None:
             chosen_rule = self.rules[randint(0,len(self.rules)-1)]
@@ -122,7 +123,7 @@ class UnitDefinition(object):
             chosen_rule = \
                 self.variations[variation_name][randint(0, max_index)]
 
-        generated_example = EMPTY_GEN
+        generated_example = EMPTY_GEN()
         for token in chosen_rule:
             generated_token = token.generate_random()
             generated_example["text"] += generated_token["text"]
@@ -226,7 +227,7 @@ class RuleContent(object):
         Returns a string and its entities randomly generated from the rules the
         object represents. May return an empty string if `randgen` is enabled.
         """
-        return EMPTY_GEN
+        return EMPTY_GEN()
 
     def generate_all(self):
         """
@@ -234,7 +235,7 @@ class RuleContent(object):
         from the rules this object represents. May include the empty string if
         it can be generated.
         """
-        return EMPTY_GEN
+        return EMPTY_GEN()
 
 
     def printDBG(self, nb_indent):

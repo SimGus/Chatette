@@ -41,7 +41,7 @@ class SlotRuleContent(RuleContent):
 
     def generate_random(self):
         if self.randgen is not None and randint(0,99) >= self.percentgen:
-            return EMPTY_GEN  # TODO keep track of which randgen have been generated
+            return EMPTY_GEN()  # TODO keep track of which randgen have been generated
 
         generated_example = self.parser.get_definition(self.name, Unit.slot)\
                                        .generate_random(self.variation_name, \
@@ -57,7 +57,7 @@ class SlotRuleContent(RuleContent):
     def generate_all(self):
         generated_examples = []
         if randgen is not None:
-            generated_examples.append(EMPTY_GEN)
+            generated_examples.append(EMPTY_GEN())
 
         generated_examples.extend(self.parser.get_definition(self.name, Unit.slot) \
                                              .generate_all(self.arg_value))
@@ -94,10 +94,10 @@ class DummySlotValRuleContent(RuleContent):
                         " slot value rule with another argument than just a value")
 
     def generate_random(self):
-        return EMPTY_GEN
+        return EMPTY_GEN()
 
     def generate_all(self):
-        return EMPTY_GEN
+        return EMPTY_GEN()
 
 
     def printDBG(self, nb_indent):

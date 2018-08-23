@@ -90,7 +90,7 @@ class WordGroupRuleContent(RuleContent):
 
     def generate_random(self):
         if self.randgen is not None and randint(0,99) >= self.percentgen:
-            return EMPTY_GEN
+            return EMPTY_GEN()
 
         # Generate the string according to the parameters of the object
         generated_str = self.words
