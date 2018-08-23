@@ -1,4 +1,4 @@
-from units import *
+from units.units import *
 
 from random import randint
 

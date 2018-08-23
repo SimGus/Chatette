@@ -4,7 +4,6 @@ from random import randint
 import re
 
 from parser_utils import Unit
-from Generator import randomly_change_case
 
 EMPTY_GEN = {
     "text": "",
