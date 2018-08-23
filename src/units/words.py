@@ -42,7 +42,7 @@ class WordGroupRule(Rule):
         - percentgen: bool
     """
     def __init__(self, words_str, leading_space=False, casegen=False,
-        randgen=None, percentage_gen=50):
+        randgen=None, percentage_gen=50):  # FIXME: wrong parameters for overriding
             super(WordGroupModel, self).__init__(words_str, leading_space=leading_space,
                 casegen=casegen, randgen=randgen, percentage_gen=percentage_gen)
             self.words = words_str
