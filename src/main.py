@@ -28,12 +28,6 @@ if __name__ == "__main__":
             parser = Parser(in_file)
             parser.parse()
             # parser.printDBG()
-        for slot in parser.slots:
-            if "rules" not in parser.slots[slot]:
-                for var in parser.slots[slot]:
-                    if "rules" not in parser.slots[slot][var]:
-                        print("HERE")
-                        print(parser.slots[slot][var])
         print("")
 
         with io.open(output_file_path, 'w+', encoding="utf-8") as out_file:  # TODO create if not already existing (same with dirs)
