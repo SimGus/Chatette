@@ -7,6 +7,8 @@
 - TODO: generate all possible sentences when asked (tied to a maximum)
 - TODO: add casegen inside declarations
 - TODO: replace modifier regex by several one to allow for escaping special characters everywhere
+- **TODO**: add choice support in OOP rewriting
+- **TODO**: add entities when generating slot in OOP rewriting
 
 ## Done
 
