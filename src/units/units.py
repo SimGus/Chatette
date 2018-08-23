@@ -122,11 +122,11 @@ class UnitDefinition(object):
             chosen_rule = \
                 self.variations[variation_name][randint(0, max_index)]
 
-            generated_example = EMPTY_GEN
-            for token in chosen_rule:
-                generated_token = token.generate_random()
-                generated_example["text"] += generated_token["text"]
-                generated_example["entities"].extend(generated_token["entities"])
+        generated_example = EMPTY_GEN
+        for token in chosen_rule:
+            generated_token = token.generate_random()
+            generated_example["text"] += generated_token["text"]
+            generated_example["entities"].extend(generated_token["entities"])
 
         if self.casegen:
             generated_example["text"] = randomly_change_case(generated_example["text"])
@@ -138,6 +138,7 @@ class UnitDefinition(object):
             generated_example[text] = \
                 generated_example["text"].replace("\$", "$")
 
+        # print("generate random for "+self.name+": "+str(generated_example))
         return generated_example
 
     def generate_all(self, arg_value=None):  # TODO should i manage variations in here?
@@ -211,6 +212,8 @@ class RuleContent(object):
             self.name = name
             self.variation_name = variation_name
             self.arg_value = arg_value
+
+            self.leading_space = leading_space
 
             self.casegen = casegen
             self.randgen = randgen

@@ -336,11 +336,11 @@ class Parser(object):
     def get_definition(self, def_name, type):
         def_list = None
         if type == Unit.alias:
-            def_list = self.aliases
+            def_list = self.alias_definitions
         elif type == Unit.slot:
-            def_list = self.slots
+            def_list = self.slot_definitions
         elif type == Unit.intent:
-            def_list = self.intents
+            def_list = self.intent_definitions
         else:
             raise ValueError("Tried to get a definition with wrong type (expected"+
                              "alias, slot or intent)")

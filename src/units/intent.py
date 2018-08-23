@@ -30,7 +30,9 @@ class IntentDefinition(UnitDefinition):
         generated_examples = []
         for _ in range(self.nb_examples_asked):
             # TODO check that this example hasn't been generated already
+            print("generating intent #")
             generated_examples.append(self.generate_random())
+            print("done: "+str(generated_examples))
         return generated_examples
 
     # Everything else is in the superclass

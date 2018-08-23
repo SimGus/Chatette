@@ -68,6 +68,7 @@ class Generator(object):
         printDBG("Start generation")
         for intent_name in self.parser.intent_definitions:
             print("generating: "+intent_name)
+            # print("generated: "+str(self.parser.intent_definitions[intent_name].generate()))
             self.generated_examples.extend(
                 self.parser.intent_definitions[intent_name].generate()
             )

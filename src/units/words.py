@@ -34,8 +34,14 @@ class WordRuleContent(RuleContent):
 
     def generate_random(self, arg_value=None):
         if self.leading_space:
-            return ' '+self.word
-        return self.word
+            return {
+                "text": ' '+self.word,
+                "entities": [],
+            }
+        return {
+            "text": self.word,
+            "entities": [],
+        }
 
     def generate_all(self, arg_value=None):
         generated_examples = []
