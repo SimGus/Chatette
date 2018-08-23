@@ -25,7 +25,7 @@ class AliasRule(Rule):
         - randgen: str
         - percentgen: int
         - arg: str
-        - variation_name: str
+        - variation-name: str
     """
     def __init__(self, name, leading_space=False, variation_name=None, arg_value=None,
         casegen=False, randgen=None, percentage_gen=50, parser=None):
