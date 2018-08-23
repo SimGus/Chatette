@@ -306,6 +306,11 @@ class Generator():
                             "' for intent named '" + unit_rule["name"] + "'"
                         )
                 elif "rules" in unit_def:
+                    # Get argument
+                    current_arg_name = unit_def["arg"]
+                    if current_arg_name == "":
+                        current_arg_name = None
+
                     unit_def = unit_def["rules"]
                 else:  # No variation asked but the unit is defined with variations
                     unit_def = unit_def["all-variations-aggregation"]["rules"]
@@ -345,7 +350,7 @@ class Generator():
                 "entities": generated_entities,
             }
 
-    def generate_all_possibilities(self, unit_rule):
+    def generate_all_possibilities(self, unit_rule, arg=None):
         """
         Generates all the possible values that the rule 'unit_rule' can generate
         (including the empty generation if possible) and returns them all
@@ -357,7 +362,8 @@ class Generator():
             examples_from_sub_rules = []
             tmp_buffer = []
             for sub_unit_rule in unit_rule:
-                sub_unit_possibilities = self.generate_all_possibilities(sub_unit_rule)
+                sub_unit_possibilities = \
+                    self.generate_all_possibilities(sub_unit_rule, arg)
                 tmp_buffer = []
                 if len(examples_from_sub_rules) == 0:
                     examples_from_sub_rules = sub_unit_possibilities
@@ -373,7 +379,7 @@ class Generator():
             return generated_texts
 
         if "type" not in unit_rule:
-            return self.generate_all_possibilities(unit_rule["rule"])
+            return self.generate_all_possibilities(unit_rule["rule"], arg)
 
         unit_type = unit_rule["type"]
         if unit_type == Unit.word:
@@ -421,7 +427,8 @@ class Generator():
                 examples_from_sub_rules = []
                 tmp_buffer = []
                 for sub_unit_rule in choice:
-                    sub_unit_possibilities = self.generate_all_possibilities(sub_unit_rule)
+                    sub_unit_possibilities = \
+                        self.generate_all_possibilities(sub_unit_rule, arg)
                     tmp_buffer = []
                     if len(examples_from_sub_rules) == 0:
                         examples_from_sub_rules = sub_unit_possibilities
@@ -443,10 +450,11 @@ class Generator():
 
             return generated_texts
         else:
-            # TODO manage `arg`
             generated_texts = []
             if unit_rule["randgen"] is not None:
                 generated_texts.append(EMPTY_GEN)
+
+            current_arg_name = None
 
             if unit_type == Unit.alias or unit_typ == Unit.slot:
                 unit_def = None
@@ -477,7 +485,14 @@ class Generator():
                 elif "rules" not in unit_def:  # No variation asked but the unit is defined with variations
                     unit_def = unit_def["all-variations-aggregation"]  # TODO check this with arg
 
+                # Get arg identifier
                 if isinstance(unit_def, dict):
+                    current_arg_name = unit_def["arg"]
+                    if current_arg_name is not None:
+                        print("arg: "+str(current_arg_name))
+                    if current_arg_name == "":
+                        current_arg_name = None
+
                     unit_def = unit_def["rules"]
 
                 if len(unit_def) > 0:
@@ -488,7 +503,8 @@ class Generator():
                         examples_from_sub_rules = []
                         tmp_buffer = []
                         for sub_unit_rule in rule:
-                            sub_unit_possibilities = self.generate_all_possibilities(sub_unit_rule)
+                            sub_unit_possibilities = \
+                                self.generate_all_possibilities(sub_unit_rule, arg)
                             tmp_buffer = []
                             if len(examples_from_sub_rules) == 0:
                                 examples_from_sub_rules = sub_unit_possibilities
@@ -519,6 +535,13 @@ class Generator():
                             "' for intent named '" + unit_rule["name"] + "'"
                         )
                 elif "rules" in unit_def:
+                    # Get arg identifier
+                    current_arg_name = unit_def["arg"]
+                    if current_arg_name is not None:
+                        print("arg: "+str(current_arg_name))
+                    if current_arg_name == "":
+                        current_arg_name = None
+
                     unit_def = unit_def["rules"]
                 else:  # No variation asked but the unit is defined with variations
                     unit_def = unit_def["all-variations-aggregation"]["rules"]
@@ -527,7 +550,8 @@ class Generator():
                     examples_from_sub_rules = []
                     tmp_buffer = []
                     for sub_unit_rule in rule:
-                        sub_unit_possibilities = self.generate_all_possibilities(sub_unit_rule)
+                        sub_unit_possibilities = \
+                            self.generate_all_possibilities(sub_unit_rule, arg)
                         tmp_buffer = []
                         if len(examples_from_sub_rules) == 0:
                             examples_from_sub_rules = sub_unit_possibilities
@@ -561,6 +585,14 @@ class Generator():
                         "entities": ex["entities"],
                     })
                 generated_texts = casegen_examples
+
+            # Deal with arguments
+            if arg is not None and current_arg_name is not None:
+                for (i, ex) in enumerate(generated_texts):
+                    pattern_arg = r"(?<!\\)\$"+current_arg_name
+                    ex = re.sub(pattern_arg, unit_rule["arg"], ex)
+                    generated_texts[i]["text"] = ex.replace("\$", "$")
+
             return generated_texts
 
 
@@ -568,10 +600,12 @@ class Generator():
         synonyms = dict()
         for slot_name in self.parser.slots:
             if "rules" in self.parser.slots[slot_name]:  # No variations
+                current_arg_val = self.parser.slots[slot_name]["arg"]
                 for rule in self.parser.slots[slot_name]["rules"]:
                     current_val = rule["slot-value-name"]
                     rule = rule["rule"]
-                    current_all_possibilities = self.generate_all_possibilities(rule)
+                    current_all_possibilities = \
+                        self.generate_all_possibilities(rule, current_arg_val)
                     if current_val not in synonyms:
                         synonyms[current_val] = []
                     for possibility in current_all_possibilities:
@@ -581,27 +615,20 @@ class Generator():
             else:  # Variations
                 for variation in self.parser.slots[slot_name]:
                     if "rules" in self.parser.slots[slot_name][variation]:
+                        current_arg_val = self.parser.slots[slot_name][variation]["arg"]
                         for rule in self.parser.slots[slot_name][variation]["rules"]:
                             current_val = rule["slot-value-name"]
                             rule = rule["rule"]
-                            current_all_possibilities = self.generate_all_possibilities(rule)
+                            current_all_possibilities = \
+                                self.generate_all_possibilities(rule, current_arg_val)
                             if current_val not in synonyms:
                                 synonyms[current_val] = []
                             for possibility in current_all_possibilities:
                                 text = possibility["text"]
                                 if text not in synonyms[current_val]:
                                     synonyms[current_val].append(possibility["text"].strip())
-                    else:
-                        for rule in self.parser.slots[slot_name][variation]:
-                            current_val = rule["slot-value-name"]
-                            rule = rule["rule"]
-                            current_all_possibilities = self.generate_all_possibilities(rule)
-                            if current_val not in synonyms:
-                                synonyms[current_val] = []
-                            for possibility in current_all_possibilities:
-                                text = possibility["text"]
-                                if text not in synonyms[current_val]:
-                                    synonyms[current_val].append(possibility["text"].strip())
+                    else:  # aggregation of all variations
+                        pass
         return synonyms
 
 
