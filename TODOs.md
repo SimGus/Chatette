@@ -2,6 +2,7 @@
 
 - **TODO**: redo as OOP
 
+_ **TODO**: support `arg` inside synonym lists
 - **TODO**: add *casegen* inside declarations
 - **TODO**: add regex to rasa JSON file
 
