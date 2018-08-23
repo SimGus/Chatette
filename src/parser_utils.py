@@ -75,6 +75,8 @@ def is_unit_start(text):
     return (len(text) > 0 and is_start_unit_sym(text[0]))
 def is_choice(text):
     return (len(text) > 0 and text.startswith(CHOICE_OPEN_SYM))
+def is_word(text):
+    return not (text.startswith(CHOICE_OPEN_SYM) or is_unit_start(text))
 
 def get_unit_type(unit):
     if unit.startswith(UNIT_OPEN_SYM):
