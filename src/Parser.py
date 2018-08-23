@@ -24,13 +24,9 @@ class Parser(object):
         self.line_nb = 0
         self.line_counts_per_file = []
 
-        self.aliases = dict()  # for each alias, stores a list of list of units
-        self.slots = dict()  # for each slot, stores a list of value name and unit
-        self.intents = dict()  # for each intent, stores a list of list of slots
-
-        self.alias_definitions = []  # TODO redo as OOP
-        self.slots_definitions = []
-        self.intents_definitions = []
+        self.alias_definitions = dict()
+        self.slot_definitions = dict()
+        self.intent_definitions = dict()
 
         self.parsing_finished = False
 
@@ -493,6 +489,7 @@ class Parser(object):
                 rules.append(
                     WordRuleContent(remove_escapement(string), not no_leading_space)
                 )
+                continue
 
             unit_type = get_unit_type(string)
             if unit_type == Unit.word_group:
@@ -558,56 +555,10 @@ class Parser(object):
 
     def printDBG(self):
         print("\nAliases:")
-        for name in self.aliases:
-            current_alias_def = self.aliases[name]
-            if "rules" in current_alias_def:  # No variations
-                print("\t"+name+" (arg: "+str(current_alias_def["arg"])+"):")
-                rules = current_alias_def["rules"]
-                for rule in rules:
-                    print("\t\trule: "+str(rule))
-            else:  # Variations
-                print("\t"+name+":")
-                for variation in current_alias_def:
-                    print("\t\tvariation: "+variation+" (arg: "+str(current_alias_def[variation]["arg"])+"):")
-                    rules = current_alias_def[variation]["rules"]
-                    for rule in rules:
-                        print("\t\t\trule: "+str(rule))
 
         print("\nSlots:")
-        for name in self.slots:
-            current_slot_def = self.slots[name]
-            if "rules" in current_slot_def:
-                print("\t"+name+" (arg: "+str(current_slot_def["arg"])+"):")
-                rules = current_slot_def["rules"]
-                for rule in rules:
-                    print("\t\trule: "+str(rule))
-            else:
-                print("\t"+name+": ")
-                for variation in current_slot_def:
-                    print("\t\tvariation: "+variation+" (arg: "+str(current_slot_def[variation]["arg"]+"):"))
-                    rules = current_slot_def["rules"]
-                    for rule in current_slot_def[variation]:
-                        print("\t\t\trule: "+str(rule))
 
         print("\nIntents:")
-        for name in self.intents:
-            current_intent_def = self.intents[name]
-            if "nb-gen-asked" in current_intent_def:
-                    print("\t"+name+"(to generate "
-                        +str(current_intent_def["nb-gen-asked"])+"x, arg: "+
-                        str(current_intent_def["arg"])+"):")
-                    for rule in current_intent_def["rules"]:
-                        print("\t\trule: "+str(rule))
-            else:
-                print("\t"+name+":")
-                for variation in current_intent_def:
-                    current_variation = current_intent_def[variation]
-                    print("\t\tvariation: "+variation+
-                        " to generate "+str(current_variation["nb-gen-asked"])+
-                        "x (arg: "+current_variation["arg"]+"):")
-                    for rule in current_variation["rules"]:
-                        print("\t\t\trule: "+str(rule))
-
 
 
 if __name__ == "__main__":

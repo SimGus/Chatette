@@ -65,8 +65,11 @@ class UnitDefinition(object):
         self.rules = rules
 
         self.argument_identifier = arg
-        pattern_arg = r"(?<!\\)\$"+arg
-        self.arg_regex = re.compile(pattern_arg)
+        if arg is not None:
+            pattern_arg = r"(?<!\\)\$"+arg
+            self.arg_regex = re.compile(pattern_arg)
+        else:
+            self.arg_regex = None
 
         self.variations = dict()
 
