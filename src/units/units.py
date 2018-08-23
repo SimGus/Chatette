@@ -56,7 +56,7 @@ def may_get_leading_space(text):
     return (text != "" and not text.startswith(' '))
 
 
-class UnitDefinition():
+class UnitDefinition(object):
     """Superclass representing a unit definition."""
     def __init__(self, name, rules=[], arg=None, casegen=False):
         self.type = "unit"
@@ -166,7 +166,7 @@ class UnitDefinition():
         return generated_examples
 
 
-class RuleContent():
+class RuleContent(object):
     """
     Represents anything that can be inside a rule:
     for words and word groups, it generates as is;

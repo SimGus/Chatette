@@ -26,7 +26,7 @@ class WordRuleContent(RuleContent):
             if parser is not None:
                 raise RuntimeError("Internal error: tried to create a word "+
                     "with a pointer to the parser")
-            super(WordModel, self).__init__(name, leading_space=leading_space,
+            super(WordRuleContent, self).__init__(name, leading_space=leading_space,
                                             variation_name=None, arg_value=None,
                                             casegen=False, randgen=None,
                                             percentage_gen=None, parser=None)
@@ -72,7 +72,7 @@ class WordGroupRuleContent(RuleContent):
                 raise RuntimeError("Internal error: tried to create a word "+
                     "group with a pointer to the parser")
 
-            super(WordGroupModel, self).__init__(name,
+            super(WordGroupRuleContent, self).__init__(name,
                                                  leading_space=leading_space,
                                                  variation_name=None,
                                                  arg_value=None,

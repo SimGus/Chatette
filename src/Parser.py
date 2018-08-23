@@ -131,7 +131,8 @@ class Parser():
             if percentgen == "":
                 raise SyntaxError("Percentage for generation cannot be empty",
                     (self.in_file.name, self.line_nb, start_index, unit))
-            if match["casegen"] != '&':
+            if match["casegen"] is not None and match["casegen"] != '&':
+                print("casegen was "+str(match["casegen"]))
                 raise SyntaxError("Unable to understand the symbols you used "+
                     "for case generation (should be '&')",
                     (self.in_file.name, self.line_nb, start_index, unit))
