@@ -201,7 +201,7 @@ class Rule():
         Returns a string and its entities randomly generated from the rules the
         object represents. May return an empty string if `randgen` is enabled.
         """
-        pass
+        return EMPTY_GEN
 
     def generate_all(self):
         """
@@ -209,4 +209,4 @@ class Rule():
         from the rules this object represents. May include the empty string if
         it can be generated.
         """
-        pass
+        return EMPTY_GEN
