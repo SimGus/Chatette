@@ -47,6 +47,7 @@ class SlotRuleContent(RuleContent):
                                        .generate_random(self.variation_name, \
                                                         self.arg_value)
 
+        # TODO: manage entities here
         if self.casegen:
             generated_example["text"] = \
                 randomly_change_case(generated_example["text"])
