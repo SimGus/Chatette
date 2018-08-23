@@ -90,7 +90,7 @@ class UnitDefinition():
         """
         Generates one of your rule at random and
         returns the string generated and the entities inside it
-        """
+        """  # TODO I think there is a bug in here
         chosen_rule = None
         if variation_name is None:
             chosen_rule = self.rules[randint(0,len(self.rules)-1)]
