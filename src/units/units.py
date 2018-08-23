@@ -73,8 +73,9 @@ class UnitDefinition():
         self.casegen = casegen # IDEA: don't make the casegen variation agnostic
 
 
-    def add_rule(self, rule, variation_name=None):
-        # (Rule, str) -> ()
+    def add_rule(self, rule, variation_name=None, slot_val=None):
+        # (Rule, str, str) -> ()
+        rule.set_slot_value
         if variation_name is None:
             self.rules.append(rule)
         else:
@@ -86,8 +87,8 @@ class UnitDefinition():
             else:
                 self.variations[variation_name].append(rule)
             self.rules.append(rule)
-    def add_rules(self, rules, variation_name=None):
-        # ([Rule], str) -> ()
+    def add_rules(self, rules, variation_name=None, slot_val=None):
+        # ([Rule], str, str) -> ()
         if variation_name is None
             self.rules.extend(rules)
         else:
@@ -200,7 +201,6 @@ class Rule():
         Returns a string and its entities randomly generated from the rules the
         object represents. May return an empty string if `randgen` is enabled.
         """
-        # () -> {"text": str, "entities": [str]}
         pass
 
     def generate_all(self):
@@ -209,5 +209,4 @@ class Rule():
         from the rules this object represents. May include the empty string if
         it can be generated.
         """
-        # () -> [{"text": str, "entities": [str]}]
         pass
