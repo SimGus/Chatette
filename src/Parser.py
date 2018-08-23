@@ -385,8 +385,32 @@ class Parser():
                 }
 
 
+    #=========== Getters =================
     def has_parsed(self):
         return self.parsing_finished
+
+    def get_definition(self, def_name, type):
+        def_list = None
+        if type == Unit.alias:
+            def_list = self.aliases
+        elif type == Unit.slot:
+            def_list = self.slots
+        elif type == Unit.intent:
+            def_list = self.intents
+        else:
+            raise ValueError("Tried to get a definition with wrong type (expected"+
+                             "alias, slot or intent)")
+
+        if def_name not def_list:
+            type_str = "alias"
+            if type == Unit.slot:
+                type_str = "slot"
+            elif type == Unit.intent:
+                type_str = "intent"
+            raise ValueError("Couldn't find a definition for "+type_str+" '"+
+                              def_name+"'")
+
+        return def_list[def_name]
 
 
     #=========== Util methods =================
@@ -512,77 +536,6 @@ class Parser():
                 current += c
         if current != "":
             words_and_units_raw.append(current)
-
-        # escaped = False
-        # space_just_seen = False
-        # must_parse_alt_slot_val = False
-        # inside_choice = False
-        # for c in text:
-        #     # Manage character escapement
-        #     if escaped:
-        #         current += c
-        #         escaped = False
-        #         continue
-        #     if c == COMMENT_SYM:
-        #         break
-        #     # Manage choices
-        #     if inside_choice:
-        #         if c != CHOICE_CLOSE_SYM:
-        #             current += c
-        #         else:  # End of choice
-        #             inside_choice = False
-        #             words_and_units_raw.append(current+CHOICE_CLOSE_SYM)
-        #             current = ""
-        #         continue
-        #     # Manage spaces
-        #     if c.isspace():
-        #         space_just_seen = True
-        #         if current == "":
-        #             continue
-        #         elif not is_unit_start(current):  # Parsing a word
-        #             # New word
-        #             print("not unit start: "+current)
-        #             words_and_units_raw.append(current)
-        #             current = ""
-        #             continue
-        #         else:
-        #             current += c
-        #             continue
-        #     elif c == ESCAPE_SYM:
-        #         escaped = True
-        #         current += c
-        #     # End unit
-        #     elif c == UNIT_CLOSE_SYM:
-        #         current += c
-        #         words_and_units_raw.append(current)
-        #         current = ""
-        #     elif accept_alt_solt_val and c == ALT_SLOT_VALUE_NAME_SYM:
-        #         must_parse_alt_slot_val = True
-        #         break
-        #     # New choice
-        #     elif c == CHOICE_OPEN_SYM:
-        #         if current != "":
-        #             words_and_units_raw.append(current)
-        #         elif space_just_seen:
-        #             words_and_units_raw.append(' ')
-        #         current = CHOICE_OPEN_SYM
-        #         inside_choice = True
-        #     # New unit
-        #     elif is_start_unit_sym(c) or current == "":
-        #         if space_just_seen and current == "":
-        #             words_and_units_raw.append(' ')
-        #         elif current != "" and not is_start_unit_sym(current):
-        #             words_and_units_raw.append(current)
-        #             current = ""
-        #         current += c
-        #     # Any other character
-        #     else:
-        #         current += c
-        #
-        #     if not c.isspace():
-        #         space_just_seen = False
-        # if current != "":
-        #     words_and_units_raw.append(current)
 
         print(words_and_units_raw)
 
