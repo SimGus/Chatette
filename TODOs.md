@@ -7,12 +7,12 @@
 - TODO: generate all possible sentences when asked (tied to a maximum)
 - TODO: add casegen inside declarations
 - TODO: replace modifier regex by several one to allow for escaping special characters everywhere
-- **TODO**: fix overriding of rules
 
 ## Done
 
 - done: fix line number count for different files
 - done: add unicode support for all files (io.open autodetects encoding i think)
+- **done**: fix overriding of rules
 
 # Bugs
 
