@@ -14,7 +14,7 @@ class SlotDefinition(UnitDefinition):
     # Everything else is in the superclass
 
 
-class SlotRule(Rule):
+class SlotRuleContent(RuleContent):
     """
     This class represents a slot as it can be contained in a rule,
     with its modifiers.
@@ -29,7 +29,7 @@ class SlotRule(Rule):
     """
     def __init__(self, name, leading_space=False, variation_name=None, arg_value=None,
         casegen=False, randgen=None, percentage_gen=50, parser=None):
-            super(SlotRule, self).__init__(name, leading_space=leading_space,
+            super(SlotRuleContent, self).__init__(name, leading_space=leading_space,
                 variation_name=variation_name, arg_value=arg_value, casegen=casegen,
                 percentage_gen=percentage_gen, parser=parser)
             self.slot_value = None  # The generated slot value will be the generated text
@@ -79,7 +79,7 @@ class SlotRule(Rule):
         return generated_examples
 
 
-class DummySlotValRule(Rule):
+class DummySlotValRuleContent(RuleContent):
     """
     This class is supposed to be the first rule inside a list of rules that has
     a slot value. It won't generate anything ever.

@@ -74,7 +74,7 @@ class UnitDefinition():
 
 
     def add_rule(self, rule, variation_name=None, slot_val=None):
-        # (Rule, str, str) -> ()
+        # (RuleContent, str, str) -> ()
         rule.set_slot_value
         if variation_name is None:
             self.rules.append(rule)
@@ -88,7 +88,7 @@ class UnitDefinition():
                 self.variations[variation_name].append(rule)
             self.rules.append(rule)
     def add_rules(self, rules, variation_name=None, slot_val=None):
-        # ([Rule], str, str) -> ()
+        # ([RuleContent], str, str) -> ()
         if variation_name is None
             self.rules.extend(rules)
         else:
@@ -166,7 +166,7 @@ class UnitDefinition():
         return generated_examples
 
 
-class Rule():
+class RuleContent():
     """
     Represents anything that can be inside a rule:
     for words and word groups, it generates as is;

@@ -15,7 +15,7 @@ class AliasDefinition(UnitDefinition):
     # Everything else is in the superclass
 
 
-class AliasRule(Rule):
+class AliasRuleContent(RuleContent):
     """
     This class represents an alias as it can be contained in a rule,
     with its modifiers.
@@ -29,7 +29,7 @@ class AliasRule(Rule):
     """
     def __init__(self, name, leading_space=False, variation_name=None, arg_value=None,
         casegen=False, randgen=None, percentage_gen=50, parser=None):
-            super(AliasRule, self).__init__(name, leading_space=leading_space,
+            super(AliasRuleContent, self).__init__(name, leading_space=leading_space,
                 variation_name=variation_name, arg_value=arg_value, casegen=casegen,
                 percentage_gen=percentage_gen, parser=parser)
 

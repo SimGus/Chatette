@@ -36,7 +36,7 @@ class IntentDefinition(UnitDefinition):
     # Everything else is in the superclass
 
 
-class IntentRule(Rule):
+class IntentRuleContent(RuleContent):
     """
     This class represents an intent as it can be contained in a rule,
     with its modifiers.
@@ -50,7 +50,7 @@ class IntentRule(Rule):
     """
     def __init__(self, name, leading_space=False, variation_name=None, arg_value=None,
         casegen=False, randgen=None, percentage_gen=50, parser=None):
-            super(IntentRule, self).__init__(name, leading_space=leading_space,
+            super(IntentRuleContent, self).__init__(name, leading_space=leading_space,
                 variation_name=variation_name, arg_value=arg_value, casegen=casegen,
                 percentage_gen=percentage_gen, parser=parser)
 
