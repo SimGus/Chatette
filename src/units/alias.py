@@ -15,7 +15,7 @@ class AliasDefinition(UnitDefinition):
     # Everything else is in the superclass
 
 
-class AliasRule(UnitModel):
+class AliasRule(Rule):
     """
     This class represent an alias as it can be contained
     in a rule with its modifiers.

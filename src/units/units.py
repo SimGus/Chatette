@@ -135,7 +135,7 @@ class UnitDefinition():
         return generated_examples
 
 
-class TokenRule():
+class Rule():
     """
     Represents anything that can be inside a rule:
     for words and word groups, it generates as is;

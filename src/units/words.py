@@ -3,7 +3,7 @@ from units.units import *
 from random import randint
 
 
-class WordRule(TokenModel):
+class WordRule(Rule):
     """
     Represents a word inside a rule
     Accepted modifiers:
@@ -32,7 +32,7 @@ class WordRule(TokenModel):
         return generated_examples
 
 
-class WordGroupRule(TokenModel):
+class WordGroupRule(Rule):
     """
     Represents a word group token inside a rule
     Accepted modifiers:
