@@ -17,7 +17,7 @@ class AliasDefinition(UnitDefinition):
 
 class AliasRule(Rule):
     """
-    This class represent an alias as it can be contained
+    This class represents an alias as it can be contained
     in a rule with its modifiers.
     Accepted modifier:
         - leading-space: bool
