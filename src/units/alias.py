@@ -55,8 +55,7 @@ class AliasRule(UnitModel):
             generated_examples.append(EMPTY_GEN)
 
         generated_examples.extend(self.parser.get_definition(self.name, Unit.alias) \
-                                             .generate_all(self.arg_value)
-                                 )
+                                             .generate_all(self.arg_value))
 
         if self.leading_space:
             for (i, ex) in enumerate(generated_examples):
