@@ -13,7 +13,7 @@ from units.slot import SlotDefinition, SlotRuleContent, DummySlotValRuleContent
 from units.intent import IntentDefinition, IntentRuleContent
 
 
-class Parser():
+class Parser(object):
     """
     This class will parse the input file(s)
     and create an internal representation of its contents.

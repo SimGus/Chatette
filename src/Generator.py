@@ -50,7 +50,7 @@ def randomly_change_case(text):
                 return text[:i] + text[i].upper() + text[(i+1):]
 
 
-class Generator():
+class Generator(object):
     """
     Using the info parsed from the input file, this class will generate
     a Rasa NLU dataset and dump it in a JSON file.
