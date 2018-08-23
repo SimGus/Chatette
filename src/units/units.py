@@ -112,6 +112,13 @@ class UnitDefinition():
         if self.casegen:
             generated_example["text"] = randomly_change_case(generated_example["text"])
 
+        # Replace `arg` inside the generated sentence
+        if arg_value is not None and self.argument_identifier is not None:
+            generated_example["text"] = \
+                self.arg_regex.sub(arg_value, generated_example["text"])
+            generated_example[text] = \
+                generated_example["text"].replace("\$", "$")
+
         return generated_example
 
     def generate_all(self, arg_value=None):  # TODO should i manage variations in here?
@@ -140,7 +147,7 @@ class UnitDefinition():
         if arg_value is not None and self.argument_identifier is not None:
             for (i, ex) in enumerate(generated_examples):
                 ex["text"] = self.arg_regex.sub(arg_value, ex["text"])
-                generated_examples[i] = ex["text"].replace("\$", "$")
+                generated_examples[i]["text"] = ex["text"].replace("\$", "$")
         return generated_examples
 
 
