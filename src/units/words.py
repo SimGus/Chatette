@@ -1,4 +1,4 @@
-from Unit import *
+from units import *
 
 from random import randint
 
@@ -13,12 +13,12 @@ class WordRule(TokenModel):
         super(WordModel, self).__init__(word, leading_space=leading_space)
         self.word = word
 
-    def generate_random(self, arg_val=None):
+    def generate_random(self, arg_value=None):
         if self.leading_space:
             return ' '+self.word
         return self.word
 
-    def generate_all(self, arg_val=None):
+    def generate_all(self, arg_value=None):
         generated_examples = []
         if self.leading_space:
             generated_examples.append({
@@ -47,7 +47,7 @@ class WordGroupRule(TokenModel):
                 casegen=casegen, randgen=randgen, percentage_gen=percentage_gen)
             self.words = words_str
 
-    def generate_random(self, arg_val=None):
+    def generate_random(self):
         if self.randgen is not None and randint(0,99) >= self.percentgen:
             return EMPTY_GEN
 
@@ -63,7 +63,7 @@ class WordGroupRule(TokenModel):
             "entities": [],
         }
 
-    def generate_all(self, arg_val=None):
+    def generate_all(self):
         generated_examples = []
         if self.randgen is not None:
             generated_examples.append("")

@@ -45,7 +45,7 @@ pattern_nb_gen_asked = re.compile(r"\]\((?P<nbgen>[0-9]+)\)")
 pattern_comment = re.compile(r"(?<!\\);")
 
 
-class Unit(Enum):
+class Unit(Enum):  # TODO move this into unit defintions
     word = 1  # simple word, no other info needed
     word_group = 2  # word group with modifiers
     alias = 3  # alias with modifiers

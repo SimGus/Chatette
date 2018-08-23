@@ -2,6 +2,7 @@
 
 from random import randint
 
+from parser_utils import Unit
 from Generator import randomly_change_case
 
 EMPTY_GEN = {
@@ -101,7 +102,7 @@ class UnitDefinition():
             text = randomly_change_case(text)
         return (text, entities)
 
-    def generate_all(self, arg_val=None):
+    def generate_all(self, arg_value=None):
         pass  # TODO
 
 
@@ -120,11 +121,13 @@ class TokenRule():
                            of chances that this rule will generate something)
         - arg: str (represents the identifier of an argument inside the rule,
                     which will be replaced by a value given upon generation)
+        - variation-name: str (identifies which variation of the definition
+                               we are calling)
     """
-    def __init__(self, name, leading_space=False, variation=None, arg_value=None,
+    def __init__(self, name, leading_space=False, variation_name=None, arg_value=None,
         casegen=False, randgen=None, percentage_gen=50, parser=None):
             self.name = name
-            self.variation = variation
+            self.variation_name = variation_name
             self.arg_value = arg_value
 
             self.casegen = casegen
@@ -133,7 +136,7 @@ class TokenRule():
 
             self.parser = parser
 
-    def generate_random(self, arg_val=None):
+    def generate_random(self):
         """
         Returns a string and its entities randomly generated from the rules the
         object represents. May return an empty string if `randgen` is enabled.
@@ -141,7 +144,7 @@ class TokenRule():
         # () -> {"text": str, "entities": [str]}
         pass
 
-    def generate_all(self, arg_val=None):
+    def generate_all(self):
         """
         Returns a list of all the strings and entities that can be generated
         from the rules this object represents. May include the empty string if
