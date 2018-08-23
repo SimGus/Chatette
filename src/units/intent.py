@@ -1,4 +1,4 @@
-from units.units import *
+from .units import *
 from parser_utils import Unit
 
 

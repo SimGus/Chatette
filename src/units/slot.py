@@ -1,4 +1,4 @@
-from units import *
+from .units import *
 
 
 class SlotDefinition(UnitDefinition):
