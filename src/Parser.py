@@ -518,7 +518,7 @@ class Parser(object):
                         (self.in_file.name, self.line_nb, 0, name))
 
                 rules.append(
-                    WordGroupRuleContent(remove_escapement(string),
+                    WordGroupRuleContent(remove_escapement(name),
                                   not no_leading_space, casegen=casegen,
                                   randgen=randgen, percentage_gen=percentgen)
                 )

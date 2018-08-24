@@ -1,5 +1,5 @@
 %[&test](4)
-    this is a ~[test?rand] @[name?rand]
+    this is a [&word group with?] ~[test?rand] @[name?rand]
 
 ~[test]
   test
