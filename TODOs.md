@@ -10,6 +10,7 @@
 - **TODO**: use symbols from parser_utils everywhere needed
 - **TODO**: add support for synonyms in OOP rewriting
 - **TODO**: slot value should be the whole text and not only the first word if no value is given
+- **TODO**: remove escapement in slot values
 
 ## Done
 
