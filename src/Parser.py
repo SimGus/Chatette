@@ -156,7 +156,7 @@ class Parser(object):
         result = ChoiceContent(text, leading_space, casegen=casegen,
                                randgen=randgen, parser=self)
         for choice_str in splits:
-            if choice_str is not None and choice_str != "":  # TODO check the type of each choice?
+            if choice_str is not None and choice_str != "":
                 result.add_choice(self.split_contents(choice_str))
             else:
                 raise SyntaxError("Empty choice not allowed in choices",
@@ -567,7 +567,7 @@ class Parser(object):
                 )
 
         if accept_slot_val:
-            return (slot_val, rules)  # QUESTION: is it a problem to return two different things (defined by the arguments)?
+            return (slot_val, rules)
         return rules
 
 

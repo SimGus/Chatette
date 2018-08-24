@@ -145,7 +145,7 @@ class UnitDefinition(object):
         # print("generate random for "+self.name+": "+str(generated_example))
         return generated_example
 
-    def generate_all(self, arg_value=None):  # TODO should i manage variations in here?
+    def generate_all(self, arg_value=None):
         generated_examples = []
 
         for rule in self.rules:
