@@ -9,6 +9,7 @@
 - **TODO**: add support for synonyms in OOP rewriting
 - **TODO**: Rewrite docstrings formatted as explained in *PEP257*
 - **TODO**: use more list/dict comprehensions (faster than using `append`)
+- **TODO**: check that slot value in slots content has any use
 
 ## Done
 
