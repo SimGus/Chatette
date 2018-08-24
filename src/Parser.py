@@ -11,6 +11,7 @@ from units.words import WordRuleContent, WordGroupRuleContent
 from units.alias import AliasDefinition, AliasRuleContent
 from units.slot import SlotDefinition, SlotRuleContent, DummySlotValRuleContent
 from units.intent import IntentDefinition, IntentRuleContent
+from units.choice import ChoiceContent
 
 
 class Parser(object):
@@ -135,31 +136,36 @@ class Parser(object):
 
         return (name, arg, variation, randgen, percentgen, casegen)
 
-    def parse_choice(self, text):
-        """Parses a choice (as a str) and returns a list of inside str"""
-        # TODO this code is broken
-        no_leading_space = i == 0 or (i != 0 and words_and_units_raw[i-1] != ' ')
+    def parse_choice(self, text, leading_space):
+        """Parses a choice (as a str) and returns a `ChoiceContent`"""
+        # (str, bool) -> (ChoiceContent or None)
         choices = []
-        splits = re.split(r"(?<!\\)/", string[1:-1])  # TODO improve the regex here
+        splits = re.split(r"(?<!\\)/", text[1:-1])  # TODO improve the regex here
+
+        # Manage casegen
+        casegen = False
+        if len(splits[0]) >= 1 and splits[0][0] == CASE_GEN_SYM:  # choice begins with '&'
+            splits[0] = splits[0][1:]
+            casegen = True
         # Manage randgen
-        randgen = False
-        if len(splits[-1]) >= 1 and splits[-1][-1] == RAND_GEN_SYM:
-            if not (len(splits[-1]) >= 2 and splits[-1][-2] == ESCAPE_SYM):
+        randgen = None  # NOTE: randgen is supposed to be a name (may be empty)
+        if len(splits[-1]) >= 1 and splits[-1][-1] == RAND_GEN_SYM:  # choice ends with '?'
+            if not (len(splits[-1]) >= 2 and splits[-1][-2] == ESCAPE_SYM):  # This '?' is not escaped
                 splits[-1] = splits[-1][:-1]
-                randgen = True
+                randgen = ""
+
         for choice_str in splits:
             if choice_str is not None and choice_str != "":  # TODO check the type of each choice?
-                choices.append(self.split_contents(choice_str))
+                choices.extend(self.split_contents(choice_str))
             else:
                 raise SyntaxError("Empty choice not allowed in choices",
                     (self.in_file.name, self.line_nb, 0, name))
-        if choices != []:
-            words_and_units.append({
-                "type": Unit.choice,
-                "randgen": randgen,
-                "choices": choices,
-                "leading-space": not no_leading_space,
-            })
+        if choices == []:
+            return None
+        result = ChoiceContent(text, leading_space, casegen=casegen,
+                               randgen=randgen, parser=self)
+        result.add_choices(choices)
+        return result
 
     def parse_alias_definition(self, first_line):  # Lots of copy-paste in three methods
         """
@@ -411,6 +417,7 @@ class Parser(object):
         to be the slot value name for the splitted expression. In this case, the
         return value will be `(alt_name, list)`.
         """
+        # (str, bool) -> [RuleContent]
         # Split string in list of words and raw units (as strings)
         words_and_units_raw = []
         current = ""
@@ -523,10 +530,9 @@ class Parser(object):
                                   randgen=randgen, percentage_gen=percentgen)
                 )
             elif unit_type == Unit.choice:
-                choices = []
-                print("choices not yet supported")
-                continue
-                rules.append(self.parse_choice(string))
+                choice = self.parse_choice(string, not no_leading_space)
+                if choice is not None:
+                    rules.append(self.parse_choice(string, not no_leading_space))
             elif unit_type == Unit.alias:
                 (name, arg_value, variation, randgen, percentgen, casegen) = \
                     self.parse_unit(string)

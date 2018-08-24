@@ -251,6 +251,7 @@ class RuleContent(object):
 
 
     def printDBG(self, nb_indent):
+        # (int) -> ()
         indentation = nb_indent*'\t'
         print(indentation+self.name)
         print(indentation+"\tvariation name: "+str(self.variation_name))

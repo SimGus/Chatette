@@ -1,7 +1,2 @@
 %[&test](4)
-    this is a ~[test$the argument]
-    this is a ~[test$another argument]
-
-~[test$ARG]
-  test ($ARG)
-  TEST (\$ARG $ARG)
+    this is a {blue/red?} {&test/unicorn}
