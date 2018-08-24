@@ -44,6 +44,7 @@ _ **TODO**: support `arg` inside synonym lists
 
 - **BUG**: somewhere in the synonyms: Rasa NLU can't generate it without crashing (unhashable type 'dict' when looking for "value")
 - **BUG**: in synonyms, too many synonyms are added because variations are not taken into account at generation
+- **BUG**: when no DummySlotValRuleContent, synonyms keep entities
 
 ## To confirm
 
