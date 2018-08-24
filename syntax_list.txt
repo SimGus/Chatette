@@ -20,8 +20,9 @@
 [any#precision?id/20]
 [&name]             `name` will be generated starting with a lowercase or uppercase letter (50% chance) /!\ not usable in a top declaration
 
-... = slot_value    inside a slot declaration, when generating the string `...` for the slot, it will give it the value name `slot value` (everything that comes after `=` lstriped)
-                    if slot_value is "/", then the generated text will be the value
+... = slot_value    inside a slot declaration, when generating the string `...` for the slot, it will give it the value name `slot value` (everything that comes after `=` lstriped);
+                    if slot_value is "/", then the name of the first element in the rule will be taken as the slot value;
+                    if nothing is provided after the '=' or no '=' is written at all, the generated text will be taken as the slot value.
 
 |path/to/file       include the contents of that file inside the current file with the same indentation as this line (only as a top-level line)
 

@@ -6,43 +6,43 @@
 ;=============== Slots definitions =====================
 ;--------------- Production lines ---------------------
 @[production_line#long]
-  ~[GLO_SSP#long]
-  ~[LAL_HSM#long]
-  ~[LAL_SKP#long]
-  ~[EXT_SKP#long]
-  ~[LAL_PCK#long]
-  ~[EXT_PCK#long]
-  ~[LAL_CRM#long]
-  ~[EXT_CRM#long]
-  ~[LAL_PAC#long]
-  ~[LAL_SHP#long]
-  ~[STR_GLV#long]
-  ~[EXT_GLV#long]
-  ~[STR_PNT#long]
-  ~[EXT_PNT#long]
-  ~[STR_SLT#long]
-  ~[STR_PAC#long]
-  ~[STR_SHP#long]
-  ~[GLO_CLI#long]
+  ~[GLO_SSP#long] = /
+  ~[LAL_HSM#long] = /
+  ~[LAL_SKP#long] = /
+  ~[EXT_SKP#long] = /
+  ~[LAL_PCK#long] = /
+  ~[EXT_PCK#long] = /
+  ~[LAL_CRM#long] = /
+  ~[EXT_CRM#long] = /
+  ~[LAL_PAC#long] = /
+  ~[LAL_SHP#long] = /
+  ~[STR_GLV#long] = /
+  ~[EXT_GLV#long] = /
+  ~[STR_PNT#long] = /
+  ~[EXT_PNT#long] = /
+  ~[STR_SLT#long] = /
+  ~[STR_PAC#long] = /
+  ~[STR_SHP#long] = /
+  ~[GLO_CLI#long] = /
 @[production_line#acronym]
-  ~[GLO_SSP#acronym]
-  ~[LAL_HSM#acronym]
-  ~[LAL_SKP#acronym]
-  ~[EXT_SKP#acronym]
-  ~[LAL_PCK#acronym]
-  ~[EXT_PCK#acronym]
-  ~[LAL_CRM#acronym]
-  ~[EXT_CRM#acronym]
-  ~[LAL_PAC#acronym]
-  ~[LAL_SHP#acronym]
-  ~[STR_GLV#acronym]
-  ~[EXT_GLV#acronym]
-  ~[STR_PNT#acronym]
-  ~[EXT_PNT#acronym]
-  ~[STR_SLT#acronym]
-  ~[STR_PAC#acronym]
-  ~[STR_SHP#acronym]
-  ~[GLO_CLI#acronym]
+  ~[GLO_SSP#acronym] = /
+  ~[LAL_HSM#acronym] = /
+  ~[LAL_SKP#acronym] = /
+  ~[EXT_SKP#acronym] = /
+  ~[LAL_PCK#acronym] = /
+  ~[EXT_PCK#acronym] = /
+  ~[LAL_CRM#acronym] = /
+  ~[EXT_CRM#acronym] = /
+  ~[LAL_PAC#acronym] = /
+  ~[LAL_SHP#acronym] = /
+  ~[STR_GLV#acronym] = /
+  ~[EXT_GLV#acronym] = /
+  ~[STR_PNT#acronym] = /
+  ~[EXT_PNT#acronym] = /
+  ~[STR_SLT#acronym] = /
+  ~[STR_PAC#acronym] = /
+  ~[STR_SHP#acronym] = /
+  ~[GLO_CLI#acronym] = /
 
 @[line_number#long]
   {[number ]/\#}1 = 1

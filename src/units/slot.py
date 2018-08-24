@@ -79,7 +79,15 @@ class SlotDefinition(UnitDefinition):
         synonyms = dict()
         for rule in self.rules:
             slot_value = rule[0].name
-            if not isinstance(rule[0], DummySlotValRuleContent):  # No synonyms provided
+            if not isinstance(rule[0], DummySlotValRuleContent):
+                for token in rule:
+                    current_examples = token.generate_all()
+                    for example in current_examples:
+                        text = example["text"]
+                        if text in synonyms:
+                            synonyms[text].append(example)
+                        else:
+                            synonyms[text] = [example]
                 continue
 
             current_examples = []
@@ -97,6 +105,7 @@ class SlotDefinition(UnitDefinition):
                 synonyms[slot_value] = current_examples
             else:
                 synonyms[slot_value].extend(current_examples)
+
         return synonyms
 
     # Everything else is in the superclass
@@ -150,7 +159,7 @@ class SlotRuleContent(RuleContent):
             generated_example["text"] = ' '+generated_example["text"]
         return generated_example
 
-    def generate_all(self):
+    def generate_all(self, arg_value=None):
         generated_examples = []
         if self.randgen is not None:
             generated_examples.append(EMPTY_GEN())

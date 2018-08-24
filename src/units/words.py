@@ -43,7 +43,7 @@ class WordRuleContent(RuleContent):
             "entities": [],
         }
 
-    def generate_all(self, arg_value=None):
+    def generate_all(self):
         if self.leading_space:
             return [{
                 "text": ' '+self.word,

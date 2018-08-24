@@ -255,7 +255,11 @@ class Parser(object):
                 self.split_contents(stripped_line, accept_slot_val=True)
             if len(rule) <= 0:
                 return
-            if slot_val is not None and slot_val != '/':  # Otherwise take the whole generated example as a slot value
+            if slot_val is None or slot_val == '':
+                pass  # The generated text will be taken to be the slot value
+            elif slot_val == '/':
+                rule.insert(0, DummySlotValRuleContent(rule[0].name))
+            else:
                 rule.insert(0, DummySlotValRuleContent(slot_val))
             rules.append(rule)
 

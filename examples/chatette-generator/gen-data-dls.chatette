@@ -11,7 +11,7 @@
 
 ;=============== Intents definitions ======================
 ;-------------- Intermediate answers -----------------
-%[&inform_machine](130)
+%[&inform_machine](1);(130)
   {~[yes],/~[no],?} ~[i said?] @[production_line#long] @[line_number#long?][.?]
   {~[yes],/~[no],?} ~[i said?] @[production_line#acronym] @[line_number#short?][.?]
 %[&inform_machine_number](70)

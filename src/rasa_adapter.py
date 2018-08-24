@@ -28,4 +28,4 @@ def to_Rasa_format(intent_name, example):
 def to_Rasa_synonym_format(synonyms):
     # {str: [str]} -> [{"value": str, "synonyms": [str]}]
     return [{"value": slot_name, "synonyms": synonyms[slot_name]}
-            for slot_name in synonyms]
+            for slot_name in synonyms if len(synonyms[slot_name]) > 1]
