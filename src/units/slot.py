@@ -23,14 +23,16 @@ class SlotDefinition(UnitDefinition):
         # (str, str) -> {"text": str, "entities": [{"slot-name": str, "text": str, "value": str}]}
         chosen_rule = None
         if variation_name is None:
-            chosen_rule = self.rules[randint(0,len(self.rules)-1)]
+            chosen_rule = choose(self.rules)
         else:
             if variation_name not in self.variations:
                 raise SyntaxError("Couldn't find a variation named '"+
                     variation_name+"' for "+self.type+" '"+self.name+"'")
             max_index = len(self.variations[variation_name])-1
-            chosen_rule = \
-                self.variations[variation_name][randint(0, max_index)]
+            chosen_rule = choose(self.variations[variation_name])
+
+        if chosen_rule is None:  # No rule
+            return EMPTY_GEN()
 
         if len(chosen_rule) <= 0:
             raise ValueError("Tried to generate an entity using an empty rule "+

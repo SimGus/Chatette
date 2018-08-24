@@ -57,7 +57,7 @@ class ChoiceContent(RuleContent):
         if len(self.choices) <= 0:
             return EMPTY_GEN
 
-        choice = self.choices[randint(0,len(self.choices)-1)]
+        choice = choose(self.choices)
         generated_example = EMPTY_GEN()
         for token in choice:
             generated_token = token.generate_random(generated_randgens)
