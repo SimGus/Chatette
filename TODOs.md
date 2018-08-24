@@ -1,6 +1,5 @@
 # TODOs
 
-- **TODO**: redo as OOP
 
 _ **TODO**: support `arg` inside synonym lists
 - **TODO**: add *casegen* inside declarations
@@ -39,14 +38,11 @@ _ **TODO**: support `arg` inside synonym lists
 - **done**: give a default nb of indent for `printDBG` methods
 - **done**: add support for synonyms in OOP rewriting
 - **done**: check that slot value in slots content has any use (removed)
+- **done**: redo as OOP
 
 # Bugs
 
-- **BUG**: Fix bug with ']' generated in word groups within choices (`{[test ~[this]]/[and ~[this]]}`)
-
 ## To confirm
-
-- There seems to be a bug with choices not appearing even when they have to (rarely happens)
 
 ## Fixed bugs
 
@@ -58,6 +54,7 @@ _ **TODO**: support `arg` inside synonym lists
 - **fixed**: choice flattens its rules
 - **fixed**: double spaces sometimes
 - **fixed**: Comment lines inside definitions aren't truly ignored
+- **fixed**: Fix bug with ']' generated in word groups within choices (`{[test ~[this]]/[and ~[this]]}`)
 
 # Ideas
 
