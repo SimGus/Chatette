@@ -9,10 +9,10 @@
   hello
   hey
 ~[question mark]
-  \?
-  \?\?
-  \?\?\?
-  \?!
+  [ ?]\?
+  [ ?]\?\?
+  [ ?]\?\?\?
+  [ ?]\?!
 
 ~[is#no elision]
   is
@@ -30,6 +30,32 @@
   're
   'll be
   'd be
+~[auxiliary#no elision]
+  would
+  will
+
+~[yes]
+  yes
+  ok
+  okay
+  ;alright
+~[no]
+  no
+
+~[agree]
+  yes ~[that's it?]
+  ~[that's it]
+  exactly
+~[that's it]
+  that is {it/correct/right}
+  that's {it/correct/right}
+
+~[disagree]
+  no ~[that's wrong?]
+  ~[that's wrong]
+~[that's wrong]
+  that is {not it/wrong/incorrect}
+  that's {not it wrong/incorrect}
 
 ;------------- Question utilities -----------------
 ~[what is#singular]
@@ -38,6 +64,22 @@
 ~[what is#plural]
   what ~[are#no elision]
   what~[are#elision]
+
+~[why]
+  why
+  for {what/which} reason
+
+~[what caused]
+  what caused
+  what causes
+  what would cause
+  what'd cause
+  what will cause
+  what'll cause
+
+~[which]
+  what
+  which
 
 ~[ask]
   ~[could you?] ~[tell me#infinitive]
@@ -57,6 +99,18 @@
   showing me
   reporting
 
+;------------- Inform utilities --------------
+~[i]
+  i
+  I
+~[i said]
+  ~[i] said
+  ;~[i] {am/was} saying
+  it was
+  it is
+  it's
+
+
 ;------------- Other utilities ---------------
 ~[named#singular]
   {which is/that is?} named
@@ -71,12 +125,47 @@
   {which are/that are?} labelled
   whose name is
 
+~[such that]
+  that
+  which
+~[such that are]
+  ~[such that] are
+  ~[such that]'re
+  ~[such that] will be
+  ~[such that]'ll be
+  ~[such that] would be
+  ~[such that]'d be
+
 ;------------- Planning ---------------------
 ~[planning]
   planning
   schedule
 ~[planning of]
   ~[planning] {of/for}
+
+~[fully]
+  fully
+  entirely
+  completely
+~[fully planned]
+  ~[fully] planned
+
+~[not planned]
+  not planned
+
+~[planned at$PERCENT]
+  planned at [only?] $PERCENT\%
+  planned up to [only?] $PERCENT\%
+  ~[completed] {at/up to} [only?] $PERCENT\%
+
+~[finished]
+  finished
+  ;over
+  done
+  completed
+~[completed]
+  done
+  completed
 
 ;------------ Production lines ----------------
 ~[production line]
@@ -100,5 +189,44 @@
 ~[line name#shipping]
   shipping
 ~[line name#client]
+  client
 
 |prod-lines-LAL.chatette
+
+;-------------- Orders --------------------
+~[order#singular]
+  order
+  command
+~[order#plural]
+  orders
+  commands
+
+;------------- Time ------------------------
+~[late]
+  ~[finished?] [too?] late
+  ~[finished?] behind schedule
+  not on time
+  [long-?]overdue
+  [long-?]delayed
+  ;[long-?]behindhand
+  ;[long-?]belated
+  ;tardy
+
+~[on time]
+  ~[finished?] on time
+  ~[finished?] in [good?] time
+  ~[finished?] {on/to} schedule
+
+;----------- Utilization -------------------
+~[fully used]
+  ~[fully] used
+  ~[fully] utilized
+~[not used]
+  not used
+  not utilized
+
+~[used at$PERCENT]
+  {used/utilized} {at/up to} [only?] $PERCENT\%
+
+~[utilization$PERCENT]
+  [up to?] [only?] $PERCENT[\%?]

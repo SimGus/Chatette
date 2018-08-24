@@ -4,8 +4,8 @@
 ; !!! Client: La Louvière !!!
 
 ~[client factory name]
-  [&La] [&Louvière]
   [&La] [&Louviere]
+;[&La] [&Louvière]  ; Non-ascii characters may be a problem with python 2
 
 ~[partner factory name]
   [&Strasbourg]

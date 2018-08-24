@@ -3,76 +3,137 @@
 ; Contains the definitions of the production lines
 ; !!! Client: La Louvière !!!
 
-~[GLO_SSP]
-    [the?] ~[production line?line] ~[named?line] {GLO_SSP/glo_ssp}
-    [the?decorator] {GLO_SSP/glo_ssp} ~[production line?decorator]
-~[LAL_HSM]
-    [the?] ~[production line?line] ~[named?line] {LAL_HSM/lal_hsm}
-    [the?decorator] {LAL_HSM/lal_hsm} ~[production line?decorator]
+~[prodline$ACRONYM]
+  ~[production line] $ACRONYM
+  the ~[production line] ~[named] $ACRONYM
+  the $ACRONYM ~[production line]
+
+~[GLO_SSP#long]
+    ~[prodline$GLO_SSP]
+    ~[prodline$glo_ssp]
+~[LAL_HSM#long]
+    ~[prodline$LAL_HSM]
+    ~[prodline$lal_hsm]
     {our/the [internal?]} ~[line name#hot strip mill] ~[production line?]
     the ~[line name#hot strip mill] ~[production line?] of ~[client factory name]
-~[LAL_SKP]
-    [the?] ~[production line?line] ~[named?line] {LAL_SKP/lal_skp}
-    [the?decorator] {LAL_SKP/lal_skp} ~[production line?decorator]
-~[EXT_SKP]
-    [the?] ~[production line?line] ~[named?line] {EXT_SKP/ext_skp}
-    [the?decorator] {EXT_SKP/ext_skp} ~[production line?decorator]
-~[LAL_PCK]
-    [the?] ~[production line?line] ~[named?line] {LAL_PCK/lal_pck}
-    [the?decorator] {LAL_PCK/lal_pck} ~[production line?decorator]
+~[LAL_SKP#long]
+    ~[prodline$LAL_SKP]
+    ~[prodline$lal_skp]
+~[EXT_SKP#long]
+    ~[prodline$EXT_SKP]
+    ~[prodline$ext_skp]
+~[LAL_PCK#long]
+    ~[prodline$LAL_PCK]
+    ~[prodline$lal_pck]
     {our/the internal} ~[line name#pickling] ~[production line?]
     the ~[line name#pickling] ~[production line?] of ~[client factory name]
-~[EXT_PCK]
-    [the?] ~[production line?line] ~[named?line] {EXT_PCK/ext_pck}
-    [the?decorator] {EXT_PCK/ext_pck} ~[production line?decorator]
+~[EXT_PCK#long]
+    ~[prodline$EXT_PCK]
+    ~[prodline$ext_pck]
     the external ~[line name#pickling] ~[production line?]
-~[LAL_CRM]
-    [the?] ~[production line?line] ~[named?line] {LAL_CRM/lal_crm}
-    [the?decorator] {LAL_CRM/lal_crm} ~[production line?decorator]
+~[LAL_CRM#long]
+    ~[prodline$LAL_CRM]
+    ~[prodline$lal_crm]
     {our/the internal} ~[line name#cold rolling mill] ~[production line?]
     the ~[line name#cold rolling mill] ~[production line?] of ~[client factory name]
-~[EXT_CRM]
-    [the?] ~[production line?line] ~[named?line] {EXT_CRM/ext_crm}
-    [the?decorator] {EXT_CRM/ext_crm} ~[production line?decorator]
+~[EXT_CRM#long]
+    ~[prodline$EXT_CRM]
+    ~[prodline$ext_crm]
     the external ~[line name#cold rolling mill] ~[production line?]
-~[LAL_PAC]
-    [the?] ~[production line?line] ~[named?line] {LAL_PAC/lal_pac}
-    [the?decorator] {LAL_PAC/lal_pac} ~[production line?decorator]
+~[LAL_PAC#long]
+    ~[prodline$LAL_PAC]
+    ~[prodline$lal_pac]
     {our/the internal} ~[line name#packing] ~[production line?]
     the ~[line name#packing] ~[production line?] of ~[client factory name]
-~[LAL_SHP]
-    [the?] ~[production line?line] ~[named?line] {LAL_SHP/lal_shp}
-    [the?decorator] {LAL_SHP/lal_shp} ~[production line?decorator]
+~[LAL_SHP#long]
+    ~[prodline$LAL_SHP]
+    ~[prodline$lal_shp]
     {our/the internal} ~[line name#shipping] ~[production line?]
     the ~[line name#shipping] ~[production line?] of ~[client factory name]
-~[STR_GLV]
-    [the?] ~[production line?line] ~[named?line] {STR_GLV/str_glv}
-    [the?decorator] {STR_GLV/str_glv} ~[production line?decorator]
+~[STR_GLV#long]
+    ~[prodline$STR_GLV]
+    ~[prodline$str_glv]
     the ~[line name#galvanization] ~[production line?]
-~[EXT_GLV]
-    [the?] ~[production line?line] ~[named?line] {EXT_GLV/ext_glv}
-    [the?decorator] {EXT_GLV/ext_glv} ~[production line?decorator]
+~[EXT_GLV#long]
+    ~[prodline$EXT_GLV]
+    ~[prodline$ext_glv]
     the external ~[line name#galvanization] ~[production line?]
-~[STR_PNT]
-    [the?] ~[production line?line] ~[named?line] {STR_PNT/str_pnt}
-    [the?decorator] {STR_PNT/str_pnt} ~[production line?decorator]
+~[STR_PNT#long]
+    ~[prodline$STR_PNT]
+    ~[prodline$str_pnt]
     the ~[line name#paint] ~[production line?] of ~[partner factory name]
-~[EXT_PNT]
-    [the?] ~[production line?line] ~[named?line] {EXT_PNT/ext_pnt}
-    [the?decorator] {EXT_PNT/ext_pnt} ~[production line?decorator]
-~[STR_SLT]
-    [the?] ~[production line?line] ~[named?line] {STR_SLT/str_slt}
-    [the?decorator] {STR_SLT/str_slt} ~[production line?decorator]
+~[EXT_PNT#long]
+    ~[prodline$EXT_PNT]
+    ~[prodline$ext_pnt]
+~[STR_SLT#long]
+    ~[prodline$STR_SLT]
+    ~[prodline$str_slt]
     the ~[line name#slitting] ~[production line?] of ~[partner factory name]
-~[STR_PAC]
-    [the?] ~[production line?line] ~[named?line] {STR_PAC/str_pac}
-    [the?decorator] {STR_PAC/str_pac} ~[production line?decorator]
+~[STR_PAC#long]
+    ~[prodline$STR_PAC]
+    ~[prodline$str_pac]
     the ~[line name#packing] ~[production line?] of ~[partner factory name]
-~[STR_SHP]
-    [the?] ~[production line?line] ~[named?line] {STR_SHP/str_shp}
-    [the?decorator] {STR_SHP/str_shp} ~[production line?decorator]
+~[STR_SHP#long]
+    ~[prodline$STR_SHP]
+    ~[prodline$str_shp]
     the ~[line name#shipping] ~[production line?] of ~[partner factory name]
-~[GLO_CLI]
-    [the?] ~[production line?line] ~[named?line] {GLO_CLI/glo_cli}
-    [the?decorator] {GLO_CLI/glo_cli} ~[production line?decorator]
+~[GLO_CLI#long]
+    ~[prodline$GLO_CLI]
+    ~[prodline$glo_cli]
     the ~[line name#client] ~[production line]
+
+
+~[GLO_SSP#acronym]
+  GLO_SSP
+  glo_ssp
+~[LAL_HSM#acronym]
+  LAL_HSM
+  lal_hsm
+~[LAL_SKP#acronym]
+  LAL_SKP
+  lal_skp
+~[EXT_SKP#acronym]
+  EXT_SKP
+  ext_skp
+~[LAL_PCK#acronym]
+  LAL_PCK
+  lal_pck
+~[EXT_PCK#acronym]
+  EXT_PCK
+  ext_pck
+~[LAL_CRM#acronym]
+  LAL_CRM
+  lal_crm
+~[EXT_CRM#acronym]
+  EXT_CRM
+  ext_crm
+~[LAL_PAC#acronym]
+  LAL_PAC
+  lal_pac
+~[LAL_SHP#acronym]
+  LAL_SHP
+  lal_shp
+~[STR_GLV#acronym]
+  STR_GLV
+  str_glv
+~[EXT_GLV#acronym]
+  EXT_GLV
+  ext_glv
+~[STR_PNT#acronym]
+  STR_PNT
+  str_pnt
+~[EXT_PNT#acronym]
+  EXT_PNT
+  ext_pnt
+~[STR_SLT#acronym]
+  STR_SLT
+  str_slt
+~[STR_PAC#acronym]
+  STR_PAC
+  str_pac
+~[STR_SHP#acronym]
+  STR_SHP
+  str_shp
+~[GLO_CLI#acronym]
+  GLO_CLI
+  glo_cli
