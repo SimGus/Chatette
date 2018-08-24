@@ -3,14 +3,10 @@
 - TODO: remake as OOP
 - **TODO**: add a 'choose' function utiliry
 - TODO: add argument support
-- TODO: make arguments several layers deep?
 - TODO: don't generate twice the same sentence
 - TODO: generate all possible sentences when asked (tied to a maximum)
-- TODO: add casegen inside declarations
 - TODO: replace modifier regex by several one to allow for escaping special characters everywhere
 - **TODO**: use symbols from parser_utils everywhere needed
-- **TODO**: maybe add more modifiers to choices?
-- **TODO**: use overrides pip package (no, doesn't work in python 2)
 - **TODO**: add support for synonyms in OOP rewriting
 
 ## Done
@@ -19,6 +15,7 @@
 - done: add unicode support for all files (io.open autodetects encoding i think)
 - **done**: fix overriding of rules
 - **done**: add entities when generating slot in OOP rewriting
+- **done**: add casegen inside declarations
 - **done**: add choice support in OOP rewriting
 
 # Bugs
@@ -26,10 +23,19 @@
 - BUG: There seems to be a bug with choices not appearing even when they have to (rarely happens)
 - fixed?: Fix bug with ']' generated in some rules
 - BUG: can't parse when a content line is commented out
-- **BUG**: choice ending with ',' always generates it but not for all choices
 
 ## Fixed bugs
 
 - fixed: No case changing when asked with uppercase feeding
 - fixed: escapment not currently working
 - fixed: slots starting with a word crash the script
+- **fixed**: choice flattens its rules
+
+# Ideas
+
+- **IDEA**: make arguments several layers deep?
+- **IDEA**: maybe add more modifiers to choices?
+
+## Rejected
+
+- **rejected**: use overrides pip package (no, doesn't work in python 2)
