@@ -192,7 +192,7 @@ class UnitDefinition(object):
 
 class RuleContent(object):
     """
-    Represents anything that can be inside a rule:
+    Superclass represents anything that can be inside a rule:
     for words and word groups, it generates as is;
     for units, it is a link to a definition that can be generated.
     The rule also contains modifier used during the generation, such as:
