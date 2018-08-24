@@ -1,6 +1,6 @@
 from .units import *
-
 from parser_utils import remove_escapement
+from utils import choose
 
 
 class SlotDefinition(UnitDefinition):
@@ -70,6 +70,41 @@ class SlotDefinition(UnitDefinition):
 
         return generated_example
 
+
+    def get_synonyms_dict(self):
+        """
+        Makes a dict of the synonyms for entities
+        based on the slot values they are assigned.
+        """
+        # () -> ({str: [str]})
+        synonyms = dict()
+        for rule in self.rules:
+            slot_value = rule[0].name
+            if not isinstance(rule[0], DummySlotValRuleContent):  # No synonyms provided
+                continue
+
+            current_examples = []
+            for token in rule:
+                print("generating "+str(token.name))
+                current_token_all_generations = token.generate_all()
+                print("generates "+str(current_token_all_generations))
+                if len(current_examples) <= 0:
+                    current_examples = [gen["text"]
+                                       for gen in current_token_all_generations]
+                else:
+                    for gen in current_token_all_generations:
+                        print(gen)
+                        print("text"+str(gen["text"]))
+                    current_examples = [example_part+gen["text"]
+                                        for example_part in current_examples
+                                        for gen in current_token_all_generations]
+
+            if slot_value not in synonyms:
+                synonyms[slot_value] = current_examples
+            else:
+                synonyms[slot_value].extend(current_examples)
+        return synonyms
+
     # Everything else is in the superclass
 
 
@@ -93,7 +128,7 @@ class SlotRuleContent(RuleContent):
                 randgen=randgen, percentage_gen=percentage_gen, parser=parser)
             self.slot_value = None  # The generated slot value will be the generated text
 
-    def set_slot_value(self, slot_value):
+    def set_slot_value(self, slot_value):  # QUESTION: has this any use? cf. DummySlotValRuleContent
         # str -> ()
         self.slot_value = slot_value
 
@@ -128,7 +163,7 @@ class SlotRuleContent(RuleContent):
 
     def generate_all(self):
         generated_examples = []
-        if randgen is not None:
+        if self.randgen is not None:
             generated_examples.append(EMPTY_GEN())
 
         generated_examples.extend(self.parser.get_definition(self.name, Unit.slot) \
@@ -136,11 +171,11 @@ class SlotRuleContent(RuleContent):
 
         if self.leading_space:
             for (i, ex) in enumerate(generated_examples):
-                if may_get_leading_space(ex):
+                if may_get_leading_space(ex["text"]):
                     generated_examples[i]["text"] = ' '+ex["text"]
         if self.casegen:
             tmp_buffer = []
-            for ex in generated_examples:
+            for ex in generated_examples:  # TODO: list comprehension
                 tmp.buffer.append({
                     "text": with_leading_lower(ex["text"]),
                     "entities": ex["entities"],
@@ -149,6 +184,7 @@ class SlotRuleContent(RuleContent):
                     "text": with_leading_upper(ex["text"]),
                     "entities": ex["entities"],
                 })
+            generated_examples = tmp_buffer
         return generated_examples
 
 
@@ -156,10 +192,12 @@ class DummySlotValRuleContent(RuleContent):
     """
     This class is supposed to be the first rule inside a list of rules that has
     a slot value. It won't generate anything ever.
+    `self.name` and `self.slot_value` map to the slot value it represents.
     """
     def __init__(self, name, leading_space=False, variation_name=None, arg_value=None,
         casegen=False, randgen=None, percentage_gen=None, parser=None):
             self.name = name
+            self.slot_value = name
             if leading_space or variation_name is not None or \
                 arg_value is not None or casegen or randgen is not None or \
                 percentage_gen is not None or parser is not None:
@@ -170,7 +208,7 @@ class DummySlotValRuleContent(RuleContent):
         return EMPTY_GEN()
 
     def generate_all(self):
-        return EMPTY_GEN()
+        return [EMPTY_GEN()]
 
 
     def printDBG(self, nb_indent=0):

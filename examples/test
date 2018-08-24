@@ -1,25 +1,10 @@
-%[test](20)
-  {~[&yes],/~[&no],?} ~[i said?] @[slot]
-
-~[yes]
-  yes
-  ;
-  ;
-  ;
-  ;
-  ;
-~[no]
-  no
-  ;
-  ;
-  ;
-  ;
-
-~[i]
-  i
-  I
-~[i said]
-  ~[i] said
+%[test](1)
+  @[slot]
 
 @[slot]
-  slot val
+  slot val 1 = 1
+  slot val 2 = 1
+  slot val 3 = 1
+  test
+  test2 = test
+  nothing

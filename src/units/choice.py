@@ -3,6 +3,7 @@
 from random import randint
 
 from .units import *
+from utils import choose
 
 
 class ChoiceContent(RuleContent):
@@ -78,11 +79,24 @@ class ChoiceContent(RuleContent):
             generated_examples.append(EMPTY_GEN())
 
         for choice in self.choices:
-            generated_examples.extend(choice.generate_all())
+            current_examples = []
+            for token in choice:
+                current_token_all_generations = token.generate_all()
+                if len(current_examples) <= 0:
+                    current_examples = [gen
+                                        for gen in current_token_all_generations]
+                else:
+                    current_examples = [{
+                                            "text": partial_example["text"]+gen["text"],
+                                            "entities": partial_example["entities"]+gen["entities"],
+                                        }
+                                        for partial_example in current_examples
+                                        for gen in current_token_all_generations]
+            generated_examples.extend(current_examples)
 
         if self.leading_space:
             for (i, ex) in enumerate(generated_examples):
-                if may_get_leading_space(ex):
+                if may_get_leading_space(ex["text"]):
                     generated_examples[i]["text"] = ' '+ex["text"]
         if self.casegen:
             tmp_buffer = []

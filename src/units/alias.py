@@ -61,10 +61,9 @@ class AliasRuleContent(RuleContent):
             generated_example["text"] = ' '+generated_example["text"]
         return generated_example
 
-
     def generate_all(self):
         generated_examples = []
-        if randgen is not None:
+        if self.randgen is not None:
             generated_examples.append(EMPTY_GEN())
 
         generated_examples.extend(self.parser.get_definition(self.name, Unit.alias) \
@@ -72,11 +71,11 @@ class AliasRuleContent(RuleContent):
 
         if self.leading_space:
             for (i, ex) in enumerate(generated_examples):
-                if may_get_leading_space(ex):
+                if may_get_leading_space(ex["text"]):
                     generated_examples[i]["text"] = ' '+ex["text"]
         if self.casegen:
             tmp_buffer = []
-            for ex in generated_examples:
+            for ex in generated_examples:  # TODO: list comprehension
                 tmp.buffer.append({
                     "text": with_leading_lower(ex["text"]),
                     "entities": ex["entities"],
@@ -85,4 +84,5 @@ class AliasRuleContent(RuleContent):
                     "text": with_leading_upper(ex["text"]),
                     "entities": ex["entities"],
                 })
+            generated_examples = tmp_buffer
         return generated_examples

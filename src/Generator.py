@@ -6,7 +6,7 @@ import json
 
 from utils import *
 from parser_utils import Unit
-from rasa_adapter import to_Rasa_format
+from rasa_adapter import *
 
 
 class Generator(object):
@@ -36,12 +36,30 @@ class Generator(object):
         self.write_JSON()
 
 
+    def get_entities_synonyms(self):
+        """
+        Makes a dict of all the synonyms of entities
+        based on the slot value they are assigned.
+        """
+        synonyms = dict()
+        for slot_definition in self.parser.slot_definitions:
+            current_synonyms_dict = \
+                self.parser.slot_definitions[slot_definition].get_synonyms_dict()
+            for slot_value in current_synonyms_dict:
+                if slot_value not in synonyms:
+                    synonyms[slot_value] = current_synonyms_dict[slot_value]
+                else:
+                    synonyms[slot_value].extend(current_synonyms_dict[slot_value])
+        return synonyms
+
+
     def write_JSON(self):
         raw_json_data = {
             "rasa_nlu_data": {
                 "common_examples": self.generated_examples,
                 "regex_features" : [],
-                "entity_synonyms": []
+                "entity_synonyms":
+                    to_Rasa_synonym_format(self.get_entities_synonyms()),
             }
         }
         json_data = cast_to_unicode(raw_json_data)

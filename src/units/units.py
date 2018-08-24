@@ -4,7 +4,7 @@ from random import randint
 import re
 from copy import deepcopy
 
-from parser_utils import Unit
+from parser_utils import Unit, choose
 
 def EMPTY_GEN():
     return deepcopy({  # NOTE: deepcopy is needed to avoid rewriting on old data
@@ -249,7 +249,7 @@ class RuleContent(object):
         from the rules this object represents. May include the empty string if
         it can be generated.
         """
-        return EMPTY_GEN()
+        return [EMPTY_GEN()]
 
 
     def printDBG(self, nb_indent=0):

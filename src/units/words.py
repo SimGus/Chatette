@@ -1,6 +1,6 @@
-from .units import *
-
 from random import randint
+
+from .units import *
 
 
 class WordRuleContent(RuleContent):
@@ -44,17 +44,15 @@ class WordRuleContent(RuleContent):
         }
 
     def generate_all(self, arg_value=None):
-        generated_examples = []
         if self.leading_space:
-            generated_examples.append({
+            return [{
                 "text": ' '+self.word,
                 "entities": [],
-            })
-        generated_examples.append({
+            }]
+        return [{
             "text": self.word,
             "entities": [],
-        })
-        return generated_examples
+        }]
 
 
 class WordGroupRuleContent(RuleContent):

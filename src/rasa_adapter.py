@@ -23,3 +23,9 @@ def to_Rasa_format(intent_name, example):
         "intent": intent_name,
         "entities": rasa_entities,
     }
+
+
+def to_Rasa_synonym_format(synonyms):
+    # {str: [str]} -> [{"value": str, "synonyms": [str]}]
+    return [{"value": slot_name, "synonyms": synonyms[slot_name]}
+            for slot_name in synonyms]
