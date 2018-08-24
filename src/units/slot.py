@@ -61,7 +61,6 @@ class SlotDefinition(UnitDefinition):
         slot_value = chosen_rule[0].name
         if not isinstance(chosen_rule[0], DummySlotValRuleContent):
             slot_value = generated_example["text"][:]
-        slot_value = remove_escapement(slot_value)
         generated_example["entities"].append({
             "slot-name": self.name,
             "text": generated_example["text"][:],
@@ -196,8 +195,8 @@ class DummySlotValRuleContent(RuleContent):
     """
     def __init__(self, name, leading_space=False, variation_name=None, arg_value=None,
         casegen=False, randgen=None, percentage_gen=None, parser=None):
-            self.name = name
-            self.slot_value = name
+            self.name = remove_escapement(name)
+            self.slot_value = self.name
             if leading_space or variation_name is not None or \
                 arg_value is not None or casegen or randgen is not None or \
                 percentage_gen is not None or parser is not None:
