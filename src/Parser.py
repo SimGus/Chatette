@@ -296,7 +296,11 @@ class Parser(object):
 
         nb_examples_asked = None
         try:
-            nb_examples_asked = int(find_nb_examples_asked(first_line))
+            nb_examples_asked_str = find_nb_examples_asked(first_line)
+            if nb_examples_asked_str is not None:
+                nb_examples_asked = int(nb_examples_asked_str)
+            else:
+                nb_examples_asked = None
         except ValueError:
             raise SyntaxError("Number of examples asked is not a number",
                     (self.in_file.name, self.line_nb, 0, first_line))
