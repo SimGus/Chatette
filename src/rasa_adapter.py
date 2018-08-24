@@ -2,6 +2,13 @@
 
 from utils import *
 
+def find_entity(text, entity_str):
+    """Finds `entity_str` in `text` ignoring the case of the first non-space"""
+    index = text.find(entity_str)
+    if index == -1:
+        return text.lower().find(entity_str.lower())
+    return index
+
 
 def to_Rasa_format(intent_name, example):
     # ({"text": str, "entities": [{"slot-name": str, "text": str, "value": str}]}) -> ({"text": str, "intent": str, "entities": [...]})
@@ -10,9 +17,8 @@ def to_Rasa_format(intent_name, example):
 
     rasa_entities = []
     for entity in entities:
-        first_index = example_str.find(entity["text"].strip())  # Always finds something
-        if first_index == -1:
-            print("couldn't find '"+entity["text"].strip()+"' in '"+example_str+"'")
+        entity["text"] = entity["text"].strip()
+        first_index = find_entity(example_str, entity["text"])  # Always finds something
         rasa_entities.append({
             "value": entity["value"],
             "entity": entity["slot-name"],

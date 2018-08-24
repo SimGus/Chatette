@@ -42,7 +42,6 @@ _ **TODO**: support `arg` inside synonym lists
 
 # Bugs
 
-- **BUG**: when changing case, some entities cannot be found any longer
 
 ## To confirm
 
@@ -58,6 +57,7 @@ _ **TODO**: support `arg` inside synonym lists
 - **fixed**: comment lines inside definitions aren't truly ignored
 - **fixed**: fix bug with ']' generated in word groups within choices (`{[test ~[this]]/[and ~[this]]}`)
 - **fixed**: some slot values are not present in the synonym list even if they have synonyms
+- **fixed**: when changing case, some entities cannot be found any longer
 
 # Ideas
 
