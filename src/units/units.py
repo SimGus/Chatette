@@ -111,7 +111,7 @@ class UnitDefinition(object):
         Generates one of your rule at random and
         returns the string generated and the entities inside it as a dict.
         """
-        # (str, str) -> {"text": str, "entities": [str]}
+        # (str, str) -> {"text": str, "entities": [{"slot-name": str, "text": str, "value": str}]}
         chosen_rule = None
         if variation_name is None:
             chosen_rule = self.rules[randint(0,len(self.rules)-1)]

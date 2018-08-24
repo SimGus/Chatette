@@ -11,6 +11,54 @@ class SlotDefinition(UnitDefinition):
             casegen=casegen)
         self.type = "alias"
 
+
+    def generate_random(self, variation_name=None, arg_value=None):
+        """
+        Generates one of your rule at random and
+        returns the string generated and the entities inside it as a dict.
+        This is the only kind of definition that will generate an entity.
+        """
+        # (str, str) -> {"text": str, "entities": [{"slot-name": str, "text": str, "value": str}]}
+        chosen_rule = None
+        if variation_name is None:
+            chosen_rule = self.rules[randint(0,len(self.rules)-1)]
+        else:
+            if variation_name not in self.variations:
+                raise SyntaxError("Couldn't find a variation named '"+
+                    variation_name+"' for "+self.type+" '"+self.name+"'")
+            max_index = len(self.variations[variation_name])-1
+            chosen_rule = \
+                self.variations[variation_name][randint(0, max_index)]
+
+        if len(chosen_rule) <= 0:
+            raise ValueError("Tried to generate an entity using an empty rule "+
+                "for slot named '"+self.name+"'")
+
+        generated_example = EMPTY_GEN()
+        for token in chosen_rule:
+            generated_token = token.generate_random()
+            generated_example["text"] += generated_token["text"]
+            generated_example["entities"].extend(generated_token["entities"])
+
+        if self.casegen:
+            generated_example["text"] = randomly_change_case(generated_example["text"])
+
+        # Replace `arg` inside the generated sentence
+        if arg_value is not None and self.argument_identifier is not None:
+            generated_example["text"] = \
+                self.arg_regex.sub(arg_value, generated_example["text"])
+            generated_example[text] = \
+                generated_example["text"].replace("\$", "$")
+
+        # Add the entity in the list
+        generated_example["entities"].append({
+            "slot-name": self.name,
+            "text": generated_example["text"][:],
+            "value": chosen_rule[0].name,
+        })
+
+        return generated_example
+
     # Everything else is in the superclass
 
 
@@ -47,7 +95,6 @@ class SlotRuleContent(RuleContent):
                                        .generate_random(self.variation_name, \
                                                         self.arg_value)
 
-        # TODO: manage entities here
         if self.casegen:
             generated_example["text"] = \
                 randomly_change_case(generated_example["text"])
