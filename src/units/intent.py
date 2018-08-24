@@ -30,7 +30,9 @@ class IntentDefinition(UnitDefinition):
         generated_examples = []
         for _ in range(self.nb_examples_asked):
             # TODO check that this example hasn't been generated already
-            generated_examples.append(self.generate_random())
+            current_example = self.generate_random()
+            current_example["text"] = current_example["text"].strip()  # Strip for safety
+            generated_examples.append(current_example)
         return generated_examples
 
     # Everything else is in the superclass

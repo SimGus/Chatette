@@ -26,9 +26,11 @@ class Generator(object):
         print("")
         printDBG("Start generation")
         for intent_name in self.parser.intent_definitions:
-            self.generated_examples.extend(
-                self.parser.intent_definitions[intent_name].generate()
-            )
+            current_examples = self.parser.intent_definitions[intent_name].generate()
+            formatted_examples = []
+            for ex in current_examples:
+                formatted_examples.append(to_Rasa_format(intent_name, ex))
+            self.generated_examples.extend(formatted_examples)
 
         printDBG("Generation over, writing to file...")
         self.write_JSON()

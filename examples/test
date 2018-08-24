@@ -1,2 +1,7 @@
-%[&test](4)
-    this is a {blue/red?} {&test/unicorn}
+%[test](10)
+  {~[&yes],/~[&no],?} test
+
+~[yes]
+  yes
+~[no]
+  no

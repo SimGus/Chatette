@@ -53,7 +53,7 @@ class SlotDefinition(UnitDefinition):
         # Add the entity in the list
         generated_example["entities"].append({
             "slot-name": self.name,
-            "text": generated_example["text"][:],
+            "text": generated_example["text"][:].strip(),  # Strip for safety
             "value": chosen_rule[0].name,
         })
 
