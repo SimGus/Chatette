@@ -153,14 +153,10 @@ class Parser(object):
                 splits[-1] = splits[-1][:-1]
                 randgen = ""
 
-        print("splits:")
-        print(splits)
-
         result = ChoiceContent(text, leading_space, casegen=casegen,
                                randgen=randgen, parser=self)
         for choice_str in splits:
             if choice_str is not None and choice_str != "":  # TODO check the type of each choice?
-                print(self.split_contents(choice_str))
                 result.add_choice(self.split_contents(choice_str))
             else:
                 raise SyntaxError("Empty choice not allowed in choices",
