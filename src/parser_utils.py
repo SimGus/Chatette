@@ -125,8 +125,8 @@ def get_all_rules_in_variations(definition):
         all_rules.extend(definition["rules"])
     else:
         for variation in definition:
-            print("defvar: "+str(definition[variation]))
-            all_rules.extend(definition[variation]["rules"])  # TODO manage arg
+            if variation != "all-variations-aggregation":
+                all_rules.extend(definition[variation]["rules"])  # TODO manage arg
     return all_rules
 
 def get_all_rules_in_intent_variations(definition):
@@ -136,7 +136,8 @@ def get_all_rules_in_intent_variations(definition):
     # and the rules in `rules`
     all_rules = []
     for variation in definition:
-        all_rules.extend(definition[variation]["rules"])
+        if variation != "all-variations-aggregation":
+            all_rules.extend(definition[variation]["rules"])
     return all_rules
 
 
