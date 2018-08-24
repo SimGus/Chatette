@@ -11,6 +11,8 @@ def to_Rasa_format(intent_name, example):
     rasa_entities = []
     for entity in entities:
         first_index = example_str.find(entity["text"].strip())  # Always finds something
+        if first_index == -1:
+            print("couldn't find '"+entity["text"].strip()+"' in '"+example_str+"'")
         rasa_entities.append({
             "value": entity["value"],
             "entity": entity["slot-name"],
