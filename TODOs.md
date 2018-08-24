@@ -42,6 +42,7 @@ _ **TODO**: support `arg` inside synonym lists
 
 # Bugs
 
+- **BUG**: somewhere in the synonyms: Rasa NLU can't generate it without crashing (unhashable type 'dict' when looking for "value")
 
 ## To confirm
 
