@@ -125,11 +125,6 @@ class SlotRuleContent(RuleContent):
             super(SlotRuleContent, self).__init__(name, leading_space=leading_space,
                 variation_name=variation_name, arg_value=arg_value, casegen=casegen,
                 randgen=randgen, percentage_gen=percentage_gen, parser=parser)
-            self.slot_value = None  # The generated slot value will be the generated text
-
-    def set_slot_value(self, slot_value):  # QUESTION: has this any use? cf. DummySlotValRuleContent
-        # str -> ()
-        self.slot_value = slot_value
 
 
     def generate_random(self, generated_randgens=dict()):

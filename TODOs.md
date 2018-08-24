@@ -9,7 +9,6 @@
 - **TODO**: add support for synonyms in OOP rewriting
 - **TODO**: Rewrite docstrings formatted as explained in *PEP257*
 - **TODO**: use more list/dict comprehensions (faster than using `append`)
-- **TODO**: check that slot value in slots content has any use
 
 ## Done
 
@@ -23,6 +22,7 @@
 - **done**: remove escapement in slot values
 - **done**: add a 'choose' function utility
 - **done**: give a default nb of indent for `printDBG` methods
+- **done**: check that slot value in slots content has any use (removed)
 
 # Bugs
 
