@@ -1,13 +1,16 @@
 # TODOs
 
 - TODO: remake as OOP
+- **TODO**: add a 'choose' function utiliry
 - TODO: add argument support
 - TODO: make arguments several layers deep?
 - TODO: don't generate twice the same sentence
 - TODO: generate all possible sentences when asked (tied to a maximum)
 - TODO: add casegen inside declarations
 - TODO: replace modifier regex by several one to allow for escaping special characters everywhere
+- **TODO**: use symbols from parser_utils everywhere needed
 - **TODO**: add choice support in OOP rewriting
+- **TODO**: maybe add more modifiers to choices?
 
 ## Done
 
