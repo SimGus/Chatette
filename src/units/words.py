@@ -73,7 +73,7 @@ class WordGroupRuleContent(RuleContent):
                     name+"' does (unescaped '#'?)")
             if arg_value is not None:
                 raise SyntaxError("Word groups cannot have an argument, yet '"+
-                    name+"' does (unescaped ':'?)")
+                    name+"' does (unescaped '$'?)")
             if parser is not None:
                 raise RuntimeError("Internal error: tried to create a word "+
                     "group with a pointer to the parser")
