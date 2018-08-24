@@ -137,7 +137,7 @@ class UnitDefinition(object):
         if arg_value is not None and self.argument_identifier is not None:
             generated_example["text"] = \
                 self.arg_regex.sub(arg_value, generated_example["text"])
-            generated_example[text] = \
+            generated_example["text"] = \
                 generated_example["text"].replace("\$", "$")
 
         # print("generate random for "+self.name+": "+str(generated_example))

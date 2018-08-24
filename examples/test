@@ -1,12 +1,7 @@
 %[&test](4)
-    this is a ~[test#min] in lowercase
-    this is a ~[test#max] in uppercase
+    this is a ~[test$the argument]
+    this is a ~[test$another argument]
 
-~[test#min]
-  test
-~[test#max]
-  TEST
-
-@[name]
-  John = 2016
-  Jack = /
+~[test$ARG]
+  test ($ARG)
+  TEST (\$ARG $ARG)
