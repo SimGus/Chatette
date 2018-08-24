@@ -8,13 +8,13 @@
 - TODO: add casegen inside declarations
 - TODO: replace modifier regex by several one to allow for escaping special characters everywhere
 - **TODO**: add choice support in OOP rewriting
-- **TODO**: add entities when generating slot in OOP rewriting
 
 ## Done
 
 - done: fix line number count for different files
 - done: add unicode support for all files (io.open autodetects encoding i think)
 - **done**: fix overriding of rules
+- **done**: add entities when generating slot in OOP rewriting
 
 # Bugs
 
