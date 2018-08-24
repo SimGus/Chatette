@@ -88,9 +88,21 @@ class WordGroupRuleContent(RuleContent):
                                                  parser=None)
             self.words = name
 
-    def generate_random(self):
-        if self.randgen is not None and randint(0,99) >= self.percentgen:
-            return EMPTY_GEN()
+    def generate_random(self, generated_randgens=dict()):
+        # Manage randgen
+        if self.randgen is not None and self.randgen in generated_randgens:
+            if generated_randgens[self.randgen]:
+                pass  # Must be generated
+            else:
+                return EMPTY_GEN()  # Cannot be generated
+        elif self.randgen is not None:
+            if randint(0,99) >= self.percentgen:
+                # Don't generated this randgen
+                generated_randgens[self.randgen] = False
+                return EMPTY_GEN()
+            else:
+                # Generate this randgen
+                generated_randgens[self.randgen] = True
 
         # Generate the string according to the parameters of the object
         generated_str = self.words

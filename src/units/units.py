@@ -124,8 +124,9 @@ class UnitDefinition(object):
                 self.variations[variation_name][randint(0, max_index)]
 
         generated_example = EMPTY_GEN()
+        generated_randgens = dict()
         for token in chosen_rule:
-            generated_token = token.generate_random()
+            generated_token = token.generate_random(generated_randgens)
             generated_example["text"] += generated_token["text"]
             generated_example["entities"].extend(generated_token["entities"])
 
@@ -222,10 +223,15 @@ class RuleContent(object):
 
             self.parser = parser
 
-    def generate_random(self):
+    def generate_random(self, generated_randgens={}):
         """
         Returns a string and its entities randomly generated from the rules the
         object represents. May return an empty string if `randgen` is enabled.
+        `generated_randgens` is a dict of all the randgen names that have been
+        decided as to generate or not, i.e. if "some randgen" is in
+        `generated_randgens` and its value is `True`, all contents with this
+        randgen must be generated; if its value is `False`, it cannot be
+        generated; otherwise you can choose and put it into `generated_randgens`.
         """
         return EMPTY_GEN()
 
