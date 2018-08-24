@@ -209,8 +209,9 @@ class RuleContent(object):
         - variation-name: str (identifies which variation of the definition
                                we are calling)
     """
-    def __init__(self, name, leading_space=False, variation_name=None, arg_value=None,
-        casegen=False, randgen=None, percentage_gen=50, parser=None):
+    def __init__(self, name, leading_space=False, variation_name=None,
+        arg_value=None, casegen=False, randgen=None, percentage_gen=50,
+        parser=None):
             self.name = name
             self.variation_name = variation_name
             self.arg_value = arg_value
