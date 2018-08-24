@@ -1,6 +1,3 @@
-%[&a]
-  a
-
 %[&test](4)
     this is a ~[test?rand] @[name?rand]
 

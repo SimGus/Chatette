@@ -50,7 +50,7 @@ def with_leading_lower(text):
     """Returns `text` with a leading lowercase letter"""
     for (i, c) in enumerate(text):
         if not c.isspace():
-            return text[:i] + text[i].upper() + text[(i+1):]
+            return text[:i] + text[i].lower() + text[(i+1):]
     return text
 
 
