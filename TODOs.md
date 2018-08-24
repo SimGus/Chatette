@@ -9,9 +9,8 @@
 - TODO: add casegen inside declarations
 - TODO: replace modifier regex by several one to allow for escaping special characters everywhere
 - **TODO**: use symbols from parser_utils everywhere needed
-- **TODO**: add choice support in OOP rewriting
 - **TODO**: maybe add more modifiers to choices?
-- **TODO**: use overrides pip package
+- **TODO**: use overrides pip package (no, doesn't work in python 2)
 
 ## Done
 
@@ -19,6 +18,7 @@
 - done: add unicode support for all files (io.open autodetects encoding i think)
 - **done**: fix overriding of rules
 - **done**: add entities when generating slot in OOP rewriting
+- **done**: add choice support in OOP rewriting
 
 # Bugs
 
