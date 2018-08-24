@@ -530,8 +530,6 @@ class Parser(object):
                     raise SyntaxError("Aliases must have a name",
                         (self.in_file.name, self.line_nb, 0, name))
 
-                # print("for "+name+" randgen is "+str(randgen))
-
                 rules.append(
                     AliasRuleContent(name, not no_leading_space, variation, arg_value,
                               casegen, randgen, percentgen, self)
@@ -542,8 +540,6 @@ class Parser(object):
                 if name is None:
                     raise SyntaxError("Slots must have a name",
                         (self.in_file.name, self.line_nb, 0, name))
-
-                # print("for "+name+" randgen is "+str(randgen))
 
                 rules.append(
                     SlotRuleContent(name, not no_leading_space, variation, arg_value,

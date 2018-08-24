@@ -52,7 +52,7 @@ class IntentRuleContent(RuleContent):
         casegen=False, randgen=None, percentage_gen=50, parser=None):
             super(IntentRuleContent, self).__init__(name, leading_space=leading_space,
                 variation_name=variation_name, arg_value=arg_value, casegen=casegen,
-                percentage_gen=percentage_gen, parser=parser)
+                randgen=randgen, percentage_gen=percentage_gen, parser=parser)
 
     def generate_random(self, generated_randgens=dict()):
         # Manage randgen
