@@ -38,7 +38,7 @@ class ChoiceContent(RuleContent):
                                                 arg_value=None,
                                                 casegen=casegen,
                                                 randgen=randgen,
-                                                percentage_gen=50,
+                                                percentage_gen=None,
                                                 parser=None)
             self.choices = []
 
