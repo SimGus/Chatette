@@ -2,12 +2,14 @@
 
 - TODO: remake as OOP
 - **TODO**: add a 'choose' function utiliry
+- **TODO**: give a default nb of indent for `printDBG` methods
 - TODO: add argument support
 - TODO: don't generate twice the same sentence
 - TODO: generate all possible sentences when asked (tied to a maximum)
 - TODO: replace modifier regex by several one to allow for escaping special characters everywhere
 - **TODO**: use symbols from parser_utils everywhere needed
 - **TODO**: add support for synonyms in OOP rewriting
+- **TODO**: slot value should be the whole text and not only the first word if no value is given
 
 ## Done
 
@@ -23,7 +25,7 @@
 - BUG: There seems to be a bug with choices not appearing even when they have to (rarely happens)
 - fixed?: Fix bug with ']' generated in some rules
 - BUG: can't parse when a content line is commented out
-- **BUG**: some word in a choice print even when they shouldn't
+- **BUG**: Comment lines inside definitions aren't truly ignored
 
 ## Fixed bugs
 
