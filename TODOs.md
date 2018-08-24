@@ -1,7 +1,6 @@
 # TODOs
 
 - TODO: remake as OOP
-- **TODO**: give a default nb of indent for `printDBG` methods
 - TODO: add argument support
 - TODO: don't generate twice the same sentence
 - TODO: generate all possible sentences when asked (tied to a maximum)
@@ -20,6 +19,7 @@
 - **done**: slot value should be the whole text and not only the first word if no value is given
 - **done**: remove escapement in slot values
 - **done**: add a 'choose' function utility
+- **done**: give a default nb of indent for `printDBG` methods
 
 # Bugs
 

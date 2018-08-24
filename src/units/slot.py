@@ -173,6 +173,6 @@ class DummySlotValRuleContent(RuleContent):
         return EMPTY_GEN()
 
 
-    def printDBG(self, nb_indent):
+    def printDBG(self, nb_indent=0):
         indentation = nb_indent*'\t'
         print(indentation+"Slot val: "+self.name)

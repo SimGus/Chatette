@@ -252,7 +252,7 @@ class RuleContent(object):
         return EMPTY_GEN()
 
 
-    def printDBG(self, nb_indent):
+    def printDBG(self, nb_indent=0):
         # (int) -> ()
         indentation = nb_indent*'\t'
         print(indentation+self.name)
