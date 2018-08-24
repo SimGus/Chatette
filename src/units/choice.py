@@ -58,7 +58,11 @@ class ChoiceContent(RuleContent):
             return EMPTY_GEN
 
         choice = self.choices[randint(0,len(self.choices)-1)]
-        generated_example = choice.generate_random()
+        generated_example = EMPTY_GEN()
+        for token in choice:
+            generated_token = token.generate_random(generated_randgens)
+            generated_example["text"] += generated_token["text"]
+            generated_example["entities"].extend(generated_token["entities"])
 
         if self.casegen:
             generated_example["text"] = \

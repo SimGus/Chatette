@@ -139,7 +139,6 @@ class Parser(object):
     def parse_choice(self, text, leading_space):
         """Parses a choice (as a str) and returns a `ChoiceContent`"""
         # (str, bool) -> (ChoiceContent or None)
-        choices = []
         splits = re.split(r"(?<!\\)/", text[1:-1])  # TODO improve the regex here
 
         # Manage casegen
@@ -154,17 +153,18 @@ class Parser(object):
                 splits[-1] = splits[-1][:-1]
                 randgen = ""
 
+        print("splits:")
+        print(splits)
+
+        result = ChoiceContent(text, leading_space, casegen=casegen,
+                               randgen=randgen, parser=self)
         for choice_str in splits:
             if choice_str is not None and choice_str != "":  # TODO check the type of each choice?
-                choices.extend(self.split_contents(choice_str))
+                print(self.split_contents(choice_str))
+                result.add_choice(self.split_contents(choice_str))
             else:
                 raise SyntaxError("Empty choice not allowed in choices",
                     (self.in_file.name, self.line_nb, 0, name))
-        if choices == []:
-            return None
-        result = ChoiceContent(text, leading_space, casegen=casegen,
-                               randgen=randgen, parser=self)
-        result.add_choices(choices)
         return result
 
     def parse_alias_definition(self, first_line):  # Lots of copy-paste in three methods
