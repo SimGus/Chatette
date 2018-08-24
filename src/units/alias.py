@@ -57,7 +57,7 @@ class AliasRuleContent(RuleContent):
         if self.casegen:
             generated_example["text"] = \
                 randomly_change_case(generated_example["text"])
-        if self.leading_space:
+        if self.leading_space and may_get_leading_space(generated_example["text"]):
             generated_example["text"] = ' '+generated_example["text"]
         return generated_example
 
@@ -72,7 +72,8 @@ class AliasRuleContent(RuleContent):
 
         if self.leading_space:
             for (i, ex) in enumerate(generated_examples):
-                generated_examples[i]["text"] = ' '+ex["text"]
+                if may_get_leading_space(ex):
+                    generated_examples[i]["text"] = ' '+ex["text"]
         if self.casegen:
             tmp_buffer = []
             for ex in generated_examples:

@@ -23,7 +23,7 @@
 - BUG: There seems to be a bug with choices not appearing even when they have to (rarely happens)
 - fixed?: Fix bug with ']' generated in some rules
 - BUG: can't parse when a content line is commented out
-- **BUG**: double spaces sometimes
+- **BUG**: some word in a choice print even when they shouldn't
 
 ## Fixed bugs
 
@@ -31,6 +31,7 @@
 - fixed: escapment not currently working
 - fixed: slots starting with a word crash the script
 - **fixed**: choice flattens its rules
+- **fixed**: double spaces sometimes
 
 # Ideas
 
