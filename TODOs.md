@@ -42,19 +42,21 @@ _ **TODO**: support `arg` inside synonym lists
 
 # Bugs
 
+- **BUG**: some slot values are not present in the synonym list even if they have synonyms
+
 ## To confirm
 
 ## Fixed bugs
 
-- **fixed**: No case changing when asked with uppercase feeding
+- **fixed**: no case changing when asked with uppercase feeding
 - **fixed**: escapment not currently working
 - **fixed**: slots starting with a word crash the script
 - **fixed**: can't parse when a content line is commented out
-- **fixed**: Sometimes the adapter can't find the text entity inside the example
+- **fixed**: sometimes the adapter can't find the text entity inside the example
 - **fixed**: choice flattens its rules
 - **fixed**: double spaces sometimes
-- **fixed**: Comment lines inside definitions aren't truly ignored
-- **fixed**: Fix bug with ']' generated in word groups within choices (`{[test ~[this]]/[and ~[this]]}`)
+- **fixed**: comment lines inside definitions aren't truly ignored
+- **fixed**: fix bug with ']' generated in word groups within choices (`{[test ~[this]]/[and ~[this]]}`)
 
 # Ideas
 
