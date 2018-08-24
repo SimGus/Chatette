@@ -164,8 +164,9 @@ class SlotRuleContent(RuleContent):
         if self.randgen is not None:
             generated_examples.append(EMPTY_GEN())
 
-        generated_examples.extend(self.parser.get_definition(self.name, Unit.slot) \
-                                             .generate_all(self.arg_value))
+        generated_examples.extend(self.parser \
+                                        .get_definition(self.name, Unit.slot) \
+                                        .generate_all(self.arg_value, variation_name=variation_name))
 
         if self.leading_space:
             for (i, ex) in enumerate(generated_examples):

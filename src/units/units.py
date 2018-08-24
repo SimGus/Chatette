@@ -145,10 +145,18 @@ class UnitDefinition(object):
         # print("generate random for "+self.name+": "+str(generated_example))
         return generated_example
 
-    def generate_all(self, arg_value=None):
+    def generate_all(self, arg_value=None, variation_name=None):
         generated_examples = []
 
-        for rule in self.rules:
+        relevant_rules = self.rules
+        if variation_name is not None:
+            if variation_name in self.variations:
+                relevant_rules = self.variations[variation_name]
+            else:
+                raise SyntaxError("Couldn't find variation '"+variation_name+
+                    "' for "+self.type+" '"+self.name+"'")
+
+        for rule in relevant_rules:
             examples_from_sub_rules = []
             tmp_buffer = []
             for sub_unit_rule in rule:
