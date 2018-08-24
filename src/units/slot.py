@@ -84,16 +84,11 @@ class SlotDefinition(UnitDefinition):
 
             current_examples = []
             for token in rule:
-                print("generating "+str(token.name))
                 current_token_all_generations = token.generate_all()
-                print("generates "+str(current_token_all_generations))
                 if len(current_examples) <= 0:
                     current_examples = [gen["text"]
                                        for gen in current_token_all_generations]
                 else:
-                    for gen in current_token_all_generations:
-                        print(gen)
-                        print("text"+str(gen["text"]))
                     current_examples = [example_part+gen["text"]
                                         for example_part in current_examples
                                         for gen in current_token_all_generations]

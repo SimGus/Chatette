@@ -6,7 +6,6 @@
 - TODO: generate all possible sentences when asked (tied to a maximum)
 - TODO: replace modifier regex by several one to allow for escaping special characters everywhere
 - **TODO**: use symbols from parser_utils everywhere needed
-- **TODO**: add support for synonyms in OOP rewriting
 - **TODO**: Rewrite docstrings formatted as explained in *PEP257*
 - **TODO**: use more list/dict comprehensions (faster than using `append`)
 
@@ -22,6 +21,7 @@
 - **done**: remove escapement in slot values
 - **done**: add a 'choose' function utility
 - **done**: give a default nb of indent for `printDBG` methods
+- **done**: add support for synonyms in OOP rewriting
 - **done**: check that slot value in slots content has any use (removed)
 
 # Bugs
