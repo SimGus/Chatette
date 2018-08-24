@@ -1,5 +1,7 @@
 from .units import *
 
+from parser_utils import remove_escapement
+
 
 class SlotDefinition(UnitDefinition):
     """
@@ -50,11 +52,18 @@ class SlotDefinition(UnitDefinition):
             generated_example[text] = \
                 generated_example["text"].replace("\$", "$")
 
+        # Tidy up generated text
+        generated_example["text"] = generated_example["text"].strip()  # Strip for safety
+
         # Add the entity in the list
+        slot_value = chosen_rule[0].name
+        if not isinstance(chosen_rule[0], DummySlotValRuleContent):
+            slot_value = generated_example["text"][:]
+        slot_value = remove_escapement(slot_value)
         generated_example["entities"].append({
             "slot-name": self.name,
-            "text": generated_example["text"][:].strip(),  # Strip for safety
-            "value": chosen_rule[0].name,
+            "text": generated_example["text"][:],
+            "value": slot_value,
         })
 
         return generated_example

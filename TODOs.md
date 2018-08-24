@@ -9,8 +9,6 @@
 - TODO: replace modifier regex by several one to allow for escaping special characters everywhere
 - **TODO**: use symbols from parser_utils everywhere needed
 - **TODO**: add support for synonyms in OOP rewriting
-- **TODO**: slot value should be the whole text and not only the first word if no value is given
-- **TODO**: remove escapement in slot values
 
 ## Done
 
@@ -20,6 +18,8 @@
 - **done**: add entities when generating slot in OOP rewriting
 - **done**: add casegen inside declarations
 - **done**: add choice support in OOP rewriting
+- **done**: slot value should be the whole text and not only the first word if no value is given
+- **done**: remove escapement in slot values
 
 # Bugs
 

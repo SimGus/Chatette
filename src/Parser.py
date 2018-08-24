@@ -240,7 +240,7 @@ class Parser(object):
             raise SyntaxError("Declarations cannot have a random generation modifier",
                     (self.in_file.name, self.line_nb, 0, first_line))
 
-        #Manage the contents
+        # Manage the contents
         rules = []
         indentation_nb = None
         while self.is_inside_decl():
@@ -255,9 +255,8 @@ class Parser(object):
                 self.split_contents(stripped_line, accept_slot_val=True)
             if len(rule) <= 0:
                 return
-            if slot_val is None or slot_val == '/':  # Take the name of the first unit
-                slot_val = rule[0].name
-            rule.insert(0, DummySlotValRuleContent(slot_val))
+            if slot_val is not None and slot_val != '/':  # Otherwise take the whole generated example as a slot value
+                rule.insert(0, DummySlotValRuleContent(slot_val))
             rules.append(rule)
 
         # Put the new definition inside the dict with slots definitions
