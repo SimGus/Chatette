@@ -7,6 +7,7 @@
 - TODO: replace modifier regex by several one to allow for escaping special characters everywhere
 - **TODO**: use symbols from parser_utils everywhere needed
 - **TODO**: add support for synonyms in OOP rewriting
+- **TODO**: Rewrite docstrings formatted as explained in *PEP257*
 
 ## Done
 
