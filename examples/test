@@ -1,5 +1,5 @@
 %[test](10)
-  {~[&yes],/~[&no],?} test
+  {~[&yes]/~[&no],?} test
 
 ~[yes]
   yes
