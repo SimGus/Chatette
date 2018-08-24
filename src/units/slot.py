@@ -164,7 +164,7 @@ class SlotRuleContent(RuleContent):
                     generated_examples[i]["text"] = ' '+ex["text"]
         if self.casegen:
             tmp_buffer = []
-            for ex in generated_examples:  # TODO: list comprehension
+            for ex in generated_examples:
                 tmp.buffer.append({
                     "text": with_leading_lower(ex["text"]),
                     "entities": ex["entities"],

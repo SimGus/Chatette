@@ -75,7 +75,8 @@ class AliasRuleContent(RuleContent):
                     generated_examples[i]["text"] = ' '+ex["text"]
         if self.casegen:
             tmp_buffer = []
-            for ex in generated_examples:  # TODO: list comprehension
+            generated_examples
+            for ex in generated_examples:
                 tmp.buffer.append({
                     "text": with_leading_lower(ex["text"]),
                     "entities": ex["entities"],
