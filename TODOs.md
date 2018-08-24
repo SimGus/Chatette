@@ -11,6 +11,7 @@
 - **TODO**: use symbols from parser_utils everywhere needed
 - **TODO**: maybe add more modifiers to choices?
 - **TODO**: use overrides pip package (no, doesn't work in python 2)
+- **TODO**: add support for synonyms in OOP rewriting
 
 ## Done
 
