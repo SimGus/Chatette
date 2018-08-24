@@ -43,9 +43,10 @@ class AliasRuleContent(RuleContent):
         elif self.randgen is not None:
             if randint(0,99) >= self.percentgen:
                 # Don't generated this randgen
-                generated_randgens[self.randgen] = False
+                if self.randgen != "":
+                    generated_randgens[self.randgen] = False
                 return EMPTY_GEN()
-            else:
+            elif self.randgen != "":
                 # Generate this randgen
                 generated_randgens[self.randgen] = True
 

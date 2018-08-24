@@ -219,7 +219,10 @@ class RuleContent(object):
 
             self.casegen = casegen
             self.randgen = randgen
-            self.percentgen = percentage_gen
+            if percentage_gen is not None:
+                self.percentgen = int(percentage_gen)
+            else:
+                self.percentgen = 50
 
             self.parser = parser
 
