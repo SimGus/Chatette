@@ -212,6 +212,8 @@ class RuleContent(object):
     def __init__(self, name, leading_space=False, variation_name=None,
         arg_value=None, casegen=False, randgen=None, percentage_gen=50,
         parser=None):
+            if name is None or name == "":
+                raise SyntaxError("Tried to create content without a contents (or a name)")
             self.name = name
             self.variation_name = variation_name
             self.arg_value = arg_value
