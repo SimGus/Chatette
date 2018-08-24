@@ -198,6 +198,8 @@ class Parser(object):
             indentation_nb = self.check_indentation(indentation_nb, line, stripped_line)
             stripped_line = strip_comments(stripped_line)
 
+            if stripped_line == "":
+                continue
             rules.append(self.split_contents(stripped_line))
 
         # Put the new definition inside the dict with aliases definitions
@@ -316,6 +318,8 @@ class Parser(object):
             indentation_nb = self.check_indentation(indentation_nb, line, stripped_line)
             stripped_line = strip_comments(stripped_line)
 
+            if stripped_line == "":
+                continue
             rules.append(self.split_contents(stripped_line))
 
         # Put the new definition inside the dict with intents definitions

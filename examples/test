@@ -1,7 +1,25 @@
-%[&test](10)
-  {~[yes],/~[no],?} test
+%[test](20)
+  {~[&yes],/~[&no],?} ~[i said?] @[slot]
 
 ~[yes]
   yes
+  ;
+  ;
+  ;
+  ;
+  ;
 ~[no]
   no
+  ;
+  ;
+  ;
+  ;
+
+~[i]
+  i
+  I
+~[i said]
+  ~[i] said
+
+@[slot]
+  slot val

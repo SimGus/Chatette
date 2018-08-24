@@ -106,3 +106,8 @@ class ChoiceContent(RuleContent):
         print(indentation+"\tcasegen: "+str(self.casegen))
         print(indentation+"\trandgen: "+str(self.randgen)+" with percentage: "
             +str(self.percentgen))
+
+        for choice in self.choices:
+            print(indentation+"\tChoice:")
+            for token in choice:
+                token.printDBG(nb_indent+2)
