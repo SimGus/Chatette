@@ -73,7 +73,7 @@ class ChoiceContent(RuleContent):
         return generated_example
 
 
-    def generate_all(self):
+    def generate_all(self, variation_name=None):
         generated_examples = []
         if self.randgen is not None:
             generated_examples.append(EMPTY_GEN())

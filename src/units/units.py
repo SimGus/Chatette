@@ -243,7 +243,7 @@ class RuleContent(object):
         """
         return EMPTY_GEN()
 
-    def generate_all(self):
+    def generate_all(self, variation_name=None):
         """
         Returns a list of all the strings and entities that can be generated
         from the rules this object represents. May include the empty string if
