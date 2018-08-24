@@ -1,8 +1,10 @@
 %[&test](4)
-    this is a [&word group with?] ~[test?rand] @[name?rand]
+    this is a ~[test#min] in lowercase
+    this is a ~[test#max] in uppercase
 
-~[test]
+~[test#min]
   test
+~[test#max]
   TEST
 
 @[name]

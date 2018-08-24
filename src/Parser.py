@@ -200,7 +200,7 @@ class Parser(object):
 
         # Put the new definition inside the dict with aliases definitions
         if alias_name not in self.alias_definitions:
-            if alias_variation is not None:
+            if alias_variation is None:
                 self.alias_definitions[alias_name] = \
                     AliasDefinition(alias_name, rules, alias_arg, casegen)
             else:
@@ -258,7 +258,7 @@ class Parser(object):
 
         # Put the new definition inside the dict with slots definitions
         if slot_name not in self.slot_definitions:
-            if slot_variation is not None:
+            if slot_variation is None:
                 self.slot_definitions[slot_name] = \
                     SlotDefinition(slot_name, rules, slot_arg, casegen)
             else:
@@ -318,7 +318,7 @@ class Parser(object):
 
         # Put the new definition inside the dict with intents definitions
         if intent_name not in self.intent_definitions:
-            if intent_variation is not None:
+            if intent_variation is None:
                 new_definition = \
                     IntentDefinition(intent_name, rules, intent_arg, casegen)
                 new_definition.set_nb_examples(nb_examples_asked)
