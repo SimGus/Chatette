@@ -4,6 +4,7 @@ Chatette is a Python script that helps you generate training datasets for the [*
 If you want to make large datasets of example data for Natural Language Understanding tasks without too much of a headache, Chatette is a project for you.
 
 Specifically, Chatette implements a Domain Specific Language (*DSL*) that allows you to define templates to generate a large number of sentences. Those sentences are then saved in the input format of *Rasa NLU*.
+
 The *DSL* used is a superset of the excellent project [*Chatito*](https://github.com/rodrigopivi/Chatito "Chatito's GitHub repository") created by Rodrigo Pimentel.
 
 # How to use Chatette?
@@ -13,8 +14,8 @@ The *DSL* used is a superset of the excellent project [*Chatito*](https://github
 The data that Chatette uses and generates is load from and saved to files.
 - The **input file** containing the templates.
 
-   There is no need for a specific file extension. The syntax of the *DSL* to make those templates is described in the [syntax specification](TODO.md).
-   Note that templates can be divided into several files, with one *master* file linking them all together (described in the [syntax specification](TODO.md)).
+   There is no need for a specific file extension. The syntax of the *DSL* to make those templates is described in the [syntax specification](syntax-specs.md).
+   Note that templates can be divided into several files, with one *master* file linking them all together (described in the [syntax specification](syntax-specs.md)).
 
 - The **output file**, a *JSON* file containing data that can be directly fed to *Rasa NLU*.
 
@@ -22,7 +23,7 @@ The data that Chatette uses and generates is load from and saved to files.
 
 To run Chatette, you will need to have [Python](https://www.python.org/) installed. Chatette works with both version 2.x and 3.x.
 
-To run the script, then simply run the following command in a terminal:
+Then simply run the following command in a terminal:
 ```bash
 python main.py template/path
 ```
@@ -44,7 +45,7 @@ The output file will then be saved in a file named `output-file-name.json` withi
 # *Chatette* vs *Chatito*?
 
 A perfectly legitimate question could be:
-> Why does *Chatette* exists when *Chatito* already achieves the same goals?
+> Why does *Chatette* exists when *Chatito* already fulfills the same purposes?
 
 The reason comes from the different goals of the two projects:
 
@@ -61,6 +62,7 @@ The reason comes from the different goals of the two projects:
 - Syntax for generating words with different case for the leading letter
 - Argument support so that some templates may be filled by given words
 - Indentation must simply be somewhat coherent
+- Synonyms support
 
 As previously mentioned, the *DSL* used by *Chatette* is a superset of the one used by *Chatito*. This means that input files used for *Chatito* are completely usable with *Chatette* (not the other way around). Hence, it is easy to get from *Chatito* to *Chatette*.
 
@@ -95,6 +97,7 @@ As an example, this *Chatito* data:
 ```
 could be directly given as input to *Chatette*, but this data would produce the same thing using *Chatette*:
 ```
+; This template defines different ways to ask for the location of toilets
 %[&ask_toilet](3)
     ~[sorry?] ~[tell me] where {@[toilet#singular] is/@[toilet#plural] are} [please?]\?
 
@@ -115,5 +118,7 @@ could be directly given as input to *Chatette*, but this data would produce the 
 @[toilet#plural]
     toilets
 ```
+
+The *Chatito* version is arguably easier to read, but the *Chatette* version is shorter, which may be very useful when dealing with lots of data.
 
 Beware that, as always with machine learning, having too much data may cause your models to perform less well because of overfitting.
