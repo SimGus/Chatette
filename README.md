@@ -1,17 +1,17 @@
-# Chatette
+# *Chatette* dataset generator
 
-Chatette is a Python script that helps you generate training datasets for the [*Rasa NLU*](https://github.com/RasaHQ/rasa_nlu "rasa-nlu GitHub repository") Python package.
-If you want to make large datasets of example data for Natural Language Understanding tasks without too much of a headache, Chatette is a project for you.
+*Chatette* is a Python script that helps you generate training datasets for the [*Rasa NLU*](https://github.com/RasaHQ/rasa_nlu "rasa-nlu GitHub repository") Python package.
+If you want to make large datasets of example data for Natural Language Understanding tasks without too much of a headache, *Chatette* is a project for you.
 
-Specifically, Chatette implements a Domain Specific Language (*DSL*) that allows you to define templates to generate a large number of sentences. Those sentences are then saved in the input format of *Rasa NLU*.
+Specifically, *Chatette* implements a Domain Specific Language (*DSL*) that allows you to define templates to generate a large number of sentences. Those sentences are then saved in the input format of *Rasa NLU*.
 
 The *DSL* used is a superset of the excellent project [*Chatito*](https://github.com/rodrigopivi/Chatito "Chatito's GitHub repository") created by Rodrigo Pimentel.
 
-# How to use Chatette?
+# How to use *Chatette*?
 
 ## Input and output data
 
-The data that Chatette uses and generates is load from and saved to files.
+The data that *Chatette* uses and generates is load from and saved to files.
 - The **input file** containing the templates.
 
    There is no need for a specific file extension. The syntax of the *DSL* to make those templates is described in the [syntax specification](syntax-specs.md).
@@ -19,9 +19,9 @@ The data that Chatette uses and generates is load from and saved to files.
 
 - The **output file**, a *JSON* file containing data that can be directly fed to *Rasa NLU*.
 
-## Running Chatette
+## Running *Chatette*
 
-To run Chatette, you will need to have [Python](https://www.python.org/) installed. Chatette works with both version 2.x and 3.x.
+To run *Chatette*, you will need to have [Python](https://www.python.org/) installed. *Chatette* works with both version 2.x and 3.x.
 
 Then simply run the following command in a terminal:
 ```bash
