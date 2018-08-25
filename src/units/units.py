@@ -19,17 +19,10 @@ def cast_to_unicode(any):
     if isinstance(any, str):
         return unicode(any, "utf-8")
     elif isinstance(any, dict):
-        cast_dict = dict()
-        for key in any:
-            cast_key = cast_to_unicode(key)
-            cast_value = cast_to_unicode(any[key])
-            cast_dict[cast_key] = cast_value
-        return cast_dict
+        return {cast_to_unicode(key): cast_to_unicode(val)
+                for (key, val) in any.iteritems()}  # NOTE: this code works since it is executed only by python 2 (`iteritems` doesn't exist in python 3)
     elif isinstance(any, list):
-        cast_list = []
-        for e in any:
-            cast_list.append(cast_to_unicode(e))
-        return cast_list
+        return [cast_to_unicode(e) for e in any]
     else:
         return any
 

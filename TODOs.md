@@ -1,14 +1,14 @@
 # TODOs
 
 
-_ **TODO**: support `arg` inside synonym lists
-- **TODO**: add *casegen* inside declarations
 - **TODO**: add regex to rasa JSON file
 
 - **TODO**: don't generate twice the same sentence
 - **TODO**: tie the "all possibilities" generation to a maximum
-- **TODO**: do something with `arg` when generating all the possibilities
 - **TODO**: support generation without a max number given
+
+- **TODO**: do something with `arg` when generating all the possibilities
+_ **TODO**: support `arg` inside synonym lists
 
 - **TODO**: replace modifier regex by several one to allow for escaping special characters everywhere
 - **TODO**: make arguments several layers deep?
@@ -18,8 +18,8 @@ _ **TODO**: support `arg` inside synonym lists
 - **TODO**: improve the overall command line experience (cf. `click` library)
 
 - **TODO**: use symbols from parser_utils everywhere needed
-- **TODO**: Rewrite docstrings formatted as explained in *PEP257*
 - **TODO**: use more list/dict comprehensions (faster than using `append`)
+- **TODO**: Rewrite docstrings formatted as explained in *PEP257*
 
 ## Done
 
@@ -30,11 +30,11 @@ _ **TODO**: support `arg` inside synonym lists
 - **done**: add synonyms into the synonym object of rasa JSON file
 - **done**: fix overriding of rules
 - **done**: add entities when generating slot in OOP rewriting
-- **done**: add casegen inside declarations
-- **done**: add choice support in OOP rewriting
+- **done**: add *casegen* inside declarations
+- **done**: add choice support in *OOP* rewriting
 - **done**: slot value should be the whole text and not only the first word if no value is given
 - **done**: remove escapement in slot values
-- **done**: add a 'choose' function utility
+- **done**: add a `choose` function utility
 - **done**: give a default nb of indent for `printDBG` methods
 - **done**: add support for synonyms in OOP rewriting
 - **done**: check that slot value in slots content has any use (removed)

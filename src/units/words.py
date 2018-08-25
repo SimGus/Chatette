@@ -130,10 +130,5 @@ class WordGroupRuleContent(RuleContent):
                 if may_get_leading_space(ex):
                     generated_examples[i] = ' '+ex
 
-        result = []
-        for ex in generated_examples:
-            result.append({
-                "text": ex,
-                "entities": [],
-            })
+        result = [{"text": ex, "entities": []} for ex in generated_examples]
         return result
