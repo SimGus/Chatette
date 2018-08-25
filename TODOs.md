@@ -6,7 +6,8 @@
 - **TODO**: tie the "all possibilities" generation to a maximum
 
 - **TODO**: do something with `arg` when generating all the possibilities
-_ **TODO**: support `arg` inside synonym lists
+- **TODO**: support `arg` inside synonym lists
+- **TODO**: add opposite `randgen` names
 
 - **TODO**: replace modifier regex by several one to allow for escaping special characters everywhere
 - **TODO**: make arguments several layers deep?
