@@ -24,8 +24,9 @@ class IntentDefinition(UnitDefinition):
         as asked). The number of generated examples is tied to a maximum though.
         """
         if self.nb_examples_asked is None:
-            print("No number of examples given not yet supported")
-            return []
+            return [{"text": ex["text"].strip(), "entities": ex["entities"]}
+                    for ex in self.generate_all()]
+
 
         generated_examples = []
         for _ in range(self.nb_examples_asked):

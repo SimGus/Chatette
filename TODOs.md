@@ -1,11 +1,9 @@
 # TODOs
 
-
 - **TODO**: add regex to rasa JSON file
 
 - **TODO**: don't generate twice the same sentence
 - **TODO**: tie the "all possibilities" generation to a maximum
-- **TODO**: support generation without a max number given
 
 - **TODO**: do something with `arg` when generating all the possibilities
 _ **TODO**: support `arg` inside synonym lists
@@ -39,6 +37,7 @@ _ **TODO**: support `arg` inside synonym lists
 - **done**: add support for synonyms in OOP rewriting
 - **done**: check that slot value in slots content has any use (removed)
 - **done**: redo as OOP
+- **done**: support generation without a max number given
 
 # Bugs
 

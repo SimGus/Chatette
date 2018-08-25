@@ -1,4 +1,4 @@
-%[test](1)
+%[test]
   slot\: @[slot]
 
 @[slot]
@@ -13,6 +13,7 @@
 ~[line name#HSM]
     HSM
     hot strip mill
+    {pouet/test}
 ~[line name#CRM]
     CRM
     cold rolling mill
