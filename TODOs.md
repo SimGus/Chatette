@@ -14,6 +14,8 @@ _ **TODO**: support `arg` inside synonym lists
 - **TODO**: add a *changelog*
 
 - **TODO**: improve the overall command line experience (cf. `click` library)
+- **TODO**: allow for arguments to the command line
+- **TODO**: change `main.py` to a more user-friendly name
 
 - **TODO**: use symbols from parser_utils everywhere needed
 - **TODO**: use more list/dict comprehensions (faster than using `append`)
