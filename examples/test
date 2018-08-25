@@ -2,8 +2,8 @@
   slot\: @[slot]
 
 @[slot]
-    ~[first]
-    ~[second]
+    ~[first] = HSM
+    ~[second] = CRM
 
 ~[first]
     the line ~[line name#HSM]
@@ -12,5 +12,7 @@
 
 ~[line name#HSM]
     HSM
+    hot strip mill
 ~[line name#CRM]
     CRM
+    cold rolling mill

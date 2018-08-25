@@ -81,11 +81,9 @@ class SlotDefinition(UnitDefinition):
             slot_value = rule[0].name
             if not isinstance(rule[0], DummySlotValRuleContent):
                 for token in rule:
-                    print("generating token "+token.name)
-                    current_examples = token.generate_all() # FIXME: variation
+                    current_examples = token.generate_all()
                     for example in current_examples:
                         text = example["text"]
-                        print("ex: "+text)
                         if text in synonyms:
                             synonyms[text].append(text)
                         else:
@@ -94,7 +92,7 @@ class SlotDefinition(UnitDefinition):
 
             current_examples = []
             for token in rule:
-                current_token_all_generations = token.generate_all() # FIXME: variation
+                current_token_all_generations = token.generate_all()
                 if len(current_examples) <= 0:
                     current_examples = [gen["text"]
                                        for gen in current_token_all_generations]
@@ -107,9 +105,6 @@ class SlotDefinition(UnitDefinition):
                 synonyms[slot_value] = current_examples
             else:
                 synonyms[slot_value].extend(current_examples)
-
-        print("from slot")
-        print(synonyms)
 
         return synonyms
 
@@ -164,14 +159,15 @@ class SlotRuleContent(RuleContent):
             generated_example["text"] = ' '+generated_example["text"]
         return generated_example
 
-    def generate_all(self, variation_name=None):
+    def generate_all(self):
         generated_examples = []
         if self.randgen is not None:
             generated_examples.append(EMPTY_GEN())
 
         generated_examples.extend(self.parser \
                                         .get_definition(self.name, Unit.slot) \
-                                        .generate_all(self.arg_value, variation_name=variation_name))
+                                        .generate_all(self.arg_value,
+                                                      variation_name=self.variation_name))
 
         if self.leading_space:
             for (i, ex) in enumerate(generated_examples):

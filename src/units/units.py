@@ -142,7 +142,6 @@ class UnitDefinition(object):
             generated_example["text"] = \
                 generated_example["text"].replace("\$", "$")
 
-        # print("generate random for "+self.name+": "+str(generated_example))
         return generated_example
 
     def generate_all(self, arg_value=None, variation_name=None):
@@ -161,7 +160,7 @@ class UnitDefinition(object):
             tmp_buffer = []
             for sub_unit_rule in rule:
                 sub_unit_possibilities = \
-                    sub_unit_rule.generate_all(variation_name=variation_name)
+                    sub_unit_rule.generate_all()
                 if len(examples_from_sub_rules) == 0:
                     examples_from_sub_rules = sub_unit_possibilities
                 else:
@@ -251,7 +250,7 @@ class RuleContent(object):
         """
         return EMPTY_GEN()
 
-    def generate_all(self, variation_name=None):
+    def generate_all(self):
         """
         Returns a list of all the strings and entities that can be generated
         from the rules this object represents. May include the empty string if

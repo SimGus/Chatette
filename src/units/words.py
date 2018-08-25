@@ -43,7 +43,7 @@ class WordRuleContent(RuleContent):
             "entities": [],
         }
 
-    def generate_all(self, variation_name=None):
+    def generate_all(self):
         if self.leading_space:
             return [{
                 "text": ' '+self.word,
@@ -114,7 +114,7 @@ class WordGroupRuleContent(RuleContent):
             "entities": [],
         }
 
-    def generate_all(self, variation_name=None):
+    def generate_all(self):
         generated_examples = []
         if self.randgen is not None:
             generated_examples.append("")

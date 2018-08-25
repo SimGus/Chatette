@@ -73,7 +73,7 @@ class ChoiceContent(RuleContent):
         return generated_example
 
 
-    def generate_all(self, variation_name=None):
+    def generate_all(self):
         generated_examples = []
         if self.randgen is not None:
             generated_examples.append(EMPTY_GEN())
@@ -82,7 +82,7 @@ class ChoiceContent(RuleContent):
             current_examples = []
             for token in choice:
                 current_token_all_generations = \
-                    token.generate_all(variation_name=variation_name)
+                    token.generate_all()
                 if len(current_examples) <= 0:
                     current_examples = [gen
                                         for gen in current_token_all_generations]
