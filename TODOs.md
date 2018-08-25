@@ -44,7 +44,6 @@ _ **TODO**: support `arg` inside synonym lists
 
 - **BUG**: somewhere in the synonyms: Rasa NLU can't generate it without crashing (unhashable type 'dict' when looking for "value")
 - **BUG**: in synonyms, too many synonyms are added because variations are not taken into account at generation
-- **BUG**: when no DummySlotValRuleContent, synonyms keep entities
 
 ## To confirm
 
@@ -61,6 +60,7 @@ _ **TODO**: support `arg` inside synonym lists
 - **fixed**: fix bug with ']' generated in word groups within choices (`{[test ~[this]]/[and ~[this]]}`)
 - **fixed**: some slot values are not present in the synonym list even if they have synonyms
 - **fixed**: when changing case, some entities cannot be found any longer
+- **fixed**: when no DummySlotValRuleContent, synonyms keep entities
 
 # Ideas
 

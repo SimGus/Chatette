@@ -161,7 +161,7 @@ class UnitDefinition(object):
             tmp_buffer = []
             for sub_unit_rule in rule:
                 sub_unit_possibilities = \
-                    sub_unit_rule.generate_all()
+                    sub_unit_rule.generate_all(variation_name=variation_name)
                 if len(examples_from_sub_rules) == 0:
                     examples_from_sub_rules = sub_unit_possibilities
                 else:

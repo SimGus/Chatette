@@ -1,10 +1,16 @@
 %[test](1)
-  @[slot]
+  slot\: @[slot]
 
 @[slot]
-  slot val 1 = 1
-  slot val 2 = 1
-  slot val 3 = 1
-  test
-  test2 = test
-  nothing
+    ~[first]
+    ~[second]
+
+~[first]
+    the line ~[line name#HSM]
+~[second]
+    the line ~[line name#CRM]
+
+~[line name#HSM]
+    HSM
+~[line name#CRM]
+    CRM

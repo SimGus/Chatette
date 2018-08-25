@@ -81,7 +81,8 @@ class ChoiceContent(RuleContent):
         for choice in self.choices:
             current_examples = []
             for token in choice:
-                current_token_all_generations = token.generate_all()
+                current_token_all_generations = \
+                    token.generate_all(variation_name=variation_name)
                 if len(current_examples) <= 0:
                     current_examples = [gen
                                         for gen in current_token_all_generations]

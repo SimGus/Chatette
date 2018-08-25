@@ -70,6 +70,8 @@ class AliasRuleContent(RuleContent):
                                         .get_definition(self.name, Unit.alias) \
                                         .generate_all(self.arg_value,
                                                       variation_name=variation_name))
+        print("with variation: "+str(variation_name))
+        print("alias content all: "+str(generated_examples))
 
         if self.leading_space:
             for (i, ex) in enumerate(generated_examples):

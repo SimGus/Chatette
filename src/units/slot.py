@@ -81,18 +81,20 @@ class SlotDefinition(UnitDefinition):
             slot_value = rule[0].name
             if not isinstance(rule[0], DummySlotValRuleContent):
                 for token in rule:
-                    current_examples = token.generate_all()
+                    print("generating token "+token.name)
+                    current_examples = token.generate_all() # FIXME: variation
                     for example in current_examples:
                         text = example["text"]
+                        print("ex: "+text)
                         if text in synonyms:
-                            synonyms[text].append(example)
+                            synonyms[text].append(text)
                         else:
-                            synonyms[text] = [example]
+                            synonyms[text] = [text]
                 continue
 
             current_examples = []
             for token in rule:
-                current_token_all_generations = token.generate_all()
+                current_token_all_generations = token.generate_all() # FIXME: variation
                 if len(current_examples) <= 0:
                     current_examples = [gen["text"]
                                        for gen in current_token_all_generations]
@@ -105,6 +107,9 @@ class SlotDefinition(UnitDefinition):
                 synonyms[slot_value] = current_examples
             else:
                 synonyms[slot_value].extend(current_examples)
+
+        print("from slot")
+        print(synonyms)
 
         return synonyms
 
