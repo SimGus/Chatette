@@ -1,19 +1,17 @@
-%[test]
-  slot\: @[slot]
+%[&introduce](2)
+    ~[hi] ~[i am] @[name][, nice to meet you?]
+    ~[hi] my name{'s/ is} @[name]
 
-@[slot]
-    ~[first] = HSM
-    ~[second] = CRM
+~[hi]
+    hi
+    hello
+    howdy
 
-~[first]
-    the line ~[line name#HSM]
-~[second]
-    the line ~[line name#CRM]
+~[i am]
+    {i/I} am
+    {i/I}'m
 
-~[line name#HSM]
-    HSM
-    hot strip mill
-    {pouet/test}
-~[line name#CRM]
-    CRM
-    cold rolling mill
+@[name]
+    John
+    Robert = Robert
+    Bob = Robert
