@@ -21,8 +21,10 @@ The data that *Chatette* uses and generates is load from and saved to files.
 
 ## Running *Chatette*
 
-To run *Chatette*, you will need to have [Python](https://www.python.org/) installed. *Chatette* works with both version 2.x and 3.x.
+To run *Chatette*, you will need to have [Python](https://www.python.org/) installed.
+*Chatette* works with both version 2.x and 3.x.
 
+Clone or download this repository and start a terminal from the `src` folder.
 Then simply run the following command in a terminal:
 ```bash
 python main.py template/path
@@ -45,7 +47,7 @@ The output file will then be saved in a file named `output-file-name.json` withi
 # *Chatette* vs *Chatito*?
 
 A perfectly legitimate question could be:
-> Why does *Chatette* exists when *Chatito* already fulfills the same purposes?
+> Why does *Chatette* exist when *Chatito* already fulfills the same purposes?
 
 The reason comes from the different goals of the two projects:
 
