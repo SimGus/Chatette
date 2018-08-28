@@ -69,8 +69,8 @@ As previously mentioned, the *DSL* used by *Chatette* is a superset of the one u
 As an example, this *Chatito* data:
 ```
 %[ask_toilet](3)
-    ~[sorry?] ~[tell me] where @[toilet#singular] is ~[please?]?
-    ~[sorry?] ~[tell me] where @[toilet#plural] are ~[please?]?
+    ~[sorry?] ~[tell me] where the @[toilet#singular] is ~[please?]?
+    ~[sorry?] ~[tell me] where the @[toilet#plural] are ~[please?]?
 
 ~[sorry]
     sorry
@@ -95,11 +95,11 @@ As an example, this *Chatito* data:
 @[toilet#plural]
     toilets
 ```
-could be directly given as input to *Chatette*, but this data would produce the same thing using *Chatette*:
+could be directly given as input to *Chatette*, but this *Chatette* template would produce the same thing:
 ```
 ; This template defines different ways to ask for the location of toilets
 %[&ask_toilet](3)
-    ~[sorry?] ~[tell me] where {@[toilet#singular] is/@[toilet#plural] are} [please?]\?
+    ~[sorry?] ~[tell me] where the {@[toilet#singular] is/@[toilet#plural] are} [please?]\?
 
 ~[sorry]
     sorry
@@ -108,9 +108,7 @@ could be directly given as input to *Chatette*, but this data would produce the 
 ~[tell me]
     ~[can you?] {tell/show} me
 ~[can you]
-    can you
-    could you
-    would you
+    {can/could/would} you
 
 @[toilet#singular]
     toilet
@@ -119,6 +117,6 @@ could be directly given as input to *Chatette*, but this data would produce the 
     toilets
 ```
 
-The *Chatito* version is arguably easier to read, but the *Chatette* version is shorter, which may be very useful when dealing with lots of data.
+The *Chatito* version is arguably easier to read, but the *Chatette* version is shorter, which may be very useful when dealing with lots of templates and potential repetition.
 
-Beware that, as always with machine learning, having too much data may cause your models to perform less well because of overfitting.
+Beware that, as always with machine learning, having too much data may cause your models to perform less well because of overfitting. While this script can be used to generate thousands upon thousands of examples, it isn't advised.
