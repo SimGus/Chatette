@@ -11,7 +11,7 @@ The *DSL* used is a superset of the excellent project [*Chatito*](https://github
 
 ## Input and output data
 
-The data that *Chatette* uses and generates is load from and saved to files.
+The data that *Chatette* uses and generates is loaded from and saved to files. We thus have:
 - The **input file** containing the templates.
 
    There is no need for a specific file extension. The syntax of the *DSL* to make those templates is described in the [syntax specification](syntax-specs.md).
@@ -22,7 +22,7 @@ The data that *Chatette* uses and generates is load from and saved to files.
 ## Running *Chatette*
 
 To run *Chatette*, you will need to have [Python](https://www.python.org/) installed.
-*Chatette* works with both version 2.x and 3.x.
+*Chatette* works with both Python 2.x and 3.x.
 
 Clone or download this repository and start a terminal from the `src` folder.
 Then simply run the following command:
@@ -57,14 +57,14 @@ The reason comes from the different goals of the two projects:
 
 - Ability to break down templates into multiple files
 - Support for comments inside template files
-- Word group syntax that allows to define part of sentences that might not be generated in every examples
+- Word group syntax that allows to define parts of sentences that might not be generated in every example
 - Possibility to specify the probability of generating some parts of the sentences
-- Choice syntax to prevent copy-pasting rules with only one change
-- Ability to define the value of each slot example
+- Choice syntax to prevent copy-pasting rules with only a few changes
+- Ability to define the value of each slot whatever the generated example
 - Syntax for generating words with different case for the leading letter
 - Argument support so that some templates may be filled by given words
 - Indentation must simply be somewhat coherent
-- Synonyms support
+- Support for synonyms
 
 As previously mentioned, the *DSL* used by *Chatette* is a superset of the one used by *Chatito*. This means that input files used for *Chatito* are completely usable with *Chatette* (not the other way around). Hence, it is easy to get from *Chatito* to *Chatette*.
 
@@ -121,4 +121,4 @@ could be directly given as input to *Chatette*, but this *Chatette* template wou
 
 The *Chatito* version is arguably easier to read, but the *Chatette* version is shorter, which may be very useful when dealing with lots of templates and potential repetition.
 
-Beware that, as always with machine learning, having too much data may cause your models to perform less well because of overfitting. While this script can be used to generate thousands upon thousands of examples, it isn't advised.
+Beware that, as always with machine learning, having too much data may cause your models to perform less well because of overfitting. While this script can be used to generate thousands upon thousands of examples, it isn't advised for machine learning tasks.
