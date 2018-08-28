@@ -157,3 +157,13 @@ Three modifiers for declarations are currently supported:
     ~[greet$NAME]
         hello $NAME
     ```
+
+There are three different types of definitions, identified by the leading special character of their declaration: alias definitions, slot definitions and intent definitions.
+
+#### 2.1.1. Alias definitions
+
+An alias is defined as a
+
+### 2.1.2. Slot definitions
+
+### 2.1.3. Intent definitions
