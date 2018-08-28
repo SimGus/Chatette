@@ -11,35 +11,40 @@
 
 ;=============== Intents definitions ======================
 ;-------------- Intermediate answers -----------------
-%[&inform_machine](1);(130)
+%[affirm](20)
+  ~[agree]
+%[deny](15)
+  ~[disagree]
+
+%[&inform_production_line](200)
   {~[yes],/~[no],?} ~[i said?] @[production_line#long] @[line_number#long?][.?]
   {~[yes],/~[no],?} ~[i said?] @[production_line#acronym] @[line_number#short?][.?]
-%[&inform_machine_number](70)
+%[&inform_line_number](70)
   {~[yes],/~[no],?} ~[i said?] @[line_number]
 
-%[&inform_time_filter](180)
+%[&inform_filter_time](120)
   {~[yes],/~[no],?} ~[i said?] @[filter_time]
 ; Missing completion here
-%[&inform_utilization](120)
+%[&inform_utilization](180)
   {~[yes],/~[no],?} ~[i said?] @[utilization#number only]
 
 ;--------------- Queries ----------------------
-%[&query_machine_planning](1000)
+%[&query_machine_planning](1300)
   ~[what is#singular] the ~[planning of] @[production_line#long] @[line_number#long?]~[question mark?]
   ~[what is#singular] the ~[planning of] @[production_line#acronym] @[line_number#short?]~[question mark?]
   ~[ask?] the ~[planning of] @[production_line#long] @[line_number#long?][ please?]~[question mark?]
   ~[ask?] the ~[planning of] @[production_line#acronym] @[line_number#short?][ please?]~[question mark?]
 
-%[&query_filter_orders_time](1000)
+%[&query_filter_orders_time](900)
   ~[which] ~[order#plural] ~[are#no elision] @[filter_time]~[question mark?]
-  ~[ask?] [all?] the ~[order#plural] ~[such that are] @[filter_completion][ please?]~[question mark?]
-%[&query_filter_orders_completion](1000)
+  ~[ask?] [all?] the ~[order#plural] ~[such that are] @[filter_time][ please?]~[question mark?]
+%[&query_filter_orders_completion](1200)
   ~[which] ~[order#plural] ~[are#no elision] @[filter_completion]~[question mark?]
   ~[ask?] [all?] the ~[order#plural] ~[such that are] @[filter_completion][ please?]~[question mark?]
 
 
 ;--------------- Analysis ----------------------
-%[&why_machine_utilization](1050)
+%[&why_machine_utilization](1500)
   ~[why] is @[production_line#long] @[line_number#long?] {@[utilization#positive]/@[utilization#negative]}~[question mark?]
   ~[why] is @[production_line#acronym] @[line_number#short?] {@[utilization#positive]/@[utilization#negative]}~[question mark?]
   ~[why] ~[auxiliary#no elision] @[production_line#long] @[line_number#long?] be {@[utilization#positive]/@[utilization#negative]}~[question mark?]
