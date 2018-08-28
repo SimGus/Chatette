@@ -164,6 +164,6 @@ There are three different types of definitions, identified by the leading specia
 
 An alias is defined as a
 
-### 2.1.2. Slot definitions
+#### 2.1.2. Slot definitions
 
-### 2.1.3. Intent definitions
+#### 2.1.3. Intent definitions
