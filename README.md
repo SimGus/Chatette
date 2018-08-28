@@ -25,7 +25,7 @@ To run *Chatette*, you will need to have [Python](https://www.python.org/) insta
 *Chatette* works with both version 2.x and 3.x.
 
 Clone or download this repository and start a terminal from the `src` folder.
-Then simply run the following command in a terminal:
+Then simply run the following command:
 ```bash
 python main.py template/path
 ```
