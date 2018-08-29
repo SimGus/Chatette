@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 from .units import *
 from parser_utils import remove_escapement
 from utils import choose
