@@ -4,7 +4,7 @@
 
 *Chatette* is a Python script that can generate an input file for *Rasa NLU* from a file containing templates written in a Domain Specific Language. This document describes this DSL.
 
-This DSL is a superset of *Chatito*'s DSL, described [here](https://github.com/rodrigopivi/Chatito/blob/master/spec.md).
+The DSL is a superset of *Chatito*'s DSL, described [here](https://github.com/rodrigopivi/Chatito/blob/master/spec.md).
 
 Here is an example of such a template file.
 
@@ -29,7 +29,7 @@ Here is an example of such a template file.
     Bob = Robert
 ```
 
-This will generate a file containing data such as the one shown hereafter. This data is made up of examples sentences which are labelled as having a certain intent and optionnally contain one or several entities corresponding to the value of a slot. Read *Rasa NLU*'s data format [here](http://rasa.com/docs/nlu/0.13.1/dataformat/) for more information.
+The generated file will contain example data and will thus look as the one shown hereafter. This data is made up of examples sentences which are labelled as having a certain intent and optionally contain one or several entities corresponding to the value of a slot. There is also a support to list synonyms for entity value. Read about *Rasa NLU*'s data format [here](http://rasa.com/docs/nlu/0.13.1/dataformat/) for more information.
 ```json
 {
   "rasa_nlu_data": {
@@ -77,12 +77,12 @@ Template files can be encoded in any charset, while JSON files will always be UT
 
 ## 2. Language syntax
 
-As visible in the example shown above, a file is composed of several definitions, made up of a declaration and a set of rules, one rule per line.
+As visible in the example shown above, a file is composed of several **definitions**, made up of what we will reference as a **declaration** and a **set of rules**, one rule per line.
 The declaration is the unindented part, while the set of rules are indented. The indentation must be coherent inside a rule, i.e. each rule in a definition must be indented in the same way. However, different indentations may be used for different definitions.
 
 Everything that follows a semi-colon (`;`) is considered to be a comment and is thus ignored.
 
-We show here a skeleton of this.
+The structure of such a file can thus be represented as follows:
 ```
 ; Whole line comment
 DECLARATION1
@@ -96,24 +96,31 @@ DECLARATION2  ; Other comment
 Semi-colons are not the only characters with a special meaning in the DSL. If you want to use special characters as normal characters, they should be escaped by prepending a backslash (`\`) to them. This is true anywhere in the template documents, except in comments.
 
 Here is an exhaustive list of characters which should be escaped:
+
 |   |   |
 |---|---|
 | Semi-colon | `;` |
 | Percent | `%` |
 | Tilde | `~` |
 | At | `@` |
-| Question | mark `?` |
+| Question mark | `?` |
 | Hashtag | `#` |
 | Slash | `/` |
-| Dollar sign `$`
+| Dollar sign | `$`
 | Ampersand | `&` |
 | Square brackets | `[` and `]` |
 | Curly braces | `{` and `}` |
 | Equal symbol | `=` |
-| Pipe | `|` |
+| Pipe | `\|` |
 | Backslash | `\` |
 
 Note that not escaping these characters might not be problematic in certain cases, but it is more prudent to do it in all cases. Escaping a character outside of this list will simply be ignored by the parser which will act as if there was no backslash there.
+
+### 2.1. Rules
+
+As we said, a definition contains a set of rules. A rule is made of "tokens" which are either words (or group of words) or references to definitions.
+
+When a rule is generated (i.e. when we are making an example )
 
 ### 2.1. Declarations
 
