@@ -119,10 +119,27 @@ Note that not escaping these characters might not be problematic in certain case
 ### 2.1. Rules
 
 As we said, a definition contains a set of rules. A rule is made of "tokens" which are either words (or group of words) or references to definitions.
+A rule is used to generate example: each token of the rule, being able to generate one or several words, generates them in sequence. However, the generation of most of those tokens can be adapted using modifiers.
 
-When a rule is generated (i.e. when we are making an example )
+We list and explain each and every possible token hereafter.
 
-### 2.1. Declarations
+#### 2.1.1. Words
+
+Words are tokens that can only generate one word. This kind of token cannot take any modifier.
+
+For example, the rule `this is a rule` will *always* generate the sentence `this is a rule`.
+
+#### 2.1.2. Word groups
+
+#### 2.1.3. Aliases
+
+#### 2.1.4. Slots
+
+#### 2.1.5. Intents
+
+#### 2.1.6. Choices
+
+### 2.2. Declarations
 
 As we said, each definition starts with a declaration which is made in the following way: a special character to distinguish the different types of definitions, followed by an identifier in-between square brackets.
 Identifier can be made of any characters, including whitespaces. To use characters from the previous table in identifier, escape them. The only forbidden characters are the line feed (`\n`) and carriage return (`\r`).
@@ -167,10 +184,10 @@ Three modifiers for declarations are currently supported:
 
 There are three different types of definitions, identified by the leading special character of their declaration: alias definitions, slot definitions and intent definitions.
 
-#### 2.1.1. Alias definitions
+#### 2.2.1. Alias definitions
 
 An alias is defined as a
 
-#### 2.1.2. Slot definitions
+#### 2.2.2. Slot definitions
 
-#### 2.1.3. Intent definitions
+#### 2.2.3. Intent definitions
