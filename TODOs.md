@@ -22,6 +22,8 @@
 - **TODO**: use more list/dict comprehensions (faster than using `append`)
 - **TODO**: Rewrite docstrings formatted as explained in *PEP257*
 
+- **TODO**: Change comments symbols from `;` to `//` to more closely resemble Chatito
+
 ## Done
 
 - **done**: fix line number count for different files

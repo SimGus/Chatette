@@ -5,7 +5,7 @@ If you want to make large datasets of example data for Natural Language Understa
 
 Specifically, *Chatette* implements a Domain Specific Language (*DSL*) that allows you to define templates to generate a large number of sentences. Those sentences are then saved in the input format of *Rasa NLU*.
 
-The *DSL* used is a superset of the excellent project [*Chatito*](https://github.com/rodrigopivi/Chatito "Chatito's GitHub repository") created by Rodrigo Pimentel.
+The *DSL* used is a superset of the excellent project [*Chatito*](https://github.com/rodrigopivi/Chatito "Chatito's GitHub repository") created by Rodrigo Pimentel. (*Note: the DSL is actually a superset of Chatito v2.0.0, not the latest version.*)
 
 # How to use *Chatette*?
 
@@ -55,8 +55,8 @@ The reason comes from the different goals of the two projects:
 
 *Chatette* defines a more complex *DSL* to be able to manage larger projects. Here is a non-exhaustive list of features that can help with that:
 
-- Ability to break down templates into multiple files
-- Support for comments inside template files
+- Ability to break down templates into multiple files (*Note: this is now possible in Chatito too*)
+- Support for comments inside template files (*Note: this is now possible in Chatito too*)
 - Word group syntax that allows to define parts of sentences that might not be generated in every example
 - Possibility to specify the probability of generating some parts of the sentences
 - Choice syntax to prevent copy-pasting rules with only a few changes
