@@ -186,7 +186,7 @@ As word groups, the string generation of aliases can be adapted by using modifie
 - A variation name
 
   As will be explained later, it is possible to define the same alias with several different variations. This is for example useful when you want to define a certain alias in a singular and in a plural form.
-  Each variation thus has a name, which can be refered to by 
+  Each variation thus has a name, which can be refered to by
 
 - An argument identifier
 
@@ -251,4 +251,4 @@ An alias is defined as a
 
 #### 2.2.3. Intent definitions
 
-### 3.0. Other special syntax
+### 2.3. Other special syntax
