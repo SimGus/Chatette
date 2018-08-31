@@ -127,9 +127,38 @@ We list and explain each and every possible token hereafter.
 
 Words are tokens that can only generate one word. This kind of token cannot take any modifier.
 
-For example, the rule `this is a rule` will *always* generate the sentence `this is a rule`.
+For example, the rule `this is a rule`, which contains 4 word tokens, will *always* generate the sentence `this is a rule`.
 
 #### 2.1.2. Word groups
+
+Word groups are tokens that are a little more adaptable. As the name suggests, they are a group of words grouped within square brackets.
+Such tokens will generate the exact string that is enclosed in the square brackets, unless some modifiers adapts their generation.
+
+A word group can take three modifiers:
+
+- A case generation modifier
+
+  Adding an ampersand `&` as the first character in the square brackets will make the word group choose to generate its string with either a leading uppercase or lowercase letter at random.
+
+  For example, the word group `[&hello I'm a test]` will generate `hello I'm a test` 50% of the time and `Hello I'm a test` 50% of the time.
+
+- A random generation modifier
+
+  Adding a question mark `?` after the word group's string will make the word group either generate something or nothing.
+
+  For example, `[test?]` will generate `test` 50% of the time and nothing 50% of the time.
+
+  It is possible to give a name to such a modifier. Then, each token that will have a random modifier with the same name in the rule will generate something if and only if the other tokens with the same modifier generated something, and vice-versa.
+
+  For example, the rule `Hey [I'm a?name] pretty [test?name]` will generate either `Hey I'm a pretty test` or `Hey pretty`.
+
+- A percentage for the random generation modifier
+
+  When adding a random generation modifier as shown above, the generation defaults to generating the token 50% of the time and not generating it 50% of the time. This number can be changed by giving the percentage of the time the token should generate something, without the percent symbol `%` and separated from the random generation modifier by a slash `/`.
+
+  Thus, the rule `[test?/80]` will generate `test` 80% of the time, and will generate nothing 20% of the time.
+
+  Of course, a name for the random generation can still be provided between the question mark and the slash.
 
 #### 2.1.3. Aliases
 
