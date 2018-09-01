@@ -75,6 +75,8 @@ The generated file will contain example data and will thus look as the one shown
 
 Template files can be encoded in any charset, while JSON files will always be UTF-8 encoded.
 
+You can find other illustrative examples at the end of this document.
+
 ## 2. Language syntax
 
 As visible in the example shown above, a file is composed of several **definitions**, made up of what we will reference as a **declaration** and a **set of rules**, one rule per line.
@@ -188,7 +190,11 @@ As word groups, the string generation of aliases can be adapted by using modifie
   As will be explained later, it is possible to define the same alias with several different variations. This is for example useful when you want to define a certain alias in a singular and in a plural form.
   Each variation thus has a name, which can be refered to by
 
-- An argument identifier
+- An argument value
+
+  It is sometimes useful to be able to give an argument to a alias definition when it is used. The argument value is thus a string that will be used inside the alias definition. It must be written after a dollar sign `$` before the closing square bracket.
+
+  For example, if we have an alias definition named `greet` that would generate `hello {NAME}!`, where `{NAME}` identifies the argument, the alias reference `~[greet$John]` in a rule will generate `hello John!`.
 
 #### 2.1.4. Slot references
 
@@ -196,13 +202,25 @@ Slots references are pointers to slot definitions made somewhere else. The diffe
 
 Slot references can take the same modifiers as alias references.
 
+A slot reference begins with an at sign `@` followed by the identifier (and possibly modifiers) between square brackets, as for alias references.
+
 #### 2.1.5. Intent references
 
-As for alias references and slot references, intent references reference intent definitions made somewhere else.
+As for alias references and slot references, intent references reference intent definitions made somewhere else. An intent reference, used in a rule, is totally equivalent to an alias reference (except it references an intent definition rather than an alias definition). The difference between an alias definition and an intent definition will be explained later on in this document.
+
+Intent references take the same modifiers as alias and slot references.
+
+Intent references begin with a percent symbol `%`. Their identifier must be in-between brackets as for alias and slot references.
 
 #### 2.1.6. Choices
 
-### 2.2. Declarations
+Choice tokens are way to quickly say to the generator to choose between 2 "sub-rules" to generate in a rule. A choice token is a list of choice items separated by slashes `/`, all this in-between curly braces (`{` and `}`). Note that a choice item may be any kind of valid rule. As choices are not very readable, it is not advised to use choices to choose between a large number of choice items or between very long items. Indeed, the same behavior of the generator is achievable by specifying several different rules in the current definition.
+
+Beware that spaces are considered meaningful characters, which means putting a space before or after a slash symbol will generate a space if the right token is chosen.
+
+TODO example
+
+### 2.2. Definitions and declarations
 
 As we said, each definition starts with a declaration which is made in the following way: a special character to distinguish the different types of definitions, followed by an identifier in-between square brackets.
 Identifier can be made of any characters, including whitespaces. To use characters from the previous table in identifier, escape them. The only forbidden characters are the line feed (`\n`) and carriage return (`\r`).
@@ -256,3 +274,5 @@ An alias is defined as a
 #### 2.2.3. Intent definitions
 
 ### 2.3. Other special syntax
+
+## 3. Illustrative examples
