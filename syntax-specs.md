@@ -192,9 +192,13 @@ As word groups, the string generation of aliases can be adapted by using modifie
 
 #### 2.1.4. Slot references
 
-Slots are references to slot definition made somewhere else. The difference with an alias reference is that a slot will generate a
+Slots references are pointers to slot definitions made somewhere else. The difference with an alias reference is that a slot will generate a string which will be marked as an *entity*, i.e. the value of a slot. See [Rasa NLU's doc](http://rasa.com/docs/nlu/0.13.2/entities/) for more information about what entities represent.
+
+Slot references can take the same modifiers as alias references.
 
 #### 2.1.5. Intent references
+
+As for alias references and slot references, intent references reference intent definitions made somewhere else.
 
 #### 2.1.6. Choices
 
