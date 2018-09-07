@@ -1,5 +1,7 @@
 # *Chatette* dataset generator
 
+![*Chatette* logo](/images/chatette-logo.png | width=100)
+
 *Chatette* is a Python script that helps you generate training datasets for the [*Rasa NLU*](https://github.com/RasaHQ/rasa_nlu "rasa-nlu GitHub repository") Python package.
 If you want to make large datasets of example data for Natural Language Understanding tasks without too much of a headache, *Chatette* is a project for you.
 
