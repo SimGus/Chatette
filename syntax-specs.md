@@ -535,3 +535,5 @@ This example would generate a dataset such as this:
   }
 }
 ```
+
+As usual with *Rasa NLU*'s dataset, it is advised to look at them within a tool rather than to read the JSON file directly (as it is less easy to read this way). You can use the very good project (*Rasa NLU* trainer)[https://rasahq.github.io/rasa-nlu-trainer/] for this.
