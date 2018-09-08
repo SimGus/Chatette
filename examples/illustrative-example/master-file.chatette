@@ -1,0 +1,14 @@
+; Master file defining the intents
+%[&greet](2)
+    ~[hello][!?]
+
+%[&inform-mood](5)
+    [well?] [&i]{~[am#elision]/ ~[am#no elision]} @[mood#good][!?] [:)?]
+    [well?] [&i]{~[am#elision]/ ~[am#no elision]} @[mood#bad][...?]
+    [&i] feel @[mood#good][!?] [:)?]
+    [&i] feel @[mood#bad][...?]
+
+%[&goodbye](2)
+    ~[bye][!?]
+
+|aliases-and-slots.chatette

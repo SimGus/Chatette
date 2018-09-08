@@ -1,0 +1,25 @@
+; File defining the aliases and slots
+~[hello]
+    hello
+    hi
+
+~[am#elision]
+    'm
+    've been
+~[am#no elision]
+    am
+    have been
+
+~[bye]
+    bye
+    goodbye
+    see you
+
+@[mood#good]
+    good
+    fine = good
+    great = good
+@[mood#bad]
+    bad = /
+    not so good = bad
+    terrible = bad
