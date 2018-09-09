@@ -39,7 +39,10 @@ class IntentDefinition(UnitDefinition):
 
         nb_examples_asked = self.nb_training_examples_asked
         if not training:
+            if self.nb_testing_examples_asked is None:
+                return []  # No examples must be generated
             nb_examples_asked = self.nb_testing_examples_asked
+
         generated_examples = []
         for _ in range(nb_examples_asked):
             # TODO check that this example hasn't been generated already
@@ -124,3 +127,12 @@ class IntentRuleContent(RuleContent):
                 })
             generated_examples = tmp_buffer
         return generated_examples
+
+    def get_nb_possible_generated_examples(self):
+        nb_possible_ex = self.parser.get_definition(self.name, Unit.intent) \
+                                    .get_nb_possible_generated_examples(self.variation_name)
+        if self.casegen:
+            nb_possible_ex *= 2
+        if self.randgen is not None:
+            nb_possible_ex += 1
+        return nb_possible_ex

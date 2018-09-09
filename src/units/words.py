@@ -57,6 +57,9 @@ class WordRuleContent(RuleContent):
             "entities": [],
         }]
 
+    def get_nb_possible_generated_examples(self):
+        return 1
+
 
 class WordGroupRuleContent(RuleContent):
     """
@@ -135,3 +138,11 @@ class WordGroupRuleContent(RuleContent):
 
         result = [{"text": ex, "entities": []} for ex in generated_examples]
         return result
+
+    def get_nb_possible_generated_examples(self):
+        nb_possible_ex = 1
+        if self.casegen:
+            nb_possible_ex *= 2
+        if self.randgen is not None:
+            nb_possible_ex += 1
+        return nb_possible_ex

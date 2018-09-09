@@ -82,8 +82,7 @@ class ChoiceContent(RuleContent):
         for choice in self.choices:
             current_examples = []
             for token in choice:
-                current_token_all_generations = \
-                    token.generate_all()
+                current_token_all_generations = token.generate_all()
                 if len(current_examples) <= 0:
                     current_examples = [gen
                                         for gen in current_token_all_generations]
@@ -112,6 +111,24 @@ class ChoiceContent(RuleContent):
                     "entities": ex["entities"],
                 })
         return generated_examples
+
+    def get_nb_possible_generated_examples(self):
+        nb_possible_ex = 0
+        for choice in self.choices:
+            choice_nb_ex = 0
+            for token in choice:
+                current_nb_ex = token.get_nb_possible_generated_examples()
+                if choice_nb_ex == 0:
+                    choice_nb_ex = current_nb_ex
+                else:
+                    choice_nb_ex *= current_nb_ex
+            nb_possible_ex += choice_nb_ex
+
+        if self.casegen:
+            nb_possible_ex *= 2
+        if self.randgen is not None:
+            nb_possible_ex += 1
+        return nb_possible_ex
 
 
     def printDBG(self, nb_indent=0):

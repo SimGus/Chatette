@@ -2,6 +2,7 @@
 
 - **TODO**: don't generate twice the same sentence
 - **TODO**: tie the "all possibilities" generation to a maximum
+- **TODO**: check that `casegen` is applicable and useful before setting it for a rule content
 
 - **TODO**: do something with `arg` when generating all the possibilities
 - **TODO**: support `arg` inside synonym lists
@@ -22,6 +23,8 @@
 - **TODO**: rewrite docstrings formatted as explained in *PEP257*
 
 - **TODO**: add unit tests
+
+- **TODO**: *Docs* add warning about circular references
 
 ## Done
 

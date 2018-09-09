@@ -1,24 +1,9 @@
-// this is a test
-; with comments
-%[&introduce]('testing': '5', 'training': '4') ; com
-    ~[hi] ~[i am] @[name][, nice to meet you?] ; comment
-    ~[hi] my name{'s/ is} @[name] // something
+%[test](1)
+    word {~[alias]/t}
 
-~[hi] // something
-    hi
-    // somethign
-    hello
-    howdy//yo
-// da
-~[i am] // far~[sih]
-    {i/I} am;[clock]
-    {i/I}'m ;%[math]
-
-@[name];t
-    John // traio
-    ; jog
-    Robert = Robert
-    Bob = Robert ; jog
-    // jog
-
-//
+~[alias]
+    an alias
+    a ~[&second]
+~[second]
+    2
+    second

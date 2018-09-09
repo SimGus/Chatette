@@ -190,6 +190,16 @@ class SlotRuleContent(RuleContent):
             generated_examples = tmp_buffer
         return generated_examples
 
+    def get_nb_possible_generated_examples(self):
+        nb_possible_ex = self.parser.get_definition(self.name, Unit.slot) \
+                                    .get_nb_possible_generated_examples(self.variation_name)
+
+        if self.casegen:
+            nb_possible_ex *= 2
+        if self.randgen is not None:
+            nb_possible_ex += 1
+        return nb_possible_ex
+
 
 class DummySlotValRuleContent(RuleContent):
     """
