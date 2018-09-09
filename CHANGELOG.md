@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Parser support for *Chatito* v2.1.x's syntax for asking for intent generation (`('training': '5')`). *Old way is not deprecated!*
+
 ### Deprecated
 - Semi-colon `;` syntax for comments (rather use double slash `//` syntax) to stick closer to *Chatito* v2.1.x
 
