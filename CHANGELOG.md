@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 - Semi-colon `;` syntax for comments (rather use double slash `//` syntax) to stick closer to *Chatito* v2.1.x
 
-### [1.0] - 2018-09-08
+## [1.0] - 2018-09-08
 ### Added
 - Changelog
 - Logo
