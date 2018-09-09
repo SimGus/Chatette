@@ -305,15 +305,29 @@ class Parser(object):
             raise SyntaxError("Declarations cannot have a random generation modifier",
                     (self.in_file.name, self.line_nb, 0, first_line))
 
-        nb_examples_asked = None
+        # Parse the number of training examples asked
+        nb_training_examples_asked = None
         try:
-            nb_examples_asked_str = find_nb_examples_asked(first_line)
-            if nb_examples_asked_str is not None:
-                nb_examples_asked = int(nb_examples_asked_str)
+            nb_training_examples_asked_str = \
+                find_nb_training_examples_asked(first_line)
+            if nb_training_examples_asked_str is not None:
+                nb_training_examples_asked = int(nb_training_examples_asked_str)
             else:
-                nb_examples_asked = None
+                nb_training_examples_asked = None
         except ValueError:
-            raise SyntaxError("Number of examples asked is not a number",
+            raise SyntaxError("Number of training examples asked is not a number",
+                    (self.in_file.name, self.line_nb, 0, first_line))
+        # Parse the number of testing examples asked
+        nb_testing_examples_asked = None
+        try:
+            nb_testing_examples_asked_str = \
+                find_nb_testing_examples_asked(first_line)
+            if nb_testing_examples_asked_str is not None:
+                nb_testing_examples_asked = int(nb_testing_examples_asked_str)
+            else:
+                nb_testing_examples_asked = None
+        except ValueError:
+            raise SyntaxError("Number of testing examples asked is not a number",
                     (self.in_file.name, self.line_nb, 0, first_line))
 
         # Manage the contents
@@ -334,13 +348,15 @@ class Parser(object):
             if intent_variation is None:
                 new_definition = \
                     IntentDefinition(intent_name, rules, intent_arg, casegen)
-                new_definition.set_nb_examples(nb_examples_asked)
+                new_definition.set_nb_examples_asked(nb_training_examples_asked,
+                                                     nb_testing_examples_asked)
                 self.intent_definitions[intent_name] = new_definition
             else:
                 new_definition = \
                     IntentDefinition(intent_name, [], intent_arg, casegen)
                 new_definition.add_rules(rules, intent_variation)
-                new_definition.set_nb_examples(nb_examples_asked)
+                new_definition.set_nb_examples_asked(nb_training_examples_asked,
+                                                     nb_testing_examples_asked)
                 self.intent_definitions[intent_name] = new_definition
         else:
             self.intent_definitions[intent_name].add_rules(rules, intent_variation)

@@ -14,25 +14,34 @@ class IntentDefinition(UnitDefinition):
         super(IntentDefinition, self).__init__(name, rules=rules, arg=arg,
             casegen=casegen)
         self.type = "intent"
-        self.nb_examples_asked = None  # All possibilities will be generated TODO
+        self.nb_training_examples_asked = None  # All possibilities will be generated TODO
+        self.nb_testing_examples_asked = None
 
-    def set_nb_examples(self, nb_examples_asked):
+    def set_nb_examples_asked(self, nb_training_examples_asked,
+                                    nb_testing_examples_asked=None):
         # int -> ()
-        self.nb_examples_asked = nb_examples_asked
+        self.nb_training_examples_asked = nb_training_examples_asked
+        self.nb_testing_examples_asked = nb_testing_examples_asked
 
 
-    def generate(self):
+    def generate(self, training=True):
         """
         Generates all the examples that were asked (i.e. as much examples
-        as asked). The number of generated examples is tied to a maximum though.
+        as asked). The number of generated examples is tied to a maximum though TODO.
+        When `training` is `True`, this will generate the training examples
+        (i.e. the number of training examples asked), when it is `False`, it
+        will generate the testing examples (i.e. the number of testing examples
+        asked).
         """
-        if self.nb_examples_asked is None:
+        if training and self.nb_training_examples_asked is None:
             return [{"text": ex["text"].strip(), "entities": ex["entities"]}
                     for ex in self.generate_all()]
 
-
+        nb_examples_asked = self.nb_training_examples_asked
+        if not training:
+            nb_examples_asked = self.nb_testing_examples_asked
         generated_examples = []
-        for _ in range(self.nb_examples_asked):
+        for _ in range(nb_examples_asked):
             # TODO check that this example hasn't been generated already
             current_example = self.generate_random()
             current_example["text"] = current_example["text"].strip()  # Strip for safety

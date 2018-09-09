@@ -49,10 +49,10 @@ pattern_comment = re.compile(r"(?<!\\)"+COMMENT_MARKER)
 
 _nb_training_gen_name = "training"
 _nb_test_gen_name = "testing"
-pattern_nb_gen_asked = re.compile(r"\]\((?P<nbgen>[0-9]+)\)")
-pattern_nb_gen_asked_training = \
+pattern_nb_examples_asked = re.compile(r"\]\((?P<nbgen>[0-9]+)\)")
+pattern_nb_training_examples_asked = \
     re.compile(r"'"+_nb_training_gen_name+r"': '(?P<nbgen>[0-9]+)'")
-pattern_nb_gen_asked_test = \
+pattern_nb_testing_examples_asked = \
     re.compile(r"'"+_nb_test_gen_name+r"': '(?P<nbgen_test>[0-9]+)'")
 
 
@@ -140,28 +140,45 @@ def get_unit_type(unit_text):
             "something that was not a unit: '"+unit_text+"'")
 
 
-def find_nb_examples_asked(intent_text):
+def find_nb_training_examples_asked(intent_text):
     """
-    Finds the number of examples asked for the provided intent string and
-    returns it (or `None` if it wasn't provided).
+    Finds the number of training examples asked for the provided intent string
+    and returns it (or `None` if it wasn't provided).
     """
-    nb_gen_asked = None
+    nb_training_examples_asked = None
     one_found = False
-    patterns_list = [pattern_nb_gen_asked,
-                     pattern_nb_gen_asked_training,]
-                     # pattern_nb_gen_asked_test]
+    patterns_list = [pattern_nb_examples_asked,
+                     pattern_nb_training_examples_asked]
     for current_pattern in patterns_list:
         for match in current_pattern.finditer(intent_text):
             start_index = match.start()
             if one_found:
-                raise SyntaxError("Expected only one number of generation asked in "+
-                    intent_text)
+                raise SyntaxError("Expected only one number of training "+
+                                  "examples asked in "+intent_text)
             else:
                 one_found = True
             match = match.groupdict()
 
-            nb_gen_asked = match["nbgen"]
-    return nb_gen_asked
+            nb_training_examples_asked = match["nbgen"]
+    return nb_training_examples_asked
+def find_nb_testing_examples_asked(intent_text):
+    """
+    Finds the number of testing examples asked for the provided intent string
+    and returns it (or `None` if it wasn't provided).
+    """
+    nb_testing_examples_asked = None
+    one_found = False
+    for match in pattern_nb_testing_examples_asked.finditer(intent_text):
+        start_index = match.start()
+        if one_found:
+            raise SyntaxError("Expected only one number of testing "+
+                              "examples asked in '"+intent_text+"'")
+        else:
+            one_found = True
+        match = match.groupdict()
+
+        nb_testing_examples_asked = match["nbgen_test"]
+    return nb_testing_examples_asked
 
 
 def get_all_rules_in_variations(definition):

@@ -12,6 +12,7 @@
 - **TODO**: replace modifier regex by several one to allow for escaping special characters everywhere
 - **TODO**: use symbols from parser_utils everywhere needed
 - **TODO**: as *Chatito* v2.1.x does, generate a testing dataset if asked
+- **TODO**: add the new training and testing syntax into the syntax specifications
 
 - **TODO**: improve the overall command line experience (cf. `click` library)
 - **TODO**: allow for arguments to the command line
