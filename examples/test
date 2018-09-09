@@ -1,6 +1,6 @@
 // this is a test
 ; with comments
-%[&introduce](4) ; com
+%[&introduce]('testing': '5', 'training': '4') ; com
     ~[hi] ~[i am] @[name][, nice to meet you?] ; comment
     ~[hi] my name{'s/ is} @[name] // something
 
