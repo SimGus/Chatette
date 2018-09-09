@@ -69,9 +69,12 @@ class Parser(object):
         while line != "":
             line = self.read_line()
             stripped_line = line.lstrip()
-            line_type = self.get_top_level_line_type(line, stripped_line)
+            line_type = get_top_level_line_type(line, stripped_line)
 
-            if line_type == LineType.empty or line_type == LineType.comment:
+            if line_type is None:
+                raise SyntaxError("Invalid top-level line",
+                    (self.in_file.name, 0, start_index, unit))
+            elif line_type == LineType.empty or line_type == LineType.comment:
                 continue
             stripped_line = strip_comments(stripped_line)  # Not done before to compute the indentation
             if line_type == LineType.include_file:
@@ -391,28 +394,6 @@ class Parser(object):
                 raise SyntaxError("Incorrect indentation",
                     (self.in_file.name, self.line_nb, indentation_nb, line))
 
-    def get_top_level_line_type(self, line, stripped_line):
-        """
-        Returns the type of a top-level line (Note: this is expected to never
-        be called for something else than a top-level line).
-        Raises an error if the top-level line is not valid
-        """
-        if stripped_line == "":
-            return LineType.empty
-        elif stripped_line.startswith(COMMENT_SYM):
-            return LineType.comment
-        elif line.startswith(ALIAS_SYM):
-            return LineType.alias_declaration
-        elif line.startswith(SLOT_SYM):
-            return LineType.slot_declaration
-        elif line.startswith(INTENT_SYM):
-            return LineType.intent_declaration
-        elif line.startswith(INCLUDE_FILE_SYM):
-            return LineType.include_file
-        else:
-            SyntaxError("Invalid syntax",
-                (self.in_file.name, self.line_nb, 1, line))
-
     def split_contents(self, text, accept_slot_val=False):
         """
         Splits `text` into a list of `RuleContent`s (thus, only used on rules and
@@ -420,6 +401,7 @@ class Parser(object):
         If `accept_slot_val` is `True`, expressions after a `=` will be considered
         to be the slot value name for the splitted expression. In this case, the
         return value will be `(alt_name, list)`.
+        @pre: `text` has no comments inside it
         """
         # (str, bool) -> [RuleContent]
         # Split string in list of words and raw units (as strings)
@@ -435,8 +417,8 @@ class Parser(object):
                 current += c
                 escaped = False
                 continue
-            elif c == COMMENT_SYM:
-                break
+            # elif c == COMMENT_SYM_DEPRECATED:
+            #     break
             elif inside_choice:
                 if c == CHOICE_CLOSE_SYM:
                     words_and_units_raw.append(current+c)

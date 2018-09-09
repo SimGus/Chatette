@@ -6,7 +6,8 @@ import re
 
 from utils import *
 
-COMMENT_SYM = ';'
+COMMENT_SYM_DEPRECATED = ';'
+COMMENT_MARKER = '//'
 ESCAPE_SYM = '\\'
 
 ALIAS_SYM = '~'
@@ -43,7 +44,8 @@ pattern_modifiers = \
         r"(?:\?(?P<randgen>[^#\[\]\?/\$]*)(?:/(?P<percentgen>[^#\[\]\?/\$]*))?)?\]"
     )
 pattern_nb_gen_asked = re.compile(r"\]\((?P<nbgen>[0-9]+)\)")
-pattern_comment = re.compile(r"(?<!\\);")
+pattern_comment_deprecated = re.compile(r"(?<!\\)"+COMMENT_SYM_DEPRECATED)
+pattern_comment = re.compile(r"(?<!\\)"+COMMENT_MARKER)
 
 
 class Unit(Enum):  # TODO move this into unit defintions
@@ -65,9 +67,38 @@ class LineType(Enum):
 
 def strip_comments(text):
     match = pattern_comment.search(text)
-    if match is None:
+    match_deprecated = pattern_comment_deprecated.search(text)
+    if match is None and match_deprecated is None:
         return text.rstrip()
-    return text[:match.start()].rstrip()
+    elif match_deprecated is None:
+        return text[:match.start()].rstrip()
+    elif match is None:
+        return text[:match_deprecated.start()].rstrip()
+    else:
+        if match.start() <= match_deprecated.start():
+            return text[:match.start()].rstrip()
+        return text[:match_deprecated.start()].rstrip()
+
+def get_top_level_line_type(line, stripped_line):
+    """
+    Returns the type of a top-level line (Note: this is expected to never
+    be called for something else than a top-level line).
+    Returns `None` if the top-level line is invalid.
+    """
+    if stripped_line == "":
+        return LineType.empty
+    elif (   stripped_line.startswith(COMMENT_MARKER)
+          or stripped_line.startswith(COMMENT_SYM_DEPRECATED)):
+        return LineType.comment
+    elif line.startswith(ALIAS_SYM):
+        return LineType.alias_declaration
+    elif line.startswith(SLOT_SYM):
+        return LineType.slot_declaration
+    elif line.startswith(INTENT_SYM):
+        return LineType.intent_declaration
+    elif line.startswith(INCLUDE_FILE_SYM):
+        return LineType.include_file
+    return None
 
 def is_start_unit_sym(char):
     return (char == UNIT_OPEN_SYM or char == ALIAS_SYM or \
