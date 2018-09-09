@@ -3,6 +3,7 @@
 
 # TODO shouldn't generate twice the same statement
 
+import io
 import json
 
 from utils import *
@@ -17,23 +18,36 @@ class Generator(object):
     If there were inconsistencies in the input file, they are likely to be
     detected here.
     """
-    def __init__(self, output_file, parser):
-        self.out_file = output_file
+    def __init__(self, output_file_path, testing_file_path, parser):
+        self.training_file_path = output_file_path
+        self.testing_file_path = testing_file_path
         self.parser = parser
-        self.generated_examples = []
-        self.generated_randgens = dict()
 
     def generate(self):
-        print("")
-        printDBG("Start generation")
+        printDBG("Generating training examples...")
+        generated_examples = []
         for intent_name in self.parser.intent_definitions:
-            current_examples = self.parser.intent_definitions[intent_name].generate()
+            current_examples = \
+                self.parser.intent_definitions[intent_name].generate()
             formatted_examples = [to_Rasa_format(intent_name, ex)
                                   for ex in current_examples]
-            self.generated_examples.extend(formatted_examples)
+            generated_examples.extend(formatted_examples)
 
-        printDBG("Generation over, writing to file...")
-        self.write_JSON()
+        printDBG("Writing to file...")
+        self.write_JSON(generated_examples, self.training_file_path)
+
+        printDBG("Generating testing examples...")
+        generated_examples = []
+        for intent_name in self.parser.intent_definitions:
+            current_examples = \
+                self.parser.intent_definitions[intent_name].generate(training=False)
+            formatted_examples = [to_Rasa_format(intent_name, ex)
+                                  for ex in current_examples]
+            generated_examples.extend(formatted_examples)
+        if len(generated_examples) > 0:
+            printDBG("Writing to file...")
+            self.write_JSON(generated_examples, self.testing_file_path)
+        printDBG("Generation over")
 
 
     def get_entities_synonyms(self):
@@ -53,19 +67,21 @@ class Generator(object):
         return synonyms
 
 
-    def write_JSON(self):
+    def write_JSON(self, generated_examples, file_path):
         raw_json_data = {
             "rasa_nlu_data": {
-                "common_examples": self.generated_examples,
+                "common_examples": generated_examples,
                 "regex_features" : [],
                 "entity_synonyms":
                     to_Rasa_synonym_format(self.get_entities_synonyms()),
             }
         }
         json_data = cast_to_unicode(raw_json_data)
-        self.out_file.write(
-            json.dumps(json_data, ensure_ascii=False, indent=2, sort_keys=True)
-        )
+        with io.open(file_path, 'w', encoding="utf-8") as out_file:
+            out_file.write(json.dumps(json_data,
+                                      ensure_ascii=False,  # output in utf-8
+                                      indent=2,  # More readable
+                                      sort_keys=True))  # Deterministic
 
 
 if __name__ == "__main__":

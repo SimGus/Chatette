@@ -6,6 +6,7 @@ from Parser import Parser, Unit
 from Generator import Generator
 
 DEFAULT_OUTPUT_FILENAME = "output.json"
+DEFAULT_TESTING_DATASET_FILENAME = "testing-dataset.json"
 
 
 def print_usage():
@@ -19,10 +20,13 @@ if __name__ == "__main__":
         print_usage()
     else:
         template_file_path = sys.argv[1]
+        dir_path = os.path.dirname(template_file_path)
         output_filename = DEFAULT_OUTPUT_FILENAME
         if len(sys.argv) == 3:
             output_filename = sys.argv[2]
-        output_file_path = os.path.join(os.path.dirname(template_file_path), output_filename)
+        output_file_path = os.path.join(dir_path, output_filename)
+        testing_filename = DEFAULT_TESTING_DATASET_FILENAME
+        testing_file_path = os.path.join(dir_path, testing_filename)
 
         parser = None
         with io.open(template_file_path, 'r') as in_file:
@@ -31,6 +35,5 @@ if __name__ == "__main__":
             # parser.printDBG()
         print("")
 
-        with io.open(output_file_path, 'w+', encoding="utf-8") as out_file:  # TODO create if not already existing (same with dirs)
-            generator = Generator(out_file, parser)
-            generator.generate()
+        generator = Generator(output_file_path, testing_file_path, parser)
+        generator.generate()

@@ -8,3 +8,4 @@
 # Output
 out/
 output.json
+*.json

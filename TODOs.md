@@ -11,8 +11,8 @@
 - **TODO**: add regex to rasa JSON file
 - **TODO**: replace modifier regex by several one to allow for escaping special characters everywhere
 - **TODO**: use symbols from parser_utils everywhere needed
-- **TODO**: as *Chatito* v2.1.x does, generate a testing dataset if asked
 - **TODO**: add the new training and testing syntax into the syntax specifications
+- **TODO**: training and testing datasets should never overlap
 
 - **TODO**: improve the overall command line experience (cf. `click` library)
 - **TODO**: allow for arguments to the command line
@@ -45,6 +45,7 @@
 - **done**: add a *changelog*
 - **done**: change comments symbols from `;` to `//` to more closely resemble *Chatito* v2.1.x
 - **done**: parser support *Chatito* v2.1.x's syntax for asking training and testing generations
+- **done**: as *Chatito* v2.1.x does, generate a testing dataset if asked
 
 # Bugs
 
