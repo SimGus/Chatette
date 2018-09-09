@@ -1,28 +1,25 @@
 # TODOs
 
-- **TODO**: add regex to rasa JSON file
-
 - **TODO**: don't generate twice the same sentence
 - **TODO**: tie the "all possibilities" generation to a maximum
 
 - **TODO**: do something with `arg` when generating all the possibilities
 - **TODO**: support `arg` inside synonym lists
 - **TODO**: add opposite `randgen` names
+- **TODO**: support several arguments in one rule
 
+- **TODO**: add regex to rasa JSON file
 - **TODO**: replace modifier regex by several one to allow for escaping special characters everywhere
-- **TODO**: make arguments several layers deep?
-
-- **TODO**: add a *changelog*
+- **TODO**: use symbols from parser_utils everywhere needed
 
 - **TODO**: improve the overall command line experience (cf. `click` library)
 - **TODO**: allow for arguments to the command line
 - **TODO**: change `main.py` to a more user-friendly name
 
-- **TODO**: use symbols from parser_utils everywhere needed
 - **TODO**: use more list/dict comprehensions (faster than using `append`)
-- **TODO**: Rewrite docstrings formatted as explained in *PEP257*
+- **TODO**: rewrite docstrings formatted as explained in *PEP257*
 
-- **TODO**: Change comments symbols from `;` to `//` to more closely resemble Chatito
+- **TODO**: add unit tests
 
 ## Done
 
@@ -43,6 +40,8 @@
 - **done**: check that slot value in slots content has any use (removed)
 - **done**: redo as OOP
 - **done**: support generation without a max number given
+- **done**: add a *changelog*
+- **done**: change comments symbols from `;` to `//` to more closely resemble Chatito v2.1.x
 
 # Bugs
 
@@ -75,3 +74,4 @@
 ## Rejected
 
 - **rejected**: use overrides pip package (no, doesn't work in python 2)
+- **rejected**: make arguments several layers deep? no, it is not useful as you can pass arguments down the references
