@@ -5,6 +5,7 @@ from enum import Enum
 import re
 
 from utils import *
+import deprecations
 
 COMMENT_SYM_DEPRECATED = ';'
 COMMENT_MARKER = '//'
@@ -68,6 +69,9 @@ class LineType(Enum):
 def strip_comments(text):
     match = pattern_comment.search(text)
     match_deprecated = pattern_comment_deprecated.search(text)
+    if match_deprecated is not None:
+        deprecations.warn_deprecation_semicolon_comments()
+
     if match is None and match_deprecated is None:
         return text.rstrip()
     elif match_deprecated is None:
@@ -87,8 +91,10 @@ def get_top_level_line_type(line, stripped_line):
     """
     if stripped_line == "":
         return LineType.empty
-    elif (   stripped_line.startswith(COMMENT_MARKER)
-          or stripped_line.startswith(COMMENT_SYM_DEPRECATED)):
+    elif stripped_line.startswith(COMMENT_MARKER):
+        return LineType.comment
+    elif stripped_line.startswith(COMMENT_SYM_DEPRECATED):
+        deprecations.warn_deprecation_semicolon_comments()
         return LineType.comment
     elif line.startswith(ALIAS_SYM):
         return LineType.alias_declaration

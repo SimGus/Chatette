@@ -7,6 +7,8 @@ from random import randint
 
 def printDBG(txt):
     print("[DBG] "+txt)
+def printWarn(txt):
+    print("[WARN] "+txt)
 
 
 def cast_to_unicode(any):
