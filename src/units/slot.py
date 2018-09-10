@@ -132,9 +132,22 @@ class SlotRuleContent(RuleContent):
             super(SlotRuleContent, self).__init__(name, leading_space=leading_space,
                 variation_name=variation_name, arg_value=arg_value, casegen=casegen,
                 randgen=randgen, percentage_gen=percentage_gen, parser=parser)
+            self.casegen_checked = False
+
+    def can_have_casegen(self):
+        return self.parser.get_definition(self.name, Unit.slot) \
+                          .can_have_casegen()
+    def check_casegen(self):
+        """Checks that casegen is applicable (at generation time)."""
+        if not self.casegen_checked and self.casegen:
+            if not self.can_have_casegen():
+                self.casegen = False
+            self.casegen_checked = True
 
 
     def generate_random(self, generated_randgens=dict()):
+        self.check_casegen()
+
         # Manage randgen
         if self.randgen is not None and self.randgen in generated_randgens:
             if generated_randgens[self.randgen]:
@@ -163,6 +176,8 @@ class SlotRuleContent(RuleContent):
         return generated_example
 
     def generate_all(self):
+        self.check_casegen()
+
         generated_examples = []
         if self.randgen is not None:
             generated_examples.append(EMPTY_GEN())

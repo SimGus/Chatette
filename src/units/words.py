@@ -35,6 +35,10 @@ class WordRuleContent(RuleContent):
                                             percentage_gen=None, parser=None)
             self.word = name
 
+    def can_have_casegen(self):
+        return contains_letters(self.word)
+
+
     def generate_random(self, arg_value=None):
         if self.leading_space:
             return {
@@ -82,6 +86,9 @@ class WordGroupRuleContent(RuleContent):
                 raise RuntimeError("Internal error: tried to create a word "+
                     "group with a pointer to the parser")
 
+            if not contains_letters(name):
+                casegen = False
+
             super(WordGroupRuleContent, self).__init__(name,
                                                  leading_space=leading_space,
                                                  variation_name=None,
@@ -91,6 +98,10 @@ class WordGroupRuleContent(RuleContent):
                                                  percentage_gen=percentage_gen,
                                                  parser=None)
             self.words = name
+
+    def can_have_casegen(self):
+        return contains_letters(self.words)
+
 
     def generate_random(self, generated_randgens=dict()):
         # Manage randgen

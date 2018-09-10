@@ -43,16 +43,37 @@ class ChoiceContent(RuleContent):
                                                 percentage_gen=None,
                                                 parser=None)
             self.choices = []
+            self.casegen_checked = False
+
+    def can_have_casegen(self):
+        for choice in self.choices:
+            if len(choice) > 0 and choice[0].can_have_casegen():
+                return True
+        return False
+    def check_casegen(self):
+        """Checks that casegen is applicable (at generation time)."""
+        if not self.casegen_checked and self.casegen:
+            if not self.can_have_casegen():
+                self.casegen = False
+            self.casegen_checked = True
+
 
     def add_choice(self, choice):
         # (RuleContent) -> ()
+        if len(choice) <= 0:
+            return
         self.choices.append(choice)
     def add_choices(self, choices):
         # ([RuleContent]) -> ()
-        self.choices.extend(choices)
+        interesting_choices = [choice for choice in choices if len(choice) > 0]
+        if len(interesting_choices) <= 0:
+            return
+        self.choices.extend(interesting_choices)
 
 
     def generate_random(self, generated_randgens=dict()):
+        self.check_casegen()
+
         # Manage randgen
         if self.randgen is not None and randint(0,99) >= self.percentgen:
             return EMPTY_GEN()
@@ -73,8 +94,9 @@ class ChoiceContent(RuleContent):
             generated_example["text"] = ' '+generated_example["text"]
         return generated_example
 
-
     def generate_all(self):
+        self.check_casegen()
+
         generated_examples = []
         if self.randgen is not None:
             generated_examples.append(EMPTY_GEN())

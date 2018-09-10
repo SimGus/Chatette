@@ -28,6 +28,13 @@ def cast_to_unicode(any):
         return any
 
 
+def contains_letters(text):
+    """Returns `True` if casegen would have an influence on `text`."""
+    for c in text:
+        if c.isalpha():
+            return True
+    return False
+
 def randomly_change_case(text):
     """Randomly set the case of the first letter of `text`"""
     if randint(0, 99) >= 50:
@@ -71,6 +78,16 @@ class UnitDefinition(object):
 
         self.casegen = casegen # IDEA: don't make the casegen variation agnostic
 
+    def can_have_casegen(self):  # TODO: manage variations
+        """
+        Returns `True` if casegen may have an influence on
+        any of the rules of this definition.
+        """
+        for rule in self.rules:
+            if len(rule) > 0 and rule[0].can_have_casegen():  # BUG: with DummySlotValRuleContent
+                    return True
+        return False
+
 
     def add_rule(self, rule, variation_name=None, slot_val=None):
         # (RuleContent, str, str) -> ()
@@ -88,9 +105,8 @@ class UnitDefinition(object):
             self.rules.append(rule)
     def add_rules(self, rules, variation_name=None, slot_val=None):
         # ([RuleContent], str, str) -> ()
-        if variation_name is None:
-            self.rules.extend(rules)
-        else:
+        self.rules.extend(rules)
+        if variation_name is not None:
             if variation_name == "":
                 raise SyntaxError("Defining a "+self.type+" with an empty name"+
                     "is not allowed")
@@ -98,7 +114,6 @@ class UnitDefinition(object):
                 self.variations[variation_name] = rules
             else:
                 self.variations[variation_name].extend(rules)
-            self.rules.extend(rules)
 
     def generate_random(self, variation_name=None, arg_value=None):
         """
@@ -199,7 +214,7 @@ class UnitDefinition(object):
                     rule_nb_ex *= current_nb_ex
             nb_possible_ex += rule_nb_ex
 
-        if self.casegen:  # BUG: casegen might already have been computed from the first sub-rule
+        if self.casegen:
             nb_possible_ex *= 2
         return nb_possible_ex
 
@@ -259,6 +274,11 @@ class RuleContent(object):
                 self.percentgen = 50
 
             self.parser = parser
+
+    def can_have_casegen(self):
+        """Returns `True` if casegen can have an influence on this rule."""
+        return False
+
 
     def generate_random(self, generated_randgens={}):
         """
