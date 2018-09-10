@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import random
+
 from .units import *
 from parser_utils import Unit
 
@@ -43,13 +45,24 @@ class IntentDefinition(UnitDefinition):
                 return []  # No examples must be generated
             nb_examples_asked = self.nb_testing_examples_asked
 
-        generated_examples = []
-        for _ in range(nb_examples_asked):
-            # TODO check that this example hasn't been generated already
-            current_example = self.generate_random()
-            current_example["text"] = current_example["text"].strip()  # Strip for safety
-            generated_examples.append(current_example)
-        return generated_examples
+        nb_possible_ex = self.get_nb_possible_generated_examples()
+        if nb_examples_asked > nb_possible_ex:
+            return [{"text": ex["text"].strip(), "entities": ex["entities"]}
+                    for ex in self.generate_all()]
+
+        if nb_examples_asked < nb_possible_ex/2:
+            generated_examples = []
+            for _ in range(nb_examples_asked):
+                # TODO check that this example hasn't been generated already
+                current_example = self.generate_random()
+                current_example["text"] = current_example["text"].strip()  # Strip for safety
+                generated_examples.append(current_example)
+            return generated_examples
+        else:
+            all_examples = [{"text": ex["text"].strip(),
+                             "entities": ex["entities"]}
+                            for ex in self.generate_all()]
+            random.sample(all_examples, nb_examples_asked)
 
     # Everything else is in the superclass
 

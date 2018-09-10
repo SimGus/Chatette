@@ -206,7 +206,6 @@ class UnitDefinition(object):
             for sub_unit_rule in rule:
                 current_nb_ex = sub_unit_rule.get_nb_possible_generated_examples()
                 if current_nb_ex is None:
-                    print("None examples for "+sub_unit_rule.name+" ("+type(sub_unit_rule).__name__+")")
                     continue
                 if rule_nb_ex == 0:
                     rule_nb_ex = current_nb_ex
