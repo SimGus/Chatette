@@ -1,8 +1,6 @@
 # TODOs
 
-- **TODO**: don't generate twice the same sentence
 - **TODO**: tie the "all possibilities" generation to a maximum
-- **TODO**: check that `casegen` is applicable and useful before setting it for a rule content
 
 - **TODO**: do something with `arg` when generating all the possibilities
 - **TODO**: support `arg` inside synonym lists
@@ -11,12 +9,11 @@
 
 - **TODO**: add regex to rasa JSON file
 - **TODO**: replace modifier regex by several one to allow for escaping special characters everywhere
-- **TODO**: use symbols from parser_utils everywhere needed
-- **TODO**: add the new training and testing syntax into the syntax specifications
+- **TODO**: use symbols from `parser_utils` everywhere needed
 - **TODO**: training and testing datasets should never overlap
 
 - **TODO**: improve the overall command line experience (cf. `click` library)
-- **TODO**: allow for arguments to the command line
+- **TODO**: allow for arguments to the command line (output file*s* paths)
 - **TODO**: change `main.py` to a more user-friendly name
 
 - **TODO**: use more list/dict comprehensions (faster than using `append`)
@@ -50,6 +47,9 @@
 - **done**: change comments symbols from `;` to `//` to more closely resemble *Chatito* v2.1.x
 - **done**: parser support *Chatito* v2.1.x's syntax for asking training and testing generations
 - **done**: as *Chatito* v2.1.x does, generate a testing dataset if asked
+- **done**: don't generate twice the same sentence
+- **done**: check that `casegen` is applicable and useful before setting it for a rule content
+- **done**: add the new training and testing syntax into the syntax specifications
 
 # Bugs
 
