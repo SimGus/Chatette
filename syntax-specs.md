@@ -364,6 +364,16 @@ For example, the following intent definition tells the generator to generate 10 
     ~[hello] @[name]!
 ```
 
+Another syntax (from *Chatito v2.1.x*) can also be used to define the number of examples asked. The intent declaration would be followed by several arguments with the following syntax: `'argument': 'value'` (arguments being separated by commas). The argument name for asking for a certain number of examples is `'training'` (the value is the number of examples in-between single quotes).
+
+This syntax allows to support the generation of training and testing datasets: with the additional `'testing'` argument, you can ask for the generation of another file containing examples that are not in the first file (if it is possible). This second file can thus be used to evaluate the model you would have trained on the first file. By default, this second file will be named `testing-dataset.json`.
+
+For example, this intent definition would generate 5 examples with intent `greet` in the training dataset and 2 other examples with the same intent (if they exist) in the test dataset.
+```
+%[greet]('training': '5', 'testing': '2')
+    ~[hello]
+```
+
 ### 2.3. Other special syntax
 
 There is one more feature that *Chatette* has and which we can talk about: file inclusion.

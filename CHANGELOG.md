@@ -6,11 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- Support for generation of a training and a testing dataset (currently possibly overlapping)
-- Parser support for *Chatito* v2.1.x's syntax for asking for intent generation (`('training': '5')`). *Old way is not deprecated!*
+- Support for generation of non-overlapping training and testing datasets
+- Parser support for *Chatito* v2.1.x's syntax for asking for intent generation (`('training': '5', 'testing': '3')`). *Old way is not deprecated!*
 
 ### Changed
-- Discard duplicates in generated examples
+- Discard duplicates in generated examples (for both training and test datasets)
 - Discard inapplicable case generation modifiers (in most cases)
 
 ### Deprecated
