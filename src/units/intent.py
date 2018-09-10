@@ -50,19 +50,22 @@ class IntentDefinition(UnitDefinition):
             return [{"text": ex["text"].strip(), "entities": ex["entities"]}
                     for ex in self.generate_all()]
 
-        if nb_examples_asked < nb_possible_ex/2:
+        if nb_examples_asked < nb_possible_ex/2:  # QUESTION: should this be /2?
             generated_examples = []
             for _ in range(nb_examples_asked):
                 # TODO check that this example hasn't been generated already
-                current_example = self.generate_random()
-                current_example["text"] = current_example["text"].strip()  # Strip for safety
-                generated_examples.append(current_example)
+                while True:
+                    current_example = self.generate_random()
+                    current_example["text"] = current_example["text"].strip()  # Strip for safety
+                    if current_example not in generated_examples:
+                        generated_examples.append(current_example)
+                        break
             return generated_examples
         else:
             all_examples = [{"text": ex["text"].strip(),
                              "entities": ex["entities"]}
                             for ex in self.generate_all()]
-            random.sample(all_examples, nb_examples_asked)
+            return random.sample(all_examples, nb_examples_asked)
 
     # Everything else is in the superclass
 

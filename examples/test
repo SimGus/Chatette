@@ -1,9 +1,15 @@
-%[test](10)
+%[test](3)
     word {~[alias]/t}
 
 ~[alias]
     an alias
     a @[&second]
+    a
+    b
+    v
+    c
+    d
+    e
 @[second]
     2 = two
     second
