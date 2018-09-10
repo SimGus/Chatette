@@ -1,15 +1,9 @@
-%[test](3)
+%[test]('training': '5', 'testing': '5')
     word {~[alias]/t}
 
 ~[alias]
     an alias
     a @[&second]
-    a
-    b
-    v
-    c
-    d
-    e
 @[second]
     2 = two
     second

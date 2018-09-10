@@ -26,38 +26,46 @@ class IntentDefinition(UnitDefinition):
         self.nb_testing_examples_asked = nb_testing_examples_asked
 
 
-    def generate(self, training=True):
+    def generate(self, training_examples=None):
         """
         Generates all the examples that were asked (i.e. as much examples
         as asked). The number of generated examples is tied to a maximum though TODO.
-        When `training` is `True`, this will generate the training examples
-        (i.e. the number of training examples asked), when it is `False`, it
-        will generate the testing examples (i.e. the number of testing examples
-        asked).
+        When `training_examples` is `None`, this will generate the training examples
+        (i.e. the number of training examples asked), otherwise, it will generate
+        examples that are not in `training_examples` (if possible).
         """
-        if training and self.nb_training_examples_asked is None:
+        if (    training_examples is None
+            and self.nb_training_examples_asked is None):
             return [{"text": ex["text"].strip(), "entities": ex["entities"]}
                     for ex in self.generate_all()]
 
         nb_examples_asked = self.nb_training_examples_asked
-        if not training:
+        if training_examples is not None:
             if self.nb_testing_examples_asked is None:
                 return []  # No examples must be generated
             nb_examples_asked = self.nb_testing_examples_asked
 
         nb_possible_ex = self.get_nb_possible_generated_examples()
         if nb_examples_asked > nb_possible_ex:
-            return [{"text": ex["text"].strip(), "entities": ex["entities"]}
-                    for ex in self.generate_all()]
+            if training_examples is None:
+                return [{"text": ex["text"].strip(), "entities": ex["entities"]}
+                        for ex in self.generate_all()]
+            else:
+                all_examples = [{"text": ex["text"].strip(),
+                                 "entities": ex["entities"]}
+                                for ex in self.generate_all()]
+                return [ex for ex in all_examples
+                        if ex not in training_examples]
 
         if nb_examples_asked < nb_possible_ex/2:  # QUESTION: should this be /2?
             generated_examples = []
             for _ in range(nb_examples_asked):
-                # TODO check that this example hasn't been generated already
                 while True:
                     current_example = self.generate_random()
                     current_example["text"] = current_example["text"].strip()  # Strip for safety
-                    if current_example not in generated_examples:
+                    if (    current_example not in generated_examples
+                        and (   training_examples is None
+                             or current_example not in training_examples)):
                         generated_examples.append(current_example)
                         break
             return generated_examples
@@ -65,7 +73,12 @@ class IntentDefinition(UnitDefinition):
             all_examples = [{"text": ex["text"].strip(),
                              "entities": ex["entities"]}
                             for ex in self.generate_all()]
-            return random.sample(all_examples, nb_examples_asked)
+            if training_examples is None:
+                return random.sample(all_examples, nb_examples_asked)
+            else:
+                random.shuffle(all_examples)
+                return [ex for ex in all_examples
+                        if ex not in training_examples]
 
     # Everything else is in the superclass
 
