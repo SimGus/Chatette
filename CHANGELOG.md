@@ -4,13 +4,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.1] - 2018-09-11
 ### Added
-- Support for generation of a training and a testing dataset (currently possibly overlapping)
-- Parser support for *Chatito* v2.1.x's syntax for asking for intent generation (`('training': '5')`). *Old way is not deprecated!*
+- Support for generation of non-overlapping training and testing datasets
+- Parser support for *Chatito* v2.1.x's syntax for asking for intent generation (`('training': '5', 'testing': '3')`). *Old way is not deprecated!*
 
 ### Changed
-- Discard duplicates in generated examples
+- Discard duplicates in generated examples (for both training and test datasets)
 - Discard inapplicable case generation modifiers (in most cases)
 
 ### Deprecated
@@ -103,7 +103,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for slot value names
 - Generator able to generate an output file in *Rasa NLU* format (without support for synonyms or regex features)
 
-[Unreleased]: https://github.com/SimGus/Chatette/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/SimGus/Chatette/compare/v1.1...HEAD
+[1.1]: https://github.com/SimGus/Chatette/compare/v1.0...v1.1
 [1.0]: https://github.com/SimGus/Chatette/compare/v0.4.2...v1.0
 [0.4.2]: https://github.com/SimGus/Chatette/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/SimGus/Chatette/compare/v0.3.2...v0.4.1
