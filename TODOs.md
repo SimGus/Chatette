@@ -25,6 +25,7 @@
 - **TODO**: add unit tests
 
 - **TODO**: *Docs* add warning about circular references
+- **TODO**: *Docs* deprecate semi-colong syntax
 
 ## Done
 
