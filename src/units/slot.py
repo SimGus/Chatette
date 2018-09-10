@@ -194,11 +194,11 @@ class SlotRuleContent(RuleContent):
         if self.casegen:
             tmp_buffer = []
             for ex in generated_examples:
-                tmp.buffer.append({
+                tmp_buffer.append({
                     "text": with_leading_lower(ex["text"]),
                     "entities": ex["entities"],
                 })
-                tmp.buffer.append({
+                tmp_buffer.append({
                     "text": with_leading_upper(ex["text"]),
                     "entities": ex["entities"],
                 })

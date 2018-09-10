@@ -98,11 +98,11 @@ class AliasRuleContent(RuleContent):
             tmp_buffer = []
             generated_examples
             for ex in generated_examples:
-                tmp.buffer.append({
+                tmp_buffer.append({
                     "text": with_leading_lower(ex["text"]),
                     "entities": ex["entities"],
                 })
-                tmp.buffer.append({
+                tmp_buffer.append({
                     "text": with_leading_upper(ex["text"]),
                     "entities": ex["entities"],
                 })
