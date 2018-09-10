@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Parser support for *Chatito* v2.1.x's syntax for asking for intent generation (`('training': '5')`). *Old way is not deprecated!*
 
 ### Changed
+- Discard duplicates in generated examples
 - Discard inapplicable case generation modifiers (in most cases)
 
 ### Deprecated
