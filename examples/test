@@ -3,7 +3,7 @@
 
 ~[alias]
     an alias
-    a @[&second]
+    a @[second]
 @[second]
     2 = two
     second

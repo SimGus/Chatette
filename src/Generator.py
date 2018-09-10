@@ -26,12 +26,14 @@ class Generator(object):
     def generate(self):
         printDBG("Generating training examples...")
         training_examples = []
+        unformatted_training_examples = []
         for intent_name in self.parser.intent_definitions:
             current_examples = \
                 self.parser.intent_definitions[intent_name].generate()
             formatted_examples = [to_Rasa_format(intent_name, ex)
                                   for ex in current_examples]
             training_examples.extend(formatted_examples)
+            unformatted_training_examples.extend(current_examples)
 
         printDBG("Writing to file...")
         self.write_JSON(training_examples, self.training_file_path)
@@ -41,7 +43,7 @@ class Generator(object):
         for intent_name in self.parser.intent_definitions:
             current_examples = \
                 self.parser.intent_definitions[intent_name] \
-                           .generate(training_examples)
+                           .generate(unformatted_training_examples)
             formatted_examples = [to_Rasa_format(intent_name, ex)
                                   for ex in current_examples]
             testing_examples.extend(formatted_examples)
