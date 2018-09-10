@@ -38,16 +38,23 @@ class Generator(object):
         printDBG("Writing to file...")
         self.write_JSON(training_examples, self.training_file_path)
 
-        printDBG("Generating testing examples...")
-        testing_examples = []
+        should_generate_test_set = False
         for intent_name in self.parser.intent_definitions:
-            current_examples = \
-                self.parser.intent_definitions[intent_name] \
-                           .generate(unformatted_training_examples)
-            formatted_examples = [to_Rasa_format(intent_name, ex)
-                                  for ex in current_examples]
-            testing_examples.extend(formatted_examples)
-        if len(testing_examples) > 0:
+            if self.parser.intent_definitions[intent_name] \
+                          .nb_testing_examples_asked is not None:
+                should_generate_test_set = True
+
+        if should_generate_test_set:
+            printDBG("Generating testing examples...")
+            testing_examples = []
+            for intent_name in self.parser.intent_definitions:
+                current_examples = \
+                    self.parser.intent_definitions[intent_name] \
+                               .generate(unformatted_training_examples)
+                formatted_examples = [to_Rasa_format(intent_name, ex)
+                                      for ex in current_examples]
+                testing_examples.extend(formatted_examples)
+
             printDBG("Writing to file...")
             self.write_JSON(testing_examples, self.testing_file_path)
         printDBG("Generation over")

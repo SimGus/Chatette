@@ -44,6 +44,8 @@ class IntentDefinition(UnitDefinition):
             if self.nb_testing_examples_asked is None:
                 return []  # No examples must be generated
             nb_examples_asked = self.nb_testing_examples_asked
+        if nb_examples_asked <= 0:
+            return []
 
         nb_possible_ex = self.get_nb_possible_generated_examples()
         if nb_examples_asked > nb_possible_ex:
