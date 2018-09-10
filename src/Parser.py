@@ -262,9 +262,9 @@ class Parser(object):
             if slot_val is None or slot_val == '':
                 pass  # The generated text will be taken to be the slot value
             elif slot_val == '/':
-                rule.insert(0, DummySlotValRuleContent(rule[0].name))
+                rule.insert(0, DummySlotValRuleContent(rule[0].name, rule[0]))
             else:
-                rule.insert(0, DummySlotValRuleContent(slot_val))
+                rule.insert(0, DummySlotValRuleContent(slot_val, rule[0]))
             rules.append(rule)
 
         # Put the new definition inside the dict with slots definitions

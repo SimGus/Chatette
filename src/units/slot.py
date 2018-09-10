@@ -222,15 +222,15 @@ class DummySlotValRuleContent(RuleContent):
     a slot value. It won't generate anything ever.
     `self.name` and `self.slot_value` map to the slot value it represents.
     """
-    def __init__(self, name, leading_space=False, variation_name=None, arg_value=None,
-        casegen=False, randgen=None, percentage_gen=None, parser=None):
-            self.name = remove_escapement(name)
-            self.slot_value = self.name
-            if leading_space or variation_name is not None or \
-                arg_value is not None or casegen or randgen is not None or \
-                percentage_gen is not None or parser is not None:
-                    raise RuntimeError("Internal error: tried to create a dummy"+
-                        " slot value rule with another argument than just a value")
+    def __init__(self, name, next_token):
+        # (str, RuleContent) -> ()
+        self.name = remove_escapement(name)
+        self.slot_value = self.name
+        self.real_first_token = next_token
+
+    def can_have_casegen(self):
+        return self.real_first_token.can_have_casegen()
+
 
     def generate_random(self):
         return EMPTY_GEN()

@@ -84,7 +84,7 @@ class UnitDefinition(object):
         any of the rules of this definition.
         """
         for rule in self.rules:
-            if len(rule) > 0 and rule[0].can_have_casegen():  # BUG: with DummySlotValRuleContent
+            if len(rule) > 0 and rule[0].can_have_casegen():
                     return True
         return False
 

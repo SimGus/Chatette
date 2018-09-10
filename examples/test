@@ -3,9 +3,9 @@
 
 ~[alias]
     an alias
-    a ~[&second]
-~[second]
-    2
+    a @[&second]
+@[second]
+    2 = two
     second
 //a
 ;b
