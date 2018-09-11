@@ -7,8 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [1.1.1] - 2018-09-11
+### Added
+- Warning about circular references in the documentation
+
 ### Changed
-- Warn about circular references in the documentation
 - Deprecate semi-colon syntax in documentation
 
 ## [1.1] - 2018-09-11
