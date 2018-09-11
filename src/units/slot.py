@@ -54,7 +54,7 @@ class SlotDefinition(UnitDefinition):
         if arg_value is not None and self.argument_identifier is not None:
             generated_example["text"] = \
                 self.arg_regex.sub(arg_value, generated_example["text"])
-            generated_example[text] = \
+            generated_example["text"] = \
                 generated_example["text"].replace("\$", "$")
 
         # Tidy up generated text
