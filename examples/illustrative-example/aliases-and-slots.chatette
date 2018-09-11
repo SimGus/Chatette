@@ -1,4 +1,4 @@
-; File defining the aliases and slots
+// File defining the aliases and slots
 ~[hello]
     hello
     hi
