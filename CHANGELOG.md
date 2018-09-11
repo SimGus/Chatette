@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Hard limit on the generation of intent example to avoid producing too large files (by default, not more then 20'000 examples per intent)
 
+### Changed
+- Release number to follow SemVer 2.0.0
+
 ## [1.1.1] - 2018-09-11
 ### Added
 - Warning about circular references in the documentation
@@ -15,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Deprecate semi-colon syntax in documentation
 
-## [1.1] - 2018-09-11
+## [1.1.0] - 2018-09-11
 ### Added
 - Support for generation of non-overlapping training and testing datasets
 - Parser support for *Chatito* v2.1.x's syntax for asking for intent generation (`('training': '5', 'testing': '3')`). *Old way is not deprecated!*
@@ -27,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Deprecated
 - Semi-colon `;` syntax for comments (rather use double slash `//` syntax) to stick closer to *Chatito* v2.1.x
 
-## [1.0] - 2018-09-08
+## [1.0.0] - 2018-09-08
 ### Added
 - Changelog
 - Logo
@@ -57,7 +60,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Crashing *Rasa* adapter
 
-## [0.4] - 2018-08-24
+## [0.4.0] - 2018-08-24
 ### Added
 - Generate all possible strings for each and every token
 - Synonym support (in *Rasa NLU* format) in generator
@@ -78,7 +81,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 - Lots of debugging prints
 
-## [0.3] - 2018-08-19
+## [0.3.0] - 2018-08-19
 ### Added
 - Argument support
 - Real-life data
@@ -95,7 +98,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Line feed `\n` inside parsed strings
 - Assumption that words provided to the generator begin with a lowercase letter
 
-## [0.2] - 2018-08-17
+## [0.2.0] - 2018-08-17
 ### Added
 - Support for choices in the parser and the generator
 - Easier way to have a slot value named as the string generated (i.e. using slash `/` syntax)
@@ -103,7 +106,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Named random generations now generate (or don't generate) together
 
-## 0.1 - 2018-08-17
+## 0.1.0 - 2018-08-17
 ### Added
 - MIT license file
 - README file
@@ -116,12 +119,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [Unreleased]: https://github.com/SimGus/Chatette/compare/v1.1.1...HEAD
 [1.1.1]: https://github.com/SimGus/Chatette/compare/v1.1...v1.1.1
-[1.1]: https://github.com/SimGus/Chatette/compare/v1.0...v1.1
-[1.0]: https://github.com/SimGus/Chatette/compare/v0.4.2...v1.0
+[1.1.0]: https://github.com/SimGus/Chatette/compare/v1.0...v1.1
+[1.0.0]: https://github.com/SimGus/Chatette/compare/v0.4.2...v1.0
 [0.4.2]: https://github.com/SimGus/Chatette/compare/v0.4.1...v0.4.2
 [0.4.1]: https://github.com/SimGus/Chatette/compare/v0.3.2...v0.4.1
-[0.4]: https://github.com/SimGus/Chatette/compare/v0.3.2...v0.4
+[0.4.0]: https://github.com/SimGus/Chatette/compare/v0.3.2...v0.4
 [0.3.2]: https://github.com/SimGus/Chatette/compare/v0.3.1...v0.3.2
 [0.3.1]: https://github.com/SimGus/Chatette/compare/v0.3...v0.3.1
-[0.3]: https://github.com/SimGus/Chatette/compare/v0.2...v0.3
-[0.2]: https://github.com/SimGus/Chatette/compare/v0.1...v0.2
+[0.3.0]: https://github.com/SimGus/Chatette/compare/v0.2...v0.3
+[0.2.0]: https://github.com/SimGus/Chatette/compare/v0.1...v0.2
