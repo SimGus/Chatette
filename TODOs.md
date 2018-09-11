@@ -1,7 +1,5 @@
 # TODOs
 
-- **TODO**: tie the "all possibilities" generation to a maximum
-
 - **TODO**: do something with `arg` when generating all the possibilities
 - **TODO**: support `arg` inside synonym lists
 - **TODO**: add opposite `randgen` names
@@ -50,6 +48,7 @@
 - **done**: add the new training and testing syntax into the syntax specifications
 - **done**: *Docs* deprecate semi-colong syntax
 - **done**: *Docs* add warning about circular references
+- **done**: tie the "all possibilities" generation to a maximum
 
 # Bugs
 
@@ -76,7 +75,6 @@
 
 # Ideas
 
-- **IDEA**: make arguments several layers deep?
 - **IDEA**: maybe add more modifiers to choices?
 
 ## Rejected

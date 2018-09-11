@@ -360,6 +360,7 @@ As we said, when used within a rule, intent references behave exactly as alias r
 The only difference between alias and intent definitions is that the definition of an intent (and *not* its use in rules) is a handle for the generator. In other words, intent definitions are entry points to the generation.
 
 An intent definition can indeed be followed by a number in-between parentheses. This number specifies to the generator how many example sentences with this intent should be generated.
+However, there is a hard limit of 20'000 examples per intent to avoid producing too large files.
 
 For example, the following intent definition tells the generator to generate 10 example sentences with intent `greet`.
 ```

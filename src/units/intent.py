@@ -26,7 +26,7 @@ class IntentDefinition(UnitDefinition):
         self.nb_testing_examples_asked = nb_testing_examples_asked
 
 
-    def generate(self, training_examples=None):
+    def generate(self, max_nb_examples, training_examples=None):
         """
         Generates all the examples that were asked (i.e. as much examples
         as asked). The number of generated examples is tied to a maximum though TODO.
@@ -37,7 +37,8 @@ class IntentDefinition(UnitDefinition):
         if (    training_examples is None
             and self.nb_training_examples_asked is None):
             return [{"text": ex["text"].strip(), "entities": ex["entities"]}
-                    for ex in self.generate_all()]
+                    for (i, ex) in enumerate(self.generate_all())
+                    if i < max_nb_examples]
 
         nb_examples_asked = self.nb_training_examples_asked
         if training_examples is not None:
@@ -51,13 +52,17 @@ class IntentDefinition(UnitDefinition):
         if nb_examples_asked > nb_possible_ex:
             if training_examples is None:
                 return [{"text": ex["text"].strip(), "entities": ex["entities"]}
-                        for ex in self.generate_all()]
+                        for (i, ex) in enumerate(self.generate_all())
+                        if i < max_nb_examples]
             else:
                 all_examples = [{"text": ex["text"].strip(),
                                  "entities": ex["entities"]}
-                                for ex in self.generate_all()]
+                                for (i, ex) in enumerate(self.generate_all())
+                                if i < max_nb_examples]
                 return [ex for ex in all_examples
                         if ex not in training_examples]
+        if nb_examples_asked > max_nb_examples:
+            nb_examples_asked = max_nb_examples
 
         if nb_examples_asked < nb_possible_ex/2:  # QUESTION: should this be /2?
             generated_examples = []

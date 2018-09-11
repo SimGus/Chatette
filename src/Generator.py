@@ -18,10 +18,18 @@ class Generator(object):
     If there were inconsistencies in the input file, they are likely to be
     detected here.
     """
+    DEFAULT_MAX_NB_INTENT_EXAMPLES = 20000
+
     def __init__(self, output_file_path, testing_file_path, parser):
         self.training_file_path = output_file_path
         self.testing_file_path = testing_file_path
         self.parser = parser
+        self.max_nb_single_intent_examples = \
+            Generator.DEFAULT_MAX_NB_INTENT_EXAMPLES
+
+    def set_max_nb_single_intent_examples(new_max):
+        self.max_nb_single_intent_examples = new_max
+
 
     def generate(self):
         printDBG("Generating training examples...")
@@ -29,7 +37,8 @@ class Generator(object):
         unformatted_training_examples = []
         for intent_name in self.parser.intent_definitions:
             current_examples = \
-                self.parser.intent_definitions[intent_name].generate()
+                self.parser.intent_definitions[intent_name] \
+                           .generate(self.max_nb_single_intent_examples)
             formatted_examples = [to_Rasa_format(intent_name, ex)
                                   for ex in current_examples]
             training_examples.extend(formatted_examples)
@@ -50,7 +59,8 @@ class Generator(object):
             for intent_name in self.parser.intent_definitions:
                 current_examples = \
                     self.parser.intent_definitions[intent_name] \
-                               .generate(unformatted_training_examples)
+                               .generate(self.max_nb_single_intent_examples,
+                                         unformatted_training_examples)
                 formatted_examples = [to_Rasa_format(intent_name, ex)
                                       for ex in current_examples]
                 testing_examples.extend(formatted_examples)
