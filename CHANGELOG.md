@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.1] - 2018-09-11
+### Changed
+- Warn about circular references in the documentation
+- Deprecate semi-colon syntax in documentation
+
 ## [1.1] - 2018-09-11
 ### Added
 - Support for generation of non-overlapping training and testing datasets
@@ -105,7 +110,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for slot value names
 - Generator able to generate an output file in *Rasa NLU* format (without support for synonyms or regex features)
 
-[Unreleased]: https://github.com/SimGus/Chatette/compare/v1.1...HEAD
+[Unreleased]: https://github.com/SimGus/Chatette/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/SimGus/Chatette/compare/v1.1...v1.1.1
 [1.1]: https://github.com/SimGus/Chatette/compare/v1.0...v1.1
 [1.0]: https://github.com/SimGus/Chatette/compare/v0.4.2...v1.0
 [0.4.2]: https://github.com/SimGus/Chatette/compare/v0.4.1...v0.4.2

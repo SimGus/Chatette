@@ -7,7 +7,7 @@ If you want to make large datasets of example data for Natural Language Understa
 
 Specifically, *Chatette* implements a Domain Specific Language (*DSL*) that allows you to define templates to generate a large number of sentences. Those sentences are then saved in the input format of *Rasa NLU*.
 
-The *DSL* used is a superset of the excellent project [*Chatito*](https://github.com/rodrigopivi/Chatito "Chatito's GitHub repository") created by Rodrigo Pimentel. (*Note: the DSL is actually a superset of Chatito v2.0.0 for Rasa NLU, not the latest version with all possible adapters.*)
+The *DSL* used is a superset of the excellent project [*Chatito*](https://github.com/rodrigopivi/Chatito "Chatito's GitHub repository") created by Rodrigo Pimentel. (*Note: the DSL is actually a superset of Chatito v2.1.x for Rasa NLU, not for all possible adapters.*)
 
 # How to use *Chatette*?
 
@@ -58,7 +58,7 @@ The reason comes from the different goals of the two projects:
 *Chatette* defines a more complex *DSL* to be able to manage larger projects. Here is a non-exhaustive list of features that can help with that:
 
 - Ability to break down templates into multiple files
-- Support for comments inside template files (*Note: this is now possible in Chatito v2.1.x too*)
+- ~~Support for comments inside template files~~ (*Note: this is now possible in Chatito v2.1.x too*)
 - Word group syntax that allows to define parts of sentences that might not be generated in every example
 - Possibility to specify the probability of generating some parts of the sentences
 - Choice syntax to prevent copy-pasting rules with only a few changes
@@ -72,7 +72,8 @@ As previously mentioned, the *DSL* used by *Chatette* is a superset of the one u
 
 As an example, this *Chatito* data:
 ```
-%[ask_toilet](3)
+// This template defines different ways to ask for the location of toilets (Chatito version)
+%[ask_toilet]('training': '3')
     ~[sorry?] ~[tell me] where the @[toilet#singular] is ~[please?]?
     ~[sorry?] ~[tell me] where the @[toilet#plural] are ~[please?]?
 
@@ -101,7 +102,7 @@ As an example, this *Chatito* data:
 ```
 could be directly given as input to *Chatette*, but this *Chatette* template would produce the same thing:
 ```
-; This template defines different ways to ask for the location of toilets
+// This template defines different ways to ask for the location of toilets (Chatette version)
 %[&ask_toilet](3)
     ~[sorry?] ~[tell me] where the {@[toilet#singular] is/@[toilet#plural] are} [please?]\?
 

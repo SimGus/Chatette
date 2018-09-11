@@ -13,16 +13,14 @@
 - **TODO**: training and testing datasets should never overlap
 
 - **TODO**: improve the overall command line experience (cf. `click` library)
-- **TODO**: allow for arguments to the command line (output file*s* paths)
+- **TODO**: allow for arguments to the command line (output file*s* paths, max generation per intent,...)
 - **TODO**: change `main.py` to a more user-friendly name
 
 - **TODO**: use more list/dict comprehensions (faster than using `append`)
 - **TODO**: rewrite docstrings formatted as explained in *PEP257*
+- **TODO**: detect and warn about circular references
 
 - **TODO**: add unit tests
-
-- **TODO**: *Docs* add warning about circular references
-- **TODO**: *Docs* deprecate semi-colong syntax
 
 ## Done
 
@@ -50,6 +48,8 @@
 - **done**: don't generate twice the same sentence
 - **done**: check that `casegen` is applicable and useful before setting it for a rule content
 - **done**: add the new training and testing syntax into the syntax specifications
+- **done**: *Docs* deprecate semi-colong syntax
+- **done**: *Docs* add warning about circular references
 
 # Bugs
 
