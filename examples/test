@@ -1,11 +1,11 @@
-%[test]('training': '5', 'testing': '5')
-    word {~[alias]/t}
+%[test](3)
+    @[slot$hi]
 
-~[alias]
-    an alias
-    a @[second]
-@[second]
-    2 = two
-    second
-//a
-;b
+~[al$ARG]
+    something $ARG
+    $ARG something
+
+@[slot$ARG]
+    $ARG
+    ~[al$ARG]
+    test = $ARG

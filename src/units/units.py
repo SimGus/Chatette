@@ -161,27 +161,27 @@ class UnitDefinition(object):
             if variation_name in self.variations:
                 relevant_rules = self.variations[variation_name]
             else:
-                raise SyntaxError("Couldn't find variation '"+variation_name+
-                    "' for "+self.type+" '"+self.name+"'")
+                raise SyntaxError("Couldn't find variation '"+
+                                  str(variation_name)+"' for "+str(self.type)+
+                                  " '"+str(self.name)+"'")
 
         for rule in relevant_rules:
-            examples_from_sub_rules = []
-            tmp_buffer = []
+            examples_from_current_rule = []
             for sub_unit_rule in rule:
                 sub_unit_possibilities = \
                     sub_unit_rule.generate_all()
-                if len(examples_from_sub_rules) == 0:
-                    examples_from_sub_rules = sub_unit_possibilities
+                if len(examples_from_current_rule) <= 0:
+                    examples_from_current_rule = sub_unit_possibilities
                 else:
                     tmp_buffer = []
-                    for ex in examples_from_sub_rules:
+                    for ex in examples_from_current_rule:
                         for possibility in sub_unit_possibilities:
                             tmp_buffer.append({
                                 "text": ex["text"]+possibility["text"],
-                                "entities": ex["entities"]+possibility["entities"]
+                                "entities": ex["entities"]+possibility["entities"],
                             })
-                    examples_from_sub_rules = tmp_buffer
-            generated_examples.extend(examples_from_sub_rules)
+                    examples_from_current_rule = tmp_buffer
+            generated_examples.extend(examples_from_current_rule)
 
         # Replace `arg` inside generated sentences
         if arg_value is not None and self.argument_identifier is not None:

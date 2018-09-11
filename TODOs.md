@@ -55,6 +55,9 @@
 
 # Bugs
 
+- **BUG**: arguments are not correctly managed within entities list
+- **BUG**: arguments are not given down when an argument is transmitted as the argument of a token
+
 ## To confirm
 
 - **BUG?**: somewhere in the synonyms: Rasa NLU can't generate it without crashing (unhashable type 'dict' when looking for "value")
@@ -75,6 +78,7 @@
 - **fixed**: when no DummySlotValRuleContent, synonyms keep entities
 - **fixed**: duplicates in synonym list
 - **fixed**: in synonyms, too many synonyms are added because variations are not taken into account at generation
+- **fixed**: entities are not generated with `generate_all`
 
 # Ideas
 

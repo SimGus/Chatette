@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Release number to follow SemVer 2.0.0
 
+### Fixed
+- When asking to generate lots of examples, entities were not listed
+
 ## [1.1.1] - 2018-09-11
 ### Added
 - Warning about circular references in the documentation

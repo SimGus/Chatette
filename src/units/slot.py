@@ -72,6 +72,62 @@ class SlotDefinition(UnitDefinition):
 
         return generated_example
 
+    def generate_all(self, arg_value=None, variation_name=None):
+        generated_examples = []
+
+        relevant_rules = self.rules
+        if variation_name is not None:
+            if variation_name in self.variations:
+                relevant_rules = self.variations[variation_name]
+            else:
+                raise SyntaxError("Couldn't find variation '"+
+                                  str(variation_name)+"' for slot '"+
+                                  str(self.name)+"'")
+
+        for rule in relevant_rules:
+            examples_from_current_rule = []
+            for sub_unit_rule in rule:
+                sub_unit_possibilities = \
+                    sub_unit_rule.generate_all()
+                if len(examples_from_current_rule) <= 0:
+                    examples_from_current_rule = sub_unit_possibilities
+                else:
+                    tmp_buffer = []
+                    for ex in examples_from_current_rule:
+                        for possibility in sub_unit_possibilities:
+                            tmp_buffer.append({
+                                "text": ex["text"]+possibility["text"],
+                                "entities": ex["entities"]+possibility["entities"],
+                            })
+                    examples_from_current_rule = tmp_buffer
+
+            # Add the entity in the list
+            slot_value = rule[0].name
+            if not isinstance(rule[0], DummySlotValRuleContent):
+                slot_value = None
+            for ex in examples_from_current_rule:
+                if slot_value is not None:
+                    ex["entities"].append({
+                        "slot-name": self.name,
+                        "text": ex["text"][:],
+                        "value": slot_value,
+                    })
+                else:
+                    ex["entities"].append({
+                        "slot-name": self.name,
+                        "text": ex["text"][:],
+                        "value": ex["text"][:],
+                    })
+
+            generated_examples.extend(examples_from_current_rule)
+
+        # Replace `arg` inside generated sentences
+        if arg_value is not None and self.argument_identifier is not None:
+            for (i, ex) in enumerate(generated_examples):
+                ex["text"] = self.arg_regex.sub(arg_value, ex["text"])
+                generated_examples[i]["text"] = ex["text"].replace("\$", "$")
+        return generated_examples
+
 
     def get_synonyms_dict(self):
         """
