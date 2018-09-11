@@ -275,6 +275,8 @@ For declarations, three modifiers are supported:
 
     The dollar sign `$` must be placed after the declaration name and the identifier and the argument has to be located after that. As for any other identifiers, arguments identifiers can be made up of any characters except line breaks (and special characters should be escaped). In the example, we usually use uppercase arguments name to quickly spot them.
 
+    Note that it is not advised to use the same identifier for an argument in a definition and in a reference within this definition, as the generator might incorrectly determine which should be replaced and which shouldn't.
+
     Inside rules, you would reference the argument simply by writing it, prepended by a dollar sign.
     For example:
     ```
