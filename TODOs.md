@@ -4,6 +4,9 @@
 - **TODO**: support `arg` inside synonym lists
 - **TODO**: add opposite `randgen` names
 - **TODO**: support several arguments in one rule
+- **TODO**: parse in a better way asked number of generation of intents
+
+- **TODO**: allow for (most) special characters without escapement outside of units
 
 - **TODO**: add regex to rasa JSON file
 - **TODO**: replace modifier regex by several one to allow for escaping special characters everywhere
