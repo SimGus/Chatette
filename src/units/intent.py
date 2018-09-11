@@ -73,12 +73,10 @@ class IntentDefinition(UnitDefinition):
                     if (    current_example not in generated_examples
                         and (   training_examples is None
                              or current_example not in training_examples)):
-                        print(str(current_example)+" not in "+str(training_examples))
                         generated_examples.append(current_example)
                         break
             return generated_examples
         else:
-            print("test")
             all_examples = [{"text": ex["text"].strip(),
                              "entities": ex["entities"]}
                             for ex in self.generate_all()]
