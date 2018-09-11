@@ -51,19 +51,15 @@ class SlotDefinition(UnitDefinition):
             generated_example["text"] = randomly_change_case(generated_example["text"])
 
         # Replace `arg` inside the generated sentence
-        if arg_value is not None and self.argument_identifier is not None:
-            generated_example["text"] = \
-                self.arg_regex.sub(arg_value, generated_example["text"])
-            generated_example["text"] = \
-                generated_example["text"].replace("\$", "$")
-
-        # Tidy up generated text
-        generated_example["text"] = generated_example["text"].strip()  # Strip for safety
+        generated_example["text"] = \
+            self._replace_arg(generated_example["text"], arg_value).strip()  # Strip for safety
 
         # Add the entity in the list
         slot_value = chosen_rule[0].name
         if not isinstance(chosen_rule[0], DummySlotValRuleContent):
             slot_value = generated_example["text"][:]
+        # Replace the argument by its value if needed
+        slot_value = self._replace_arg(slot_value, arg_value)
         generated_example["entities"].append({
             "slot-name": self.name,
             "text": generated_example["text"][:],
@@ -101,10 +97,22 @@ class SlotDefinition(UnitDefinition):
                             })
                     examples_from_current_rule = tmp_buffer
 
+            # Replace `arg` inside generated sentences
+            if arg_value is not None and self.argument_identifier is not None:
+                for ex in examples_from_current_rule:
+                    ex["text"] = self._replace_arg(ex["text"], arg_value)
+                    for entity in ex["entities"]:
+                        entity["text"] = self._replace_arg(entity["text"],
+                                                           arg_value)
+                        entity["value"] = self._replace_arg(entity["value"],
+                                                            arg_value)
+
             # Add the entity in the list
             slot_value = rule[0].name
             if not isinstance(rule[0], DummySlotValRuleContent):
                 slot_value = None
+            else:  # Replace the argument by its value if needed
+                slot_value = self._replace_arg(slot_value, arg_value)
             for ex in examples_from_current_rule:
                 if slot_value is not None:
                     ex["entities"].append({
@@ -121,11 +129,6 @@ class SlotDefinition(UnitDefinition):
 
             generated_examples.extend(examples_from_current_rule)
 
-        # Replace `arg` inside generated sentences
-        if arg_value is not None and self.argument_identifier is not None:
-            for (i, ex) in enumerate(generated_examples):
-                ex["text"] = self.arg_regex.sub(arg_value, ex["text"])
-                generated_examples[i]["text"] = ex["text"].replace("\$", "$")
         return generated_examples
 
 
@@ -166,6 +169,15 @@ class SlotDefinition(UnitDefinition):
                 synonyms[slot_value].extend(current_examples)
 
         return synonyms
+
+
+    def _replace_arg(self, text, arg_value):
+        """If needed, replaces the arguments by their value in `text`."""
+        # (str, str) -> (str)
+        if arg_value is not None and self.argument_identifier is not None:
+            text = self.arg_regex.sub(arg_value, text)
+            text = text.replace("\$", "$")
+        return text
 
     # Everything else is in the superclass
 
