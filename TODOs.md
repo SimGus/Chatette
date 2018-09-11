@@ -1,6 +1,5 @@
 # TODOs
 
-- **TODO**: do something with `arg` when generating all the possibilities
 - **TODO**: support `arg` inside synonym lists
 - **TODO**: add opposite `randgen` names
 - **TODO**: support several arguments in one rule
@@ -42,6 +41,7 @@
 - **done**: check that slot value in slots content has any use (removed)
 - **done**: redo as OOP
 - **done**: support generation without a max number given
+- **done**: do something with `arg` when generating all the possibilities
 - **done**: add a *changelog*
 - **done**: change comments symbols from `;` to `//` to more closely resemble *Chatito* v2.1.x
 - **done**: parser support *Chatito* v2.1.x's syntax for asking training and testing generations
