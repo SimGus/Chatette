@@ -1,6 +1,5 @@
 # TODOs
 
-- **TODO**: support `arg` inside synonym lists
 - **TODO**: add opposite `randgen` names
 - **TODO**: support several arguments in one rule
 - **TODO**: parse in a better way asked number of generation of intents
@@ -88,3 +87,4 @@
 
 - **rejected**: use overrides pip package (no, doesn't work in python 2)
 - **rejected**: make arguments several layers deep? no, it is not useful as you can pass arguments down the references
+- **rejected**: support `arg` inside synonym lists (how?)
