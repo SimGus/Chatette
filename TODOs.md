@@ -1,6 +1,5 @@
 # TODOs
 
-- **TODO**: allow for (most) special characters without escapement outside of units
 - **TODO**: parse in a better way asked number of generation of intents
 - **TODO**: replace modifier regex by several one to allow for escaping special characters everywhere
 - **TODO**: use symbols from `parser_utils` everywhere needed
@@ -53,6 +52,7 @@
 - **done**: training and testing datasets should never overlap
 - **done**: support `arg` inside synonym lists
 - **done**: `generate_random` and `generate_all` don't have coherent arguments
+- **done**: allow for (most) special characters without escapement outside of units
 
 # Bugs
 

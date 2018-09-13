@@ -103,7 +103,7 @@ DECLARATION2  // Other comment
   RULE2
 ```
 
-If you want to use special characters (semi-colons, square brackets, etc.) as normal characters, they should be escaped by prepending a backslash (`\`) to them in order to avoid incorrect parsings of the templates. This is true anywhere in the template documents, except in comments.
+If you want to use special characters (semi-colons, square brackets, etc.) as normal characters, they should be escaped by prepending a backslash (`\`) to them in order to avoid incorrect parsings of the templates. This is true anywhere those characters might have a special meaning (usually in parts between squared brackets), except in comments.
 
 Here is an exhaustive list of characters which should be escaped:
 
