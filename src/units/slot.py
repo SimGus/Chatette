@@ -183,16 +183,29 @@ class SlotDefinition(UnitDefinition):
             (unprocessed_synonyms, synonyms) = (synonyms, dict())
             # Manage arguments
             for slot_value in unprocessed_synonyms:
-                # TODO: manage the slot value as well
-                synonyms[slot_value] = []
-                for ex in unprocessed_synonyms[slot_value]:
-                    if self._contains_arg(ex):
-                        for arg_value in self.arg_values_encountered:
-                            synonyms[slot_value].append(
-                                self._replace_arg(ex, arg_value)
-                            )
-                    else:
-                        synonyms[slot_value].append(ex)
+                if self._contains_arg(slot_value):
+                    for arg_value in self.arg_values_encountered:
+                        processed_slot_val = \
+                            self._replace_arg(slot_value, arg_value)
+                        synonyms[processed_slot_val] = []
+                        for ex in unprocessed_synonyms[slot_value]:
+                            if self._contains_arg(ex):
+                                for arg_value in self.arg_values_encountered:
+                                    synonyms[processed_slot_val].append(
+                                        self._replace_arg(ex, arg_value)
+                                    )
+                            else:
+                                synonyms[processed_slot_val].append(ex)
+                else:
+                    synonyms[slot_value] = []
+                    for ex in unprocessed_synonyms[slot_value]:
+                        if self._contains_arg(ex):
+                            for arg_value in self.arg_values_encountered:
+                                synonyms[slot_value].append(
+                                    self._replace_arg(ex, arg_value)
+                                )
+                        else:
+                            synonyms[slot_value].append(ex)
 
         return synonyms
 
