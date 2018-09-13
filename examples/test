@@ -1,5 +1,6 @@
 %[test](3)
     @[slot$hi]
+    @[slot$pouet]
 
 ~[al$ARG]
     something $ARG

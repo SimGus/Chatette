@@ -4,6 +4,8 @@
 - **TODO**: support several arguments in one rule
 - **TODO**: parse in a better way asked number of generation of intents
 
+- **TODO**: `generate_random` and `generate_all` don't have coherent arguments
+
 - **TODO**: allow for (most) special characters without escapement outside of units
 
 - **TODO**: add regex to rasa JSON file
@@ -51,6 +53,7 @@
 - **done**: *Docs* deprecate semi-colong syntax
 - **done**: *Docs* add warning about circular references
 - **done**: tie the "all possibilities" generation to a maximum
+- **done**: support `arg` inside synonym lists
 
 # Bugs
 
@@ -87,4 +90,3 @@
 
 - **rejected**: use overrides pip package (no, doesn't work in python 2)
 - **rejected**: make arguments several layers deep? no, it is not useful as you can pass arguments down the references
-- **rejected**: support `arg` inside synonym lists (how?)

@@ -15,6 +15,7 @@ class SlotDefinition(UnitDefinition):
         super(SlotDefinition, self).__init__(name, rules=rules, arg=arg,
             casegen=casegen)
         self.type = "alias"
+        self.arg_values_encountered = []
 
 
     def generate_random(self, variation_name=None, arg_value=None):
@@ -24,6 +25,11 @@ class SlotDefinition(UnitDefinition):
         This is the only kind of definition that will generate an entity.
         """
         # (str, str) -> {"text": str, "entities": [{"slot-name": str, "text": str, "value": str}]}
+        if (    arg_value is not None
+            and arg_value not in self.arg_values_encountered):
+            # Memorize arg value
+            self.arg_values_encountered.append(arg_value)
+
         chosen_rule = None
         if variation_name is None:
             chosen_rule = choose(self.rules)
@@ -69,6 +75,11 @@ class SlotDefinition(UnitDefinition):
         return generated_example
 
     def generate_all(self, arg_value=None, variation_name=None):
+        if (    arg_value is not None
+            and arg_value not in self.arg_values_encountered):
+            # Memorize arg value
+            self.arg_values_encountered.append(arg_value)
+
         generated_examples = []
 
         relevant_rules = self.rules
@@ -168,6 +179,21 @@ class SlotDefinition(UnitDefinition):
             else:
                 synonyms[slot_value].extend(current_examples)
 
+        if self.argument_identifier is not None:
+            (unprocessed_synonyms, synonyms) = (synonyms, dict())
+            # Manage arguments
+            for slot_value in unprocessed_synonyms:
+                # TODO: manage the slot value as well
+                synonyms[slot_value] = []
+                for ex in unprocessed_synonyms[slot_value]:
+                    if self._contains_arg(ex):
+                        for arg_value in self.arg_values_encountered:
+                            synonyms[slot_value].append(
+                                self._replace_arg(ex, arg_value)
+                            )
+                    else:
+                        synonyms[slot_value].append(ex)
+
         return synonyms
 
 
@@ -178,6 +204,15 @@ class SlotDefinition(UnitDefinition):
             text = self.arg_regex.sub(arg_value, text)
             text = text.replace("\$", "$")
         return text
+
+    def _contains_arg(self, text):
+        """
+        Checks whether `text` contains at least once the argument identifier
+        (and if it is marked as 'to replace').
+        @pre: `self.arg_regex` is not `None`
+        """
+        # (str) -> (bool)
+        return (self.arg_regex.search(text) is not None)
 
     # Everything else is in the superclass
 
