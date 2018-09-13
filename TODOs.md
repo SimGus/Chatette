@@ -1,26 +1,25 @@
 # TODOs
 
-- **TODO**: add opposite `randgen` names
-- **TODO**: support several arguments in one rule
-- **TODO**: parse in a better way asked number of generation of intents
-
 - **TODO**: `generate_random` and `generate_all` don't have coherent arguments
 
 - **TODO**: allow for (most) special characters without escapement outside of units
-
-- **TODO**: add regex to rasa JSON file
+- **TODO**: parse in a better way asked number of generation of intents
 - **TODO**: replace modifier regex by several one to allow for escaping special characters everywhere
 - **TODO**: use symbols from `parser_utils` everywhere needed
-- **TODO**: training and testing datasets should never overlap
 
-- **TODO**: improve the overall command line experience (cf. `click` library)
+- **TODO**: add opposite `randgen` names
+- **TODO**: support several arguments in one rule
+
+- **TODO**: add regex to rasa JSON file
+
 - **TODO**: allow for arguments to the command line (output file*s* paths, max generation per intent,...)
-- **TODO**: change `main.py` to a more user-friendly name
+- **TODO**: improve the overall command line experience (cf. `click` library)
 
 - **TODO**: use more list/dict comprehensions (faster than using `append`)
 - **TODO**: rewrite docstrings formatted as explained in *PEP257*
 - **TODO**: detect and warn about circular references
 
+- **TODO**: change `main.py` to a more user-friendly name
 - **TODO**: add unit tests
 
 ## Done
@@ -53,6 +52,7 @@
 - **done**: *Docs* deprecate semi-colong syntax
 - **done**: *Docs* add warning about circular references
 - **done**: tie the "all possibilities" generation to a maximum
+- **done**: training and testing datasets should never overlap
 - **done**: support `arg` inside synonym lists
 
 # Bugs
