@@ -419,7 +419,7 @@ class Parser(object):
         return value will be `(alt_name, list)`.
         @pre: `text` has no comments inside it.
         """
-        # (str, bool) -> [RuleContent]
+        # str, bool -> [RuleContent]
         # Find the alternative slot value name if needed
         slot_val = None
         if accept_slot_val:
@@ -429,8 +429,16 @@ class Parser(object):
                 slot_val = alt_slot_substring[1:].strip()
                 text = text.replace(alt_slot_substring, "").rstrip()
 
+        tokens = self._tokenize(text)
+        rules = self._make_rules_from_tokens(tokens)
+
+        if accept_slot_val:
+            return (slot_val, rules)
+        return rules
+
+    def _tokenize(self, text):
         # Split string in list of words and raw units (as strings)
-        words_and_units_raw = []
+        tokens = []
         current = ""
 
         escaped = False
@@ -445,7 +453,7 @@ class Parser(object):
             #     break
             elif inside_choice:
                 if c == CHOICE_CLOSE_SYM:
-                    words_and_units_raw.append(current+c)
+                    tokens.append(current+c)
                     current = ""
                     inside_choice = False
                 else:
@@ -456,17 +464,17 @@ class Parser(object):
             elif c.isspace():
                 if not is_unit_start(current) and not is_choice(current):  # End of word
                     if current != "":
-                        words_and_units_raw.append(current)
-                    words_and_units_raw.append(' ')
+                        tokens.append(current)
+                    tokens.append(' ')
                     current = ""
                 elif current == "" and \
-                    len(words_and_units_raw) > 0 and words_and_units_raw[-1] == ' ':
+                    len(tokens) > 0 and tokens[-1] == ' ':
                         continue  # Double space in-between words
                 else:
                     current += c
             elif c == UNIT_CLOSE_SYM:
                 if is_unit_start(current):
-                    words_and_units_raw.append(current+c)
+                    tokens.append(current+c)
                     current = ""
                 else:
                     warnings.warn("Inconsistent use of the unit close symbol ("+
@@ -484,32 +492,32 @@ class Parser(object):
                 current += c
             elif c == CHOICE_OPEN_SYM:
                 if current != "":
-                    words_and_units_raw.append(current)
+                    tokens.append(current)
                 inside_choice = True
                 current = c
             elif is_start_unit_sym(c) and current != ALIAS_SYM and \
                 current != SLOT_SYM and current != INTENT_SYM:
                     if current != "":
-                        words_and_units_raw.append(current)
+                        tokens.append(current)
                     current = c
             else:  # Any other character
                 current += c
         if current != "":
-            words_and_units_raw.append(current)
+            tokens.append(current)
+        return tokens
 
-        # Make a list of `RuleContent`s from this parsing
+    def _make_rules_from_tokens(self, tokens):
+        # [str] -> [RuleContent]
         rules = []
-        for (i, string) in enumerate(words_and_units_raw):
+        for (i, string) in enumerate(tokens):
             if string == ' ':
                 continue
 
-            no_leading_space = (i == 0 or \
-                (i != 0 and words_and_units_raw[i-1] != ' '))
+            no_leading_space = (i == 0 or (i != 0 and tokens[i-1] != ' '))
 
             if is_word(string):
-                rules.append(
-                    WordRuleContent(remove_escapement(string), not no_leading_space)
-                )
+                rules.append(WordRuleContent(remove_escapement(string),
+                                             not no_leading_space))
                 continue
 
             unit_type = get_unit_type(string)
@@ -525,15 +533,16 @@ class Parser(object):
                     raise SyntaxError("Word groups cannot have a variation",
                         (self.in_file.name, self.line_nb, 0, name))
 
-                rules.append(
-                    WordGroupRuleContent(remove_escapement(name),
-                                  not no_leading_space, casegen=casegen,
-                                  randgen=randgen, percentage_gen=percentgen)
-                )
+                rules.append(WordGroupRuleContent(remove_escapement(name),
+                                                  not no_leading_space,
+                                                  casegen=casegen,
+                                                  randgen=randgen,
+                                                  percentage_gen=percentgen))
             elif unit_type == Unit.choice:
                 choice = self.parse_choice(string, not no_leading_space)
                 if choice is not None:
-                    rules.append(self.parse_choice(string, not no_leading_space))
+                    rules.append(self.parse_choice(string,
+                                                   not no_leading_space))
             elif unit_type == Unit.alias:
                 (name, arg_value, variation, randgen, percentgen, casegen) = \
                     self.parse_unit(string)
@@ -541,10 +550,9 @@ class Parser(object):
                     raise SyntaxError("Aliases must have a name",
                         (self.in_file.name, self.line_nb, 0, name))
 
-                rules.append(
-                    AliasRuleContent(name, not no_leading_space, variation, arg_value,
-                              casegen, randgen, percentgen, self)
-                )
+                rules.append(AliasRuleContent(name, not no_leading_space,
+                                              variation, arg_value, casegen,
+                                              randgen, percentgen, self))
             elif unit_type == Unit.slot:
                 (name, arg_value, variation, randgen, percentgen, casegen) = \
                     self.parse_unit(string)
@@ -552,10 +560,9 @@ class Parser(object):
                     raise SyntaxError("Slots must have a name",
                         (self.in_file.name, self.line_nb, 0, name))
 
-                rules.append(
-                    SlotRuleContent(name, not no_leading_space, variation, arg_value,
-                              casegen, randgen, percentgen, self)
-                )
+                rules.append(SlotRuleContent(name, not no_leading_space,
+                                             variation, arg_value, casegen,
+                                             randgen, percentgen, self))
             else:  # Unit.intent
                 (name, arg_value, variation, randgen, percentgen, casegen) = \
                     self.parse_unit(string)
@@ -563,13 +570,10 @@ class Parser(object):
                     raise SyntaxError("Intents must have a name",
                         (self.in_file.name, self.line_nb, 0, name))
 
-                rules.append(
-                    IntentRuleContent(name, not no_leading_space, variation, arg_value,
-                              casegen, randgen, percentgen, self)
-                )
+                rules.append(IntentRuleContent(name, not no_leading_space,
+                                               variation, arg_value, casegen,
+                                               randgen, percentgen, self))
 
-        if accept_slot_val:
-            return (slot_val, rules)
         return rules
 
 
