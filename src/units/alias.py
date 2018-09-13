@@ -87,8 +87,8 @@ class AliasRuleContent(RuleContent):
 
         generated_examples.extend(self.parser \
                                         .get_definition(self.name, Unit.alias) \
-                                        .generate_all(self.arg_value,
-                                                      variation_name=self.variation_name))
+                                        .generate_all(self.variation_name,
+                                                      self.arg_value))
 
         if self.leading_space:
             for (i, ex) in enumerate(generated_examples):

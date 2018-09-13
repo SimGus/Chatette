@@ -153,7 +153,7 @@ class UnitDefinition(object):
 
         return generated_example
 
-    def generate_all(self, arg_value=None, variation_name=None):
+    def generate_all(self, variation_name=None, arg_value=None):
         generated_examples = []
 
         relevant_rules = self.rules
