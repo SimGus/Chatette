@@ -417,16 +417,24 @@ class Parser(object):
         If `accept_slot_val` is `True`, expressions after a `=` will be considered
         to be the slot value name for the splitted expression. In this case, the
         return value will be `(alt_name, list)`.
-        @pre: `text` has no comments inside it
+        @pre: `text` has no comments inside it.
         """
         # (str, bool) -> [RuleContent]
+        # Find the alternative slot value name if needed
+        slot_val = None
+        if accept_slot_val:
+            alt_slot_start_index = text.find(ALT_SLOT_VALUE_NAME_SYM)
+            if alt_slot_start_index != -1:
+                alt_slot_substring = text[alt_slot_start_index:]
+                slot_val = alt_slot_substring[1:].strip()
+                text = text.replace(alt_slot_substring, "").rstrip()
+
         # Split string in list of words and raw units (as strings)
         words_and_units_raw = []
         current = ""
 
         escaped = False
         inside_choice = False
-        must_parse_alt_slot_val = False
         for c in text:
             # Manage escapement
             if escaped:
@@ -484,19 +492,10 @@ class Parser(object):
                     if current != "":
                         words_and_units_raw.append(current)
                     current = c
-            elif accept_slot_val and c == ALT_SLOT_VALUE_NAME_SYM:
-                must_parse_alt_slot_val = True
-                break
             else:  # Any other character
                 current += c
         if current != "":
             words_and_units_raw.append(current)
-
-        # Find the alternative slot value name if needed
-        slot_val = None
-        if must_parse_alt_slot_val:
-            slot_val = \
-                text[text.find(ALT_SLOT_VALUE_NAME_SYM):][1:].strip()
 
         # Make a list of `RuleContent`s from this parsing
         rules = []
