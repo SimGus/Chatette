@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Changed
-- In synonyms lists, argument identifiers are now replaced with the previously encountered values for those arguments (i.e. each of their value accross the whole templates)
+- In synonyms lists, replace argument identifiers with their previously encountered values (i.e. each value accross the whole templates)
 
 ## [1.1.2] - 2018-09-11
 ### Added
