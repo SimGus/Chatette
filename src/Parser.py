@@ -104,39 +104,98 @@ class Parser(object):
         randgen = None
         percentgen = None
         casegen = False
+        # one_found = False
+        # for match in pattern_modifiers.finditer(unit):
+        #     start_index = match.start()
+        #     if one_found:  # this error would happen only when `unit` is a whole line (i.e. a declaration)
+        #         raise SyntaxError("Expected only one unit here: only one declaration is allowed per line",
+        #             (self.in_file.name, self.line_nb, start_index, unit))
+        #     else:
+        #         one_found = True
+        #     match = match.groupdict()
+        #
+        #     name = match["name"]
+        #     arg = match["arg"]
+        #     variation = match["variation"]
+        #     randgen = match["randgen"]
+        #     percentgen = match["percentgen"]
+        #     casegen = (match["casegen"] is not None)
+
         one_found = False
-        for match in pattern_modifiers.finditer(unit):
-            start_index = match.start()
-            if one_found:  # this error would happen only when `unit` is a whole line (i.e. a declaration)
-                raise SyntaxError("Expected only one unit here: only one declaration is allowed per line",
-                    (self.in_file.name, self.line_nb, start_index, unit))
+        for match in pattern_unit_name.finditer(unit):
+            if one_found:  # this error would happen only when `unit` is a whole line
+                raise SyntaxError("Expected only one unit here.",
+                                  (self.in_file.name, self.line_nb,
+                                   match.start(), unit))
             else:
                 one_found = True
             match = match.groupdict()
 
             name = match["name"]
-            arg = match["arg"]
-            variation = match["variation"]
+            casegen = (match["casegen"] is not None)
+
+            if match["casegen"] is not None and match["casegen"] != '&':
+                raise SyntaxError("Unable to understand the symbols you used "+
+                                  "for case generation (should be '&')",
+                                  (self.in_file.name, self.line_nb,
+                                   match.start(), unit))
+
+        one_found = False
+        for match in pattern_randgen.finditer(unit):
+            if one_found:
+                raise SyntaxError("Expected only one random generation "+
+                                  "modifier here.", (self.in_file.name,
+                                                     self.line_nb,
+                                                     match.start(), unit))
+            else:
+                one_found = True
+            match = match.groupdict()
+
             randgen = match["randgen"]
             percentgen = match["percentgen"]
-            casegen = (match["casegen"] is not None)
-            if name == "":
-                raise SyntaxError("Units must have a name (or a content for word groups)",
-                    (self.in_file.name, self.line_nb, start_index, unit))
-            if arg == "":
-                raise SyntaxError("Unnamed argument or unescaped colon (:)",
-                    (self.in_file.name, self.line_nb, start_index, unit))
-            if variation == "":
-                raise SyntaxError("Precision must be named (e.g. [text#variation])",
-                    (self.in_file.name, self.line_nb, start_index, unit))
-            if percentgen == "":
-                raise SyntaxError("Percentage for generation cannot be empty",
-                    (self.in_file.name, self.line_nb, start_index, unit))
-            if match["casegen"] is not None and match["casegen"] != '&':
-                print("casegen was "+str(match["casegen"]))
-                raise SyntaxError("Unable to understand the symbols you used "+
-                    "for case generation (should be '&')",
-                    (self.in_file.name, self.line_nb, start_index, unit))
+
+        one_found = False
+        for match in pattern_variation.finditer(unit):
+            if one_found:
+                raise SyntaxError("Expected only one variation here.",
+                                  (self.in_file.name, self.line_nb,
+                                   match.start(), unit))
+            else:
+                one_found = True
+            match = match.groupdict()
+
+            variation = match["var"]
+
+        one_found = False
+        for match in pattern_arg.finditer(unit):
+            if one_found:
+                raise SyntaxError("Expected only one argument here.",
+                                  (self.in_file.name, self.line_nb,
+                                   match.start(), unit))
+            else:
+                one_found = True
+            match = match.groupdict()
+
+            arg = match["arg"]
+
+        if name == "":
+            raise SyntaxError("Units must have a name (or a content for "+
+                              "word groups).", (self.in_file.name, self.line_nb,
+                                               start_index, unit))
+        if arg == "":
+            raise SyntaxError("Unnamed argument or unescaped argument symbol ("+
+                              ARG_SYM+").", (self.in_file.name, self.line_nb,
+                                             start_index, unit))
+        if variation == "":
+            raise SyntaxError("Variations must be named "+
+                              "(e.g. [text#variation]).", (self.in_file.name,
+                                                           self.line_nb,
+                                                           start_index, unit))
+        if percentgen == "":
+            raise SyntaxError("Percentage for random generation modifiers "+
+                              "cannot be empty.", (self.in_file.name,
+                                                   self.line_nb, start_index,
+                                                   unit))
 
         return (name, arg, variation, randgen, percentgen, casegen)
 

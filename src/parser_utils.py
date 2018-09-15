@@ -35,15 +35,30 @@ RESERVED_VARIATION_NAMES = ["all-variations-aggregation", "rules", "nb-gen-asked
 
 # This regex finds patterns like this `[name#variation?randgen/percentgen]`
 # with `variation`, `randgen` and `percentgen` optional
-# TODO make this reflect the state of the symbols defined before
-pattern_modifiers = \
+pattern_unit_name = \
     re.compile(
         r"\[(?P<casegen>&)?"+
-        r"(?P<name>[^#\[\]\?/\$]*)"+
-        r"(?:\$(?P<arg>[^#\[\]?/\$]*))?"+
-        r"(?:#(?P<variation>[^#\[\]\?/\$]*))?"+
-        r"(?:\?(?P<randgen>[^#\[\]\?/\$]*)(?:/(?P<percentgen>[^#\[\]\?/\$]*))?)?\]"
+        r"(?P<name>(?:\\[\\#?/\$\[\]]|[^\\\[\]#?/\$\n]+)+)[^\]]*\]"
     )
+pattern_randgen = re.compile(
+                    r"(?<!\\)\?(?P<randgen>(?:\\[\\\[\]#?/\$]|[^\\\[\]#?/\$\n]+)*)"+
+                    r"(?:/(?P<percentgen>[0-9]+))?"
+                  )
+pattern_variation = re.compile(
+                        r"(?<!\\)#(?P<var>(?:\\[\\\[\]#?/\$]|[^\\\[\]#?/\$\n]+)+)"
+                    )
+pattern_arg = re.compile(
+                r"(?<!\\)\$(?P<arg>(?:\\[\\\[\]#?/\$]|[^\\\[\]#?/\$\n]+)+)"
+              )
+# TODO make this reflect the state of the symbols defined before
+# pattern_modifiers = \
+#     re.compile(
+#         r"\[(?P<casegen>&)?"+
+#         r"(?P<name>[^#\[\]\?/\$]*)"+
+#         r"(?:\$(?P<arg>[^#\[\]?/\$]*))?"+
+#         r"(?:#(?P<variation>[^#\[\]\?/\$]*))?"+
+#         r"(?:\?(?P<randgen>[^#\[\]\?/\$]*)(?:/(?P<percentgen>[^#\[\]\?/\$]*))?)?\]"
+#     )
 pattern_comment_deprecated = re.compile(r"(?<!\\)"+COMMENT_SYM_DEPRECATED)
 pattern_comment = re.compile(r"(?<!\\)"+COMMENT_MARKER)
 
