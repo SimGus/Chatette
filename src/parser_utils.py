@@ -14,18 +14,18 @@ ESCAPE_SYM = '\\'
 ALIAS_SYM = '~'
 SLOT_SYM = '@'
 INTENT_SYM = '%'
-UNIT_OPEN_SYM = '['
-UNIT_CLOSE_SYM = ']'
+UNIT_OPEN_SYM = '['  # This shouldn't be changed
+UNIT_CLOSE_SYM = ']'  # id.
 
-CHOICE_OPEN_SYM = r'{' #'<'
-CHOICE_CLOSE_SYM = r'}' #'>'
+CHOICE_OPEN_SYM = r'{'
+CHOICE_CLOSE_SYM = r'}'
 CHOICE_SEP = '/'
 
 VARIATION_SYM = '#'
-RAND_GEN_SYM = '?'
+RAND_GEN_SYM = '?'  # This shouldn't be changed
 PERCENT_GEN_SYM = '/'
 CASE_GEN_SYM = '&'
-ARG_SYM = '$'
+ARG_SYM = '$'  # This shouldn't be changed
 
 ALT_SLOT_VALUE_NAME_SYM = '='
 
@@ -37,18 +37,27 @@ RESERVED_VARIATION_NAMES = ["all-variations-aggregation", "rules", "nb-gen-asked
 # with `variation`, `randgen` and `percentgen` optional
 pattern_unit_name = \
     re.compile(
-        r"\[(?P<casegen>&)?"+
-        r"(?P<name>(?:\\[\\#?/\$\[\]]|[^\\\[\]#?/\$\n]+)+)[^\]]*\]"
+        r"\[(?P<casegen>"+CASE_GEN_SYM+r")?"+
+        r"(?P<name>(?:\\[\\"+VARIATION_SYM+PERCENT_GEN_SYM+
+            r"?\$\[\]]|[^\\\[\]"+VARIATION_SYM+PERCENT_GEN_SYM+
+            r"?\$\n]+)+)[^\]]*\]"
     )
 pattern_randgen = re.compile(
-                    r"(?<!\\)\?(?P<randgen>(?:\\[\\\[\]#?/\$]|[^\\\[\]#?/\$\n]+)*)"+
-                    r"(?:/(?P<percentgen>[0-9]+))?"
+                    r"(?<!\\)\?(?P<randgen>(?:\\[\\\[\]"+VARIATION_SYM+
+                        PERCENT_GEN_SYM+r"?\$]|[^\\\[\]"+VARIATION_SYM+
+                        PERCENT_GEN_SYM+r"?\$\n]+)*)"+
+                    r"(?:"+PERCENT_GEN_SYM+r"(?P<percentgen>[0-9]+))?"
                   )
 pattern_variation = re.compile(
-                        r"(?<!\\)#(?P<var>(?:\\[\\\[\]#?/\$]|[^\\\[\]#?/\$\n]+)+)"
+                        r"(?<!\\)"+VARIATION_SYM+
+                        r"(?P<var>(?:\\[\\\[\]"+VARIATION_SYM+PERCENT_GEN_SYM+
+                            r"?\$]|[^\\\[\]"+VARIATION_SYM+PERCENT_GEN_SYM+
+                            r"?\$\n]+)+)"
                     )
 pattern_arg = re.compile(
-                r"(?<!\\)\$(?P<arg>(?:\\[\\\[\]#?/\$]|[^\\\[\]#?/\$\n]+)+)"
+                r"(?<!\\)\$(?P<arg>(?:\\[\\\[\]"+VARIATION_SYM+PERCENT_GEN_SYM
+                    +r"?\$]|[^\\\[\]"+VARIATION_SYM+PERCENT_GEN_SYM+
+                    r"?\$\n]+)+)"
               )
 # TODO make this reflect the state of the symbols defined before
 # pattern_modifiers = \

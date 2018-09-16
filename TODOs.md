@@ -1,8 +1,6 @@
 # TODOs
 
 - **TODO**: parse in a better way asked number of generation of intents
-- **TODO**: replace modifier regex by several one to allow for escaping special characters everywhere
-- **TODO**: use symbols from `parser_utils` everywhere needed
 
 - **TODO**: add opposite `randgen` names
 - **TODO**: support several arguments in one rule
@@ -53,6 +51,8 @@
 - **done**: support `arg` inside synonym lists
 - **done**: `generate_random` and `generate_all` don't have coherent arguments
 - **done**: allow for (most) special characters without escapement outside of units
+- **done**: replace modifier regex by several ones to allow for escaping special characters everywhere
+- **done**: use symbols from `parser_utils` everywhere needed
 
 # Bugs
 
