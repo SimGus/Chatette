@@ -5,14 +5,14 @@ import re
 import os
 import warnings
 
-from utils import *
-from parser_utils import *
+from chatette.utils import *
+from chatette.parser_utils import *
 
-from units.words import WordRuleContent, WordGroupRuleContent
-from units.alias import AliasDefinition, AliasRuleContent
-from units.slot import SlotDefinition, SlotRuleContent, DummySlotValRuleContent
-from units.intent import IntentDefinition, IntentRuleContent
-from units.choice import ChoiceContent
+from chatette.units.words import WordRuleContent, WordGroupRuleContent
+from chatette.units.alias import AliasDefinition, AliasRuleContent
+from chatette.units.slot import SlotDefinition, SlotRuleContent, DummySlotValRuleContent
+from chatette.units.intent import IntentDefinition, IntentRuleContent
+from chatette.units.choice import ChoiceContent
 
 
 class Parser(object):
@@ -652,5 +652,5 @@ class Parser(object):
 
 if __name__ == "__main__":
     import warnings
-    warnings.warn("You are running the wrong file ('Parser.py')." +
-        "The file that should be run is 'main.py'.")
+    warnings.warn("You are running the wrong file ('parser.py')." +
+        "The file that should be run is 'run.py'.")

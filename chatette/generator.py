@@ -6,9 +6,9 @@
 import io
 import json
 
-from utils import *
-from parser_utils import Unit
-from rasa_adapter import *
+from chatette.utils import *
+from chatette.parser_utils import Unit
+from chatette.rasa_adapter import *
 
 
 class Generator(object):
@@ -27,7 +27,7 @@ class Generator(object):
         self.max_nb_single_intent_examples = \
             Generator.DEFAULT_MAX_NB_INTENT_EXAMPLES
 
-    def set_max_nb_single_intent_examples(new_max):
+    def set_max_nb_single_intent_examples(self, new_max):
         self.max_nb_single_intent_examples = new_max
 
 
@@ -106,5 +106,5 @@ class Generator(object):
 
 if __name__ == "__main__":
     import warnings
-    warnings.warn("You are running the wrong file ('Generator.py')." +
-        "The file that should be run is 'main.py'.")
+    warnings.warn("You are running the wrong file ('generator.py')." +
+        "The file that should be run is 'run.py'.")

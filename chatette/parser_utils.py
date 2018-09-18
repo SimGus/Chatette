@@ -4,8 +4,9 @@
 from enum import Enum
 import re
 
-from utils import *
-import deprecations
+from chatette import deprecations
+from chatette.utils import *
+import chatette.deprecations
 
 COMMENT_SYM_DEPRECATED = ';'
 COMMENT_MARKER = '//'

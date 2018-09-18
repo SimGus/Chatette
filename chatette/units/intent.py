@@ -4,7 +4,7 @@
 import random
 
 from .units import *
-from parser_utils import Unit
+from chatette.parser_utils import Unit
 
 
 class IntentDefinition(UnitDefinition):

@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 import sys, os, io
-from Parser import Parser, Unit
-from Generator import Generator
+from chatette.parser import Parser, Unit
+from chatette.generator import Generator
 
 DEFAULT_OUTPUT_FILENAME = "output.json"
 DEFAULT_TESTING_DATASET_FILENAME = "testing-dataset.json"
@@ -11,8 +11,8 @@ DEFAULT_TESTING_DATASET_FILENAME = "testing-dataset.json"
 
 def print_usage():
     print("This program generates Rasa NLU datasets from a template file.")
-    print("Usage:\n\t'python3 main.py <TEMPLATE_FILE_PATH> [OUTPUT_FILE_PATH]' or")
-    print("\t'./main.py <TEMPLATE_FILE_PATH> [OUTPUT_FILE_PATH]'")
+    print("Usage:\n\t'python3 run.py <TEMPLATE_FILE_PATH> [OUTPUT_FILE_PATH]' or")
+    print("\t'./run.py <TEMPLATE_FILE_PATH> [OUTPUT_FILE_PATH]'")
 
 
 if __name__ == "__main__":

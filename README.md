@@ -29,20 +29,20 @@ To run *Chatette*, you will need to have [Python](https://www.python.org/) insta
 Clone or download this repository and start a terminal from the `src` folder.
 Then simply run the following command:
 ```bash
-python main.py template/path
+python -m chatette.run template/path
 ```
 or
 ```bash
-python3 main.py template/path
+python -m chatette.run template/path
 ```
 
 You can specify the name of the output file as follows:
 ```bash
-python main.py template/path output-file-name.json
+python -m chatette.run template/path output_file_name.json
 ```
 or
 ```bash
-python3 main.py template/path output-file-name.json
+python -m chatette.run template/path output_file_name.json
 ```
 The output file will then be saved in a file named `output-file-name.json` within the same directoy as the input file.
 
