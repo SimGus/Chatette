@@ -5,9 +5,9 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;=============== Includes ===================
-|client-info-LAL.chatette
+|client_info.chatette
 |aliases.chatette
-|slots-LAL.chatette
+|slots.chatette
 
 ;=============== Intents definitions ======================
 ;-------------- Intermediate answers -----------------

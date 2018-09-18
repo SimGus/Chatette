@@ -194,7 +194,7 @@
 ~[line name#client]
   client
 
-|prod-lines-LAL.chatette
+|prod_lines.chatette
 
 ;-------------- Orders --------------------
 ~[order#singular]
