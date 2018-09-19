@@ -129,3 +129,11 @@ could be directly given as input to *Chatette*, but this *Chatette* template wou
 The *Chatito* version is arguably easier to read, but the *Chatette* version is shorter, which may be very useful when dealing with lots of templates and potential repetition.
 
 Beware that, as always with machine learning, having too much data may cause your models to perform less well because of overfitting. While this script can be used to generate thousands upon thousands of examples, it isn't advised for machine learning tasks.
+
+Note that *Chatette* is named after *Chatito*, as *-ette* in French could be translated to *-ita* or *-ito* in Spanish.
+
+# Contributors
+
+- [Vadim Fedorenko](https://github.com/meiblorn)
+
+Many thanks to him!
