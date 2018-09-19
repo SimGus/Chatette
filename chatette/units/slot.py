@@ -2,8 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from .units import *
-from parser_utils import remove_escapement
-from utils import choose
+from chatette.parser_utils import remove_escapement
+from chatette.utils import choose
 
 
 class SlotDefinition(UnitDefinition):

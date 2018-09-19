@@ -4,7 +4,7 @@
 from random import randint
 
 from .units import *
-from utils import choose
+from chatette.utils import choose
 
 
 class ChoiceContent(RuleContent):

@@ -1,6 +1,6 @@
 # *Chatette* dataset generator
 
-![*Chatette* logo](/images/chatette-logo.png)
+![*Chatette* logo](/public/images/chatette-logo.png)
 
 *Chatette* is a Python script that helps you generate training datasets for the [*Rasa NLU*](https://github.com/RasaHQ/rasa_nlu "rasa-nlu GitHub repository") Python package.
 If you want to make large datasets of example data for Natural Language Understanding tasks without too much of a headache, *Chatette* is a project for you.
@@ -26,25 +26,29 @@ The data that *Chatette* uses and generates is loaded from and saved to files. W
 To run *Chatette*, you will need to have [Python](https://www.python.org/) installed.
 *Chatette* works with both Python 2.x and 3.x.
 
-Clone or download this repository and start a terminal from the `src` folder.
+Install `Chattete` via `pip`:
+```bash
+pip install chatette
+```
+
 Then simply run the following command:
 ```bash
-python main.py template/path
+python -m chatette.run <path_to_template>
 ```
 or
 ```bash
-python3 main.py template/path
+python -m chatette.run <path_to_template>
 ```
 
 You can specify the name of the output file as follows:
 ```bash
-python main.py template/path output-file-name.json
+python -m chatette.run <path_to_template> -o <output_path.json>
 ```
 or
 ```bash
-python3 main.py template/path output-file-name.json
+python -m chatette.run <path_to_template> -o <output_path.json>
 ```
-The output file will then be saved in a file named `output-file-name.json` within the same directoy as the input file.
+The output file will then be saved in a file named `output_path.json` within the same directory as the input file.
 
 # *Chatette* vs *Chatito*?
 

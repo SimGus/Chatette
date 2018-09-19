@@ -44,4 +44,4 @@ def choose(list):
 if __name__ == "__main__":
     import warnings
     warnings.warn("You are running the wrong file ('utils.py')." +
-        "The file that should be run is 'main.py'.")
+        "The file that should be run is 'run.py'.")
