@@ -26,10 +26,12 @@ The data that *Chatette* uses and generates is loaded from and saved to files. W
 To run *Chatette*, you will need to have [Python](https://www.python.org/) installed.
 *Chatette* works with both Python 2.x and 3.x.
 
-Install `Chattete` via `pip`:
+Install *Chatette* via `pip`:
 ```bash
 pip install chatette
 ```
+
+(Alternatively, you can clone the [GitHub repository](https://github.com/SimGus/Chatette) and run the file named `run.py`.)
 
 Then simply run the following command:
 ```bash
