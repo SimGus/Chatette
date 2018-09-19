@@ -5,6 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Files to make the script a package and register it on [PyPI](https://pypi.org)
+
+### Changed
+- More pythonic project structure
+
+### Fixed
+- Generator's max number of example setter missing a parameter
 
 ## [1.1.4] - 2018-09-16
 ### Added

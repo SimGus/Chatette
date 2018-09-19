@@ -8,7 +8,6 @@
 - **TODO**: add regex to rasa JSON file
 
 - **TODO**: allow for arguments to the command line (output file*s* paths, max generation per intent,...)
-- **TODO**: improve the overall command line experience (cf. `click` library)
 
 - **TODO**: use more list/dict comprehensions (faster than using `append`)
 - **TODO**: rewrite docstrings formatted as explained in *PEP257*
@@ -53,6 +52,7 @@
 - **done**: allow for (most) special characters without escapement outside of units
 - **done**: replace modifier regex by several ones to allow for escaping special characters everywhere
 - **done**: use symbols from `parser_utils` everywhere needed
+- **done**: improve the overall command line experience (with `argparse`)
 
 # Bugs
 
