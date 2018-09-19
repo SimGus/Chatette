@@ -13,7 +13,6 @@
 - **TODO**: rewrite docstrings formatted as explained in *PEP257*
 - **TODO**: detect and warn about circular references
 
-- **TODO**: change `main.py` to a more user-friendly name
 - **TODO**: add unit tests
 
 ## Done
@@ -53,6 +52,7 @@
 - **done**: replace modifier regex by several ones to allow for escaping special characters everywhere
 - **done**: use symbols from `parser_utils` everywhere needed
 - **done**: improve the overall command line experience (with `argparse`)
+- **done**: change `main.py` to a more user-friendly name
 
 # Bugs
 
