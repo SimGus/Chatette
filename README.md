@@ -26,25 +26,29 @@ The data that *Chatette* uses and generates is loaded from and saved to files. W
 To run *Chatette*, you will need to have [Python](https://www.python.org/) installed.
 *Chatette* works with both Python 2.x and 3.x.
 
-Clone or download this repository and start a terminal from the `src` folder.
+Install `Chattete` via `pip`:
+```bash
+pip install chatette
+```
+
 Then simply run the following command:
 ```bash
-python -m chatette.run template/path
+python -m chatette.run <path_to_template>
 ```
 or
 ```bash
-python -m chatette.run template/path
+python -m chatette.run <path_to_template>
 ```
 
 You can specify the name of the output file as follows:
 ```bash
-python -m chatette.run template/path output_file_name.json
+python -m chatette.run <path_to_template> -o <output_path.json>
 ```
 or
 ```bash
-python -m chatette.run template/path output_file_name.json
+python -m chatette.run <path_to_template> -o <output_path.json>
 ```
-The output file will then be saved in a file named `output-file-name.json` within the same directoy as the input file.
+The output file will then be saved in a file named `output_path.json` within the same directory as the input file.
 
 # *Chatette* vs *Chatito*?
 
