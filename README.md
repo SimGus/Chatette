@@ -37,7 +37,7 @@ python -m chatette.run <path_to_template>
 ```
 or
 ```bash
-python -m chatette.run <path_to_template>
+python3 -m chatette.run <path_to_template>
 ```
 
 You can specify the name of the output file as follows:
@@ -46,9 +46,9 @@ python -m chatette.run <path_to_template> -o <output_path.json>
 ```
 or
 ```bash
-python -m chatette.run <path_to_template> -o <output_path.json>
+python3 -m chatette.run <path_to_template> -o <output_path.json>
 ```
-The output file will then be saved in a file named `output_path.json` within the same directory as the input file.
+The output file will then be saved in a file named `output_path.json` within the same directory as the input file. If you didn't specify a name for the output file, the default one is `output.json`.
 
 # *Chatette* vs *Chatito*?
 
