@@ -1,6 +1,7 @@
 # TODOs
 
 - **TODO**: parse in a better way asked number of generation of intents
+- **TODO**: accept `train` AND `training` for training set number of intents
 
 - **TODO**: add opposite `randgen` names
 - **TODO**: support several arguments in one rule
