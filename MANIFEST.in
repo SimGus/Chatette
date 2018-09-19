@@ -1,2 +1,3 @@
 include README.md
-
+include LICENSE
+include public/images/chatette-logo.png
