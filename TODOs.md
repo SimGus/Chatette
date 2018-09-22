@@ -16,6 +16,8 @@
 
 - **TODO**: add unit tests
 
+- **TODO**: *Docs* add a representation of the architecture of the project
+
 ## Done
 
 - **done**: fix line number count for different files
