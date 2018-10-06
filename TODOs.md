@@ -2,6 +2,7 @@
 
 - **TODO**: parse in a better way asked number of generation of intents
 - **TODO**: accept `train` AND `training` for training set number of intents
+- **TODO**: accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax
 
 - **TODO**: add opposite `randgen` names
 - **TODO**: support several arguments in one rule
