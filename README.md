@@ -1,5 +1,8 @@
 # *Chatette* dataset generator
 
+[![Github All Releases](https://img.shields.io/github/downloads/atom/atom/total.svg)](https://github.com/SimGus/Chatette)
+[![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/SimGus/Chatette)
+
 ![*Chatette* logo](/public/images/chatette-logo.png)
 
 *Chatette* is a Python script that helps you generate training datasets for the [*Rasa NLU*](https://github.com/RasaHQ/rasa_nlu "rasa-nlu GitHub repository") Python package.
