@@ -1,7 +1,7 @@
 # *Chatette* dataset generator
 
-[![Github All Releases](https://img.shields.io/github/downloads/atom/atom/total.svg)](https://github.com/SimGus/Chatette)
-[![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/SimGus/Chatette)
+[![Github All Releases](https://img.shields.io/github/downloads/SimGus/Chatette/total.svg)](https://github.com/SimGus/Chatette)
+[![GitHub license](https://img.shields.io/github/license/SimGus/Chatette.svg)](https://github.com/SimGus/Chatette/blob/master/LICENSE)
 
 ![*Chatette* logo](/public/images/chatette-logo.png)
 
