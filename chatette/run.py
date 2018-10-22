@@ -5,8 +5,12 @@ import io
 import os
 import sys
 
-from chatette.generator import Generator
-from chatette.parser import Parser
+try:
+   from chatette.generator import Generator
+   from chatette.parser import Parser
+except ImportError:
+   from generator import Generator
+   from parser import Parser
 
 DEFAULT_OUTPUT_FILENAME = "output.json"
 DEFAULT_TESTING_DATASET_FILENAME = "testing-dataset.json"

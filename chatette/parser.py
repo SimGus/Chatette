@@ -5,14 +5,24 @@ import re
 import os
 import warnings
 
-from chatette.utils import *
-from chatette.parser_utils import *
+try:
+   from chatette.utils import *
+   from chatette.parser_utils import *
 
-from chatette.units.words import WordRuleContent, WordGroupRuleContent
-from chatette.units.alias import AliasDefinition, AliasRuleContent
-from chatette.units.slot import SlotDefinition, SlotRuleContent, DummySlotValRuleContent
-from chatette.units.intent import IntentDefinition, IntentRuleContent
-from chatette.units.choice import ChoiceContent
+   from chatette.units.words import WordRuleContent, WordGroupRuleContent
+   from chatette.units.alias import AliasDefinition, AliasRuleContent
+   from chatette.units.slot import SlotDefinition, SlotRuleContent, DummySlotValRuleContent
+   from chatette.units.intent import IntentDefinition, IntentRuleContent
+   from chatette.units.choice import ChoiceContent
+except ImportError:
+   from utils import *
+   from parser_utils import *
+
+   from units.words import WordRuleContent, WordGroupRuleContent
+   from units.alias import AliasDefinition, AliasRuleContent
+   from units.slot import SlotDefinition, SlotRuleContent, DummySlotValRuleContent
+   from units.intent import IntentDefinition, IntentRuleContent
+   from units.choice import ChoiceContent
 
 
 class Parser(object):

@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from chatette.utils import *
+try:
+   from chatette.utils import *
+except ImportError:
+   from utils import *
 
 def find_entity(text, entity_str):
     """Finds `entity_str` in `text` ignoring the case of the first non-space"""

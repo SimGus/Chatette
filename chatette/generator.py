@@ -6,9 +6,14 @@
 import io
 import json
 
-from chatette.utils import *
-from chatette.parser_utils import Unit
-from chatette.rasa_adapter import *
+try:
+   from chatette.utils import *
+   from chatette.parser_utils import Unit
+   from chatette.rasa_adapter import *
+except ImportError:
+   from utils import *
+   from parser_utils import Unit
+   from rasa_adapter import *
 
 
 class Generator(object):

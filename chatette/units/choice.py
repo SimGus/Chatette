@@ -4,7 +4,10 @@
 from random import randint
 
 from .units import *
-from chatette.utils import choose
+try:
+   from chatette.utils import choose
+except ImportError:
+   from utils import choose
 
 
 class ChoiceContent(RuleContent):

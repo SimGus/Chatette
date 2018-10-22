@@ -2,7 +2,10 @@
 # -*- coding: utf-8 -*-
 
 from .units import *
-from chatette.parser_utils import Unit
+try:
+   from chatette.parser_utils import Unit
+except ImportError:
+   from parser_utils import Unit
 
 
 class AliasDefinition(UnitDefinition):

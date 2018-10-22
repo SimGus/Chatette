@@ -4,9 +4,12 @@
 from enum import Enum
 import re
 
-from chatette import deprecations
-from chatette.utils import *
-import chatette.deprecations
+try:
+   from chatette import deprecations
+   from chatette.utils import *
+except ImportError:
+   import deprecations
+   from utils import *
 
 COMMENT_SYM_DEPRECATED = ';'
 COMMENT_MARKER = '//'
@@ -72,8 +75,8 @@ pattern_arg = re.compile(
 pattern_comment_deprecated = re.compile(r"(?<!\\)"+COMMENT_SYM_DEPRECATED)
 pattern_comment = re.compile(r"(?<!\\)"+COMMENT_MARKER)
 
-_nb_training_gen_name = "training"
-_nb_test_gen_name = "testing"
+_nb_training_gen_name = "train(ing)?"
+_nb_test_gen_name = "test(ing)?"
 pattern_nb_examples_asked = re.compile(r"\]\((?P<nbgen>[0-9]+)\)")
 pattern_nb_training_examples_asked = \
     re.compile(r"'"+_nb_training_gen_name+r"': '(?P<nbgen>[0-9]+)'")

@@ -5,7 +5,10 @@ from random import randint
 import re
 from copy import deepcopy
 
-from chatette.parser_utils import Unit, choose
+try:
+   from chatette.parser_utils import Unit, choose
+except ImportError:
+   from parser_utils import Unit, choose
 
 def EMPTY_GEN():
     return deepcopy({  # NOTE: deepcopy is needed to avoid rewriting on old data

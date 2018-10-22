@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from chatette.utils import printWarn
+try:
+   from chatette.utils import printWarn
+except ImportError:
+   from utils import printWarn
 
 #============ Deprecation of semi-colon syntax for comments ===============
 # Comments starting with semi-colons ';' are now deprecated to have a closer
