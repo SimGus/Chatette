@@ -12,8 +12,9 @@
 - **TODO**: allow for arguments to the command line (output file*s* paths, max generation per intent,...)
 
 - **TODO**: use more list/dict comprehensions (faster than using `append`)
-- **TODO**: rewrite docstrings formatted as explained in *PEP257*
+<!-- - **TODO**: rewrite docstrings formatted as explained in *PEP257* -->
 - **TODO**: detect and warn about circular references
+- **TODO**: warn if there are slots within slots
 
 - **TODO**: add unit tests
 
