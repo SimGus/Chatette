@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.2.1¸) 2018-10-22
+## [1.2.1] - 2018-10-22
 ### Changed
 - Accept `train` and `test` as well as `training` and `testing` for the identifiers of the numbers of examples to generate
 
