@@ -3,7 +3,7 @@
 <!--[![Github All Releases](https://img.shields.io/github/downloads/SimGus/Chatette/total.svg)](https://github.com/SimGus/Chatette)-->
 [![GitHub license](https://img.shields.io/github/license/SimGus/Chatette.svg)](https://github.com/SimGus/Chatette/blob/master/LICENSE)
 
-![*Chatette* logo](/public/images/chatette-logo.png)
+![*Chatette* logo](https://raw.githubusercontent.com/SimGus/Chatette/master/public/images/chatette-logo.png)
 
 *Chatette* is a Python script that helps you generate training datasets for the [*Rasa NLU*](https://github.com/RasaHQ/rasa_nlu "rasa-nlu GitHub repository") Python package.
 If you want to make large datasets of example data for Natural Language Understanding tasks without too much of a headache, *Chatette* is a project for you.
