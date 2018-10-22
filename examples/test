@@ -1,4 +1,4 @@
-%[test](3)
+%[test]('train': 3, 'testing': 1)
     @[slot$hi]
     @[slot$pouet]
 

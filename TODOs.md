@@ -1,7 +1,6 @@
 # TODOs
 
 - **TODO**: parse in a better way asked number of generation of intents
-- **TODO**: accept `train` AND `training` for training set number of intents
 - **TODO**: accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax
 
 - **TODO**: add opposite `randgen` names
@@ -58,6 +57,7 @@
 - **done**: use symbols from `parser_utils` everywhere needed
 - **done**: improve the overall command line experience (with `argparse`)
 - **done**: change `main.py` to a more user-friendly name
+- **done**: accept `train` AND `training` for training set number of intents
 
 # Bugs
 
@@ -85,6 +85,7 @@
 - **fixed**: in synonyms, too many synonyms are added because variations are not taken into account at generation
 - **fixed**: entities are not generated with `generate_all`
 - **fixed**: arguments are not correctly managed within entities list
+- **fixed**: potential ImportErrors when running from `run.py` from the command line
 
 # Ideas
 
