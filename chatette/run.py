@@ -4,6 +4,7 @@ import argparse
 import io
 import os
 import sys
+from random import seed as random_seed
 
 try:
    from chatette.generator import Generator
@@ -18,13 +19,19 @@ DEFAULT_TESTING_DATASET_FILENAME = "testing-dataset.json"
 
 def main():
     argument_parser = argparse.ArgumentParser(
-        description="Generates Rasa NLU datasets from a template file",
+        description= "Chatette v1.2.2 -- "+
+                     "Generates Rasa NLU datasets from a template file",
+        epilog="SimGus -- 2018 -- Released under MIT license",
         add_help=True)
-    argument_parser.add_argument("input", help="Path to template file",
-                                 type=str)
+    argument_parser.add_argument("input", type=str,
+                                 help="Path to master template file")
     argument_parser.add_argument("-o", "--out", dest="output", required=False,
-                                 help="Output file path",
-                                 type=str, default=None)
+                                 type=str, default=None,
+                                 help="Output file path")
+    argument_parser.add_argument("-s", "--seed", dest="seed", required=False,
+                                 type=str, default=None,
+                                 help="Seed for the random generator "+
+                                      "(any string without spaces will work)")
     if len(sys.argv[1:]) == 0:
         argument_parser.print_help()
         argument_parser.exit()
@@ -35,12 +42,16 @@ def main():
     dir_path = os.path.dirname(template_file_path)
     output_filename = DEFAULT_OUTPUT_FILENAME
 
-    if args.output:
+    if args.output is not None:
         output_filename = args.output
 
     output_file_path = os.path.join(dir_path, output_filename)
     testing_filename = DEFAULT_TESTING_DATASET_FILENAME
     testing_file_path = os.path.join(dir_path, testing_filename)
+
+    # Initialize the random number generator
+    if args.seed is not None:
+        random_seed(args.seed)
 
     with io.open(template_file_path, 'r') as in_file:
         parser = Parser(in_file)
