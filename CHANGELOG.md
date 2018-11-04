@@ -5,8 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.2.2] - 2018-11-04
 ### Added
-- Program argument that is used as the seed of the random number generator
+- Program argument (`-s` or `--seed`) that is used as the seed of the random number generator
 
 ### Fixed
 - Restaurant example which still had tests within it
@@ -164,7 +166,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for slot value names
 - Generator able to generate an output file in *Rasa NLU* format (without support for synonyms or regex features)
 
-[Unreleased]: https://github.com/SimGus/Chatette/compare/v1.2.1...HEAD
+[Unreleased]: https://github.com/SimGus/Chatette/compare/v1.2.2...HEAD
+[1.2.2]: https://github.com/SimGus/Chatette/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/SimGus/Chatette/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/SimGus/Chatette/compare/v1.1.5...v1.2.0
 [1.1.5]: https://github.com/SimGus/Chatette/compare/v1.1.4...v1.1.5
