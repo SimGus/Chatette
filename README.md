@@ -51,9 +51,11 @@ python -m chatette.run <path_to_template> -o <output_path.json>
 ```
 or
 ```bash
-python3 -m chatette.run <path_to_template> -o <output_path.json>
+python3 -m chatette.run <path_to_template> --output <output_path.json>
 ```
 The output file will then be saved in a file named `output_path.json` within the same directory as the input file. If you didn't specify a name for the output file, the default one is `output.json`.
+
+You can also set the random generator seed using the program argument `-s` or `--seed`. The seed can be any text without spaces. If you execute Chatette twice on the exact same template with the same seed, the generated output is guaranteed to be exactly the same for both executions.
 
 # *Chatette* vs *Chatito*?
 
