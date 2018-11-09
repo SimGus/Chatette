@@ -1,8 +1,8 @@
-; This file will be included in another file that calls it as:
-; |included.chatette
+// This file will be included in another file that calls it as:
+// |included.chatette
 
 @[cuisine_type]
-    ~[italian]  ; if this is generated, this slot will have the value named `italian`
-    ~[french]   ; if this is generated, this slot will have the value named `french`
-    ~[mexican (nom nom)] = mexican    ; if this is generated, this slot will have the value named `mexican`
-    ~[homemade] = /  ; if this is generated, this slot will have the same value as the generated text
+    ~[italian]  // if this is generated, this slot will have the value named `italian`
+    ~[french]   // if this is generated, this slot will have the value named `french`
+    ~[mexican (nom nom)] = mexican    // if this is generated, this slot will have the value named `mexican`
+    ~[homemade] = /  // if this is generated, this slot will have the same value as the generated text
