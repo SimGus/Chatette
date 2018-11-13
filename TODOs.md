@@ -3,8 +3,9 @@
 - **TODO**: parse in a better way asked number of generation of intents
 - **TODO**: accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax
 
-- **TODO**: add a seed for random number generation
-- **TODO**: add a program argument for setting the seed
+- **TODO**: set output file path with respect to current working directory rather than input file directory
+
+- **TODO**: add an adapter to output raw lists of questions (rather than a JSON file)
 
 - **TODO**: add opposite `randgen` names
 - **TODO**: support several arguments in one rule
@@ -61,6 +62,8 @@
 - **done**: improve the overall command line experience (with `argparse`)
 - **done**: change `main.py` to a more user-friendly name
 - **done**: accept `train` AND `training` for training set number of intents
+- **done**: add a seed for random number generation
+- **done**: add a program argument for setting the seed
 
 # Bugs
 
