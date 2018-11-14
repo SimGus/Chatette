@@ -53,15 +53,16 @@ or
 ```bash
 python3 -m chatette.run <path_to_template> --output <output_path.json>
 ```
-The output file will then be saved in a file named `output_path.json` into the directory which the program is executed from (i.e. the path is specified with respect to this directory). If you didn't specify a name for the output file, the default one is `output.json`.
+The output file will then be saved in a file named as you specified into the directory which the program is executed from (i.e. the path is specified with respect to this directory). If you didn't specify a name for the output file, the default one is `output.json`.
 
 ### Other program arguments
 A bunch of more specific program arguments exist to allow for a more controlled execution of the program.
+Here is a list of those arguments:
 
-You can set the random generator seed using the program argument `-s` or `--seed`. The seed can be any text without spaces.
+- `-s` or `--seed` followed by any string (without spaces): sets the random generator seed to the string that follows the argument.
 If you execute Chatette twice with the same seed on the exact same template, the generated output(s) is guaranteed to be exactly the same on both executions.
 
-The argument `-l` or `--local` changes the output path to be specified with respect to the directory in which the template file is, rather than the current working directory.
+- `-l` or `--local`: changes the output path to be specified with respect to the directory in which the template file is, rather than the current working directory.
 
 # *Chatette* vs *Chatito*?
 
