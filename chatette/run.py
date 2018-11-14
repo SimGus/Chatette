@@ -32,6 +32,12 @@ def main():
                                  type=str, default=None,
                                  help="Seed for the random generator "+
                                       "(any string without spaces will work)")
+    argument_parser.add_argument("-l", "--local", dest="local", required=False,
+                                 action="store_true", default=False,
+                                 help="Change the base directory for output "+
+                                      "files from the current working directory "+
+                                      "to the directory containing the template "+
+                                      "file")
     if len(sys.argv[1:]) == 0:
         argument_parser.print_help()
         argument_parser.exit()
@@ -39,7 +45,10 @@ def main():
     args = argument_parser.parse_args()
 
     template_file_path = args.input
-    dir_path = os.path.dirname(template_file_path)
+    if args.local:
+        dir_path = os.path.dirname(template_file_path)
+    else:
+        dir_path = os.getcwd()
     output_filename = DEFAULT_OUTPUT_FILENAME
 
     if args.output is not None:
