@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Program argument (`-s` or `--seed`) that is used as the seed of the random number generator
 
 ### Fixed
+- `parser.py` changed to `parsing.py` to avoid some computers importing the default Python module named `parser`
 - Restaurant example which still had tests within it
 
 ## [1.2.1] - 2018-10-22
