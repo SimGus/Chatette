@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Working directory to be the directory from which the command is executed
 
+### Fixed
+- Several error messages that used legacy variables
+
 ## [1.2.2] - 2018-11-04
 ### Added
 - Program argument (`-s` or `--seed`) that is used as the seed of the random number generator
