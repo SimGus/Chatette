@@ -13,6 +13,7 @@
 - **TODO**: add regex to rasa JSON file
 
 - **TODO**: allow for arguments to the command line (output file*s* paths, max generation per intent,...)
+- **TODO**: add bulk generation
 
 - **TODO**: use more list/dict comprehensions (faster than using `append`)
 <!-- - **TODO**: rewrite docstrings formatted as explained in *PEP257* -->
