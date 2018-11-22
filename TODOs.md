@@ -69,7 +69,6 @@
 # Bugs
 
 - **BUG**: arguments are not given down when an argument is transmitted as the argument of a token
-- **BUG**: circular imports? running the code is not doable under windows 10?
 
 ## To confirm
 
