@@ -68,6 +68,7 @@
 # Bugs
 
 - **BUG**: arguments are not given down when an argument is transmitted as the argument of a token
+- **BUG**: `parser` exists as a basic Python module and is sometimes imported in place of the parser
 
 ## To confirm
 
