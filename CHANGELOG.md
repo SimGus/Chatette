@@ -5,13 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- `parser.py` changed to `parsing.py` to avoid some computers importing the default Python module named `parser`
 
 ## [1.2.2] - 2018-11-04
 ### Added
 - Program argument (`-s` or `--seed`) that is used as the seed of the random number generator
 
 ### Fixed
-- `parser.py` changed to `parsing.py` to avoid some computers importing the default Python module named `parser`
 - Restaurant example which still had tests within it
 
 ## [1.2.1] - 2018-10-22
