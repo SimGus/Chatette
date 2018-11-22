@@ -662,5 +662,5 @@ class Parser(object):
 
 if __name__ == "__main__":
     import warnings
-    warnings.warn("You are running the wrong file ('parser.py')." +
+    warnings.warn("You are running the wrong file ('parsing.py')." +
         "The file that should be run is 'run.py'.")

@@ -69,6 +69,7 @@
 
 - **BUG**: arguments are not given down when an argument is transmitted as the argument of a token
 - **BUG**: restaurant example doesn't seem to work anymore
+- **BUG**: `parser` exists as a basic Python module and is sometimes imported in place of the parser
 
 ## To confirm
 
@@ -93,6 +94,7 @@
 - **fixed**: entities are not generated with `generate_all`
 - **fixed**: arguments are not correctly managed within entities list
 - **fixed**: potential ImportErrors when running from `run.py` from the command line
+- **fixed**: `parser` exists as a basic Python module and is sometimes imported in place of the parser (renamed `parsing`)
 
 # Ideas
 
