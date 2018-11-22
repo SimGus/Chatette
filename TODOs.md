@@ -93,6 +93,7 @@
 - **fixed**: entities are not generated with `generate_all`
 - **fixed**: arguments are not correctly managed within entities list
 - **fixed**: potential ImportErrors when running from `run.py` from the command line
+- **fixed**: `parser` exists as a basic Python module and is sometimes imported in place of the parser (renamed `parsing`)
 
 # Ideas
 
