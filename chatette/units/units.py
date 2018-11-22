@@ -4,6 +4,7 @@
 from random import randint
 import re
 from copy import deepcopy
+import sys
 
 try:
    from chatette.parser_utils import Unit, choose
@@ -131,7 +132,6 @@ class UnitDefinition(object):
             if variation_name not in self.variations:
                 raise SyntaxError("Couldn't find a variation named '"+
                     variation_name+"' for "+self.type+" '"+self.name+"'")
-            max_index = len(self.variations[variation_name])-1
             chosen_rule = choose(self.variations[variation_name])
 
         if chosen_rule is None:  # No rule
