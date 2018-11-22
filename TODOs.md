@@ -70,9 +70,10 @@
 # Bugs
 
 - **BUG**: arguments are not given down when an argument is transmitted as the argument of a token
-- **BUG**: restaurant example doesn't seem to work anymore
 
 ## To confirm
+
+- **BUG?**: restaurant example doesn't seem to work anymore
 
 ## Fixed bugs
 
