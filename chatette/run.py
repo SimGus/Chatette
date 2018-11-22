@@ -8,10 +8,10 @@ from random import seed as random_seed
 
 try:
    from chatette.generator import Generator
-   from chatette.parser import Parser
+   from chatette.parsing import Parser
 except ImportError:
    from generator import Generator
-   from parser import Parser
+   from parsing import Parser
 
 DEFAULT_OUTPUT_FILENAME = "output.json"
 DEFAULT_TESTING_DATASET_FILENAME = "testing-dataset.json"
