@@ -3,6 +3,8 @@
 - **TODO**: parse in a better way asked number of generation of intents
 - **TODO**: accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax
 
+- **TODO**: check for circular includes
+
 - **TODO**: add an adapter to output raw lists of questions (rather than a JSON file)
 
 - **TODO**: add opposite `randgen` names
@@ -67,10 +69,10 @@
 # Bugs
 
 - **BUG**: arguments are not given down when an argument is transmitted as the argument of a token
+- **BUG**: circular imports? running the code is not doable under windows 10?
 
 ## To confirm
 
-- **BUG?**: somewhere in the synonyms: Rasa NLU can't generate it without crashing (unhashable type 'dict' when looking for "value")
 
 ## Fixed bugs
 
@@ -91,6 +93,7 @@
 - **fixed**: entities are not generated with `generate_all`
 - **fixed**: arguments are not correctly managed within entities list
 - **fixed**: potential ImportErrors when running from `run.py` from the command line
+- **fixed**: somewhere in the synonyms: Rasa NLU can't generate it without crashing (unhashable type 'dict' when looking for "value")
 
 # Ideas
 
