@@ -83,7 +83,7 @@ class Parser(object):
 
             if line_type is None:
                 raise SyntaxError("Invalid top-level line",
-                    (self.in_file.name, 0, start_index, unit))
+                    (self.in_file.name, 0, 0, stripped_line))
             elif line_type == LineType.empty or line_type == LineType.comment:
                 continue
             stripped_line = strip_comments(stripped_line)  # Not done before to compute the indentation
@@ -191,20 +191,20 @@ class Parser(object):
         if name == "":
             raise SyntaxError("Units must have a name (or a content for "+
                               "word groups).", (self.in_file.name, self.line_nb,
-                                               start_index, unit))
+                                               0, unit))
         if arg == "":
             raise SyntaxError("Unnamed argument or unescaped argument symbol ("+
                               ARG_SYM+").", (self.in_file.name, self.line_nb,
-                                             start_index, unit))
+                                             0, unit))
         if variation == "":
             raise SyntaxError("Variations must be named "+
                               "(e.g. [text#variation]).", (self.in_file.name,
                                                            self.line_nb,
-                                                           start_index, unit))
+                                                           0, unit))
         if percentgen == "":
             raise SyntaxError("Percentage for random generation modifiers "+
                               "cannot be empty.", (self.in_file.name,
-                                                   self.line_nb, start_index,
+                                                   self.line_nb, 0,
                                                    unit))
 
         return (name, arg, variation, randgen, percentgen, casegen)
@@ -233,7 +233,7 @@ class Parser(object):
                 result.add_choice(self.split_contents(choice_str))
             else:
                 raise SyntaxError("Empty choice not allowed in choices",
-                    (self.in_file.name, self.line_nb, 0, name))
+                    (self.in_file.name, self.line_nb, 0, text))
         return result
 
     def parse_alias_definition(self, first_line):  # Lots of copy-paste in three methods

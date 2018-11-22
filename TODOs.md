@@ -3,7 +3,7 @@
 - **TODO**: parse in a better way asked number of generation of intents
 - **TODO**: accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax
 
-- **TODO**: set output file path with respect to current working directory rather than input file directory
+- **TODO**: check for circular includes
 
 - **TODO**: add an adapter to output raw lists of questions (rather than a JSON file)
 
@@ -13,6 +13,7 @@
 - **TODO**: add regex to rasa JSON file
 
 - **TODO**: allow for arguments to the command line (output file*s* paths, max generation per intent,...)
+- **TODO**: add bulk generation
 
 - **TODO**: use more list/dict comprehensions (faster than using `append`)
 <!-- - **TODO**: rewrite docstrings formatted as explained in *PEP257* -->
@@ -64,16 +65,15 @@
 - **done**: accept `train` AND `training` for training set number of intents
 - **done**: add a seed for random number generation
 - **done**: add a program argument for setting the seed
+- **done**: set output file path with respect to current working directory rather than input file directory
 
 # Bugs
 
 - **BUG**: arguments are not given down when an argument is transmitted as the argument of a token
-- **BUG**: restaurant example doesn't seem to work anymore
-- **BUG**: `parser` exists as a basic Python module and is sometimes imported in place of the parser
 
 ## To confirm
 
-- **BUG?**: somewhere in the synonyms: Rasa NLU can't generate it without crashing (unhashable type 'dict' when looking for "value")
+- **BUG?**: restaurant example doesn't seem to work anymore
 
 ## Fixed bugs
 
@@ -94,6 +94,7 @@
 - **fixed**: entities are not generated with `generate_all`
 - **fixed**: arguments are not correctly managed within entities list
 - **fixed**: potential ImportErrors when running from `run.py` from the command line
+- **fixed**: somewhere in the synonyms: Rasa NLU can't generate it without crashing (unhashable type 'dict' when looking for "value")
 - **fixed**: `parser` exists as a basic Python module and is sometimes imported in place of the parser (renamed `parsing`)
 
 # Ideas
