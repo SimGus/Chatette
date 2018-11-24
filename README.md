@@ -38,20 +38,20 @@ pip install chatette
 
 Then simply run the following command:
 ```bash
-python -m chatette.run <path_to_template>
+python -m chatette <path_to_template>
 ```
 or
 ```bash
-python3 -m chatette.run <path_to_template>
+python3 -m chatette <path_to_template>
 ```
 
 You can specify the name of the output file as follows:
 ```bash
-python -m chatette.run <path_to_template> -o <output_path.json>
+python -m chatette <path_to_template> -o <output_path.json>
 ```
 or
 ```bash
-python3 -m chatette.run <path_to_template> --output <output_path.json>
+python3 -m chatette <path_to_template> --output <output_path.json>
 ```
 The output file will then be saved in a file named as you specified into the directory which the program is executed from (i.e. the path is specified with respect to this directory). If you didn't specify a name for the output file, the default one is `output.json`.
 
