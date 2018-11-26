@@ -1,0 +1,64 @@
+sudo: required
+
+language: python
+
+python:
+- "3.5"
+- "3.5-dev"  # 3.5 development branch
+- "3.6"
+- "3.6-dev"  # 3.6 development branch
+- "3.7-dev"  # 3.7 development branch
+
+services:
+- docker
+
+addons:
+  apt:
+    packages:
+    - tree
+    - oracle-java8-set-default
+    - docker-ce
+
+before_install:
+- export PYTHON_MAJOR_VERSION=$(echo ${TRAVIS_PYTHON_VERSION:0:1})
+- echo "Python major version is ${PYTHON_MAJOR_VERSION}"
+
+install:
+- pip install -r requirements/test.txt
+- pip install tox-travis
+- pip install codecov
+- pip install .
+
+before_script:
+- bash ./scripts/antlr4.sh download
+- bash ./scripts/antlr4.sh run ${PYTHON_MAJOR_VERSION}
+
+script:
+- tox
+
+after_success:
+- codecov
+
+before_deploy:
+- export CHATETTE_PACKAGE_VERSION=$(python setup.py --version)
+- bash ./scripts/pip.sh build
+
+deploy:
+- provider: script
+  script: bash ./scripts/pip.sh upload
+  skip_cleanup: true
+  on:
+    python: 3.6
+    branch: master
+    tags: true
+
+- provider: script
+  script: bash ./scripts/docker.sh push ${CHATETTE_PACKAGE_VERSION} latest
+  skip_cleanup: true
+  on:
+    python: 3.6
+    branch: master
+    tags: true
+
+after_deploy:
+- echo 'Successful deployment'
