@@ -1,15 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from enum import Enum
 import re
+from enum import Enum
 
-try:
-   from chatette import deprecations
-   from chatette.utils import *
-except ImportError:
-   import deprecations
-   from utils import *
+from chatette import deprecations
 
 COMMENT_SYM_DEPRECATED = ';'
 COMMENT_MARKER = '//'
@@ -41,28 +36,28 @@ RESERVED_VARIATION_NAMES = ["all-variations-aggregation", "rules", "nb-gen-asked
 # with `variation`, `randgen` and `percentgen` optional
 pattern_unit_name = \
     re.compile(
-        r"\[(?P<casegen>"+CASE_GEN_SYM+r")?"+
-        r"(?P<name>(?:\\[\\"+VARIATION_SYM+PERCENT_GEN_SYM+
-            r"?\$\[\]]|[^\\\[\]"+VARIATION_SYM+PERCENT_GEN_SYM+
-            r"?\$\n]+)+)[^\]]*\]"
+        r"\[(?P<casegen>" + CASE_GEN_SYM + r")?" +
+        r"(?P<name>(?:\\[\\" + VARIATION_SYM + PERCENT_GEN_SYM +
+        r"?\$\[\]]|[^\\\[\]" + VARIATION_SYM + PERCENT_GEN_SYM +
+        r"?\$\n]+)+)[^\]]*\]"
     )
 pattern_randgen = re.compile(
-                    r"(?<!\\)\?(?P<randgen>(?:\\[\\\[\]"+VARIATION_SYM+
-                        PERCENT_GEN_SYM+r"?\$]|[^\\\[\]"+VARIATION_SYM+
-                        PERCENT_GEN_SYM+r"?\$\n]+)*)"+
-                    r"(?:"+PERCENT_GEN_SYM+r"(?P<percentgen>[0-9]+))?"
-                  )
+    r"(?<!\\)\?(?P<randgen>(?:\\[\\\[\]" + VARIATION_SYM +
+    PERCENT_GEN_SYM + r"?\$]|[^\\\[\]" + VARIATION_SYM +
+    PERCENT_GEN_SYM + r"?\$\n]+)*)" +
+    r"(?:" + PERCENT_GEN_SYM + r"(?P<percentgen>[0-9]+))?"
+)
 pattern_variation = re.compile(
-                        r"(?<!\\)"+VARIATION_SYM+
-                        r"(?P<var>(?:\\[\\\[\]"+VARIATION_SYM+PERCENT_GEN_SYM+
-                            r"?\$]|[^\\\[\]"+VARIATION_SYM+PERCENT_GEN_SYM+
-                            r"?\$\n]+)+)"
-                    )
+    r"(?<!\\)" + VARIATION_SYM +
+    r"(?P<var>(?:\\[\\\[\]" + VARIATION_SYM + PERCENT_GEN_SYM +
+    r"?\$]|[^\\\[\]" + VARIATION_SYM + PERCENT_GEN_SYM +
+    r"?\$\n]+)+)"
+)
 pattern_arg = re.compile(
-                r"(?<!\\)\$(?P<arg>(?:\\[\\\[\]"+VARIATION_SYM+PERCENT_GEN_SYM
-                    +r"?\$]|[^\\\[\]"+VARIATION_SYM+PERCENT_GEN_SYM+
-                    r"?\$\n]+)+)"
-              )
+    r"(?<!\\)\$(?P<arg>(?:\\[\\\[\]" + VARIATION_SYM + PERCENT_GEN_SYM
+    + r"?\$]|[^\\\[\]" + VARIATION_SYM + PERCENT_GEN_SYM +
+    r"?\$\n]+)+)"
+)
 # TODO make this reflect the state of the symbols defined before
 # pattern_modifiers = \
 #     re.compile(
@@ -72,16 +67,16 @@ pattern_arg = re.compile(
 #         r"(?:#(?P<variation>[^#\[\]\?/\$]*))?"+
 #         r"(?:\?(?P<randgen>[^#\[\]\?/\$]*)(?:/(?P<percentgen>[^#\[\]\?/\$]*))?)?\]"
 #     )
-pattern_comment_deprecated = re.compile(r"(?<!\\)"+COMMENT_SYM_DEPRECATED)
-pattern_comment = re.compile(r"(?<!\\)"+COMMENT_MARKER)
+pattern_comment_deprecated = re.compile(r"(?<!\\)" + COMMENT_SYM_DEPRECATED)
+pattern_comment = re.compile(r"(?<!\\)" + COMMENT_MARKER)
 
 _nb_training_gen_name = "train(ing)?"
 _nb_test_gen_name = "test(ing)?"
 pattern_nb_examples_asked = re.compile(r"\]\((?P<nbgen>[0-9]+)\)")
 pattern_nb_training_examples_asked = \
-    re.compile(r"'"+_nb_training_gen_name+r"': '(?P<nbgen>[0-9]+)'")
+    re.compile(r"'" + _nb_training_gen_name + r"': '(?P<nbgen>[0-9]+)'")
 pattern_nb_testing_examples_asked = \
-    re.compile(r"'"+_nb_test_gen_name+r"': '(?P<nbgen_test>[0-9]+)'")
+    re.compile(r"'" + _nb_test_gen_name + r"': '(?P<nbgen_test>[0-9]+)'")
 
 
 class Unit(Enum):  # TODO move this into unit defintions
@@ -91,6 +86,7 @@ class Unit(Enum):  # TODO move this into unit defintions
     slot = 4  # slot with modifiers
     intent = 5  # intent with modifiers and generation number
     choice = 6  # choice with contained units
+
 
 class LineType(Enum):
     empty = 1
@@ -118,6 +114,7 @@ def strip_comments(text):
             return text[:match.start()].rstrip()
         return text[:match_deprecated.start()].rstrip()
 
+
 def get_top_level_line_type(line, stripped_line):
     """
     Returns the type of a top-level line (Note: this is expected to never
@@ -141,15 +138,23 @@ def get_top_level_line_type(line, stripped_line):
         return LineType.include_file
     return None
 
+
 def is_start_unit_sym(char):
     return (char == UNIT_OPEN_SYM or char == ALIAS_SYM or \
             char == SLOT_SYM or char == INTENT_SYM)
+
+
 def is_unit_start(text):
     return (len(text) > 0 and is_start_unit_sym(text[0]))
+
+
 def is_choice(text):
     return (len(text) > 0 and text.startswith(CHOICE_OPEN_SYM))
+
+
 def is_word(text):
     return not (text.startswith(CHOICE_OPEN_SYM) or is_unit_start(text))
+
 
 def get_unit_type(unit_text):
     """This function expects a string representing a unit"""
@@ -164,8 +169,8 @@ def get_unit_type(unit_text):
     elif unit_text.startswith(CHOICE_OPEN_SYM):
         return Unit.choice
     else:
-        raise RuntimeError("Internal error: tried to get the unit type of "+
-            "something that was not a unit: '"+unit_text+"'")
+        raise RuntimeError("Internal error: tried to get the unit type of " +
+                           "something that was not a unit: '" + unit_text + "'")
 
 
 def find_nb_training_examples_asked(intent_text):
@@ -181,14 +186,16 @@ def find_nb_training_examples_asked(intent_text):
         for match in current_pattern.finditer(intent_text):
             start_index = match.start()
             if one_found:
-                raise SyntaxError("Expected only one number of training "+
-                                  "examples asked in "+intent_text)
+                raise SyntaxError("Expected only one number of training " +
+                                  "examples asked in " + intent_text)
             else:
                 one_found = True
             match = match.groupdict()
 
             nb_training_examples_asked = match["nbgen"]
     return nb_training_examples_asked
+
+
 def find_nb_testing_examples_asked(intent_text):
     """
     Finds the number of testing examples asked for the provided intent string
@@ -199,8 +206,8 @@ def find_nb_testing_examples_asked(intent_text):
     for match in pattern_nb_testing_examples_asked.finditer(intent_text):
         start_index = match.start()
         if one_found:
-            raise SyntaxError("Expected only one number of testing "+
-                              "examples asked in '"+intent_text+"'")
+            raise SyntaxError("Expected only one number of testing " +
+                              "examples asked in '" + intent_text + "'")
         else:
             one_found = True
         match = match.groupdict()
@@ -222,6 +229,7 @@ def get_all_rules_in_variations(definition):
             if variation != "all-variations-aggregation":
                 all_rules.extend(definition[variation]["rules"])  # TODO manage arg
     return all_rules
+
 
 def get_all_rules_in_intent_variations(definition):
     """As `get_all_rules_in_variations` for intents"""
