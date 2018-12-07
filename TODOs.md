@@ -70,6 +70,7 @@
 # Bugs
 
 - **BUG**: arguments are not given down when an argument is transmitted as the argument of a token
+- **BUG**: wrong generation when putting an alias inside a word group
 
 ## To confirm
 
