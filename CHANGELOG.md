@@ -5,6 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- New adapter that outputs `.jsonl` files (choosing which adapter to use is done with the program argument `-a` or `--adapter`)
+
+### Changed
+- The output files cannot contain more than 10000 examples anymore
+- The output files are now by default put in folders `output/train/` and `output/test/`
+- Refactoring of most of the code
+- Script is now referred to as `chatette` rather than `chatette.run` when executing from a command line
 
 ## [1.2.3] - 2018-11-22
 ### Added

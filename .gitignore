@@ -1,4 +1,5 @@
 # Chatette default outputs
+output
 output.json
 testing-dataset.json
 *.out
