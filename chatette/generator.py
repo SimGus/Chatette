@@ -66,22 +66,6 @@ class Generator(object):
                     synonyms[slot_value].extend(current_synonyms_dict[slot_value])
         return synonyms
 
-    def write_JSON(self, generated_examples, file_path):
-        raw_json_data = {
-            "rasa_nlu_data": {
-                "common_examples": generated_examples,
-                "regex_features": [],
-                "entity_synonyms":
-                    to_Rasa_synonym_format(self.get_entities_synonyms()),
-            }
-        }
-        json_data = cast_to_unicode(raw_json_data)
-        with io.open(file_path, 'w', encoding="utf-8") as out_file:
-            out_file.write(json.dumps(json_data,
-                                      ensure_ascii=False,  # output in utf-8
-                                      indent=2,  # More readable
-                                      sort_keys=True))  # Deterministic
-
 
 if __name__ == "__main__":
     import warnings
