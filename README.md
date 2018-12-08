@@ -148,8 +148,13 @@ Beware that, as always with machine learning, having too much data may cause you
 
 Note that *Chatette* is named after *Chatito*, as *-ette* in French could be translated to *-ita* or *-ito* in Spanish.
 
-# Contributors
+# Creators
+## Author and maintainer
+- [SimGus](https://github.com/SimGus)
 
+*Disclaimer: This is a side-project I'm not paid for, don't expect me to work 24/7 on it.*
+
+## Contributors
 - [Vadim Fedorenko](https://github.com/meiblorn)
 
 Many thanks to him!
