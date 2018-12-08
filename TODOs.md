@@ -71,6 +71,8 @@
 
 - **BUG**: arguments are not given down when an argument is transmitted as the argument of a token
 - **BUG**: wrong generation when putting an alias inside a word group
+- **BUG**: indentation error raised for lines with only spaces
+- **BUG**: encoding errors under Windows
 
 ## To confirm
 
