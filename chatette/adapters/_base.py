@@ -16,7 +16,7 @@ class Batch:
 
 class Adapter(metaclass=ABCMeta):
 
-    def __init__(self, batch_size=10_000) -> None:
+    def __init__(self, batch_size=10000) -> None:
         super().__init__()
         self._batch_size = batch_size
 

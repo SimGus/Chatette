@@ -87,4 +87,4 @@ if __name__ == "__main__":
     import warnings
 
     warnings.warn("You are running the wrong file ('generator.py')." +
-                  "The file that should be run is 'run.py'.")
+                  "The file that should be run is '__main__.py'.")

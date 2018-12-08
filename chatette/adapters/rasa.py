@@ -8,7 +8,7 @@ from ._base import Adapter, Batch
 
 class RasaAdapter(Adapter):
 
-    def __init__(self, batch_size=10_000) -> None:
+    def __init__(self, batch_size=10000) -> None:
         super().__init__(batch_size)
 
     def _get_file_extension(self):
