@@ -3,24 +3,27 @@ import os
 from abc import ABCMeta, abstractmethod as abstract_method
 from typing import List, TextIO
 
+from future.utils import with_metaclass
+
 from chatette.units.intent import IntentExample
 
 
-class Batch:
+class Batch(object):
     def __init__(self, index, examples, synonyms):
-        super().__init__()
+        super(Batch, self).__init__()
         self.index = index
         self.examples = examples
         self.synonyms = synonyms
 
 
-class Adapter(metaclass=ABCMeta):
+class Adapter(with_metaclass(ABCMeta, object)):
 
-    def __init__(self, batch_size=10000) -> None:
-        super().__init__()
+    def __init__(self, batch_size=10000):# -> None:
+        super(Adapter, self).__init__()
         self._batch_size = batch_size
 
-    def write(self, output_directory, examples: List[IntentExample], synonyms) -> None:
+    def write(self, output_directory, examples, synonyms):
+    #def write(self, output_directory, examples: List[IntentExample], synonyms): -> None:
         if not os.path.exists(output_directory):
             os.makedirs(output_directory)
 
@@ -34,7 +37,8 @@ class Adapter(metaclass=ABCMeta):
         raise NotImplementedError()
 
     @abstract_method
-    def _write_batch(self, output_file_handle: TextIO, batch: Batch) -> None:
+    def _write_batch(self, output_file_handle, batch):
+    #def _write_batch(self, output_file_handle: TextIO, batch: Batch):# -> None:
         raise NotImplementedError()
 
     @classmethod

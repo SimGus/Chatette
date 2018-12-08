@@ -5,9 +5,9 @@ from random import randint
 from chatette.utils import choose
 
 
-class Example:
-    def __init__(self, text="", entities=None) -> None:
-        super().__init__()
+class Example(object):
+    def __init__(self, text="", entities=None):# -> None:
+        super(Example, self).__init__()
 
         if entities is None:
             entities = []

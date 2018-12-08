@@ -116,7 +116,7 @@ class DummySlotValRuleContent(RuleContent):
 
     def __init__(self, name, next_token):
         # (str, RuleContent) -> ()
-        super().__init__(name)
+        super(DummySlotValRuleContent, self).__init__(name)
         self.name = remove_escapement(name)
         self.slot_value = self.name
         self.real_first_token = next_token

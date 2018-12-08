@@ -8,15 +8,17 @@ from ._base import Adapter, Batch
 
 class RasaAdapter(Adapter):
 
-    def __init__(self, batch_size=10000) -> None:
-        super().__init__(batch_size)
+    def __init__(self, batch_size=10000):# -> None:
+        super(RasaAdapter, self).__init__(batch_size)
 
     def _get_file_extension(self):
         return "json"
 
-    def _write_batch(self, output_file_handle: TextIO, batch: Batch) -> None:
+    def _write_batch(self, output_file_handle, batch):
+    #def _write_batch(self, output_file_handle: TextIO, batch: Batch) -> None:
 
-        def example_to_rasa_entities(example: IntentExample):
+        def example_to_rasa_entities(example):
+        #def example_to_rasa_entities(example: IntentExample):
             def entity_to_rasa(entity):
                 entity["text"] = entity["text"].strip()
                 first_index = self.__find_entity(example.text, entity["text"])  # Always finds something

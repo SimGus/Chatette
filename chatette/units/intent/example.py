@@ -3,8 +3,8 @@ from chatette.units import Example
 
 class IntentExample(Example):
 
-    def __init__(self, name, text="", entities=None) -> None:
-        super().__init__(text, entities)
+    def __init__(self, name, text="", entities=None):# -> None:
+        super(IntentExample, self).__init__(text, entities)
         self.name = name
 
     def __str__(self):

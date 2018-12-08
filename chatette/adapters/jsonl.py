@@ -13,13 +13,15 @@ class JsonListAdapter(Adapter):
     def _get_file_extension(self):
         return "jsonl"
 
-    def _write_batch(self, output_file_handle: TextIO, batch: Batch) -> None:
+    def _write_batch(self, output_file_handle, batch):
+    #def _write_batch(self, output_file_handle: TextIO, batch: Batch) -> None:
         output_file_handle.writelines([
             json.dumps(cast_to_unicode(example.__dict__), ensure_ascii=False, sort_keys=True) + "\n"
             for example in batch.examples
         ])
 
-    def write(self, output_directory, examples: List[IntentExample], synonyms) -> None:
+    def write(self, output_directory, examples, synonyms):
+    #def write(self, output_directory, examples: List[IntentExample], synonyms) -> None:
         super().write(output_directory, examples, synonyms)
 
         synonyms_file_path = os.path.join(output_directory, "synonyms.json")

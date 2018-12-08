@@ -25,7 +25,7 @@ class IntentDefinition(UnitDefinition):
         self.nb_training_examples_asked = nb_training_examples_asked
         self.nb_testing_examples_asked = nb_testing_examples_asked
 
-    def generate(self, max_nb_examples, training_examples=None) -> List[Example]:
+    def generate(self, max_nb_examples, training_examples=None):# -> List[Example]:
         """
         Generates all the examples that were asked (i.e. as much examples
         as asked). The number of generated examples is tied to a maximum though TODO.
