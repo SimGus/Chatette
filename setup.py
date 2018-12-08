@@ -7,7 +7,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="chatette",
-    version="1.2.2",
+    version="1.2.3",
     description="A dataset generator for Rasa NLU",
     author="SimGus",
     license="MIT",

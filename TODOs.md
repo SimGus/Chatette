@@ -3,8 +3,6 @@
 - **TODO**: parse in a better way asked number of generation of intents
 - **TODO**: accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax
 
-- **TODO**: check for circular includes
-
 - **TODO**: add an adapter to output raw lists of questions (rather than a JSON file)
 
 - **TODO**: add opposite `randgen` names
@@ -18,8 +16,10 @@
 - **TODO**: use more list/dict comprehensions (faster than using `append`)
 <!-- - **TODO**: rewrite docstrings formatted as explained in *PEP257* -->
 - **TODO**: detect and warn about circular references
+- **TODO**: check for circular includes
 - **TODO**: warn if there are slots within slots
 
+- **TODO**: refactor units to remove duplicated code
 - **TODO**: add unit tests
 
 - **TODO**: *Docs* add a representation of the architecture of the project
@@ -70,6 +70,9 @@
 # Bugs
 
 - **BUG**: arguments are not given down when an argument is transmitted as the argument of a token
+- **BUG**: wrong generation when putting an alias inside a word group
+- **BUG**: indentation error raised for lines with only spaces
+- **BUG**: encoding errors under Windows
 
 ## To confirm
 

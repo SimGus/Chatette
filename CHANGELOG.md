@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- New adapter that outputs `.jsonl` files (choosing which adapter to use is done with the program argument `-a` or `--adapter`)
+
+### Changed
+- The output files cannot contain more than 10000 examples anymore
+- The output files are now by default put in folders `output/train/` and `output/test/`
+- Refactoring of most of the code
+- Script is now referred to as `chatette` rather than `chatette.run` when executing from a command line
+
+## [1.2.3] - 2018-11-22
+### Added
 - Program argument (`-l` or `--local`) to make the working directory be the directory containing the template file
 
 ### Changed
@@ -176,7 +186,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for slot value names
 - Generator able to generate an output file in *Rasa NLU* format (without support for synonyms or regex features)
 
-[Unreleased]: https://github.com/SimGus/Chatette/compare/v1.2.2...HEAD
+[Unreleased]: https://github.com/SimGus/Chatette/compare/v1.2.3...HEAD
+[1.2.3]: https://github.com/SimGus/Chatette/compare/v1.2.2...v1.2.3
 [1.2.2]: https://github.com/SimGus/Chatette/compare/v1.2.1...v1.2.2
 [1.2.1]: https://github.com/SimGus/Chatette/compare/v1.2.0...v1.2.1
 [1.2.0]: https://github.com/SimGus/Chatette/compare/v1.1.5...v1.2.0

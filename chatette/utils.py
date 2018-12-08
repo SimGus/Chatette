@@ -6,9 +6,11 @@ from random import randint
 
 
 def printDBG(txt):
-    print("[DBG] "+txt)
+    print("[DBG] " + txt)
+
+
 def printWarn(txt):
-    print("[WARN] "+txt)
+    print("[WARN] " + txt)
 
 
 def cast_to_unicode(any):
@@ -38,10 +40,11 @@ def choose(list):
     list_len = len(list)
     if list_len <= 0:
         return None
-    return list[randint(0, list_len-1)]
+    return list[randint(0, list_len - 1)]
 
 
 if __name__ == "__main__":
     import warnings
+
     warnings.warn("You are running the wrong file ('utils.py')." +
-        "The file that should be run is 'run.py'.")
+                  "The file that should be run is 'run.py'.")
