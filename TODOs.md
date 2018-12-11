@@ -23,6 +23,7 @@
 - **TODO**: add unit tests
 
 - **TODO**: *Docs* add a representation of the architecture of the project
+- **TODO**: *Docs* multilingual
 
 ## Done
 
