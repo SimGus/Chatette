@@ -48,5 +48,5 @@ class WordRuleContent(RuleContent):
 
         return [Example(self.word)]
 
-    def get_nb_possible_generated_examples(self):
+    def get_max_nb_generated_examples(self):
         return 1

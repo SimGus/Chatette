@@ -1,7 +1,8 @@
+from __future__ import print_function
 from random import randint
 
-from chatette.units import Example, RuleContent, may_get_leading_space, randomly_change_case, with_leading_lower, \
-    with_leading_upper
+from chatette.units import Example, RuleContent, may_get_leading_space, \
+                           randomly_change_case, with_leading_lower, with_leading_upper
 from chatette.utils import choose
 
 
@@ -22,10 +23,12 @@ class ChoiceRuleContent(RuleContent):
         # NOTE: its name would be the unparsed text as a string
         if randgen is not None and randgen != "":
             raise SyntaxError("Choices cannot have a named randgen, " +
-                              "as was the case for '" + name + "': " + randgen + " ('?' unescaped?)")
+                              "as was the case for '" + name + "': " + randgen +
+                              " ('?' unescaped?)")
         if variation_name is not None:
             raise SyntaxError("Choices cannot have a variation, as was the " +
-                              "case for '" + name + "' ('#' unescaped?)")  # TODO: change the symbol to a variable from parser_utils
+                              "case for '" + name + "' ('#' unescaped?)")
+                              # TODO: change the symbol to a variable from parser_utils
         if arg_value is not None:
             raise SyntaxError("Choices cannot have an argument, as was the " +
                               "case for '" + name + "' ('$' unescaped?)")
@@ -136,12 +139,12 @@ class ChoiceRuleContent(RuleContent):
 
         return generated_examples
 
-    def get_nb_possible_generated_examples(self):
+    def get_max_nb_generated_examples(self):
         nb_possible_ex = 0
         for choice in self.choices:
             choice_nb_ex = 0
             for token in choice:
-                current_nb_ex = token.get_nb_possible_generated_examples()
+                current_nb_ex = token.get_max_nb_generated_examples()
                 if choice_nb_ex == 0:
                     choice_nb_ex = current_nb_ex
                 else:
@@ -154,7 +157,7 @@ class ChoiceRuleContent(RuleContent):
             nb_possible_ex += 1
         return nb_possible_ex
 
-    def printDBG(self, nb_indent=0):
+    def print_DBG(self, nb_indent=0):
         indentation = nb_indent * '\t'
         print(indentation + self.name)
         print(indentation + "\tvariation name: " + str(self.variation_name))
@@ -166,4 +169,4 @@ class ChoiceRuleContent(RuleContent):
         for choice in self.choices:
             print(indentation + "\tChoice:")
             for token in choice:
-                token.printDBG(nb_indent + 2)
+                token.print_DBG(nb_indent + 2)

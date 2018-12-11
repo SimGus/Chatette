@@ -1,14 +1,15 @@
 import io
 import os
 from abc import ABCMeta, abstractmethod as abstract_method
-from typing import List, TextIO
+#from typing import List, TextIO
 
 from future.utils import with_metaclass
 
-from chatette.units.intent import IntentExample
+#from chatette.units.intent import IntentExample
 
 
 class Batch(object):
+    """Represents one batch of examples to write in the output files."""
     def __init__(self, index, examples, synonyms):
         super(Batch, self).__init__()
         self.index = index
@@ -17,6 +18,11 @@ class Batch(object):
 
 
 class Adapter(with_metaclass(ABCMeta, object)):
+    """
+    Superclass for all the adapters.
+    Using the list of generated examples, creates and writes
+    the output file(s).
+    """
 
     def __init__(self, batch_size=10000):# -> None:
         super(Adapter, self).__init__()
@@ -48,4 +54,5 @@ class Adapter(with_metaclass(ABCMeta, object)):
             yield Batch(index, examples[ndx:min(ndx + n, length)], synonyms)
 
     def __get_file_name(self, batch, output_directory):
-        return os.path.join(output_directory, "output." + str(batch.index) + "." + self._get_file_extension())
+        return os.path.join(output_directory, "output." + str(batch.index) +
+                                              "." + self._get_file_extension())

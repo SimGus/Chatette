@@ -1,7 +1,7 @@
 import random
-from typing import List
+#from typing import List
 
-from chatette.units import Example, UnitDefinition
+from chatette.units import UnitDefinition#, Example
 from .example import IntentExample
 
 
@@ -48,7 +48,7 @@ class IntentDefinition(UnitDefinition):
         if nb_examples_asked <= 0:
             return []
 
-        nb_possible_ex = self.get_nb_possible_generated_examples()
+        nb_possible_ex = self.get_max_nb_generated_examples()
         if nb_examples_asked > nb_possible_ex:
             if training_examples is None:
                 return [
@@ -80,7 +80,8 @@ class IntentDefinition(UnitDefinition):
                     if current_example not in generated_examples and \
                             (training_examples is None or current_example not in training_examples):
                         generated_examples.append(
-                            IntentExample(self.name, current_example.text, current_example.entities))
+                            IntentExample(self.name, current_example.text,
+                                          current_example.entities))
 
                         break
 

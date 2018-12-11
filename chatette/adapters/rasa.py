@@ -1,9 +1,9 @@
 import json
-from typing import TextIO
+# from typing import TextIO
 
-from chatette.units.intent import IntentExample
+# from chatette.units.intent import IntentExample
 from chatette.utils import cast_to_unicode
-from ._base import Adapter, Batch
+from ._base import Adapter#, Batch
 
 
 class RasaAdapter(Adapter):
@@ -21,7 +21,8 @@ class RasaAdapter(Adapter):
         #def example_to_rasa_entities(example: IntentExample):
             def entity_to_rasa(entity):
                 entity["text"] = entity["text"].strip()
-                first_index = self.__find_entity(example.text, entity["text"])  # Always finds something
+                first_index = self.__find_entity(example.text, entity["text"])
+                # This always finds something
                 return {
                     "value": entity["value"],
                     "entity": entity["slot-name"],
@@ -46,7 +47,8 @@ class RasaAdapter(Adapter):
         }
 
         json_data = cast_to_unicode(json_data)
-        output_file_handle.write(json.dumps(json_data, ensure_ascii=False, indent=2, sort_keys=True))
+        output_file_handle.write(json.dumps(json_data, ensure_ascii=False,
+                                            indent=2, sort_keys=True))
 
     @classmethod
     def __synonym_format(cls, synonyms):

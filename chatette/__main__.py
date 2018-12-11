@@ -10,7 +10,7 @@ from chatette.adapters import JsonListAdapter
 from chatette.adapters.rasa import RasaAdapter
 from chatette.generator import Generator
 from chatette.parsing import Parser
-from chatette.utils import printDBG
+from chatette.utils import print_DBG
 
 
 def main():
@@ -39,7 +39,8 @@ def main():
                                       "to the directory containing the template " +
                                       "file")
 
-    argument_parser.add_argument("-a", "--adapter", dest="adapter", required=False, type=str, default="rasa",
+    argument_parser.add_argument("-a", "--adapter", dest="adapter", required=False,
+                                 type=str, default="rasa",
                                  help="Write adapter. Possible values: ['rasa', 'jsonl']")
 
     if len(sys.argv[1:]) == 0:
@@ -63,7 +64,7 @@ def main():
     with io.open(template_file_path, 'r') as in_file:
         parser = Parser(in_file)
         parser.parse()
-        # parser.printDBG()
+        # parser.print_DBG()
 
     if args.adapter == 'rasa':
         adapter = RasaAdapter()
@@ -83,7 +84,7 @@ def main():
     if test_examples:
         adapter.write(os.path.join(dir_path, "test"), test_examples, synonyms)
 
-    printDBG("Generation over")
+    print_DBG("Generation over")
 
 
 if __name__ == "__main__":

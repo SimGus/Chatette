@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+"""
+Module `chatette.parser_utils`
+Contains utility functions that are specific to
+the parsing of template files.
+"""
+
+
 import re
 from enum import Enum
 
@@ -34,26 +41,26 @@ RESERVED_VARIATION_NAMES = ["all-variations-aggregation", "rules", "nb-gen-asked
 
 # This regex finds patterns like this `[name#variation?randgen/percentgen]`
 # with `variation`, `randgen` and `percentgen` optional
-pattern_unit_name = \
+PATTERN_UNIT_NAME = \
     re.compile(
         r"\[(?P<casegen>" + CASE_GEN_SYM + r")?" +
         r"(?P<name>(?:\\[\\" + VARIATION_SYM + PERCENT_GEN_SYM +
         r"?\$\[\]]|[^\\\[\]" + VARIATION_SYM + PERCENT_GEN_SYM +
         r"?\$\n]+)+)[^\]]*\]"
     )
-pattern_randgen = re.compile(
+PATTERN_RANDGEN = re.compile(
     r"(?<!\\)\?(?P<randgen>(?:\\[\\\[\]" + VARIATION_SYM +
     PERCENT_GEN_SYM + r"?\$]|[^\\\[\]" + VARIATION_SYM +
     PERCENT_GEN_SYM + r"?\$\n]+)*)" +
     r"(?:" + PERCENT_GEN_SYM + r"(?P<percentgen>[0-9]+))?"
 )
-pattern_variation = re.compile(
+PATTERN_VARIATION = re.compile(
     r"(?<!\\)" + VARIATION_SYM +
     r"(?P<var>(?:\\[\\\[\]" + VARIATION_SYM + PERCENT_GEN_SYM +
     r"?\$]|[^\\\[\]" + VARIATION_SYM + PERCENT_GEN_SYM +
     r"?\$\n]+)+)"
 )
-pattern_arg = re.compile(
+PATTERN_ARG = re.compile(
     r"(?<!\\)\$(?P<arg>(?:\\[\\\[\]" + VARIATION_SYM + PERCENT_GEN_SYM
     + r"?\$]|[^\\\[\]" + VARIATION_SYM + PERCENT_GEN_SYM +
     r"?\$\n]+)+)"
@@ -67,16 +74,16 @@ pattern_arg = re.compile(
 #         r"(?:#(?P<variation>[^#\[\]\?/\$]*))?"+
 #         r"(?:\?(?P<randgen>[^#\[\]\?/\$]*)(?:/(?P<percentgen>[^#\[\]\?/\$]*))?)?\]"
 #     )
-pattern_comment_deprecated = re.compile(r"(?<!\\)" + COMMENT_SYM_DEPRECATED)
-pattern_comment = re.compile(r"(?<!\\)" + COMMENT_MARKER)
+PATTERN_COMMENT_DEPRECATED = re.compile(r"(?<!\\)" + COMMENT_SYM_DEPRECATED)
+PATTERN_COMMENT = re.compile(r"(?<!\\)" + COMMENT_MARKER)
 
-_nb_training_gen_name = "train(ing)?"
-_nb_test_gen_name = "test(ing)?"
-pattern_nb_examples_asked = re.compile(r"\]\((?P<nbgen>[0-9]+)\)")
-pattern_nb_training_examples_asked = \
-    re.compile(r"'" + _nb_training_gen_name + r"': '(?P<nbgen>[0-9]+)'")
-pattern_nb_testing_examples_asked = \
-    re.compile(r"'" + _nb_test_gen_name + r"': '(?P<nbgen_test>[0-9]+)'")
+_NB_TRAINING_GEN_NAME = "train(ing)?"
+_NB_TEST_GEN_NAME = "test(ing)?"
+PATTERN_NB_EXAMPLES_ASKED = re.compile(r"\]\((?P<nbgen>[0-9]+)\)")
+PATTERN_NB_TRAINING_EXAMPLES_ASKED = \
+    re.compile(r"'" + _NB_TRAINING_GEN_NAME + r"': '(?P<nbgen>[0-9]+)'")
+PATTERN_NB_TEST_EXAMPLES_ASKED = \
+    re.compile(r"'" + _NB_TEST_GEN_NAME + r"': '(?P<nbgen_test>[0-9]+)'")
 
 
 class Unit(Enum):  # TODO move this into unit defintions
@@ -98,10 +105,11 @@ class LineType(Enum):
 
 
 def strip_comments(text):
-    match = pattern_comment.search(text)
-    match_deprecated = pattern_comment_deprecated.search(text)
+    """Returns the text without the comments."""
+    match = PATTERN_COMMENT.search(text)
+    match_deprecated = PATTERN_COMMENT_DEPRECATED.search(text)
     if match_deprecated is not None:
-        deprecations.warn_deprecation_semicolon_comments()
+        deprecations.warn_semicolon_comments()
 
     if match is None and match_deprecated is None:
         return text.rstrip()
@@ -126,7 +134,7 @@ def get_top_level_line_type(line, stripped_line):
     elif stripped_line.startswith(COMMENT_MARKER):
         return LineType.comment
     elif stripped_line.startswith(COMMENT_SYM_DEPRECATED):
-        deprecations.warn_deprecation_semicolon_comments()
+        deprecations.warn_semicolon_comments()
         return LineType.comment
     elif line.startswith(ALIAS_SYM):
         return LineType.alias_declaration
@@ -180,11 +188,10 @@ def find_nb_training_examples_asked(intent_text):
     """
     nb_training_examples_asked = None
     one_found = False
-    patterns_list = [pattern_nb_examples_asked,
-                     pattern_nb_training_examples_asked]
+    patterns_list = [PATTERN_NB_EXAMPLES_ASKED,
+                     PATTERN_NB_TRAINING_EXAMPLES_ASKED]
     for current_pattern in patterns_list:
         for match in current_pattern.finditer(intent_text):
-            start_index = match.start()
             if one_found:
                 raise SyntaxError("Expected only one number of training " +
                                   "examples asked in " + intent_text)
@@ -203,8 +210,7 @@ def find_nb_testing_examples_asked(intent_text):
     """
     nb_testing_examples_asked = None
     one_found = False
-    for match in pattern_nb_testing_examples_asked.finditer(intent_text):
-        start_index = match.start()
+    for match in PATTERN_NB_TEST_EXAMPLES_ASKED.finditer(intent_text):
         if one_found:
             raise SyntaxError("Expected only one number of testing " +
                               "examples asked in '" + intent_text + "'")
@@ -250,7 +256,8 @@ def remove_escapement(text):
     """
     if ESCAPE_SYM not in text:
         return text
-    # Note there might be better ways to do this with regexes (but they have fixed-length negative lookback)
+    # Note there might be better ways to do this with regexes
+    # (but they have fixed-length negative lookback)
     result = ""
     escaped = False
     for c in text:

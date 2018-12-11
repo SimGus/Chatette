@@ -1,8 +1,9 @@
+from __future__ import print_function
 from random import randint
 
 from chatette.parser_utils import Unit, remove_escapement
-from chatette.units import Example, RuleContent, may_get_leading_space, randomly_change_case, with_leading_lower, \
-    with_leading_upper
+from chatette.units import Example, RuleContent, may_get_leading_space, \
+                           randomly_change_case, with_leading_lower, with_leading_upper
 
 
 class SlotRuleContent(RuleContent):
@@ -22,8 +23,10 @@ class SlotRuleContent(RuleContent):
     def __init__(self, name, leading_space=False, variation_name=None, arg_value=None,
                  casegen=False, randgen=None, percentage_gen=50, parser=None):
         super(SlotRuleContent, self).__init__(name, leading_space=leading_space,
-                                              variation_name=variation_name, arg_value=arg_value, casegen=casegen,
-                                              randgen=randgen, percentage_gen=percentage_gen, parser=parser)
+                                              variation_name=variation_name,
+                                              arg_value=arg_value, casegen=casegen,
+                                              randgen=randgen, percentage_gen=percentage_gen,
+                                              parser=parser)
         self.casegen_checked = False
 
     def can_have_casegen(self):
@@ -96,9 +99,9 @@ class SlotRuleContent(RuleContent):
 
         return generated_examples
 
-    def get_nb_possible_generated_examples(self):
+    def get_max_nb_generated_examples(self):
         nb_possible_ex = self.parser.get_definition(self.name, Unit.slot) \
-            .get_nb_possible_generated_examples(self.variation_name)
+            .get_max_nb_generated_examples(self.variation_name)
 
         if self.casegen:
             nb_possible_ex *= 2
@@ -130,6 +133,6 @@ class DummySlotValRuleContent(RuleContent):
     def generate_all(self):
         return [Example()]
 
-    def printDBG(self, nb_indent=0):
+    def print_DBG(self, nb_indent=0):
         indentation = nb_indent * '\t'
         print(indentation + "Slot val: " + self.name)

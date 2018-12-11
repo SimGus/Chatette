@@ -3,10 +3,7 @@
 
 # TODO shouldn't generate twice the same statement
 
-import io
-import json
-
-from chatette.utils import cast_to_unicode, printDBG
+from chatette.utils import print_DBG
 
 
 class Generator(object):
@@ -27,7 +24,7 @@ class Generator(object):
         self.max_nb_single_intent_examples = new_max
 
     def generate_train(self):
-        printDBG("Generating training examples...")
+        print_DBG("Generating training examples...")
         for intent_name in self.parser.intent_definitions:
             intent = self.parser.intent_definitions[intent_name]
             examples = intent.generate(self.max_nb_single_intent_examples)
@@ -43,7 +40,7 @@ class Generator(object):
                 break
 
         if should_generate_test_set:
-            printDBG("Generating testing examples...")
+            print_DBG("Generating testing examples...")
             for intent_name in self.parser.intent_definitions:
                 intent = self.parser.intent_definitions[intent_name]
                 examples = intent.generate(self.max_nb_single_intent_examples, training_examples)

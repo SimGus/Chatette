@@ -1,7 +1,8 @@
 from random import randint
 
-from chatette.units import Example, RuleContent, contains_letters, may_get_leading_space, randomly_change_case, \
-    with_leading_lower, with_leading_upper
+from chatette.units import Example, RuleContent, contains_letters, \
+                           may_get_leading_space, randomly_change_case, \
+                           with_leading_lower, with_leading_upper
 
 
 class GroupWordRuleContent(RuleContent):
@@ -89,7 +90,7 @@ class GroupWordRuleContent(RuleContent):
         result = [Example(ex) for ex in generated_examples]
         return result
 
-    def get_nb_possible_generated_examples(self):
+    def get_max_nb_generated_examples(self):
         nb_possible_ex = 1
         if self.casegen:
             nb_possible_ex *= 2

@@ -1,6 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+"""
+Module `chatette.parsing`
+Contains all the logic to parse template files
+and transform the information into an Abstract Syntax Tree.
+"""
+
+
+from __future__ import print_function
 import os
 
 from chatette.parser_utils import *
@@ -10,7 +18,7 @@ from chatette.units.intent import IntentDefinition, IntentRuleContent
 from chatette.units.slot import DummySlotValRuleContent, SlotDefinition, SlotRuleContent
 from chatette.units.word.group_rule_content import GroupWordRuleContent
 from chatette.units.word.rule_content import WordRuleContent
-from chatette.utils import printDBG
+from chatette.utils import print_DBG
 
 
 class Parser(object):
@@ -61,7 +69,7 @@ class Parser(object):
         self.in_file = self.opened_files.pop()
 
     def parse(self):
-        printDBG("Parsing file: " + self.in_file.name)
+        print_DBG("Parsing file: " + self.in_file.name)
         line = None
         while line != "":
             line = self.read_line()
@@ -73,7 +81,8 @@ class Parser(object):
                                   (self.in_file.name, 0, 0, stripped_line))
             elif line_type == LineType.empty or line_type == LineType.comment:
                 continue
-            stripped_line = strip_comments(stripped_line)  # Not done before to compute the indentation
+            stripped_line = strip_comments(stripped_line)
+            # Stripping was not done before to compute the indentation
             if line_type == LineType.include_file:
                 self.parse_file(stripped_line[1:].rstrip())
             elif line_type == LineType.alias_declaration:
@@ -83,7 +92,7 @@ class Parser(object):
             else:  # intent declaration
                 self.parse_intent_definition(stripped_line)
 
-        printDBG("Parsing of file: " + self.in_file.name + " finished")
+        print_DBG("Parsing of file: " + self.in_file.name + " finished")
         self.parsing_finished = True
 
     def parse_unit(self, unit):
@@ -104,9 +113,13 @@ class Parser(object):
         # one_found = False
         # for match in pattern_modifiers.finditer(unit):
         #     start_index = match.start()
-        #     if one_found:  # this error would happen only when `unit` is a whole line (i.e. a declaration)
-        #         raise SyntaxError("Expected only one unit here: only one declaration is allowed per line",
-        #             (self.in_file.name, self.line_nb, start_index, unit))
+        #     if one_found:
+        #         # this error would happen only when `unit`
+        #         # is a whole line (i.e. a declaration)
+        #         raise SyntaxError("Expected only one unit here: " +
+        #                           "only one declaration is allowed per line",
+        #                           (self.in_file.name, self.line_nb, start_index,
+        #                            unit))
         #     else:
         #         one_found = True
         #     match = match.groupdict()
@@ -119,7 +132,7 @@ class Parser(object):
         #     casegen = (match["casegen"] is not None)
 
         one_found = False
-        for match in pattern_unit_name.finditer(unit):
+        for match in PATTERN_UNIT_NAME.finditer(unit):
             if one_found:  # this error would happen only when `unit` is a whole line
                 raise SyntaxError("Expected only one unit here.",
                                   (self.in_file.name, self.line_nb,
@@ -138,7 +151,7 @@ class Parser(object):
                                    match.start(), unit))
 
         one_found = False
-        for match in pattern_randgen.finditer(unit):
+        for match in PATTERN_RANDGEN.finditer(unit):
             if one_found:
                 raise SyntaxError("Expected only one random generation " +
                                   "modifier here.", (self.in_file.name,
@@ -152,7 +165,7 @@ class Parser(object):
             percentgen = match["percentgen"]
 
         one_found = False
-        for match in pattern_variation.finditer(unit):
+        for match in PATTERN_VARIATION.finditer(unit):
             if one_found:
                 raise SyntaxError("Expected only one variation here.",
                                   (self.in_file.name, self.line_nb,
@@ -164,7 +177,7 @@ class Parser(object):
             variation = match["var"]
 
         one_found = False
-        for match in pattern_arg.finditer(unit):
+        for match in PATTERN_ARG.finditer(unit):
             if one_found:
                 raise SyntaxError("Expected only one argument here.",
                                   (self.in_file.name, self.line_nb,
@@ -208,8 +221,10 @@ class Parser(object):
             casegen = True
         # Manage randgen
         randgen = None  # NOTE: randgen is supposed to be a name (may be empty)
-        if len(splits[-1]) >= 1 and splits[-1][-1] == RAND_GEN_SYM:  # choice ends with '?'
-            if not (len(splits[-1]) >= 2 and splits[-1][-2] == ESCAPE_SYM):  # This '?' is not escaped
+        if len(splits[-1]) >= 1 and splits[-1][-1] == RAND_GEN_SYM:
+            # choice ends with '?'
+            if not (len(splits[-1]) >= 2 and splits[-1][-2] == ESCAPE_SYM):
+                # This '?' is not escaped
                 splits[-1] = splits[-1][:-1]
                 randgen = ""
 
@@ -228,7 +243,7 @@ class Parser(object):
         Parses the definition of an alias (declaration and contents)
         and adds the relevant info to the list of aliases.
         """
-        # printDBG("alias: "+first_line.strip())
+        # print_DBG("alias: "+first_line.strip())
         # Manage the alias declaration
         (alias_name, alias_arg, alias_variation, randgen, percentgen, casegen) = \
             self.parse_unit(first_line)
@@ -280,7 +295,7 @@ class Parser(object):
         Parses the definition of a slot (declaration and contents)
         and adds the relevant info to the list of slots.
         """
-        # printDBG("slot: "+first_line.strip())
+        # print_DBG("slot: "+first_line.strip())
         # Manage the slot declaration
         (slot_name, slot_arg, slot_variation, randgen, percentgen, casegen) = \
             self.parse_unit(first_line)
@@ -291,7 +306,8 @@ class Parser(object):
             raise SyntaxError("Arguments must be named",
                               (self.in_file.name, self.line_nb, 0, first_line))
         if slot_variation in RESERVED_VARIATION_NAMES:
-            raise SyntaxError("You cannot use the reserved variation names: " + str(RESERVED_VARIATION_NAMES),
+            raise SyntaxError("You cannot use the reserved variation names: " +
+                              str(RESERVED_VARIATION_NAMES),
                               (self.in_file.name, self.line_nb, 0, first_line))
         if randgen is not None:
             raise SyntaxError("Declarations cannot have a named random generation modifier",
@@ -341,7 +357,7 @@ class Parser(object):
         Parses the definition of an intent (declaration and contents)
         and adds the relevant info to the list of intents.
         """
-        # printDBG("intent: "+first_line.strip())
+        # print_DBG("intent: "+first_line.strip())
         # Manage the intent declaration
         (intent_name, intent_arg, intent_variation, randgen, percentgen, casegen) = \
             self.parse_unit(first_line)
@@ -352,7 +368,8 @@ class Parser(object):
             raise SyntaxError("Arguments must be named",
                               (self.in_file.name, self.line_nb, 0, first_line))
         if intent_variation in RESERVED_VARIATION_NAMES:
-            raise SyntaxError("You cannot use the reserved variation names: " + str(RESERVED_VARIATION_NAMES),
+            raise SyntaxError("You cannot use the reserved variation names: " +
+                              str(RESERVED_VARIATION_NAMES),
                               (self.in_file.name, self.line_nb, 0, first_line))
         if randgen is not None:
             raise SyntaxError("Declarations cannot have a named random generation modifier",
@@ -421,13 +438,13 @@ class Parser(object):
     def has_parsed(self):
         return self.parsing_finished
 
-    def get_definition(self, def_name, type):
+    def get_definition(self, def_name, unit_type):
         def_list = None
-        if type == Unit.alias:
+        if unit_type == Unit.alias:
             def_list = self.alias_definitions
-        elif type == Unit.slot:
+        elif unit_type == Unit.slot:
             def_list = self.slot_definitions
-        elif type == Unit.intent:
+        elif unit_type == Unit.intent:
             def_list = self.intent_definitions
         else:
             raise ValueError("Tried to get a definition with wrong type (expected" +
@@ -435,9 +452,9 @@ class Parser(object):
 
         if def_name not in def_list:
             type_str = "alias"
-            if type == Unit.slot:
+            if unit_type == Unit.slot:
                 type_str = "slot"
-            elif type == Unit.intent:
+            elif unit_type == Unit.intent:
                 type_str = "intent"
             raise ValueError("Couldn't find a definition for " + type_str + " '" +
                              def_name + "'")
@@ -630,18 +647,18 @@ class Parser(object):
 
         return rules
 
-    def printDBG(self):
+    def print_DBG(self):
         print("\nAliases:")
         for alias_name in self.alias_definitions:
-            self.alias_definitions[alias_name].printDBG()
+            self.alias_definitions[alias_name].print_DBG()
 
         print("\nSlots:")
         for slot_name in self.slot_definitions:
-            self.slot_definitions[slot_name].printDBG()
+            self.slot_definitions[slot_name].print_DBG()
 
         print("\nIntents:")
         for intent_name in self.intent_definitions:
-            self.intent_definitions[intent_name].printDBG()
+            self.intent_definitions[intent_name].print_DBG()
 
 
 if __name__ == "__main__":
