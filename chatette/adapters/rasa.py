@@ -33,10 +33,12 @@ class RasaAdapter(Adapter):
             return {
                 "text": example.text,
                 "intent": example.name,
-                "entities": list(map(entity_to_rasa, example.entities)),
+                "entities": [entity_to_rasa(e) for e in example.entities],
+                #list(map(entity_to_rasa, example.entities)),
             }
 
-        rasa_entities = list(map(example_to_rasa_entities, batch.examples))
+        rasa_entities = [example_to_rasa_entities(ex) for ex in batch.examples]
+                        #list(map(example_to_rasa_entities, batch.examples))
 
         json_data = {
             "rasa_nlu_data": {

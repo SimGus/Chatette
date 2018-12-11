@@ -10,8 +10,9 @@ and transform the information into an Abstract Syntax Tree.
 
 from __future__ import print_function
 import os
+import re
 
-from chatette.parser_utils import *
+import chatette.parser_utils as pu
 from chatette.units.alias import AliasDefinition, AliasRuleContent
 from chatette.units.choice import ChoiceRuleContent
 from chatette.units.intent import IntentDefinition, IntentRuleContent
@@ -74,20 +75,20 @@ class Parser(object):
         while line != "":
             line = self.read_line()
             stripped_line = line.lstrip()
-            line_type = get_top_level_line_type(line, stripped_line)
+            line_type = pu.get_top_level_line_type(line, stripped_line)
 
             if line_type is None:
                 raise SyntaxError("Invalid top-level line",
                                   (self.in_file.name, 0, 0, stripped_line))
-            elif line_type == LineType.empty or line_type == LineType.comment:
+            elif line_type == pu.LineType.empty or line_type == pu.LineType.comment:
                 continue
-            stripped_line = strip_comments(stripped_line)
+            stripped_line = pu.strip_comments(stripped_line)
             # Stripping was not done before to compute the indentation
-            if line_type == LineType.include_file:
+            if line_type == pu.LineType.include_file:
                 self.parse_file(stripped_line[1:].rstrip())
-            elif line_type == LineType.alias_declaration:
+            elif line_type == pu.LineType.alias_declaration:
                 self.parse_alias_definition(stripped_line)
-            elif line_type == LineType.slot_declaration:
+            elif line_type == pu.LineType.slot_declaration:
                 self.parse_slot_definition(stripped_line)
             else:  # intent declaration
                 self.parse_intent_definition(stripped_line)
@@ -132,7 +133,7 @@ class Parser(object):
         #     casegen = (match["casegen"] is not None)
 
         one_found = False
-        for match in PATTERN_UNIT_NAME.finditer(unit):
+        for match in pu.PATTERN_UNIT_NAME.finditer(unit):
             if one_found:  # this error would happen only when `unit` is a whole line
                 raise SyntaxError("Expected only one unit here.",
                                   (self.in_file.name, self.line_nb,
@@ -151,7 +152,7 @@ class Parser(object):
                                    match.start(), unit))
 
         one_found = False
-        for match in PATTERN_RANDGEN.finditer(unit):
+        for match in pu.PATTERN_RANDGEN.finditer(unit):
             if one_found:
                 raise SyntaxError("Expected only one random generation " +
                                   "modifier here.", (self.in_file.name,
@@ -165,7 +166,7 @@ class Parser(object):
             percentgen = match["percentgen"]
 
         one_found = False
-        for match in PATTERN_VARIATION.finditer(unit):
+        for match in pu.PATTERN_VARIATION.finditer(unit):
             if one_found:
                 raise SyntaxError("Expected only one variation here.",
                                   (self.in_file.name, self.line_nb,
@@ -177,7 +178,7 @@ class Parser(object):
             variation = match["var"]
 
         one_found = False
-        for match in PATTERN_ARG.finditer(unit):
+        for match in pu.PATTERN_ARG.finditer(unit):
             if one_found:
                 raise SyntaxError("Expected only one argument here.",
                                   (self.in_file.name, self.line_nb,
@@ -194,8 +195,8 @@ class Parser(object):
                                                 0, unit))
         if arg == "":
             raise SyntaxError("Unnamed argument or unescaped argument symbol (" +
-                              ARG_SYM + ").", (self.in_file.name, self.line_nb,
-                                               0, unit))
+                              pu.ARG_SYM + ").", (self.in_file.name, self.line_nb,
+                                                  0, unit))
         if variation == "":
             raise SyntaxError("Variations must be named " +
                               "(e.g. [text#variation]).", (self.in_file.name,
@@ -216,14 +217,14 @@ class Parser(object):
 
         # Manage casegen
         casegen = False
-        if len(splits[0]) >= 1 and splits[0][0] == CASE_GEN_SYM:  # choice begins with '&'
+        if len(splits[0]) >= 1 and splits[0][0] == pu.CASE_GEN_SYM:  # choice begins with '&'
             splits[0] = splits[0][1:]
             casegen = True
         # Manage randgen
         randgen = None  # NOTE: randgen is supposed to be a name (may be empty)
-        if len(splits[-1]) >= 1 and splits[-1][-1] == RAND_GEN_SYM:
+        if len(splits[-1]) >= 1 and splits[-1][-1] == pu.RAND_GEN_SYM:
             # choice ends with '?'
-            if not (len(splits[-1]) >= 2 and splits[-1][-2] == ESCAPE_SYM):
+            if not (len(splits[-1]) >= 2 and splits[-1][-2] == pu.ESCAPE_SYM):
                 # This '?' is not escaped
                 splits[-1] = splits[-1][:-1]
                 randgen = ""
@@ -253,9 +254,9 @@ class Parser(object):
         if alias_arg == "":
             raise SyntaxError("Arguments must be named",
                               (self.in_file.name, self.line_nb, 0, first_line))
-        if alias_variation in RESERVED_VARIATION_NAMES:
+        if alias_variation in pu.RESERVED_VARIATION_NAMES:
             raise SyntaxError("You cannot use the reserved variation names: " +
-                              str(RESERVED_VARIATION_NAMES),
+                              str(pu.RESERVED_VARIATION_NAMES),
                               (self.in_file.name, self.line_nb, 0, first_line))
         if randgen is not None:
             raise SyntaxError("Declarations cannot have a named random generation modifier",
@@ -271,7 +272,7 @@ class Parser(object):
             line = self.read_line()
             stripped_line = line.lstrip()
             indentation_nb = self.check_indentation(indentation_nb, line, stripped_line)
-            stripped_line = strip_comments(stripped_line)
+            stripped_line = pu.strip_comments(stripped_line)
 
             if stripped_line == "":
                 continue
@@ -305,9 +306,9 @@ class Parser(object):
         if slot_arg == "":
             raise SyntaxError("Arguments must be named",
                               (self.in_file.name, self.line_nb, 0, first_line))
-        if slot_variation in RESERVED_VARIATION_NAMES:
+        if slot_variation in pu.RESERVED_VARIATION_NAMES:
             raise SyntaxError("You cannot use the reserved variation names: " +
-                              str(RESERVED_VARIATION_NAMES),
+                              str(pu.RESERVED_VARIATION_NAMES),
                               (self.in_file.name, self.line_nb, 0, first_line))
         if randgen is not None:
             raise SyntaxError("Declarations cannot have a named random generation modifier",
@@ -323,7 +324,7 @@ class Parser(object):
             line = self.read_line()
             stripped_line = line.lstrip()
             indentation_nb = self.check_indentation(indentation_nb, line, stripped_line)
-            stripped_line = strip_comments(stripped_line)
+            stripped_line = pu.strip_comments(stripped_line)
             if stripped_line == "":
                 continue
 
@@ -367,9 +368,9 @@ class Parser(object):
         if intent_arg == "":
             raise SyntaxError("Arguments must be named",
                               (self.in_file.name, self.line_nb, 0, first_line))
-        if intent_variation in RESERVED_VARIATION_NAMES:
+        if intent_variation in pu.RESERVED_VARIATION_NAMES:
             raise SyntaxError("You cannot use the reserved variation names: " +
-                              str(RESERVED_VARIATION_NAMES),
+                              str(pu.RESERVED_VARIATION_NAMES),
                               (self.in_file.name, self.line_nb, 0, first_line))
         if randgen is not None:
             raise SyntaxError("Declarations cannot have a named random generation modifier",
@@ -382,7 +383,7 @@ class Parser(object):
         nb_training_examples_asked = None
         try:
             nb_training_examples_asked_str = \
-                find_nb_training_examples_asked(first_line)
+                pu.find_nb_training_examples_asked(first_line)
             if nb_training_examples_asked_str is not None:
                 nb_training_examples_asked = int(nb_training_examples_asked_str)
             else:
@@ -394,7 +395,7 @@ class Parser(object):
         nb_testing_examples_asked = None
         try:
             nb_testing_examples_asked_str = \
-                find_nb_testing_examples_asked(first_line)
+                pu.find_nb_testing_examples_asked(first_line)
             if nb_testing_examples_asked_str is not None:
                 nb_testing_examples_asked = int(nb_testing_examples_asked_str)
             else:
@@ -410,7 +411,7 @@ class Parser(object):
             line = self.read_line()
             stripped_line = line.lstrip()
             indentation_nb = self.check_indentation(indentation_nb, line, stripped_line)
-            stripped_line = strip_comments(stripped_line)
+            stripped_line = pu.strip_comments(stripped_line)
 
             if stripped_line == "":
                 continue
@@ -440,11 +441,11 @@ class Parser(object):
 
     def get_definition(self, def_name, unit_type):
         def_list = None
-        if unit_type == Unit.alias:
+        if unit_type == pu.Unit.alias:
             def_list = self.alias_definitions
-        elif unit_type == Unit.slot:
+        elif unit_type == pu.Unit.slot:
             def_list = self.slot_definitions
-        elif unit_type == Unit.intent:
+        elif unit_type == pu.Unit.intent:
             def_list = self.intent_definitions
         else:
             raise ValueError("Tried to get a definition with wrong type (expected" +
@@ -452,9 +453,9 @@ class Parser(object):
 
         if def_name not in def_list:
             type_str = "alias"
-            if unit_type == Unit.slot:
+            if unit_type == pu.Unit.slot:
                 type_str = "slot"
-            elif unit_type == Unit.intent:
+            elif unit_type == pu.Unit.intent:
                 type_str = "intent"
             raise ValueError("Couldn't find a definition for " + type_str + " '" +
                              def_name + "'")
@@ -494,7 +495,7 @@ class Parser(object):
         # Find the alternative slot value name if needed
         slot_val = None
         if accept_slot_val:
-            alt_slot_start_index = text.find(ALT_SLOT_VALUE_NAME_SYM)
+            alt_slot_start_index = text.find(pu.ALT_SLOT_VALUE_NAME_SYM)
             if alt_slot_start_index != -1:
                 alt_slot_substring = text[alt_slot_start_index:]
                 slot_val = alt_slot_substring[1:].strip()
@@ -520,20 +521,20 @@ class Parser(object):
                 current += c
                 escaped = False
                 continue
-            # elif c == COMMENT_SYM_DEPRECATED:
+            # elif c == pu.COMMENT_SYM_DEPRECATED:
             #     break
             elif inside_choice:
-                if c == CHOICE_CLOSE_SYM:
+                if c == pu.CHOICE_CLOSE_SYM:
                     tokens.append(current + c)
                     current = ""
                     inside_choice = False
                 else:
                     current += c
-            elif c == ESCAPE_SYM:
+            elif c == pu.ESCAPE_SYM:
                 escaped = True
                 current += c
             elif c.isspace():
-                if not is_unit_start(current) and not is_choice(current):  # End of word
+                if not pu.is_unit_start(current) and not pu.is_choice(current):  # End of word
                     if current != "":
                         tokens.append(current)
                     tokens.append(' ')
@@ -543,31 +544,33 @@ class Parser(object):
                     continue  # Double space in-between words
                 else:
                     current += c
-            elif c == UNIT_CLOSE_SYM:
-                if is_unit_start(current):
+            elif c == pu.UNIT_CLOSE_SYM:
+                if pu.is_unit_start(current):
                     tokens.append(current + c)
                     current = ""
                 else:
                     warnings.warn("Inconsistent use of the unit close symbol (" +
-                                  UNIT_CLOSE_SYM + ") at line " + str(self.line_nb) + " of file '" +
-                                  self.in_file.name + "'. Consider escaping them if they are " +
+                                  pu.UNIT_CLOSE_SYM + ") at line " + str(self.line_nb) +
+                                  " of file '" + self.in_file.name +
+                                  "'. Consider escaping them if they are " +
                                   "not supposed to close a unit.\nThe generation will " +
                                   "however continue, considering it as a normal character.")
                     current += c
-            elif c == CHOICE_CLOSE_SYM:
+            elif c == pu.CHOICE_CLOSE_SYM:
                 warnings.warn("Inconsistent use of the choice close symbol (" +
-                              CHOICE_CLOSE_SYM + ") at line " + str(self.line_nb) + " of file '" +
-                              self.in_file.name + "'. Consider escaping them if they are " +
+                              pu.CHOICE_CLOSE_SYM + ") at line " + str(self.line_nb) +
+                              " of file '" + self.in_file.name +
+                              "'. Consider escaping them if they are " +
                               "not supposed to close a unit.\nThe generation will " +
                               "however continue, considering it as a normal character.")
                 current += c
-            elif c == CHOICE_OPEN_SYM:
+            elif c == pu.CHOICE_OPEN_SYM:
                 if current != "":
                     tokens.append(current)
                 inside_choice = True
                 current = c
-            elif is_start_unit_sym(c) and current != ALIAS_SYM and \
-                    current != SLOT_SYM and current != INTENT_SYM:
+            elif pu.is_start_unit_sym(c) and current != pu.ALIAS_SYM and \
+                    current != pu.SLOT_SYM and current != pu.INTENT_SYM:
                 if current != "":
                     tokens.append(current)
                 current = c
@@ -586,13 +589,13 @@ class Parser(object):
 
             no_leading_space = (i == 0 or (i != 0 and tokens[i - 1] != ' '))
 
-            if is_word(string):
-                rules.append(WordRuleContent(remove_escapement(string),
+            if pu.is_word(string):
+                rules.append(WordRuleContent(pu.remove_escapement(string),
                                              not no_leading_space))
                 continue
 
-            unit_type = get_unit_type(string)
-            if unit_type == Unit.word_group:
+            unit_type = pu.get_unit_type(string)
+            if unit_type == pu.Unit.word_group:
                 (name, arg_value, variation, randgen, percentgen, casegen) = \
                     self.parse_unit(string)
                 if name is None:
@@ -604,17 +607,17 @@ class Parser(object):
                     raise SyntaxError("Word groups cannot have a variation",
                                       (self.in_file.name, self.line_nb, 0, name))
 
-                rules.append(GroupWordRuleContent(remove_escapement(name),
+                rules.append(GroupWordRuleContent(pu.remove_escapement(name),
                                                   not no_leading_space,
                                                   casegen=casegen,
                                                   randgen=randgen,
                                                   percentage_gen=percentgen))
-            elif unit_type == Unit.choice:
+            elif unit_type == pu.Unit.choice:
                 choice = self.parse_choice(string, not no_leading_space)
                 if choice is not None:
                     rules.append(self.parse_choice(string,
                                                    not no_leading_space))
-            elif unit_type == Unit.alias:
+            elif unit_type == pu.Unit.alias:
                 (name, arg_value, variation, randgen, percentgen, casegen) = \
                     self.parse_unit(string)
                 if name is None:
@@ -624,7 +627,7 @@ class Parser(object):
                 rules.append(AliasRuleContent(name, not no_leading_space,
                                               variation, arg_value, casegen,
                                               randgen, percentgen, self))
-            elif unit_type == Unit.slot:
+            elif unit_type == pu.Unit.slot:
                 (name, arg_value, variation, randgen, percentgen, casegen) = \
                     self.parse_unit(string)
                 if name is None:

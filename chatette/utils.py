@@ -12,10 +12,12 @@ from random import randint
 
 
 def print_DBG(txt):
+    """Prints debug information on stdout."""
     print("[DBG] " + txt)
 
 
 def print_warn(txt):
+    """Warns the user using stdout."""
     print("[WARN] " + txt)
 
 

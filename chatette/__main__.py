@@ -67,8 +67,10 @@ def main():
         # parser.print_DBG()
 
     if args.adapter == 'rasa':
+        # pylint: disable=redefined-variable-type
         adapter = RasaAdapter()
     elif args.adapter == 'jsonl':
+        # pylint: disable=redefined-variable-type
         adapter = JsonListAdapter()
     else:
         raise ValueError("Unknown adapter was selected")

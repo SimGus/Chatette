@@ -22,7 +22,7 @@ class JsonListAdapter(Adapter):
 
     def write(self, output_directory, examples, synonyms):
     #def write(self, output_directory, examples: List[IntentExample], synonyms) -> None:
-        super().write(output_directory, examples, synonyms)
+        super(JsonListAdapter, self).write(output_directory, examples, synonyms)
 
         synonyms_file_path = os.path.join(output_directory, "synonyms.json")
         with io.open(synonyms_file_path, 'w', encoding="utf-8") as output_file:
