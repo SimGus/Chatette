@@ -9,6 +9,7 @@
 
 - **TODO**: add opposite `randgen` names
 - **TODO**: support several arguments in one rule
+- **TODO**: reverse regex
 
 - **TODO**: add regex to rasa JSON file
 
