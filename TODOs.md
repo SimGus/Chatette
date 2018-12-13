@@ -17,6 +17,7 @@
 - **TODO**: add bulk generation
 
 - **TODO**: use more list/dict comprehensions (faster than using `append`)
+- **TODO**: design patterns
 <!-- - **TODO**: rewrite docstrings formatted as explained in *PEP257* -->
 - **TODO**: detect and warn about circular references
 - **TODO**: warn if there are slots within slots
