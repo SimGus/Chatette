@@ -14,6 +14,7 @@
 - **TODO**: add bulk generation
 
 - **TODO**: use more list/dict comprehensions (faster than using `append`)
+- **TODO**: improve logging (remove `print`s and use a logging library)
 <!-- - **TODO**: rewrite docstrings formatted as explained in *PEP257* -->
 - **TODO**: detect and warn about circular references
 - **TODO**: check for circular includes
