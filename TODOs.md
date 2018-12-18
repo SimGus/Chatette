@@ -1,74 +1,74 @@
 # TODOs
 
-- **TODO**: parse in a better way asked number of generation of intents
-- **TODO**: accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax
+- [ ] parse in a better way asked number of generation of intents
+- [ ] accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax
 
-- **TODO**: check for circular includes
+- [ ] check for circular includes
 
-- **TODO**: add an adapter to output raw lists of questions (rather than a JSON file)
+- [ ] add an adapter to output raw lists of questions (rather than a JSON file)
 
-- **TODO**: add opposite `randgen` names
-- **TODO**: support several arguments in one rule
-- **TODO**: reverse regex
+- [ ] add opposite `randgen` names
+- [ ] support several arguments in one rule
+- [ ] reverse regex
 
-- **TODO**: add regex to rasa JSON file
+- [ ] add regex to rasa JSON file
 
-- **TODO**: allow for arguments to the command line (output file*s* paths, max generation per intent,...)
-- **TODO**: add bulk generation
+- [ ] allow for arguments to the command line (output file*s* paths, max generation per intent,...)
+- [ ] add bulk generation
 
-- **TODO**: use more list/dict comprehensions (faster than using `append`)
-- **TODO**: design patterns
-<!-- - **TODO**: rewrite docstrings formatted as explained in *PEP257* -->
-- **TODO**: detect and warn about circular references
-- **TODO**: warn if there are slots within slots
+- [ ] use more list/dict comprehensions (faster than using `append`)
+- [ ] design patterns
+<!-- - [ ] rewrite docstrings formatted as explained in *PEP257* -->
+- [ ] detect and warn about circular references
+- [ ] warn if there are slots within slots
 
-- **TODO**: add unit tests
+- [ ] add unit tests
 
-- **TODO**: *Docs* add a representation of the architecture of the project
-- **TODO**: *Docs* multilingual
+- [ ] *Docs* add a representation of the architecture of the project
+- [ ] *Docs* multilingual
 
 ## Done
 
-- **done**: fix line number count for different files
-- **done**: add unicode support for all files (`io.open` autodetects encoding i think)
-- **done**: add argument support
-- **done**: generate all possible sentences when asked
-- **done**: add synonyms into the synonym object of rasa JSON file
-- **done**: fix overriding of rules
-- **done**: add entities when generating slot in OOP rewriting
-- **done**: add *casegen* inside declarations
-- **done**: add choice support in *OOP* rewriting
-- **done**: slot value should be the whole text and not only the first word if no value is given
-- **done**: remove escapement in slot values
-- **done**: add a `choose` function utility
-- **done**: give a default nb of indent for `printDBG` methods
-- **done**: add support for synonyms in OOP rewriting
-- **done**: check that slot value in slots content has any use (removed)
-- **done**: redo as OOP
-- **done**: support generation without a max number given
-- **done**: do something with `arg` when generating all the possibilities
-- **done**: add a *changelog*
-- **done**: change comments symbols from `;` to `//` to more closely resemble *Chatito* v2.1.x
-- **done**: parser support *Chatito* v2.1.x's syntax for asking training and testing generations
-- **done**: as *Chatito* v2.1.x does, generate a testing dataset if asked
-- **done**: don't generate twice the same sentence
-- **done**: check that `casegen` is applicable and useful before setting it for a rule content
-- **done**: add the new training and testing syntax into the syntax specifications
-- **done**: *Docs* deprecate semi-colong syntax
-- **done**: *Docs* add warning about circular references
-- **done**: tie the "all possibilities" generation to a maximum
-- **done**: training and testing datasets should never overlap
-- **done**: support `arg` inside synonym lists
-- **done**: `generate_random` and `generate_all` don't have coherent arguments
-- **done**: allow for (most) special characters without escapement outside of units
-- **done**: replace modifier regex by several ones to allow for escaping special characters everywhere
-- **done**: use symbols from `parser_utils` everywhere needed
-- **done**: improve the overall command line experience (with `argparse`)
-- **done**: change `main.py` to a more user-friendly name
-- **done**: accept `train` AND `training` for training set number of intents
-- **done**: add a seed for random number generation
-- **done**: add a program argument for setting the seed
-- **done**: set output file path with respect to current working directory rather than input file directory
+- [x] fix line number count for different files
+- [x] add unicode support for all files (`io.open` autodetects encoding i think)
+- [x] add argument support
+- [x] generate all possible sentences when asked
+- [x] add synonyms into the synonym object of rasa JSON file
+- [x] fix overriding of rules
+- [x] add entities when generating slot in OOP rewriting
+- [x] add *casegen* inside declarations
+- [x] add choice support in *OOP* rewriting
+- [x] slot value should be the whole text and not only the first word if no value is given
+- [x] remove escapement in slot values
+- [x] add a `choose` function utility
+- [x] give a default nb of indent for `printDBG` methods
+- [x] add support for synonyms in OOP rewriting
+- [x] check that slot value in slots content has any use (removed)
+- [x] redo as OOP
+- [x] support generation without a max number given
+- [x] do something with `arg` when generating all the possibilities
+- [x] add a *changelog*
+- [x] change comments symbols from `;` to `//` to more closely resemble *Chatito* v2.1.x
+- [x] parser support *Chatito* v2.1.x's syntax for asking training and testing generations
+- [x] as *Chatito* v2.1.x does, generate a testing dataset if asked
+- [x] don't generate twice the same sentence
+- [x] check that `casegen` is applicable and useful before setting it for a rule content
+- [x] add the new training and testing syntax into the syntax specifications
+- [x] *Docs* deprecate semi-colong syntax
+- [x] *Docs* add warning about circular references
+- [x] tie the "all possibilities" generation to a maximum
+- [x] training and testing datasets should never overlap
+- [x] support `arg` inside synonym lists
+- [x] `generate_random` and `generate_all` don't have coherent arguments
+- [x] allow for (most) special characters without escapement outside of units
+- [x] replace modifier regex by several ones to allow for escaping special characters everywhere
+- [x] use symbols from `parser_utils` everywhere needed
+- [x] improve the overall command line experience (with `argparse`)
+- [x] change `main.py` to a more user-friendly name
+- [x] accept `train` AND `training` for training set number of intents
+- [x] add a seed for random number generation
+- [x] add a program argument for setting the seed
+- [x] set output file path with respect to current working directory rather than input file directory
 
 # Bugs
 
