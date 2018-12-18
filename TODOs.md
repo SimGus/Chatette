@@ -1,5 +1,7 @@
 # TODOs
 
+- [ ] complete refactor of the code: the code is almost unmaintainable
+
 - [ ] parse in a better way asked number of generation of intents
 - [ ] accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax
 
