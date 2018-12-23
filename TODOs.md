@@ -1,5 +1,7 @@
 # TODOs
 
+- [ ] add a `--version` program argument
+
 - [ ] complete refactor of the code: the code is almost unmaintainable
 
 - [ ] parse in a better way asked number of generation of intents
