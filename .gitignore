@@ -4,6 +4,9 @@ output.json
 testing-dataset.json
 *.out
 
+## Visual Studio code
+.vscode/
+
 # Created by .ignore support plugin (hsz.mobi)
 
 ### Linux template
