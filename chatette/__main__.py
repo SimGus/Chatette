@@ -14,6 +14,7 @@ from chatette.utils import print_DBG
 
 
 def main():
+    # pylint: disable=bad-continuation
     argument_parser = argparse.ArgumentParser(
         description="Chatette v1.2.2 -- " +
                     "Generates NLU datasets from a template file",

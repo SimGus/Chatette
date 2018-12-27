@@ -155,6 +155,7 @@ class UnitDefinition(object):
         # Replace `arg` inside the generated sentence
         if arg_value is not None and self.argument_identifier is not None:
             example_text = self.arg_regex.sub(arg_value, example_text)
+            # pylint: disable=anomalous-backslash-in-string
             example_text = example_text.replace("\$", "$")
 
         return Example(example_text, example_entities)
@@ -195,6 +196,7 @@ class UnitDefinition(object):
         if arg_value is not None and self.argument_identifier is not None:
             for (i, ex) in enumerate(generated_examples):
                 ex.text = self.arg_regex.sub(arg_value, ex.text)
+                # pylint: disable=anomalous-backslash-in-string
                 generated_examples[i].text = ex.text.replace("\$", "$")
         return generated_examples
 

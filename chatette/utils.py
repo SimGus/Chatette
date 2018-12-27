@@ -11,6 +11,7 @@ import sys
 from random import randint
 
 
+# pylint: disable=invalid-name
 def print_DBG(txt):
     """Prints debug information on stdout."""
     print("[DBG] " + txt)

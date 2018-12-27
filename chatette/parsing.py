@@ -642,6 +642,7 @@ class Parser(object):
 
         return rules
 
+    # pylint: disable=invalid-name
     def print_DBG(self):
         print("\nAliases:")
         for alias_name in self.alias_definitions:
@@ -657,6 +658,8 @@ class Parser(object):
 
 
 if __name__ == "__main__":
+    # pylint: disable=wrong-import-position
+    # pylint: disable=wrong-import-order
     import warnings
 
     warnings.warn("You are running the wrong file ('parsing.py')." +

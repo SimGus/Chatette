@@ -65,6 +65,8 @@ class Generator(object):
 
 
 if __name__ == "__main__":
+    # pylint: disable=wrong-import-position
+    # pylint: disable=wrong-import-order
     import warnings
 
     warnings.warn("You are running the wrong file ('generator.py')." +

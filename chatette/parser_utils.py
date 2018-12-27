@@ -88,6 +88,10 @@ PATTERN_NB_TEST_EXAMPLES_ASKED = \
 
 
 class Unit(Enum):  # TODO move this into unit defintions
+    """
+    Enumeration of all possible types of units.
+    Note: word is not considered a 'special' unit (others are).
+    """
     word = 1  # simple word, no other info needed
     word_group = 2  # word group with modifiers
     alias = 3  # alias with modifiers
@@ -97,6 +101,7 @@ class Unit(Enum):  # TODO move this into unit defintions
 
 
 class LineType(Enum):
+    """Enumeration of all possible types of lines in an input file."""
     empty = 1
     comment = 2
     alias_declaration = 3
@@ -149,19 +154,23 @@ def get_top_level_line_type(line, stripped_line):
 
 
 def is_start_unit_sym(char):
+    """Checks if character `char` is the starting character of a special unit."""
     return (char == UNIT_OPEN_SYM or char == ALIAS_SYM or \
             char == SLOT_SYM or char == INTENT_SYM)
 
 
 def is_unit_start(text):
+    """Checks if the string `text` is the start of a special unit."""
     return (len(text) > 0 and is_start_unit_sym(text[0]))
 
 
 def is_choice(text):
+    """Checks if the string `text` is a choice."""
     return (len(text) > 0 and text.startswith(CHOICE_OPEN_SYM))
 
 
 def is_word(text):
+    """Checks if the string `text` is a word alone (i.e. not a special unit)."""
     return not (len(text) <= 0 or text.isspace() or \
                 text.startswith(CHOICE_OPEN_SYM) or is_unit_start(text))
 
@@ -206,7 +215,6 @@ def find_nb_training_examples_asked(intent_text):
     if nb_training_examples_asked_str is None:
         return None
     return int(nb_training_examples_asked_str)
-    
 
 
 def find_nb_testing_examples_asked(intent_text):
@@ -263,6 +271,7 @@ def find_nb_testing_examples_asked(intent_text):
 
 
 def remove_escapement(text):
+    # pylint: disable=anomalous-backslash-in-string
     """
     Returns `text` were all escaped characters
     have been removed their escapement character (e.g. `\?` becomes `?`).
