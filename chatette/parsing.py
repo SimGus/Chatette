@@ -382,24 +382,16 @@ class Parser(object):
         # Parse the number of training examples asked
         nb_training_examples_asked = None
         try:
-            nb_training_examples_asked_str = \
+            nb_training_examples_asked = \
                 pu.find_nb_training_examples_asked(first_line)
-            if nb_training_examples_asked_str is not None:
-                nb_training_examples_asked = int(nb_training_examples_asked_str)
-            else:
-                nb_training_examples_asked = None
         except ValueError:
             raise SyntaxError("Number of training examples asked is not a number",
                               (self.in_file.name, self.line_nb, 0, first_line))
         # Parse the number of testing examples asked
         nb_testing_examples_asked = None
         try:
-            nb_testing_examples_asked_str = \
+            nb_testing_examples_asked = \
                 pu.find_nb_testing_examples_asked(first_line)
-            if nb_testing_examples_asked_str is not None:
-                nb_testing_examples_asked = int(nb_testing_examples_asked_str)
-            else:
-                nb_testing_examples_asked = None
         except ValueError:
             raise SyntaxError("Number of testing examples asked is not a number",
                               (self.in_file.name, self.line_nb, 0, first_line))

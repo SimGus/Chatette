@@ -49,11 +49,14 @@ def cast_to_unicode(anything):
 
 
 def choose(array):
-    """Same as `random.choice(array)` but doesn't throw an error if `array` is empty"""
+    """
+    Same as `random.choice(array)` but doesn't throw an error
+    if `array` is empty
+    """
     # ([anything]) -> anything or None
     array_len = len(array)
     if array_len <= 0:
-        return None
+        return None  # None and not [] (it is used later on in the code)
     return array[randint(0, array_len - 1)]
 
 

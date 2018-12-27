@@ -9,10 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New adapter that outputs `.jsonl` files (choosing which adapter to use is done with the program argument `-a` or `--adapter`)
 
 ### Changed
+- The number of examples to generate for training and testing does not need to be surrounded with single quotes anymore (but still can): `'training':'5'` is accepted as well as `test: 3`.
 - The output files cannot contain more than 10000 examples anymore
 - The output files are now by default put in folders `output/train/` and `output/test/`
-- Refactoring of most of the code
-- Script is now referred to as `chatette` rather than `chatette.run` when executing from a command line
+- Refactoring of some parts of the code
+- Script is now referred to as `chatette` rather than `chatette.run` when executing from the command line
 
 ## [1.2.3] - 2018-11-22
 ### Added

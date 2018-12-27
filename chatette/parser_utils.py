@@ -25,7 +25,7 @@ UNIT_CLOSE_SYM = ']'  # id.
 
 CHOICE_OPEN_SYM = r'{'
 CHOICE_CLOSE_SYM = r'}'
-CHOICE_SEP = '/'
+CHOICE_SEP = '/'  # TODO: deprecate and rather use '|'
 
 VARIATION_SYM = '#'
 RAND_GEN_SYM = '?'  # This shouldn't be changed
@@ -37,7 +37,8 @@ ALT_SLOT_VALUE_NAME_SYM = '='
 
 INCLUDE_FILE_SYM = '|'
 
-RESERVED_VARIATION_NAMES = ["all-variations-aggregation", "rules", "nb-gen-asked", "arg"]
+RESERVED_VARIATION_NAMES = ["all-variations-aggregation", "rules",
+                            "nb-gen-asked", "arg"]
 
 # This regex finds patterns like this `[name#variation?randgen/percentgen]`
 # with `variation`, `randgen` and `percentgen` optional
@@ -81,9 +82,9 @@ _NB_TRAINING_GEN_NAME = "train(ing)?"
 _NB_TEST_GEN_NAME = "test(ing)?"
 PATTERN_NB_EXAMPLES_ASKED = re.compile(r"\]\((?P<nbgen>[0-9]+)\)")
 PATTERN_NB_TRAINING_EXAMPLES_ASKED = \
-    re.compile(r"'" + _NB_TRAINING_GEN_NAME + r"': '(?P<nbgen>[0-9]+)'")
+    re.compile(r"'?" + _NB_TRAINING_GEN_NAME + r"'?\s*:\s*'?(?P<nbgen>[0-9]+)'?")
 PATTERN_NB_TEST_EXAMPLES_ASKED = \
-    re.compile(r"'" + _NB_TEST_GEN_NAME + r"': '(?P<nbgen_test>[0-9]+)'")
+    re.compile(r"'?" + _NB_TEST_GEN_NAME + r"'?\s*:\s*'?(?P<nbgen_test>[0-9]+)'?")
 
 
 class Unit(Enum):  # TODO move this into unit defintions
@@ -105,7 +106,7 @@ class LineType(Enum):
 
 
 def strip_comments(text):
-    """Returns the text without the comments."""
+    """Returns the text without the comments (and right stripped)."""
     match = PATTERN_COMMENT.search(text)
     match_deprecated = PATTERN_COMMENT_DEPRECATED.search(text)
     if match_deprecated is not None:
@@ -161,7 +162,8 @@ def is_choice(text):
 
 
 def is_word(text):
-    return not (text.startswith(CHOICE_OPEN_SYM) or is_unit_start(text))
+    return not (len(text) <= 0 or text.isspace() or \
+                text.startswith(CHOICE_OPEN_SYM) or is_unit_start(text))
 
 
 def get_unit_type(unit_text):
@@ -185,8 +187,9 @@ def find_nb_training_examples_asked(intent_text):
     """
     Finds the number of training examples asked for the provided intent string
     and returns it (or `None` if it wasn't provided).
+    Raises a `ValueError` if the match is not an integer (shouldn't happen).
     """
-    nb_training_examples_asked = None
+    nb_training_examples_asked_str = None
     one_found = False
     patterns_list = [PATTERN_NB_EXAMPLES_ASKED,
                      PATTERN_NB_TRAINING_EXAMPLES_ASKED]
@@ -199,16 +202,20 @@ def find_nb_training_examples_asked(intent_text):
                 one_found = True
             match = match.groupdict()
 
-            nb_training_examples_asked = match["nbgen"]
-    return nb_training_examples_asked
+            nb_training_examples_asked_str = match["nbgen"]
+    if nb_training_examples_asked_str is None:
+        return None
+    return int(nb_training_examples_asked_str)
+    
 
 
 def find_nb_testing_examples_asked(intent_text):
     """
     Finds the number of testing examples asked for the provided intent string
     and returns it (or `None` if it wasn't provided).
+    Raises a `ValueError` if the match is not an integer (shouldn't happen).
     """
-    nb_testing_examples_asked = None
+    nb_testing_examples_asked_str = None
     one_found = False
     for match in PATTERN_NB_TEST_EXAMPLES_ASKED.finditer(intent_text):
         if one_found:
@@ -218,41 +225,49 @@ def find_nb_testing_examples_asked(intent_text):
             one_found = True
         match = match.groupdict()
 
-        nb_testing_examples_asked = match["nbgen_test"]
-    return nb_testing_examples_asked
+        nb_testing_examples_asked_str = match["nbgen_test"]
+    if nb_testing_examples_asked_str is None:
+        return None
+    return int(nb_testing_examples_asked_str)
 
 
-def get_all_rules_in_variations(definition):
-    """
-    Returns a list of all the rules for all variations of `definition`
-    which is a definition for an alias or a slot (nothing else).
-    """
-    all_rules = []
-    if "rules" in definition:  # No variation
-        all_rules.extend(definition["rules"])
-    else:
-        for variation in definition:
-            if variation != "all-variations-aggregation":
-                all_rules.extend(definition[variation]["rules"])  # TODO manage arg
-    return all_rules
+# def get_all_rules_in_variations(definition):
+#     """
+#     Returns a list of all the rules for all variations of `definition`
+#     which is a definition for an alias or a slot (nothing else).
+#     Not used any longer.
+#     """
+#     all_rules = []
+#     if "rules" in definition:  # No variation
+#         all_rules.extend(definition["rules"])
+#     else:
+#         for variation in definition:
+#             if variation != "all-variations-aggregation":
+#                 all_rules.extend(definition[variation]["rules"])  # TODO manage arg
+#     return all_rules
 
 
-def get_all_rules_in_intent_variations(definition):
-    """As `get_all_rules_in_variations` for intents"""
-    # `definition` is a dict indexed by the names of the variation, each
-    # containing a dict with the nb of generations to do for this intent
-    # and the rules in `rules`
-    all_rules = []
-    for variation in definition:
-        if variation != "all-variations-aggregation":
-            all_rules.extend(definition[variation]["rules"])
-    return all_rules
+# def get_all_rules_in_intent_variations(definition):
+#     """
+#     As `get_all_rules_in_variations` for intents.
+#     Not used any longer.
+#     """
+#     # `definition` is a dict indexed by the names of the variation, each
+#     # containing a dict with the nb of generations to do for this intent
+#     # and the rules in `rules`
+#     all_rules = []
+#     for variation in definition:
+#         if variation != "all-variations-aggregation":
+#             all_rules.extend(definition[variation]["rules"])
+#     return all_rules
 
 
 def remove_escapement(text):
     """
     Returns `text` were all escaped characters
-    have been removed their escapement character
+    have been removed their escapement character (e.g. `\?` becomes `?`).
+    Note that escaped dollar sign ($) are kept escaped until generation
+    to avoid a possible bug with argument replacement.
     """
     if ESCAPE_SYM not in text:
         return text
