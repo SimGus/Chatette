@@ -2,7 +2,7 @@
 
 ## TL;DR
 
-Just be excellent to each other.
+*Just be excellent to each other.*
 
 ## Our Pledge
 
