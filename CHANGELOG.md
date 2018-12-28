@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refactoring of some parts of the code
 - Script is now referred to as `chatette` rather than `chatette.run` when executing from the command line
 
+### Fixed
+- Possible duplicated examples when generating units with different letter case.
+
 ## [1.2.3] - 2018-11-22
 ### Added
 - Program argument (`-l` or `--local`) to make the working directory be the directory containing the template file
