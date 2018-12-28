@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Code of conduct and instructions for contributing.
+- Unit tests for some parts of the projects (automatically run by Travis CI).
 - New adapter that outputs `.jsonl` files (choosing which adapter to use is done with the program argument `-a` or `--adapter`)
 
 ### Changed
