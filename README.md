@@ -148,6 +148,24 @@ Beware that, as always with machine learning, having too much data may cause you
 
 Note that *Chatette* is named after *Chatito*, as *-ette* in French could be translated to *-ita* or *-ito* in Spanish.
 
+# Development
+
+Install development requirements:
+
+```pip install -r requirements/develop.txt```
+
+Run pylint:
+
+```tox -e pylint```
+
+Run pycodestyle:
+
+```tox -e pycodestyle```
+
+Run pytest:
+
+```tox -e pytest```
+
 # Creators
 ## Author and maintainer
 - [SimGus](https://github.com/SimGus)
