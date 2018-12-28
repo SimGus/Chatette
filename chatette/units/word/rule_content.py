@@ -1,4 +1,4 @@
-from chatette.units import Example, RuleContent, contains_letters
+from chatette.units import Example, RuleContent, may_change_leading_case
 
 
 class WordRuleContent(RuleContent):
@@ -34,7 +34,7 @@ class WordRuleContent(RuleContent):
         self.word = name
 
     def can_have_casegen(self):
-        return contains_letters(self.word)
+        return may_change_leading_case(self.word)
 
     def generate_random(self, arg_value=None):
         if self.leading_space:

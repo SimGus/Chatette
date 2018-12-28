@@ -2,7 +2,8 @@ from random import randint
 
 from chatette.parser_utils import Unit
 from chatette.units import Example, RuleContent, may_get_leading_space, \
-                           randomly_change_case, with_leading_lower, with_leading_upper
+                           may_change_leading_case, randomly_change_case, \
+                           with_leading_lower, with_leading_upper
 
 
 class AliasRuleContent(RuleContent):
@@ -91,8 +92,11 @@ class AliasRuleContent(RuleContent):
         if self.casegen:
             tmp_buffer = []
             for ex in generated_examples:
-                tmp_buffer.append(Example(with_leading_lower(ex.text), ex.entities))
-                tmp_buffer.append(Example(with_leading_upper(ex.text), ex.entities))
+                if may_change_leading_case(ex.text):
+                    tmp_buffer.append(Example(with_leading_lower(ex.text), ex.entities))
+                    tmp_buffer.append(Example(with_leading_upper(ex.text), ex.entities))
+                else:
+                    tmp_buffer.append(ex)
             generated_examples = tmp_buffer
         return generated_examples
 

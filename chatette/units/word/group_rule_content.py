@@ -1,6 +1,6 @@
 from random import randint
 
-from chatette.units import Example, RuleContent, contains_letters, \
+from chatette.units import Example, RuleContent, may_change_leading_case, \
                            may_get_leading_space, randomly_change_case, \
                            with_leading_lower, with_leading_upper
 
@@ -27,7 +27,7 @@ class GroupWordRuleContent(RuleContent):
             raise RuntimeError("Internal error: tried to create a word " +
                                "group with a pointer to the parser")
 
-        if not contains_letters(name):
+        if not may_change_leading_case(name):
             casegen = False
 
         super(GroupWordRuleContent, self).__init__(name,
@@ -41,7 +41,7 @@ class GroupWordRuleContent(RuleContent):
         self.words = name
 
     def can_have_casegen(self):
-        return contains_letters(self.words)
+        return may_change_leading_case(self.words)
 
     def generate_random(self, generated_randgens=None):
         if generated_randgens is None:

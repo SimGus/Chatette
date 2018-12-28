@@ -35,9 +35,10 @@ class IntentDefinition(UnitDefinition):
         """
         if training_examples is None and self.nb_training_examples_asked is None:
             return [
-                IntentExample(self.name, ex.text.strip(), ex.entities)
-                for (i, ex) in enumerate(self.generate_all())
-                if i < max_nb_examples]
+                    IntentExample(self.name, ex.text.strip(), ex.entities)
+                    for (i, ex) in enumerate(self.generate_all())
+                    if i < max_nb_examples
+                ]
 
         nb_examples_asked = self.nb_training_examples_asked
         if training_examples is not None:

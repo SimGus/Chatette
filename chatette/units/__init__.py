@@ -27,13 +27,21 @@ class Example(object):
         self.text = text
         self.entities = entities
 
+    def __repr__(self):
+        return "<'"+self.text+"' "+str(self.entities)+'>'
 
-def contains_letters(text):
-    """Returns `True` if casegen would have an influence on `text`."""
+
+def may_change_leading_case(text):
+    """
+    Checks whether the string `text` can
+    change the letter case of its leading letter.
+    """
     for c in text:
         if c.isalpha():
             return True
-    return False
+        if c.isspace():
+            continue
+        return False
 
 
 def randomly_change_case(text):
@@ -321,3 +329,19 @@ class RuleContent(object):
         print(indentation + "\tcasegen: " + str(self.casegen))
         print(indentation + "\trandgen: " + str(self.randgen) + " with percentage: "
               + str(self.percentgen))
+
+    def __repr__(self):
+        result = "'"+self.name+"'"
+        if self.casegen:
+            result = '&'+result
+        if self.leading_space:
+            result = ' '+result
+        if self.variation_name is not None:
+            result += '#'+self.variation_name
+        if self.randgen is not None:
+            result += '?'+self.randgen
+            if self.percentgen != 50:
+                result += '/'+str(self.percentgen)
+        if self.arg_value is not None:
+            result += '$'+self.arg_value
+        return '<'+result+'>'
