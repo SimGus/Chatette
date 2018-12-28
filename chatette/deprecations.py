@@ -17,6 +17,7 @@ def warn_semicolon_comments():
     """
     global _SEMICOLON_COMMENTS_DEPRECATION_WARNED
     if not _SEMICOLON_COMMENTS_DEPRECATION_WARNED:
+        # pylint: disable=bad-continuation
         print_warn("Deprecation warning: Comments starting with a semi-colon " +
                   "';' are now deprecated. " +
                   "Rather use the new double slash '//' syntax. This " +
