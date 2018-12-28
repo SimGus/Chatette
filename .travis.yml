@@ -1,12 +1,24 @@
 language: python
 python:
-    - "2.7"
-    - "3.3"
-    - "3.4"
-    - "3.5"
-    - "3.6"
-    - "3.7-dev"
+- '2.7'
+- '3.3'
+- '3.4'
+- '3.5'
+- '3.6'
+- 3.7-dev
 install:
-    - pip install -r requirements/test.txt
+- pip install -r requirements/test.txt
 script:
-    - python -m pytest tests/
+- python -m pytest tests/
+after_script:
+- cd ~
+deploy:
+  provider: pypi
+  user: "SimGus"
+  password:
+    secure: i3TeGgVWux1OcnQ9g8fFd7kWhwWBXOpAptkuucihA0eei7C+X6KBhQ7C08lY7V5jZ0qRy1hN1m5R7gifz9qEGVeBGwdqT4UuQV5ezUg+EkgE33QjmLe4XX2QpESKYVqxeaZnnWouBQxKcp+CEwo5RFYVNoI+ObipVLNUEadL84maU/iaCRcjRq6TE/XR/OIEf8F26HxHrNjwUWURDN2B6weSqH6s3c/oC+EcLDVX2+c0VptZdlpc8+rWo0JtLHS3wDsY3p3d4hECtkP/eTVPt4uAejhobYDgdm6C/crW4XXMmC+Yoy7ybpyNbSKteLIp0uWj3ORZqW84xQhvzdjsB95axY+uQTX9RmJ+zPmwS+h0Qj0plP5EuYpfky2NHb6196VlJLHce/PlYL4OGaueePqKDtNVPnoEfpHVMQ57y3t0s1EFq9c4vt1vuh4vKBS8gSX+BQfARZIeMNTwO9ksAyrvMBN69yMWaDdc5nD/PgeANrLec1GvdfLbM4yj4mVZu+CCHzBNe4lJBeovd+PqE4oOQR5lxWfJc7bfRxTR5siHv52lYqNsEI4nY07fIUBUGdNtgY+o/eAXrBpW6hQTRrTE8JKlutC7EZUhO23RxuPeXSZa9w+fpZhdk+FAtlUGN3OvgUSdeA/wjscOyc3PcNgNMqpMs1Doy/ugz7QPZKQ=
+  on:
+    tags: true
+  distributions: "sdist bdist_wheel"
+  skip_existing: true
+
