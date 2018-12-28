@@ -20,8 +20,9 @@
 - **TODO**: check for circular includes
 - **TODO**: warn if there are slots within slots
 
+- **TODO**: big refactor
 - **TODO**: refactor units to remove duplicated code
-- **TODO**: add unit tests
+- **TODO**: add more unit tests
 
 - **TODO**: *Docs* add a representation of the architecture of the project
 
