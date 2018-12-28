@@ -13,5 +13,5 @@ python:
 install:
     - pip install -r requirements/common.txt
 script:
-    - pytest
+    - python -m pytest tests/
 
