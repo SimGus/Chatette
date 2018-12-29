@@ -53,7 +53,8 @@ class Parser(object):
 
     def is_inside_decl(self):
         next_line = self.peek_line()
-        return (next_line.startswith(' ') or next_line.startswith('\t'))
+        return ((next_line.startswith(' ') or next_line.startswith('\t')) and
+                not next_line.isspace())
 
     def parse_file(self, filename):
         """Runs the parsing of the file `filename` within the same parser"""
@@ -463,11 +464,7 @@ class Parser(object):
         If this is the first line (`indentation_nb` is `None`),
         considers the indentation correct and returns the number of spaces
         the line is indented with.
-        If the line is empty or contains only spaces, considers the current
-        block to be over and returns 0.
         """
-        if line == "" or line.isspace():
-            return 0
         current_indentation_nb = len(line) - len(stripped_line)
         if indentation_nb is None:
             return current_indentation_nb
