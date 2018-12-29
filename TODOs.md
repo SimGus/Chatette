@@ -102,6 +102,7 @@
 - **fixed**: somewhere in the synonyms: Rasa NLU can't generate it without crashing (unhashable type 'dict' when looking for "value")
 - **fixed**: `parser` exists as a basic Python module and is sometimes imported in place of the parser (renamed `parsing`)
 - **fixed**: empty examples were duplicated on generation when trying to change their leading letter's case
+- **fixed**: if a slot generated a certain string and this string could already be found somewhere before in the example, the first string was wrongly selected as the entity with the Rasa adapter
 
 # Ideas
 

@@ -13,6 +13,11 @@ from random import randint
 from chatette.utils import choose
 
 
+ENTITY_MARKER = "<<CHATETTE_ENTITY>>"
+# HACK: prepends every entity (removed on output file writing)
+#       to find back its index unambiguously.
+
+
 class Example(object):
     """
     Represents an utterance (i.e. an example of sentence)

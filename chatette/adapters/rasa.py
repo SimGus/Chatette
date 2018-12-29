@@ -2,6 +2,7 @@ import json
 # from typing import TextIO
 
 # from chatette.units.intent import IntentExample
+from chatette.units import ENTITY_MARKER
 from chatette.utils import cast_to_unicode
 from ._base import Adapter#, Batch
 
@@ -18,11 +19,16 @@ class RasaAdapter(Adapter):
     #def _write_batch(self, output_file_handle: TextIO, batch: Batch) -> None:
 
         def example_to_rasa_entities(example):
+            print(example)
         #def example_to_rasa_entities(example: IntentExample):
             def entity_to_rasa(entity):
                 entity["text"] = entity["text"].strip()
                 first_index = self.__find_entity(example.text, entity["text"])
-                # This always finds something
+                # NOTE: This always finds something
+                # Remove the entity marker of this entity
+                # (works unless entities are not recorded in order)
+                example.text = example.text[:first_index] + \
+                               example.text[first_index+len(ENTITY_MARKER):]
                 return {
                     "value": entity["value"],
                     "entity": entity["slot-name"],
@@ -31,14 +37,14 @@ class RasaAdapter(Adapter):
                 }
 
             return {
-                "text": example.text,
                 "intent": example.name,
                 "entities": [entity_to_rasa(e) for e in example.entities],
-                #list(map(entity_to_rasa, example.entities)),
+                # HACK: Keep "text" after having called `entity_to_rasa` 
+                #       (removes the entity markers)
+                "text": example.text,
             }
 
         rasa_entities = [example_to_rasa_entities(ex) for ex in batch.examples]
-                        #list(map(example_to_rasa_entities, batch.examples))
 
         json_data = {
             "rasa_nlu_data": {
@@ -66,8 +72,11 @@ class RasaAdapter(Adapter):
 
     @classmethod
     def __find_entity(cls, text, entity_str):
-        """Finds `entity_str` in `text` ignoring the case of the first non-space"""
-        index = text.find(entity_str)
+        """
+        Finds the entity `entity_str` in `text`
+        ignoring the case of the first non-space.
+        """
+        index = text.find(ENTITY_MARKER+entity_str)
         if index == -1:
             return text.lower().find(entity_str.lower())
         return index

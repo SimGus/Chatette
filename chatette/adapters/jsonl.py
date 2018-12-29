@@ -4,6 +4,7 @@ import os
 # from typing import List, TextIO
 
 from chatette.utils import cast_to_unicode
+from chatette.units import ENTITY_MARKER
 # from chatette.units.intent import IntentExample
 from ._base import Adapter#, Batch
 
@@ -13,10 +14,15 @@ class JsonListAdapter(Adapter):
     def _get_file_extension(self):
         return "jsonl"
 
+    @staticmethod
+    def _prepare_example(example):
+        example.text = example.text.replace(ENTITY_MARKER, "")
+        return json.dumps(cast_to_unicode(example.__dict__), ensure_ascii=False, sort_keys=True)
+
     def _write_batch(self, output_file_handle, batch):
     #def _write_batch(self, output_file_handle: TextIO, batch: Batch) -> None:
         output_file_handle.writelines([
-            json.dumps(cast_to_unicode(example.__dict__), ensure_ascii=False, sort_keys=True) + "\n"
+            JsonListAdapter._prepare_example(example) + "\n"
             for example in batch.examples
         ])
 

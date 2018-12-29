@@ -1,4 +1,5 @@
-from chatette.units import Example, UnitDefinition, randomly_change_case
+from chatette.units import Example, UnitDefinition, randomly_change_case, \
+                           ENTITY_MARKER
 from chatette.utils import choose
 from .rule_content import DummySlotValRuleContent
 
@@ -17,7 +18,7 @@ class SlotDefinition(UnitDefinition):
 
     def generate_random(self, variation_name=None, arg_value=None):
         """
-        Generates one of your rule at random and
+        Generates one of the rules at random and
         returns the string generated and the entities inside it as a dict.
         This is the only kind of definition that will generate an entity.
         """
@@ -53,18 +54,18 @@ class SlotDefinition(UnitDefinition):
             generated_example.text = randomly_change_case(generated_example.text)
 
         # Replace `arg` inside the generated sentence
-        generated_example.text = \
+        generated_example.text = ENTITY_MARKER + \
             self._replace_arg(generated_example.text, arg_value).strip()  # Strip for safety
 
         # Add the entity in the list
         slot_value = chosen_rule[0].name
         if not isinstance(chosen_rule[0], DummySlotValRuleContent):
-            slot_value = generated_example.text[:]
+            slot_value = generated_example.text[len(ENTITY_MARKER):]
         # Replace the argument by its value if needed
         slot_value = self._replace_arg(slot_value, arg_value)
         generated_example.entities.append({
             "slot-name": self.name,
-            "text": generated_example.text[:],
+            "text": generated_example.text[len(ENTITY_MARKER):],
             "value": slot_value,
         })
 
@@ -101,7 +102,7 @@ class SlotDefinition(UnitDefinition):
                             tmp_buffer.append(
                                 Example(
                                     ex.text + possibility.text,
-                                    ex.entities + possibility.entities
+                                    ex.entities + possibility.entities,  # this is a list
                                 )
                             )
                     examples_from_current_rule = tmp_buffer
@@ -137,6 +138,9 @@ class SlotDefinition(UnitDefinition):
                     })
 
             generated_examples.extend(examples_from_current_rule)
+
+        for ex in generated_examples:
+            ex.text = ENTITY_MARKER + ex.text
 
         return generated_examples
 
