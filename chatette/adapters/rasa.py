@@ -19,7 +19,6 @@ class RasaAdapter(Adapter):
     #def _write_batch(self, output_file_handle: TextIO, batch: Batch) -> None:
 
         def example_to_rasa_entities(example):
-            print(example)
         #def example_to_rasa_entities(example: IntentExample):
             def entity_to_rasa(entity):
                 entity["text"] = entity["text"].strip()

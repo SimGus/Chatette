@@ -463,7 +463,11 @@ class Parser(object):
         If this is the first line (`indentation_nb` is `None`),
         considers the indentation correct and returns the number of spaces
         the line is indented with.
+        If the line is empty or contains only spaces, considers the current
+        block to be over and returns 0.
         """
+        if line == "" or line.isspace():
+            return 0
         current_indentation_nb = len(line) - len(stripped_line)
         if indentation_nb is None:
             return current_indentation_nb
