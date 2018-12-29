@@ -13,7 +13,7 @@ class SlotDefinition(UnitDefinition):
     def __init__(self, name, rules=[], arg=None, casegen=False):
         super(SlotDefinition, self).__init__(name, rules=rules, arg=arg,
                                              casegen=casegen)
-        self.type = "alias"
+        self.type = "slot"
         self.arg_values_encountered = []
 
     def generate_random(self, variation_name=None, arg_value=None):
@@ -87,6 +87,14 @@ class SlotDefinition(UnitDefinition):
                 raise SyntaxError("Couldn't find variation '" +
                                   str(variation_name) + "' for slot '" +
                                   str(self.name) + "'")
+        
+        if not relevant_rules:  # No rules
+            if variation_name is None:
+                raise SyntaxError("No rules could be found for "+self.type+" '"+
+                                self.name+"'")
+            else:
+                raise SyntaxError("No rules could be found for "+self.type+" '"+
+                                self.name+"' (variation: '"+variation_name+"'")
 
         for rule in relevant_rules:
             examples_from_current_rule = []

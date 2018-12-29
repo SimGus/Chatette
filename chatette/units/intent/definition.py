@@ -74,7 +74,6 @@ class IntentDefinition(UnitDefinition):
         if nb_examples_asked < nb_possible_ex / 2:  # QUESTION: should this be /2?
             generated_examples = []
             for _ in range(nb_examples_asked):
-
                 while True:
                     current_example = self.generate_random()
                     current_example.text = current_example.text.strip()  # Strip for safety

@@ -99,6 +99,12 @@ class UnitDefinition(object):
         self.variations = dict()
 
         self.casegen = casegen  # IDEA: don't make the casegen variation agnostic
+    
+    def __repr__(self):
+        result = self.type+":"+self.name
+        if self.casegen:
+            result = '&'+result
+        return '<'+result+'>'
 
     def can_have_casegen(self):  # TODO: manage variations
         """
@@ -141,7 +147,6 @@ class UnitDefinition(object):
         Generates one of your rule at random and
         returns the string generated and the entities inside it as a dict.
         """
-
         if variation_name is None:
             chosen_rule = choose(self.rules)
         else:
@@ -184,6 +189,14 @@ class UnitDefinition(object):
                 raise SyntaxError("Couldn't find variation '" +
                                   str(variation_name) + "' for " + str(self.type) +
                                   " '" + str(self.name) + "'")
+
+        if not relevant_rules:  # No rules
+            if variation_name is None:
+                raise SyntaxError("No rules could be found for "+self.type+" '"+
+                                self.name+"'")
+            else:
+                raise SyntaxError("No rules could be found for "+self.type+" '"+
+                                self.name+"' (variation: '"+variation_name+"'")
 
         for rule in relevant_rules:
             examples_from_current_rule = []
