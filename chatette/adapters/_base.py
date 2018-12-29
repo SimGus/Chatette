@@ -27,9 +27,12 @@ class Adapter(with_metaclass(ABCMeta, object)):
     def __init__(self, batch_size=10000):# -> None:
         super(Adapter, self).__init__()
         self._batch_size = batch_size
+        self._single_file_output = None  # Set up just before writing
 
     def write(self, output_directory, examples, synonyms):
     # def write(self, output_directory, examples: List[IntentExample], synonyms): -> None:
+        self._single_file_output = (len(examples) <= self._batch_size)
+
         if not os.path.exists(output_directory):
             os.makedirs(output_directory)
 
@@ -54,5 +57,8 @@ class Adapter(with_metaclass(ABCMeta, object)):
             yield Batch(index, examples[ndx:min(ndx + n, length)], synonyms)
 
     def __get_file_name(self, batch, output_directory):
+        if self._single_file_output:
+            return os.path.join(output_directory, "output." + 
+                                                  self._get_file_extension())
         return os.path.join(output_directory, "output." + str(batch.index) +
                                               "." + self._get_file_extension())

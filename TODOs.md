@@ -19,6 +19,7 @@
 - **TODO**: detect and warn about circular references
 - **TODO**: check for circular includes
 - **TODO**: warn if there are slots within slots
+- **TODO**: warn when empty alias definitions are used
 
 - **TODO**: big refactor
 - **TODO**: refactor units to remove duplicated code
@@ -75,6 +76,7 @@
 - **BUG**: wrong generation when putting an alias inside a word group
 - **BUG**: indentation error raised for lines with only spaces
 - **BUG**: encoding errors under Windows
+- **BUG**: when an empty alias definition is used, nothing is generated
 
 ## To confirm
 
