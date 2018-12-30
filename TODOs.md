@@ -2,8 +2,6 @@
 
 - [ ] add a `--version` program argument
 
-- [ ] complete refactor of the code: the code is almost unmaintainable
-
 - [ ] parse in a better way asked number of generation of intents
 - [ ] accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax
 - [ ] add an adapter to output raw lists of questions (rather than a JSON file)
@@ -28,12 +26,13 @@
 - [ ] detect and warn about circular references
 - [ ] warn if there are slots within slots
 
-- [ ] big refactor
+- [ ] complete refactor of the code: the code is almost unmaintainable
 - [ ] refactor units to remove duplicated code
 - [ ] add more unit tests
 
 - [ ] *Docs* add a representation of the architecture of the project
 - [ ] *Docs* multilingual
+- [ ] *Docs* make a wiki rather than a markdown file
 
 ## Done
 
