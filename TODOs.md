@@ -1,10 +1,7 @@
 # TODOs
 
-- [ ] add a `--version` program argument
-
 - [ ] parse in a better way asked number of generation of intents
 - [ ] accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax
-- [ ] add an adapter to output raw lists of questions (rather than a JSON file)
 
 - [ ] add an adapter to output raw lists of questions (rather than a JSON file)
 
@@ -16,7 +13,6 @@
 
 - [ ] allow for arguments to the command line (output file*s* paths, max generation per intent,...)
 - [ ] add bulk generation
-<!-- - **TODO**: rewrite docstrings formatted as explained in *PEP257* -->
 
 - [ ] use more list/dict comprehensions (faster than using `append`)
 - [ ] design patterns
@@ -76,6 +72,7 @@
 - [x] add a seed for random number generation
 - [x] add a program argument for setting the seed
 - [x] set output file path with respect to current working directory rather than input file directory
+- [x] add a `--version` program argument
 
 # Bugs
 
