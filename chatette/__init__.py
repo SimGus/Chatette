@@ -11,4 +11,4 @@ import pkg_resources
 try:
     __version__ = pkg_resources.require("chatette")[0].version
 except pkg_resources.DistributionNotFound:
-    __version__ = "(couldn't retrieve version number)"
+    __version__ = "(couldn't retrieve version number)"  # TODO: find another way

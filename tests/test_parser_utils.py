@@ -65,6 +65,12 @@ class TestStripComments(object):
         s = "\ttest\// no comment// comment"
         assert strip_comments(s) == "\ttest\// no comment"
 
+    def test_old_and_new_comments(self):
+        s = "test // new comment ; old comment"
+        assert strip_comments(s) == "test"
+        s = "test ; old comment // new comment"
+        assert strip_comments(s) == "test"
+
 
 class TestGetTopLevelLineType(object):
     def test_incorrect_lines(self):
@@ -200,8 +206,19 @@ class TestGetUnitType(object):
                 get_unit_type(s)
     
     def test_units(self):
-        units = ["[unit]", "[word group]", "~[intent] //comment", "@[slot]",
-                 "%[intent]", "{choice/choice 2?}"]
+        unit = "[unit]"
+        assert get_unit_type(unit) == Unit.word_group
+        unit = "[word group]"
+        assert get_unit_type(unit) == Unit.word_group
+        unit = "~[alias] //comment"
+        assert get_unit_type(unit) == Unit.alias
+        unit = "@[slot]"
+        assert get_unit_type(unit) == Unit.slot
+        unit = "%[intent]"
+        assert get_unit_type(unit) == Unit.intent
+        unit = "{choice/choice 2?}"
+        assert get_unit_type(unit) == Unit.choice
+        
 
 
 class TestFindNbTrainingExamplesAsked(object):

@@ -47,10 +47,15 @@ def may_change_leading_case(text):
         if c.isspace():
             continue
         return False
+    return False
 
 
 def randomly_change_case(text):
-    """Randomly set the case of the first letter of `text`"""
+    """
+    Randomly set the case of the first letter of `text`.
+    NOTE: this doesn't use `capitalize()` since we need to support changing the
+          case of text that is already capitalized or indented.
+    """
     if randint(0, 99) >= 50:
         return with_leading_lower(text)
     else:
@@ -58,7 +63,7 @@ def randomly_change_case(text):
 
 
 def with_leading_upper(text):
-    """Returns `text` with a leading uppercase letter"""
+    """Returns `text` with a leading uppercase letter."""
     for (i, c) in enumerate(text):
         if not c.isspace():
             return text[:i] + text[i].upper() + text[(i + 1):]
@@ -66,7 +71,7 @@ def with_leading_upper(text):
 
 
 def with_leading_lower(text):
-    """Returns `text` with a leading lowercase letter"""
+    """Returns `text` with a leading lowercase letter."""
     for (i, c) in enumerate(text):
         if not c.isspace():
             return text[:i] + text[i].lower() + text[(i + 1):]
@@ -74,7 +79,7 @@ def with_leading_lower(text):
 
 
 def may_get_leading_space(text):
-    return text != "" and not text.startswith(' ')
+    return (text != "" and not text.startswith(' '))  # TODO: Add '\t'?
 
 
 class UnitDefinition(object):
