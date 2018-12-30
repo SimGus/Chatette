@@ -75,7 +75,6 @@
 - **BUG**: arguments are not given down when an argument is transmitted as the argument of a token
 - **BUG**: wrong generation when putting an alias inside a word group
 - **BUG**: encoding errors under Windows
-- **BUG**: when an empty alias definition is used, nothing is generated
 
 ## To confirm
 
@@ -105,6 +104,7 @@
 - **fixed**: empty examples were duplicated on generation when trying to change their leading letter's case
 - **fixed**: if a slot generated a certain string and this string could already be found somewhere before in the example, the first string was wrongly selected as the entity with the Rasa adapter
 - **fixed**: indentation error raised for lines with only spaces
+- **fixed**: when an empty alias definition is used, nothing is generated
 
 # Ideas
 
