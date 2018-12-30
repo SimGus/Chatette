@@ -1,47 +1,69 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+"""
+Module `chatette.utils`
+Contains utility functions used everywhere in the project.
+"""
+
+from __future__ import print_function
 import sys
 from random import randint
 
 
-def printDBG(txt):
-    print("[DBG] "+txt)
-def printWarn(txt):
-    print("[WARN] "+txt)
+# pylint: disable=invalid-name
+def print_DBG(txt):
+    """Prints debug information on stdout."""
+    print("[DBG] " + txt)
 
 
-def cast_to_unicode(any):
+def print_warn(txt):
+    """Warns the user using stdout."""
+    print("[WARN] " + txt)
+
+
+def cast_to_unicode(anything):
+    """
+    If executed with Python 2.7, cast any string that is in `anything`
+    to unicode.
+    If executed with Python 3, returns `anything`.
+    `anything` can be a string, an array, a dict,...
+    """
     if sys.version_info[0] == 3:
-        return any
-    if isinstance(any, str):
-        return unicode(any, "utf-8")
-    elif isinstance(any, dict):
+        return anything
+    if isinstance(anything, str):
+        return unicode(anything, "utf-8")
+    elif isinstance(anything, dict):
         cast_dict = dict()
-        for key in any:
+        for key in anything:
             cast_key = cast_to_unicode(key)
-            cast_value = cast_to_unicode(any[key])
+            cast_value = cast_to_unicode(anything[key])
             cast_dict[cast_key] = cast_value
         return cast_dict
-    elif isinstance(any, list):
+    elif isinstance(anything, list):
         cast_list = []
-        for e in any:
+        for e in anything:
             cast_list.append(cast_to_unicode(e))
         return cast_list
     else:
-        return any
+        return anything
 
 
-def choose(list):
-    """Same as `random.choice(list)` but doesn't throw an error if list is empty"""
+def choose(array):
+    """
+    Same as `random.choice(array)` but doesn't throw an error
+    if `array` is empty
+    """
     # ([anything]) -> anything or None
-    list_len = len(list)
-    if list_len <= 0:
-        return None
-    return list[randint(0, list_len-1)]
+    array_len = len(array)
+    if array_len <= 0:
+        return None  # None and not [] (it is used later on in the code)
+    return array[randint(0, array_len - 1)]
 
 
 if __name__ == "__main__":
+    # pylint: disable=wrong-import-position
     import warnings
+
     warnings.warn("You are running the wrong file ('utils.py')." +
-        "The file that should be run is 'run.py'.")
+                  "The file that should be run is 'run.py'.")

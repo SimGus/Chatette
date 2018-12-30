@@ -2,6 +2,7 @@
 
 <!--[![Github All Releases](https://img.shields.io/github/downloads/SimGus/Chatette/total.svg)](https://github.com/SimGus/Chatette)-->
 [![GitHub license](https://img.shields.io/github/license/SimGus/Chatette.svg)](https://github.com/SimGus/Chatette/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/SimGus/Chatette.svg?branch=master)](https://travis-ci.org/SimGus/Chatette)
 
 ![*Chatette* logo](https://raw.githubusercontent.com/SimGus/Chatette/master/public/images/chatette-logo.png)
 
@@ -38,22 +39,22 @@ pip install chatette
 
 Then simply run the following command:
 ```bash
-python -m chatette.run <path_to_template>
+python -m chatette <path_to_template>
 ```
 or
 ```bash
-python3 -m chatette.run <path_to_template>
+python3 -m chatette <path_to_template>
 ```
 
 You can specify the name of the output file as follows:
 ```bash
-python -m chatette.run <path_to_template> -o <output_path.json>
+python -m chatette <path_to_template> -o <output_directory_path>
 ```
 or
 ```bash
-python3 -m chatette.run <path_to_template> --output <output_path.json>
+python3 -m chatette <path_to_template> --output <output_directory_path>
 ```
-The output file will then be saved in a file named as you specified into the directory which the program is executed from (i.e. the path is specified with respect to this directory). If you didn't specify a name for the output file, the default one is `output.json`.
+The output file(s) will then be saved in numbered `.json` files in `<output_directory_path>/train` and `<output_directory_path>/test` (`<output_directory_path>` is specified with respect to the directory from which the script is being executed). If you didn't specify a path for the output directory, the default one is `output`.
 
 ### Other program arguments
 A bunch of more specific program arguments exist to allow for a more controlled execution of the program.
@@ -63,6 +64,8 @@ Here is a list of those arguments:
 If you execute Chatette twice with the same seed on the exact same template, the generated output(s) is guaranteed to be exactly the same on both executions.
 
 - `-l` or `--local`: changes the output path to be specified with respect to the directory in which the template file is, rather than the current working directory.
+
+- `-a` or `--adapter`: changes which adapter will be used to write the output (defaults to the *Rasa NLU* adapter). Currently, two adapters exist: one to produce files that can be used as input to *Rasa NLU* and one that makes `.jsonl` files containing *JSON* representations of the examples. The possible values for this arguments are thus `rasa` or `jsonl`.
 
 # *Chatette* vs *Chatito*?
 
@@ -146,8 +149,31 @@ Beware that, as always with machine learning, having too much data may cause you
 
 Note that *Chatette* is named after *Chatito*, as *-ette* in French could be translated to *-ita* or *-ito* in Spanish.
 
-# Contributors
+# Development
 
+Install development requirements:
+
+```pip install -r requirements/develop.txt```
+
+Run pylint:
+
+```tox -e pylint```
+
+Run pycodestyle:
+
+```tox -e pycodestyle```
+
+Run pytest:
+
+```tox -e pytest```
+
+# Creators
+## Author and maintainer
+- [SimGus](https://github.com/SimGus)
+
+*Disclaimer: This is a side-project I'm not paid for, don't expect me to work 24/7 on it.*
+
+## Contributors
 - [Vadim Fedorenko](https://github.com/meiblorn)
 
 Many thanks to him!

@@ -1,7 +1,12 @@
 # Chatette default outputs
+output/
 output.json
 testing-dataset.json
 *.out
+examples/test*
+
+## Visual Studio code
+.vscode/
 
 # Created by .ignore support plugin (hsz.mobi)
 
