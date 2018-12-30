@@ -60,6 +60,8 @@ The output file(s) will then be saved in numbered `.json` files in `<output_dire
 A bunch of more specific program arguments exist to allow for a more controlled execution of the program.
 Here is a list of those arguments:
 
+- `-v` or `--version`: prints the version number of the program.
+
 - `-s` or `--seed` followed by any string (without spaces): sets the random generator seed to the string that follows the argument.
 If you execute Chatette twice with the same seed on the exact same template, the generated output(s) is guaranteed to be exactly the same on both executions.
 
