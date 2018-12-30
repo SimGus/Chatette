@@ -7,12 +7,16 @@ python:
 - '3.6'
 - '3.6-dev'
 - '3.7-dev'
+
 install:
 - pip install -r requirements/test.txt
 script:
-- python -m pytest tests/
+- python -m pytest --cov=chatette tests/
 after_script:
 - cd ~
+after_success:
+- codecov
+
 deploy:
   provider: pypi
   user: "SimGus"
