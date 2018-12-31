@@ -73,6 +73,7 @@ class ChatetteFacade(object):
 
 class TestSystem(object):
     solution_file_extension = ".solution"
+    syn_solution_file_extension = ".syn"
     solution_marker = ">>>"
 
     @staticmethod
@@ -85,6 +86,15 @@ class TestSystem(object):
                TestSystem.solution_file_extension
 
     @staticmethod
+    def get_synonym_solution_filepath(input_filepath):
+        """
+        Returns the same file path as `input_filepath`
+        with a different extension.
+        """
+        return os.path.splitext(input_filepath)[0] + \
+               TestSystem.syn_solution_file_extension
+
+    @staticmethod
     def get_legal_examples(input_filepath):
         """Returns the list of all legal examples for file `input_filepath`."""
         solution_filepath = TestSystem.get_solution_filepath(input_filepath)
@@ -94,6 +104,27 @@ class TestSystem(object):
                  "text": ex.split(TestSystem.solution_marker)[1].rstrip()}
                 for ex in solution_examples
                 if (not ex.startswith('#') and not ex.isspace())]
+
+    @staticmethod
+    def get_legal_synonyms(input_filepath):
+        """
+        Returns a dict with all legal synonyms
+        or `None` if there is no synonym solution file.
+        """
+        syn_filepath = TestSystem.get_synonym_solution_filepath(input_filepath)
+        if not os.path.isfile(syn_filepath):
+            return None
+        with io.open(syn_filepath, 'r') as f:
+            result = dict()
+            for l in f:
+                if not l.startswith('#'):
+                    [name, val] = l.rstrip().split("===")
+                    if name not in result:
+                        result[name] = [val]
+                    else:
+                        result[name].append(val)
+
+        return result
 
 
     def test_generate_all_training(self):
@@ -129,6 +160,18 @@ class TestSystem(object):
                             " generated instead of " +
                             str(len(legal_examples)) + ").\nGenerated: " +
                             str(facade.train_examples))
+            legal_syn = TestSystem.get_legal_synonyms(file_path)
+            if legal_syn is not None:
+                synonyms = facade.generator.get_entities_synonyms()
+                for key in synonyms:
+                    if key not in legal_syn:
+                        pytest.fail("'" + key +
+                                    "' shouldn't have any synonyms.")
+                    for syn in synonyms[key]:
+                        if syn not in legal_syn[key]:
+                            pytest.fail("'" + syn +
+                                        "' shouldn't be a synonym of '" + 
+                                        key + "'")
 
     def test_generate_all_testing(self):
         """
