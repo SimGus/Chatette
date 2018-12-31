@@ -26,7 +26,7 @@ class ChatetteFacade(object):
 
         self.cwd = os.getcwd()
         self.output_dirpath = \
-            os.path.join(self.cwd, "tests/SystemTesting/output")
+            os.path.join(self.cwd, "tests/system-testing/output")
 
         self.generator = None
         self.train_examples = None
@@ -103,7 +103,7 @@ class TestSystem(object):
         """
         facade = ChatetteFacade.get_or_create()
 
-        input_dir_path = "tests/SystemTesting/inputs/generate-all/training-only/"
+        input_dir_path = "tests/system-testing/inputs/generate-all/training-only/"
         input_filenames = \
             ["simplest.chatette", "only-words.chatette",
              "words-and-groups.chatette"]
