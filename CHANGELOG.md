@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Program argument `-v` or `--version` to display the version number of the module (a `__version__` attribute of the module itself is also now available)
 
 ### Fixed
+- Casegen (i.e. change of case for examples) didn't apply for some definitions (notably when not asking for a specific number of examples to be generated)
 - Version number displayed in help messages in terminal
 
 ## [1.3.0] - 2018-12-30
