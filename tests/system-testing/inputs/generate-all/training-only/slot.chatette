@@ -8,6 +8,6 @@
 @[slot]
     slot one = slot1
     slot1
-@[other]
+@[&other]
  other = other slot
  other slot = other slot
