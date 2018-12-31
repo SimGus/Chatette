@@ -177,6 +177,7 @@ class TestSystem(object):
         """
         Tests templates that generate all possible examples for each intent
         and that generate only testing data.
+        NOTE: impossible (should it be permitted?)
         """
         pass
 
@@ -184,6 +185,7 @@ class TestSystem(object):
         """
         Tests templates that generate all possible examples for each intent
         and that generate both training and testing data.
+        NOTE: impossible (should it be permitted?)
         """
         pass
 
