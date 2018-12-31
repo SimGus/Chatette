@@ -1,0 +1,13 @@
+# Contains all possible examples for the Chatette template file with the same name.
+single>>><<CHATETTE_ENTITY>>slot one
+single>>><<CHATETTE_ENTITY>>slot1
+multiple>>><<CHATETTE_ENTITY>>slot one <<CHATETTE_ENTITY>>other
+multiple>>><<CHATETTE_ENTITY>>slot1 <<CHATETTE_ENTITY>>other
+multiple>>><<CHATETTE_ENTITY>>slot one <<CHATETTE_ENTITY>>other slot
+multiple>>><<CHATETTE_ENTITY>>slot1 <<CHATETTE_ENTITY>>other slot
+multiple>>><<CHATETTE_ENTITY>>slot one
+multiple>>><<CHATETTE_ENTITY>>slot1
+multiple>>><<CHATETTE_ENTITY>>slot one <<CHATETTE_ENTITY>>slot one
+multiple>>><<CHATETTE_ENTITY>>slot one <<CHATETTE_ENTITY>>slot1
+multiple>>><<CHATETTE_ENTITY>>slot1 <<CHATETTE_ENTITY>>slot one
+multiple>>><<CHATETTE_ENTITY>>slot1 <<CHATETTE_ENTITY>>slot1

@@ -106,7 +106,8 @@ class TestSystem(object):
         input_dir_path = "tests/system-testing/inputs/generate-all/training-only/"
         input_filenames = \
             ["simplest.chatette", "only-words.chatette",
-             "words-and-groups.chatette"]
+             "words-and-groups.chatette", "alias.chatette", "include.chatette",
+             "slot.chatette"]
         for filename in input_filenames:
             file_path = os.path.join(input_dir_path, filename)
             facade.run(file_path)
@@ -114,7 +115,8 @@ class TestSystem(object):
             for ex in facade.train_examples:
                 formatted_ex = {"intent": ex.name, "text": ex.text}
                 if formatted_ex not in legal_examples:
-                    pytest.fail(formatted_ex + " is not a legal example for '" +
+                    pytest.fail(str(formatted_ex) + 
+                                " is not a legal example for '" +
                                 file_path + "'")
             if len(legal_examples) != len(facade.train_examples):
                 training_texts = [ex.text for ex in facade.train_examples]
@@ -124,7 +126,9 @@ class TestSystem(object):
                                     "' was not generated.")
                 pytest.fail("An unknown example was not generated (" + 
                             str(len(facade.train_examples)) + 
-                            " generated instead of " + len(legal_examples) + ")")
+                            " generated instead of " +
+                            str(len(legal_examples)) + ").\nGenerated: " +
+                            str(facade.train_examples))
 
     def test_generate_all_testing(self):
         """
