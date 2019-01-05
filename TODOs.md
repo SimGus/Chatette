@@ -8,10 +8,14 @@
 - [ ] add opposite `randgen` names
 - [ ] support several arguments in one rule
 - [ ] reverse regex
+- [ ] add probabilities of generation for rules in defintions (cf. https://github.com/rodrigopivi/Chatito/issues/48)
+- [ ] add support Chatito's augmentations (cf. https://github.com/rodrigopivi/Chatito/issues/48)
+- [ ] add a flag to enable/disable the slot = slot synonym behavior (cf. https://github.com/rodrigopivi/Chatito/issues/50)
+- [ ] add a way to make some generation mandatory in the training set, test set or both (cf. https://github.com/rodrigopivi/Chatito/issues/51)
 
 - [ ] add regex to rasa JSON file
 
-- [ ] allow for arguments to the command line (output file*s* paths, max generation per intent,...)
+- [ ] add a command line argument to specifiy the max number of examples to generate
 - [ ] add bulk generation
 
 - [ ] use more list/dict comprehensions (faster than using `append`)
