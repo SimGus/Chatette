@@ -36,7 +36,7 @@ Install *Chatette* via `pip`:
 pip install chatette
 ```
 
-(Alternatively, you can clone the [GitHub repository](https://github.com/SimGus/Chatette) and run the file named `run.py`.)
+(Alternatively, you can clone the [GitHub repository](https://github.com/SimGus/Chatette) and run the module by using the commands below in the cloned directory.)
 
 Then simply run the following command:
 ```bash
