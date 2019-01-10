@@ -25,6 +25,7 @@
 - [ ] check for circular includes
 - [ ] detect and warn about circular references
 - [ ] warn if there are slots within slots
+- [ ] warn if the limit of examples generated was reached
 
 - [ ] complete refactor of the code: the code is almost unmaintainable
 - [ ] refactor units to remove duplicated code
