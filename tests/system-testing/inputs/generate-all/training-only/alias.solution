@@ -1,0 +1,20 @@
+# Contains all possible examples for the Chatette template file with the same name.
+single>>>alias
+single>>>Alias
+single>>>more complex alias
+single>>>several words and a group
+single>>>several words and a Group
+single>>>cascading alias
+single>>>Cascading alias
+single>>>variation one
+single>>>variation two
+multiple>>>word alias
+multiple>>>word
+multiple>>>cascading alias cascading alias
+multiple>>>Cascading alias cascading alias
+multiple>>>cascading alias Cascading alias
+multiple>>>Cascading alias Cascading alias
+multiple>>>variation one =>
+multiple>>>variation one => variation two
+arg>>>arged (ARGUMENT)
+arg>>>second arg: other argument

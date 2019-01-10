@@ -1,22 +1,22 @@
 # TODOs
 
-- [ ] add a `--version` program argument
-
 - [ ] parse in a better way asked number of generation of intents
 - [ ] accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax
-- [ ] add an adapter to output raw lists of questions (rather than a JSON file)
 
 - [ ] add an adapter to output raw lists of questions (rather than a JSON file)
 
 - [ ] add opposite `randgen` names
 - [ ] support several arguments in one rule
 - [ ] reverse regex
+- [ ] add probabilities of generation for rules in defintions (cf. https://github.com/rodrigopivi/Chatito/issues/48)
+- [ ] add support Chatito's augmentations (cf. https://github.com/rodrigopivi/Chatito/issues/48)
+- [ ] add a flag to enable/disable the slot = slot synonym behavior (cf. https://github.com/rodrigopivi/Chatito/issues/50)
+- [ ] add a way to make some generation mandatory in the training set, test set or both (cf. https://github.com/rodrigopivi/Chatito/issues/51)
 
 - [ ] add regex to rasa JSON file
 
-- [ ] allow for arguments to the command line (output file*s* paths, max generation per intent,...)
+- [ ] add a command line argument to specifiy the max number of examples to generate
 - [ ] add bulk generation
-<!-- - **TODO**: rewrite docstrings formatted as explained in *PEP257* -->
 
 - [ ] use more list/dict comprehensions (faster than using `append`)
 - [ ] design patterns
@@ -76,6 +76,7 @@
 - [x] add a seed for random number generation
 - [x] add a program argument for setting the seed
 - [x] set output file path with respect to current working directory rather than input file directory
+- [x] add a `--version` program argument
 
 # Bugs
 

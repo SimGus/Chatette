@@ -5,25 +5,32 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Program argument `-v` or `--version` to display the version number of the module (a `__version__` attribute of the module itself is also now available)
+
+### Fixed
+- Missing requirements when installing the package from [PyPI](https://pypi.org/project/chatette)
+- Casegen (i.e. change of case for examples) didn't apply for some definitions (notably when not asking for a specific number of examples to be generated)
+- Version number displayed in help messages in terminal
 
 ## [1.3.0] - 2018-12-30
 ### Added
-- Code of conduct and instructions for contributing.
-- Unit tests for some parts of the projects (automatically run by Travis CI).
+- Code of conduct and instructions for contributing
+- Unit tests for some parts of the projects (automatically run by Travis CI)
 - New adapter that outputs `.jsonl` files (choosing which adapter to use is done with the program argument `-a` or `--adapter`)
 
 ### Changed
-- The number of examples to generate for training and testing does not need to be surrounded with single quotes anymore (but still can): `'training':'5'` is accepted as well as `test: 3`.
+- The number of examples to generate for training and testing does not need to be surrounded with single quotes anymore (but still can): `'training':'5'` is accepted as well as `test: 3`
 - The output files cannot contain more than 10000 examples anymore
 - The output files are now by default put in folders `output/train/` and `output/test/`
 - Refactoring of some parts of the code
 - Script is now referred to as `chatette` rather than `chatette.run` when executing from the command line
 
 ### Fixed
-- Using an empty definition now raises an exception rather than removing all generated examples.
-- Having a line with only spaces doesn't crash the script anymore.
-- When writing output files in Rasa format, the entity highlighted could be located incorrectly in the example text (if an entity value was used twice for example).
-- Possible duplicated examples when generating units with different letter case.
+- Using an empty definition now raises an exception rather than removing all generated examples
+- Having a line with only spaces doesn't crash the script anymore
+- When writing output files in Rasa format, the entity highlighted could be located incorrectly in the example text (if an entity value was used twice for example)
+- Possible duplicated examples when generating units with different letter case
 
 ## [1.2.3] - 2018-11-22
 ### Added

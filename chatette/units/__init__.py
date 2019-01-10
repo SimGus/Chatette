@@ -9,6 +9,7 @@ from __future__ import print_function
 import re
 import sys
 from random import randint
+from copy import deepcopy
 
 from chatette.utils import choose
 
@@ -47,10 +48,15 @@ def may_change_leading_case(text):
         if c.isspace():
             continue
         return False
+    return False
 
 
 def randomly_change_case(text):
-    """Randomly set the case of the first letter of `text`"""
+    """
+    Randomly set the case of the first letter of `text`.
+    NOTE: this doesn't use `capitalize()` since we need to support changing the
+          case of text that is already capitalized or indented.
+    """
     if randint(0, 99) >= 50:
         return with_leading_lower(text)
     else:
@@ -58,7 +64,7 @@ def randomly_change_case(text):
 
 
 def with_leading_upper(text):
-    """Returns `text` with a leading uppercase letter"""
+    """Returns `text` with a leading uppercase letter."""
     for (i, c) in enumerate(text):
         if not c.isspace():
             return text[:i] + text[i].upper() + text[(i + 1):]
@@ -66,7 +72,7 @@ def with_leading_upper(text):
 
 
 def with_leading_lower(text):
-    """Returns `text` with a leading lowercase letter"""
+    """Returns `text` with a leading lowercase letter."""
     for (i, c) in enumerate(text):
         if not c.isspace():
             return text[:i] + text[i].lower() + text[(i + 1):]
@@ -74,7 +80,7 @@ def with_leading_lower(text):
 
 
 def may_get_leading_space(text):
-    return text != "" and not text.startswith(' ')
+    return (text != "" and not text.startswith(' '))  # TODO: Add '\t'?
 
 
 class UnitDefinition(object):
@@ -167,7 +173,7 @@ class UnitDefinition(object):
             example_text += generated_token.text
             example_entities.extend(generated_token.entities)
 
-        if self.casegen:
+        if self.casegen and self.can_have_casegen:
             example_text = randomly_change_case(example_text)
 
         # Replace `arg` inside the generated sentence
@@ -224,6 +230,21 @@ class UnitDefinition(object):
                 ex.text = self.arg_regex.sub(arg_value, ex.text)
                 # pylint: disable=anomalous-backslash-in-string
                 generated_examples[i].text = ex.text.replace("\$", "$")
+
+        # Apply casegen
+        if self.casegen and self.can_have_casegen():
+            tmp_examples = []
+            for ex in generated_examples:
+                (lower_ex, upper_ex) = (deepcopy(ex), deepcopy(ex))
+                lower_ex.text = with_leading_lower(lower_ex.text)
+                upper_ex.text = with_leading_upper(upper_ex.text)
+                if lower_ex != upper_ex:
+                    tmp_examples.append(lower_ex)
+                    tmp_examples.append(upper_ex)
+                else:
+                    tmp_examples.append(ex)
+            generated_examples = tmp_examples
+
         return generated_examples
 
     def get_max_nb_generated_examples(self, variation_name=None):

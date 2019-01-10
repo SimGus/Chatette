@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+
 import argparse
 import io
 import os
 import sys
 from random import seed as random_seed
 
+from chatette import __version__
 from chatette.adapters import JsonListAdapter
 from chatette.adapters.rasa import RasaAdapter
 from chatette.generator import Generator
@@ -16,9 +18,10 @@ from chatette.utils import print_DBG
 def main():
     # pylint: disable=bad-continuation
     argument_parser = argparse.ArgumentParser(
-        description="Chatette v1.2.2 -- " +
-                    "Generates NLU datasets from a template file",
+        description="Chatette v"+__version__+" -- " +
+                    "Generates NLU datasets from template files",
         epilog="SimGus -- 2018 -- Released under MIT license",
+        prog="Chatette",
         add_help=True)
 
     argument_parser.add_argument("input", type=str,
@@ -42,7 +45,12 @@ def main():
 
     argument_parser.add_argument("-a", "--adapter", dest="adapter", required=False,
                                  type=str, default="rasa",
-                                 help="Write adapter. Possible values: ['rasa', 'jsonl']")
+                                 help="Write adapter. Possible values: "+
+                                      "['rasa', 'jsonl']")
+
+    argument_parser.add_argument("-v", "--version", action="version",
+                                 version="%(prog)s v"+__version__,
+                                 help="Print the version number of the module")
 
     if len(sys.argv[1:]) == 0:
         argument_parser.print_help()

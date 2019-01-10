@@ -10,7 +10,7 @@ import chatette.utils
 from chatette.utils import cast_to_unicode, choose
 
 
-class TestPrints():
+class TestPrints(object):
     def test_existences(self):
         assert "print_DBG" in dir(chatette.utils)
         assert "print_warn" in dir(chatette.utils)
@@ -20,7 +20,7 @@ class TestPrints():
         assert chatette.utils.print_warn("Test") is None
 
 
-class TestCastToUnicode():
+class TestCastToUnicode(object):
     def test_nb(self):
         """Tests that the cast doesn't do anything for numeric types."""
         res_int = cast_to_unicode(5)
@@ -69,7 +69,7 @@ class TestCastToUnicode():
         return True
 
 
-class TestChoose():
+class TestChoose(object):
     def test_empty_array(self):
         assert choose([]) is None
     

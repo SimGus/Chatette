@@ -8,7 +8,7 @@ import pytest
 from chatette.parser_utils import *
 
 
-class TestStripComments():
+class TestStripComments(object):
     def test_empty(self):
         assert strip_comments("") == ""
 
@@ -65,8 +65,14 @@ class TestStripComments():
         s = "\ttest\// no comment// comment"
         assert strip_comments(s) == "\ttest\// no comment"
 
+    def test_old_and_new_comments(self):
+        s = "test // new comment ; old comment"
+        assert strip_comments(s) == "test"
+        s = "test ; old comment // new comment"
+        assert strip_comments(s) == "test"
 
-class TestGetTopLevelLineType():
+
+class TestGetTopLevelLineType(object):
     def test_incorrect_lines(self):
         lines = ["something", "nothing", "\tsomething incorrect", "a\t"]
         for l in lines:
@@ -107,7 +113,7 @@ class TestGetTopLevelLineType():
         for l in lines:
             assert get_top_level_line_type(l, l.lstrip()) == LineType.include_file
 
-class TestIsStartUnitSym():
+class TestIsStartUnitSym(object):
     def test_not_unit_start_sym(self):
         symbols = ['', ' ', '\t', 'a', '0', '/', ';', '|', '{', ']', '}',
                    '(', ')']
@@ -135,7 +141,7 @@ class TestIsStartUnitSym():
             assert not is_start_unit_sym(w)
 
 
-class TestIsUnitStart():
+class TestIsUnitStart(object):
     def test_empty(self):
         assert not is_unit_start("")
 
@@ -150,7 +156,7 @@ class TestIsUnitStart():
             assert is_unit_start(w)
 
 
-class TestIsChoice():
+class TestIsChoice(object):
     def test_empty(self):
         assert not is_choice("")
     
@@ -167,7 +173,7 @@ class TestIsChoice():
             assert is_choice(w)
 
 
-class TestIsWord():
+class TestIsWord(object):
     def test_empty(self):
         assert not is_word("")
     
@@ -183,7 +189,7 @@ class TestIsWord():
             assert is_word(w)
 
 
-class TestGetUnitType():
+class TestGetUnitType(object):
     def test_empty(self):
         with pytest.raises(RuntimeError,
                            message="Empty string does not raise an exception "+
@@ -200,11 +206,22 @@ class TestGetUnitType():
                 get_unit_type(s)
     
     def test_units(self):
-        units = ["[unit]", "[word group]", "~[intent] //comment", "@[slot]",
-                 "%[intent]", "{choice/choice 2?}"]
+        unit = "[unit]"
+        assert get_unit_type(unit) == Unit.word_group
+        unit = "[word group]"
+        assert get_unit_type(unit) == Unit.word_group
+        unit = "~[alias] //comment"
+        assert get_unit_type(unit) == Unit.alias
+        unit = "@[slot]"
+        assert get_unit_type(unit) == Unit.slot
+        unit = "%[intent]"
+        assert get_unit_type(unit) == Unit.intent
+        unit = "{choice/choice 2?}"
+        assert get_unit_type(unit) == Unit.choice
+        
 
 
-class TestFindNbTrainingExamplesAsked():
+class TestFindNbTrainingExamplesAsked(object):
     def test_empty(self):
         assert find_nb_training_examples_asked("") is None
 
@@ -239,7 +256,7 @@ class TestFindNbTrainingExamplesAsked():
             assert find_nb_training_examples_asked(i) == 42
 
 
-class TestFindNbTestingExamplesAsked():
+class TestFindNbTestingExamplesAsked(object):
     def test_empty(self):
         assert find_nb_testing_examples_asked("") is None
 
@@ -274,7 +291,7 @@ class TestFindNbTestingExamplesAsked():
             assert find_nb_testing_examples_asked(i) == 42
 
 
-class TestRemoveEscapement():
+class TestRemoveEscapement(object):
     def test_empty(self):
         assert remove_escapement("") == ""
 

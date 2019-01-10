@@ -1,5 +1,7 @@
+from copy import deepcopy
+
 from chatette.units import Example, UnitDefinition, randomly_change_case, \
-                           ENTITY_MARKER
+                           ENTITY_MARKER, with_leading_lower, with_leading_upper
 from chatette.utils import choose
 from .rule_content import DummySlotValRuleContent
 
@@ -50,7 +52,7 @@ class SlotDefinition(UnitDefinition):
             generated_example.text += generated_token.text
             generated_example.entities.extend(generated_token.entities)
 
-        if self.casegen:
+        if self.casegen and self.can_have_casegen():
             generated_example.text = randomly_change_case(generated_example.text)
 
         # Replace `arg` inside the generated sentence
@@ -124,6 +126,20 @@ class SlotDefinition(UnitDefinition):
                                                            arg_value)
                         entity["value"] = self._replace_arg(entity["value"],
                                                             arg_value)
+
+            # Apply casegen
+            if self.casegen and self.can_have_casegen():
+                tmp_examples = []
+                for ex in examples_from_current_rule:
+                    (lower_ex, upper_ex) = (deepcopy(ex), deepcopy(ex))
+                    lower_ex.text = with_leading_lower(lower_ex.text)
+                    upper_ex.text = with_leading_upper(upper_ex.text)
+                    if lower_ex != upper_ex:
+                        tmp_examples.append(lower_ex)
+                        tmp_examples.append(upper_ex)
+                    else:
+                        tmp_examples.append(ex)
+                examples_from_current_rule = tmp_examples
 
             # Add the entity in the list
             slot_value = rule[0].name
