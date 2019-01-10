@@ -57,8 +57,9 @@ class Adapter(with_metaclass(ABCMeta, object)):
             yield Batch(index, examples[ndx:min(ndx + n, length)], synonyms)
 
     def __get_file_name(self, batch, output_directory):
+        # pylint: disable=bad-continuation
         if self._single_file_output:
-            return os.path.join(output_directory, "output." + 
+            return os.path.join(output_directory, "output." +
                                                   self._get_file_extension())
         return os.path.join(output_directory, "output." + str(batch.index) +
                                               "." + self._get_file_extension())

@@ -47,7 +47,7 @@ def main():
                                  type=str, default="rasa",
                                  help="Write adapter. Possible values: "+
                                       "['rasa', 'jsonl']")
-    
+
     argument_parser.add_argument("-v", "--version", action="version",
                                  version="%(prog)s v"+__version__,
                                  help="Print the version number of the module")
