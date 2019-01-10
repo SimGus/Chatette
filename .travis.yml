@@ -7,7 +7,6 @@ python:
 - '3.6'
 - '3.6-dev'
 - '3.7-dev'
-
 install:
 - pip install -r requirements/test.txt
 script:
@@ -16,14 +15,12 @@ after_script:
 - cd ~
 after_success:
 - codecov
-
 deploy:
   provider: pypi
-  user: "SimGus"
+  user: SimGus
   password:
-    secure: i3TeGgVWux1OcnQ9g8fFd7kWhwWBXOpAptkuucihA0eei7C+X6KBhQ7C08lY7V5jZ0qRy1hN1m5R7gifz9qEGVeBGwdqT4UuQV5ezUg+EkgE33QjmLe4XX2QpESKYVqxeaZnnWouBQxKcp+CEwo5RFYVNoI+ObipVLNUEadL84maU/iaCRcjRq6TE/XR/OIEf8F26HxHrNjwUWURDN2B6weSqH6s3c/oC+EcLDVX2+c0VptZdlpc8+rWo0JtLHS3wDsY3p3d4hECtkP/eTVPt4uAejhobYDgdm6C/crW4XXMmC+Yoy7ybpyNbSKteLIp0uWj3ORZqW84xQhvzdjsB95axY+uQTX9RmJ+zPmwS+h0Qj0plP5EuYpfky2NHb6196VlJLHce/PlYL4OGaueePqKDtNVPnoEfpHVMQ57y3t0s1EFq9c4vt1vuh4vKBS8gSX+BQfARZIeMNTwO9ksAyrvMBN69yMWaDdc5nD/PgeANrLec1GvdfLbM4yj4mVZu+CCHzBNe4lJBeovd+PqE4oOQR5lxWfJc7bfRxTR5siHv52lYqNsEI4nY07fIUBUGdNtgY+o/eAXrBpW6hQTRrTE8JKlutC7EZUhO23RxuPeXSZa9w+fpZhdk+FAtlUGN3OvgUSdeA/wjscOyc3PcNgNMqpMs1Doy/ugz7QPZKQ=
+    secure: agMPtAzkeQAAs903SkUyXWDTxX40VCT5KmFItyWd+f+2D6K/SQmt0N+jPzFwNANIQRiNzdcqII7kIvPNPJZmTfu3fcVOkOFCQBWGttpUiWtmoJomGnBRIqgavADddiZWQKTGbs2siLOV85Ds3sFRN/7MxKvOe3Is4XP/0t0p9GBPWQ+Rxa9zAi84KrDUa3sWFZv9sX/D0h33E2EVZHdx4pX5LN1WGqk8EGXsVJzdqUZcqzWFpdF/A4Hk/+sjKfD28XkuXQi3rxv6KEkPo4AlbAiVSnpuv2DCpodKgqpv1IDlKlKhbIC216miXHnyXbHG3OEr0l+jbUYvGija2iierFOyjm8i3QsOIdgqvHfpJLnMBVmXejPRGrrLFFOZRPD1IejK8UdArFWaVe/wNGfihLcslgxRZ4hDZb6I4GCA41fT6uMb58yjx35Oy0VsBq+rpnncqVjf/I52atba6dXAmz2U6znouXgBtVfS6KpaEOJCIu/qIZQlfRE9w3u/pagrZYPEdmNNFhA4nDm11FIpTkLMChuFyu+LFvAhB3nVgcxllSAg8Z5xTQH5BfKb6lilqwucklGWpQm7OlDPt6VlfONoes1odSVEsRgi3sRcLJNVNh+PebyyqggZuvT26y7pMGTXqgzLJyQzbBwJ+b/un3mKpYhsUzccqDMYSYftwKw=
   on:
     tags: true
-  distributions: "sdist bdist_wheel"
+  distributions: sdist bdist_wheel
   skip_existing: true
-
