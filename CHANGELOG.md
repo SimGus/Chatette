@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.3.1] - 2019-01-10
 ### Added
 - Program argument `-v` or `--version` to display the version number of the module (a `__version__` attribute of the module itself is also now available)
 
@@ -204,7 +206,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for slot value names
 - Generator able to generate an output file in *Rasa NLU* format (without support for synonyms or regex features)
 
-[Unreleased]: https://github.com/SimGus/Chatette/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/SimGus/Chatette/compare/v1.3.1...HEAD
+[1.3.1]: https://github.com/SimGus/Chatette/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/SimGus/Chatette/compare/v1.2.3...v1.3.0
 [1.2.3]: https://github.com/SimGus/Chatette/compare/v1.2.2...v1.2.3
 [1.2.2]: https://github.com/SimGus/Chatette/compare/v1.2.1...v1.2.2
