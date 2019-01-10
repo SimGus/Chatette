@@ -25,5 +25,9 @@ setup(
         "Topic :: Utilities",
         "Topic :: Text Processing",
         "Topic :: Communications",
+    ],
+    install_requires=[
+        "enum-compat",
+        "future",
     ]
 )
