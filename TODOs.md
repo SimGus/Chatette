@@ -2,6 +2,7 @@
 
 - [ ] parse in a better way asked number of generation of intents
 - [ ] accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax
+- [ ] add some kind of optional version number within template files
 
 - [ ] add an adapter to output raw lists of questions (rather than a JSON file)
 

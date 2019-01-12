@@ -64,8 +64,11 @@ def main():
     else:
         dir_path = os.getcwd()
 
-    dir_path = os.path.join(dir_path, "output")
-
+    if args.output is None:
+        dir_path = os.path.join(dir_path, "output")
+    else:
+        dir_path = os.path.join(dir_path, args.output)
+    
     # Initialize the random number generator
     if args.seed is not None:
         random_seed(args.seed)
