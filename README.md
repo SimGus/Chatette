@@ -77,7 +77,7 @@ A perfectly legitimate question could be:
 
 The reason comes from the different goals of the two projects:
 
-*Chatito* aims at a generic but powerful *DSL*, that should stay simple. While it is perfectly fine for small projects, when projects get larger, this simplicity may become a burden: your template file becomes overwhelmingly large, at a point you get lost inside it.
+*Chatito* aims at a generic but powerful *DSL*, that should stay simple. While it is perfectly fine for small projects, when projects get larger, this simplicity may become a burden: your template file becomes overwhelmingly large, to the point you get lost inside it.
 
 *Chatette* defines a more complex *DSL* to be able to manage larger projects. Here is a non-exhaustive list of features that can help with that:
 
