@@ -451,7 +451,8 @@ class Parser(object):
             elif unit_type == pu.Unit.intent:
                 type_str = "intent"
             raise ValueError("Couldn't find a definition for " + type_str + " '" +
-                             def_name + "'")
+                             def_name + "' (did you mean to use the word group "+
+                             " '[" + def_name + "]'?)")
 
         return def_list[def_name]
 
