@@ -12,6 +12,8 @@ or
 python -m chatette --interactive <path-to-template-file>
 ```
 
+In this mode, no output will be generated.
+
 The program parses the template file(s) and we get to a command prompt:
 ```
 [DBG] Parsing <path-to-template-file>
@@ -34,7 +36,9 @@ There, several commands can be ran.
    
 - `generate <adapter> alias "<alias-name>"` generates all possible strings and format them as they would if adapter `<adapter>` was used. Similar commands for slots and intents exist. Again, appending a number at the end of the command limits the number of examples generated.
 
-   Two adapters currently exist: `rasa` and `jsonl`.
+  Two adapters currently exist: `rasa` and `jsonl`.
+  
+  `generate` alone will execute the generation as it would have executed in non-interactive mode.
    
 - `rule "<rule>"` will generate the rule using all the units that have been defined in the template file(s). We can redirect its outputs to a file as before. If you need to use double quotes in the rule, escape it with a backslash `\`.
 
@@ -44,7 +48,18 @@ There, several commands can be ran.
 
 - `read "<path-to-file>"` will read the file `<path-to-file>` and execute all the commands that are inside it sequentially. The commands and results will be printed on the command line as those executions are made.
 
-For all those commands, appending `> <filename>` or `>> <filename>` will respectively write the results into a file named `<filename>` (creating the file if it doesn't exist, overwriting it if it does) or append the results into a file named `<filename>` (creating it if it doesn't exist).
+  Chatette can also directly read the commands from this file by calling the script with:
+  ```bash
+  python -m chatette <path-to-template-file> -i -c <path-to-command-file>
+  ```
+  or
+  ```bash
+  python -m chatette <path-to-template-file> --interactive --command-file <path-to-command-file>
+  ```
+  
+- `exit` or `Ctrl+D` (`EOF`) stops the interactive mode (and the script). `Ctrl+C` would work as well, but stops *chatette* directly without any exit message.
+
+For all those commands (except `exit`), appending `> <filename>` or `>> <filename>` will respectively write the results into a file named `<filename>` (creating the file if it doesn't exist, overwriting it if it does) or append the results into a file named `<filename>` (creating it if it doesn't exist).
 
 ### Regexes
 Rather than using `<alias-name>` for the name of the alias (resp. any unit), you can use regexes in all those commands, in the following way `/regex/flag` where `regex` is the regex (defined as it should be to work with `re` in Python) and `flag` can be one of the following:
