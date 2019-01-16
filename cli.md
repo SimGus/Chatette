@@ -3,16 +3,20 @@
 
 Eventually, it will be possible to use *Chatette* in a dynamic way.
 
-To do this, first, we execute *Chatette* in dynamic mode:
+To do this, first, we execute *Chatette* in interactive mode:
 ```bash
-python -m chatette -d <path-to-template-file>
+python -m chatette -i <path-to-template-file>
+```
+or
+```bash
+python -m chatette --interactive <path-to-template-file>
 ```
 
 The program parses the template file(s) and we get to a command prompt:
-```bash
+```
 [DBG] Parsing <path-to-template-file>
 [DBG] Parsed!
-Executing chatette in dynamic mode.
+Executing chatette in interactive mode.
 What do you need?
 >>>
 ```
