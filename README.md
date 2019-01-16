@@ -1,6 +1,7 @@
 # *Chatette* dataset generator
 
 <!--[![Github All Releases](https://img.shields.io/github/downloads/SimGus/Chatette/total.svg)](https://github.com/SimGus/Chatette)-->
+[![PyPI package](https://badge.fury.io/py/chatette.svg)](https://badge.fury.io/py/chatette)
 [![GitHub license](https://img.shields.io/github/license/SimGus/Chatette.svg)](https://github.com/SimGus/Chatette/blob/master/LICENSE)
 [![Build Status](https://travis-ci.org/SimGus/Chatette.svg?branch=master)](https://travis-ci.org/SimGus/Chatette)
 [![codecov](https://codecov.io/gh/SimGus/Chatette/branch/master/graph/badge.svg)](https://codecov.io/gh/SimGus/Chatette)
