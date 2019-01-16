@@ -13,6 +13,7 @@
 - [ ] add support Chatito's augmentations (cf. https://github.com/rodrigopivi/Chatito/issues/48)
 - [ ] add a flag to enable/disable the slot = slot synonym behavior (cf. https://github.com/rodrigopivi/Chatito/issues/50)
 - [ ] add a way to make some generation mandatory in the training set, test set or both (cf. https://github.com/rodrigopivi/Chatito/issues/51)
+- [ ] add custom annotations as *Chatito* does
 
 - [ ] add regex to rasa JSON file
 
