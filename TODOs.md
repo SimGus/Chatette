@@ -28,6 +28,7 @@
 - [ ] detect and warn about circular references
 - [ ] warn if there are slots within slots
 - [ ] warn if the limit of examples generated was reached
+- [ ] subclass python's built-in `DeprecationWarning` rather than printing a warning for deprecations
 
 - [ ] complete refactor of the code: the code is almost unmaintainable
 - [ ] refactor units to remove duplicated code
