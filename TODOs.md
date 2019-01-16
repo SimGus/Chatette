@@ -18,6 +18,7 @@
 
 - [ ] add a command line argument to specifiy the max number of examples to generate
 - [ ] add bulk generation
+- [ ] add interactive mode (generate what the user asks through a CLI)
 
 - [ ] use more list/dict comprehensions (faster than using `append`)
 - [ ] design patterns
