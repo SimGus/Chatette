@@ -38,6 +38,7 @@
 - [ ] *Docs* add a representation of the architecture of the project
 - [ ] *Docs* multilingual
 - [ ] *Docs* make a wiki rather than a markdown file
+- [ ] *Docs* specify which version of *Rasa NLU* *chatette* can work with
 
 ## Done
 
