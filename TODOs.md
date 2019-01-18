@@ -30,6 +30,7 @@
 - [ ] detect and warn about circular references
 - [ ] warn if there are slots within slots
 - [ ] warn if the limit of examples generated was reached
+- [ ] warn if a unit reference is used within its own declaration
 
 - [ ] complete refactor of the code: the code is almost unmaintainable
 - [ ] refactor units to remove duplicated code
@@ -83,7 +84,7 @@
 - [x] add a program argument for setting the seed
 - [x] set output file path with respect to current working directory rather than input file directory
 - [x] add a `--version` program argument
-- [X] use python's built-in `DeprecationWarning` rather (print a warning for deprecations)
+- [x] use python's built-in `DeprecationWarning` rather (print a warning for deprecations)
 
 # Bugs
 
