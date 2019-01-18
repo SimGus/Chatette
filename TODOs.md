@@ -5,6 +5,7 @@
 - [ ] add some kind of optional version number within template files
 
 - [ ] add an adapter to output raw lists of questions (rather than a JSON file)
+- [ ] add default aliases and slots
 
 - [ ] add opposite `randgen` names
 - [ ] support several arguments in one rule
