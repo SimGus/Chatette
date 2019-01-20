@@ -1,0 +1,17 @@
+// Flight booking sentences
+%[&help]('train': '4', 'test': '2')
+    ~[i need?] ~[help#noun] [please?]
+    ~[help#verb] ~[me] [please?]
+    ~[can you] ~[help#verb] ~[me] [please?][\??]
+
+%[&book](training:12, testing:4)
+    ~[i need?polite] [to?polite] ~[book] a flight ~[from airport?] ~[to airport] @[departure-time?] [please?]
+    
+%[&thank](2)
+    Thank you
+    Thanks [a lot?]
+
+|aliases.chatette
+|slots/cities.chatette
+|slots/departure-times.chatette
+

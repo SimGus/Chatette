@@ -1,0 +1,28 @@
+~[help#verb]
+   help
+   aid
+   assist
+~[help#noun]
+    help
+    aid
+    
+~[me]
+    {me/us}
+   
+~[i need]
+    [&i]{'d/ would?} {need/want}
+    [&i]{'d/ would} like
+
+~[can you]
+    can you
+    could you
+    would you [be so kind and?]
+    
+~[book]
+    book
+    register
+    
+~[from airport]
+    from @[source-airport]
+~[to airport]
+    [to go?] to @[source-airport]
