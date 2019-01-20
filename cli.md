@@ -28,6 +28,8 @@ There, several commands can be ran.
 
 - `stats` will display statistics about the parsed file(s), namely the number of defined units, aliases, slots and intents.
 
+- `parse <file-path>` will parse the file at `<file-path>` (relatively to the master template file).
+
 - `show alias "<alias-name>"` will ask to show the rules that define alias `<alias-name>`. If it doesn't exist, an error is printed. The same thing exists for slots and intents: `show slot "<slot-name>"` and `show intent "<intent-name>"`.
 
 - `examples alias "<alias-name>"` will ask for all the possible strings generated when referring to alias `<alias-name>`. `gen slot "<slot-name>"` and `gen intent "<intent-name>"` exist as well. An error is printed if the alias/slot/intent doesn't exist. Variations can also be selected by appending `#<variation-name>` to the name of the unit.
