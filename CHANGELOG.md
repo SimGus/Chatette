@@ -6,9 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Examples for the wiki
 - Use a built-in `DeprecationWarning` for deprecation warnings (additionally to printing the warning on stdout)
 
 ### Fixed
+- Possible exception caused by missing import
 - Output directory (provided by the user with `-o` or `--output` flag) was ignored
 
 ## [1.3.1] - 2019-01-10
