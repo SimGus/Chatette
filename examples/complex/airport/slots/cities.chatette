@@ -1,0 +1,13 @@
+// Lists of cities that are available as source airports and destination airports
+@[source-airport]
+    Brussels
+    Paris
+    Amsterdam
+    
+@[destination-airport]
+    Paris
+    Amsterdam
+    London
+    Edinburgh
+    Berlin
+    
