@@ -32,6 +32,7 @@
 - [ ] warn if there are slots within slots
 - [ ] warn if the limit of examples generated was reached
 - [ ] warn if a unit reference is used within its own declaration
+- [ ] warn if an argument has no value
 
 - [ ] complete refactor of the code: the code is almost unmaintainable
 - [ ] refactor units to remove duplicated code
