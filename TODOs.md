@@ -22,6 +22,7 @@
 - [ ] add a command line argument to specifiy the max number of examples to generate
 - [ ] add bulk generation
 - [ ] add interactive mode (generate what the user asks through a CLI)
+- [ ] wipe the output directory before writing new files
 
 - [ ] use more list/dict comprehensions (faster than using `append`)
 - [ ] design patterns
@@ -93,6 +94,7 @@
 - **BUG**: arguments are not given down when an argument is transmitted as the argument of a token
 - **BUG**: wrong generation when putting an alias inside a word group
 - **BUG**: encoding errors under Windows
+- **BUG**: synonyms are synonyms of themselves (look at simple airport example)
 
 ## To confirm
 
