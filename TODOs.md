@@ -3,6 +3,7 @@
 - [ ] parse in a better way asked number of generation of intents
 - [ ] accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax
 - [ ] add some kind of optional version number within template files
+- [ ] add a way to specify a rule on several consecutive lines
 
 - [ ] add an adapter to output raw lists of questions (rather than a JSON file)
 - [ ] add an adapter for *Snips*
@@ -36,7 +37,7 @@
 - [ ] warn if an argument has no value
 
 - [ ] complete refactor of the code: the code is almost unmaintainable
-- [ ] refactor units to remove duplicated code
+- [ ] refactor units to remove duplicated code: make modifiers act after the string has been generated
 - [ ] add more unit tests
 
 - [ ] *Docs* add a representation of the architecture of the project
