@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from warnings import warn
+
 from chatette.utils import print_warn
+
 
 # ============ Deprecation of semi-colon syntax for comments ===============
 # Comments starting with semi-colons ';' are now deprecated to have a closer
@@ -18,8 +21,12 @@ def warn_semicolon_comments():
     global _SEMICOLON_COMMENTS_DEPRECATION_WARNED
     if not _SEMICOLON_COMMENTS_DEPRECATION_WARNED:
         # pylint: disable=bad-continuation
-        print_warn("Deprecation warning: Comments starting with a semi-colon " +
-                  "';' are now deprecated. " +
-                  "Rather use the new double slash '//' syntax. This " +
-                  "syntax allows to have a syntax closer to Chatito v2.1.x.")
+        print_warn("Comments starting with a semi-colon ';' are "+
+                   "now deprecated. Rather use the new double slash '//'"+
+                   " syntax. This syntax allows to have a syntax closer to "+
+                   "Chatito v2.1.x.")
+        warn("Comments starting with a semi-colon ';' are now deprecated. " +
+             "Rather use the new double slash '//' syntax. This " +
+             "syntax allows to have a syntax closer to Chatito v2.1.x.",
+             DeprecationWarning)
         _SEMICOLON_COMMENTS_DEPRECATION_WARNED = True

@@ -1,0 +1,15 @@
+// Slot for the number of people to book a flight for
+// This slot uses arguments
+@[nb-people]
+    {~[nb$1]/~[nb$one]} person = 1
+    {~[nb$2]/~[nb$two]} people = 2
+    {~[nb$3]/~[nb$three]} people = 3
+    {~[nb$4]/~[nb$four]} people = 4
+    {~[nb$5]/~[nb$five]} people = 5
+    {~[nb$6]/~[nb$six]} people = 6
+    
+~[nb$NB]
+    exactly $NB
+    precisely $NB
+    $NB
+

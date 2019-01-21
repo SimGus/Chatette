@@ -19,7 +19,7 @@ from chatette.units.intent import IntentDefinition, IntentRuleContent
 from chatette.units.slot import DummySlotValRuleContent, SlotDefinition, SlotRuleContent
 from chatette.units.word.group_rule_content import GroupWordRuleContent
 from chatette.units.word.rule_content import WordRuleContent
-from chatette.utils import print_DBG
+from chatette.utils import print_DBG, print_warn
 
 
 class Parser(object):
@@ -543,20 +543,20 @@ class Parser(object):
                     tokens.append(current + c)
                     current = ""
                 else:
-                    warnings.warn("Inconsistent use of the unit close symbol (" +
-                                  pu.UNIT_CLOSE_SYM + ") at line " + str(self.line_nb) +
-                                  " of file '" + self.in_file.name +
-                                  "'. Consider escaping them if they are " +
-                                  "not supposed to close a unit.\nThe generation will " +
-                                  "however continue, considering it as a normal character.")
+                    print_warn("Inconsistent use of the unit close symbol (" +
+                               pu.UNIT_CLOSE_SYM + ") at line " + str(self.line_nb) +
+                               " of file '" + self.in_file.name +
+                               "'. Consider escaping them if they are " +
+                               "not supposed to close a unit.\nThe generation will " +
+                               "however continue, considering it as a normal character.")
                     current += c
             elif c == pu.CHOICE_CLOSE_SYM:
-                warnings.warn("Inconsistent use of the choice close symbol (" +
-                              pu.CHOICE_CLOSE_SYM + ") at line " + str(self.line_nb) +
-                              " of file '" + self.in_file.name +
-                              "'. Consider escaping them if they are " +
-                              "not supposed to close a unit.\nThe generation will " +
-                              "however continue, considering it as a normal character.")
+                print_warn("Inconsistent use of the choice close symbol (" +
+                           pu.CHOICE_CLOSE_SYM + ") at line " + str(self.line_nb) +
+                           " of file '" + self.in_file.name +
+                           "'. Consider escaping them if they are " +
+                           "not supposed to close a unit.\nThe generation will " +
+                           "however continue, considering it as a normal character.")
                 current += c
             elif c == pu.CHOICE_OPEN_SYM:
                 if current != "":

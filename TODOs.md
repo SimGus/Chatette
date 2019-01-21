@@ -3,8 +3,11 @@
 - [ ] parse in a better way asked number of generation of intents
 - [ ] accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax
 - [ ] add some kind of optional version number within template files
+- [ ] add a way to specify a rule on several consecutive lines
 
 - [ ] add an adapter to output raw lists of questions (rather than a JSON file)
+- [ ] add an adapter for *Snips*
+- [ ] add default aliases and slots
 
 - [ ] add opposite `randgen` names
 - [ ] support several arguments in one rule
@@ -13,12 +16,14 @@
 - [ ] add support Chatito's augmentations (cf. https://github.com/rodrigopivi/Chatito/issues/48)
 - [ ] add a flag to enable/disable the slot = slot synonym behavior (cf. https://github.com/rodrigopivi/Chatito/issues/50)
 - [ ] add a way to make some generation mandatory in the training set, test set or both (cf. https://github.com/rodrigopivi/Chatito/issues/51)
+- [ ] add custom annotations as *Chatito* does
 
 - [ ] add regex to rasa JSON file
 
 - [ ] add a command line argument to specifiy the max number of examples to generate
 - [ ] add bulk generation
 - [ ] add interactive mode (generate what the user asks through a CLI)
+- [ ] wipe the output directory before writing new files
 
 - [ ] use more list/dict comprehensions (faster than using `append`)
 - [ ] design patterns
@@ -28,14 +33,16 @@
 - [ ] detect and warn about circular references
 - [ ] warn if there are slots within slots
 - [ ] warn if the limit of examples generated was reached
+- [ ] warn if a unit reference is used within its own declaration
+- [ ] warn if an argument has no value
 
 - [ ] complete refactor of the code: the code is almost unmaintainable
-- [ ] refactor units to remove duplicated code
+- [ ] refactor units to remove duplicated code: make modifiers act after the string has been generated
 - [ ] add more unit tests
 
 - [ ] *Docs* add a representation of the architecture of the project
 - [ ] *Docs* multilingual
-- [ ] *Docs* make a wiki rather than a markdown file
+- [ ] *Docs* specify which version of *Rasa NLU* *chatette* can work with
 
 ## Done
 
@@ -80,12 +87,15 @@
 - [x] add a program argument for setting the seed
 - [x] set output file path with respect to current working directory rather than input file directory
 - [x] add a `--version` program argument
+- [x] use python's built-in `DeprecationWarning` rather (print a warning for deprecations)
+- [x] *Docs* make a wiki rather than a markdown file
 
 # Bugs
 
 - **BUG**: arguments are not given down when an argument is transmitted as the argument of a token
 - **BUG**: wrong generation when putting an alias inside a word group
 - **BUG**: encoding errors under Windows
+- **BUG**: synonyms are synonyms of themselves (look at simple airport example)
 
 ## To confirm
 
