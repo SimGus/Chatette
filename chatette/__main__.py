@@ -11,7 +11,7 @@ from chatette import __version__
 from chatette.adapters import JsonListAdapter
 from chatette.adapters.rasa import RasaAdapter
 from chatette.generator import Generator
-from chatette.parsing import Parser
+from chatette.parsing.parser import Parser
 from chatette.utils import print_DBG
 
 

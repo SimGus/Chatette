@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Module `chatette.parsing`
+Module `chatette.parsing.parser`
 Contains all the logic to parse template files
 and transform the information into an Abstract Syntax Tree.
 """
@@ -13,8 +13,8 @@ import os
 import re
 
 from chatette.utils import print_DBG, print_warn
-import chatette.parser_utils as pu
-from chatette.tokenizer import Tokenizer
+import chatette.parsing.parser_utils as pu
+from chatette.parsing.tokenizer import Tokenizer
 from chatette.units.alias import AliasDefinition, AliasRuleContent
 from chatette.units.choice import ChoiceRuleContent
 from chatette.units.intent import IntentDefinition, IntentRuleContent

@@ -8,7 +8,7 @@ import io, shutil
 
 import pytest
 
-from chatette.parsing import Parser
+from chatette.parsing.parser import Parser
 from chatette.generator import Generator
 from chatette.adapters import RasaAdapter, JsonListAdapter
 

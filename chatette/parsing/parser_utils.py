@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Module `chatette.parser_utils`
+Module `chatette.parsing.parser_utils`
 Contains utility functions that are specific to
 the parsing of template files.
 """

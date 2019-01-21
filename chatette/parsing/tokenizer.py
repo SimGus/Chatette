@@ -4,7 +4,7 @@ Contains the tokenizer used by the parser.
 """
 
 from chatette.utils import print_warn
-import chatette.parser_utils as pu
+import chatette.parsing.parser_utils as pu
 
 
 class Tokenizer(object):

@@ -5,7 +5,7 @@ Tests the functions in module 'chatette.utils'.
 
 import pytest
 
-from chatette.parser_utils import *
+from chatette.parsing.parser_utils import *
 
 
 class TestStripComments(object):

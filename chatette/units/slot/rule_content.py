@@ -1,7 +1,7 @@
 from __future__ import print_function
 from random import randint
 
-from chatette.parser_utils import Unit, remove_escapement
+from chatette.parsing.parser_utils import Unit, remove_escapement
 from chatette.units import Example, RuleContent, may_get_leading_space, \
                            may_change_leading_case, randomly_change_case, \
                            with_leading_lower, with_leading_upper
