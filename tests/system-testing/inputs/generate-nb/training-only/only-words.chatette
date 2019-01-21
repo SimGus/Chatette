@@ -1,0 +1,13 @@
+%[single word](2)
+    Hello
+    Hi
+    hola
+    
+%[several words](training : 2)
+    Two words
+    another set of several words
+    words with (special) symbols! :D
+    
+%[&casegen intent](train: '1')
+    word
+    casegened word

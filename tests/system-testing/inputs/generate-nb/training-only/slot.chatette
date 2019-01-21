@@ -1,0 +1,13 @@
+%[single](training: '1')
+    @[&slot]
+
+%[multiple]('train' : '2')
+    @[slot] @[other]
+    @[slot] @[slot?]
+    
+@[slot]
+    slot one = slot1
+    slot1
+@[&other]
+ other = other slot
+ other slot = other slot

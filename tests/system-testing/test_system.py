@@ -126,6 +126,12 @@ class TestSystem(object):
 
         return result
 
+    
+    @staticmethod
+    def check_no_duplicates(examples):
+        """Returns `True` if there are no duplicates in the list"""
+        return len(examples) == len(set(examples))
+
 
     def test_generate_all_training(self):
         """
@@ -134,7 +140,7 @@ class TestSystem(object):
         """
         facade = ChatetteFacade.get_or_create()
 
-        input_dir_path = "tests/system-testing/inputs/generate-all/training-only/"
+        input_dir_path = "tests/system-testing/inputs/generate-all/"
         input_filenames = \
             ["simplest.chatette", "only-words.chatette",
              "words-and-groups.chatette", "alias.chatette", "include.chatette",
@@ -142,6 +148,10 @@ class TestSystem(object):
         for filename in input_filenames:
             file_path = os.path.join(input_dir_path, filename)
             facade.run(file_path)
+            if not TestSystem.check_no_duplicates(facade.train_examples):
+                pytest.fail("Some examples were generated several times "+
+                            "when dealing with file '"+filename+"'.\n"+
+                            "Generated: "+str(facade.train_examples))
             legal_examples = TestSystem.get_legal_examples(file_path)
             for ex in facade.train_examples:
                 formatted_ex = {"intent": ex.name, "text": ex.text}
@@ -181,20 +191,60 @@ class TestSystem(object):
         """
         pass
 
-    def test_generate_all(self):
-        """
-        Tests templates that generate all possible examples for each intent
-        and that generate both training and testing data.
-        NOTE: impossible (should it be permitted?)
-        """
-        pass
-
     def test_generate_nb_training(self):
         """
         Tests templates that generate a subset of all possible examples
         for each intent and that generate only training data.
         """
-        pass
+        facade = ChatetteFacade.get_or_create()
+
+        input_dir_path = "tests/system-testing/inputs/generate-nb/training-only/"
+        input_filenames = \
+            ["only-words.chatette", "words-and-groups.chatette",
+             "alias.chatette", "include.chatette", "slot.chatette"]
+        for filename in input_filenames:
+            file_path = os.path.join(input_dir_path, filename)
+            facade.run(file_path)
+            if not TestSystem.check_no_duplicates(facade.train_examples):
+                pytest.fail("Some examples were generated several times "+
+                            "when dealing with file '"+filename+"'.\n"+
+                            "Generated: "+str(facade.train_examples))
+            legal_examples = TestSystem.get_legal_examples(file_path)
+            for ex in facade.train_examples:
+                formatted_ex = {"intent": ex.name, "text": ex.text}
+                if formatted_ex not in legal_examples:
+                    pytest.fail(str(formatted_ex) + 
+                                " is not a legal example for '" +
+                                file_path + "'")
+            
+            legal_syn = TestSystem.get_legal_synonyms(file_path)
+            if legal_syn is not None:
+                synonyms = facade.generator.get_entities_synonyms()
+                for key in synonyms:
+                    if key not in legal_syn:
+                        pytest.fail("'" + key +
+                                    "' shouldn't have any synonyms.")
+                    for syn in synonyms[key]:
+                        if syn not in legal_syn[key]:
+                            pytest.fail("'" + syn +
+                                        "' shouldn't be a synonym of '" + 
+                                        key + "'")
+
+        filename_zero = "zero-ex.chatette"
+        file_path = os.path.join(input_dir_path, filename_zero)
+        facade.run(file_path)
+        if len(facade.train_examples) != 0:
+            pytest.fail("When dealing with file 'zero-ex.chatette', no "+
+                        "examples should be generated.\nGenerated: "+
+                        str(facade.train_examples))
+
+        filename_one = "one-ex.chatette"
+        file_path = os.path.join(input_dir_path, filename_one)
+        facade.run(file_path)
+        if len(facade.train_examples) != 1:
+            pytest.fail("When dealing with file 'one-ex.chatette', one "+
+                        "examples should be generated.\nGenerated: "+
+                        str(facade.train_examples))
 
     def test_generate_nb_testing(self):
         """

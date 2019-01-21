@@ -5,6 +5,7 @@ Tests the functions in module 'chatette.utils'.
 
 import sys
 import pytest
+import imp
 
 import chatette.utils
 from chatette.utils import cast_to_unicode, choose
@@ -102,3 +103,8 @@ class TestChoose(object):
         for array in arrays:
             res = choose(array)
             assert res in array
+
+
+class TestMain(object):
+    def test_main(self):
+        imp.load_source("__main__", "chatette/utils.py")
