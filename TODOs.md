@@ -42,7 +42,6 @@
 
 - [ ] *Docs* add a representation of the architecture of the project
 - [ ] *Docs* multilingual
-- [ ] *Docs* make a wiki rather than a markdown file
 - [ ] *Docs* specify which version of *Rasa NLU* *chatette* can work with
 
 ## Done
@@ -89,6 +88,7 @@
 - [x] set output file path with respect to current working directory rather than input file directory
 - [x] add a `--version` program argument
 - [x] use python's built-in `DeprecationWarning` rather (print a warning for deprecations)
+- [x] *Docs* make a wiki rather than a markdown file
 
 # Bugs
 

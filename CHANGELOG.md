@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Wiki explaining the whole syntax of template files and the usage of the program
 - Examples for the wiki
 - Use a built-in `DeprecationWarning` for deprecation warnings (additionally to printing the warning on stdout)
 
