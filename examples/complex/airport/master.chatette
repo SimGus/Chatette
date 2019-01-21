@@ -3,7 +3,7 @@
     ~[i need?] ~[help#noun] [please?]
     ~[help#verb] ~[me] [please?]
     ~[can you] ~[help#verb] ~[me] [please?][\??]
-    what ~[things?] ~[can you] {do/help ~[me] with}[\??]
+    what ~[thing] ~[can you] {do/help ~[me] with}[\??]
 
 %[&book](training:12, testing:4)
     ~[i need?polite] [to?polite] ~[book] a flight ~[from airport?] ~[to airport] @[departure-time?] [please?]
