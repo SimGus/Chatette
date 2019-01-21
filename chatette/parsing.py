@@ -12,14 +12,15 @@ from __future__ import print_function
 import os
 import re
 
+from chatette.utils import print_DBG, print_warn
 import chatette.parser_utils as pu
+from chatette.tokenizer import Tokenizer
 from chatette.units.alias import AliasDefinition, AliasRuleContent
 from chatette.units.choice import ChoiceRuleContent
 from chatette.units.intent import IntentDefinition, IntentRuleContent
 from chatette.units.slot import DummySlotValRuleContent, SlotDefinition, SlotRuleContent
 from chatette.units.word.group_rule_content import GroupWordRuleContent
 from chatette.units.word.rule_content import WordRuleContent
-from chatette.utils import print_DBG, print_warn
 
 
 class Parser(object):
@@ -33,6 +34,7 @@ class Parser(object):
         self.opened_files = []
         self.line_nb = 0
         self.line_counts_per_file = []
+        self.tokenizer = Tokenizer()
 
         self.alias_definitions = dict()
         self.slot_definitions = dict()
@@ -112,26 +114,6 @@ class Parser(object):
         randgen = None
         percentgen = None
         casegen = False
-        # one_found = False
-        # for match in pattern_modifiers.finditer(unit):
-        #     start_index = match.start()
-        #     if one_found:
-        #         # this error would happen only when `unit`
-        #         # is a whole line (i.e. a declaration)
-        #         raise SyntaxError("Expected only one unit here: " +
-        #                           "only one declaration is allowed per line",
-        #                           (self.in_file.name, self.line_nb, start_index,
-        #                            unit))
-        #     else:
-        #         one_found = True
-        #     match = match.groupdict()
-        #
-        #     name = match["name"]
-        #     arg = match["arg"]
-        #     variation = match["variation"]
-        #     randgen = match["randgen"]
-        #     percentgen = match["percentgen"]
-        #     casegen = (match["casegen"] is not None)
 
         one_found = False
         for match in pu.PATTERN_UNIT_NAME.finditer(unit):
@@ -245,7 +227,6 @@ class Parser(object):
         Parses the definition of an alias (declaration and contents)
         and adds the relevant info to the list of aliases.
         """
-        # print_DBG("alias: "+first_line.strip())
         # Manage the alias declaration
         (alias_name, alias_arg, alias_variation, randgen, percentgen, casegen) = \
             self.parse_unit(first_line)
@@ -297,7 +278,6 @@ class Parser(object):
         Parses the definition of a slot (declaration and contents)
         and adds the relevant info to the list of slots.
         """
-        # print_DBG("slot: "+first_line.strip())
         # Manage the slot declaration
         (slot_name, slot_arg, slot_variation, randgen, percentgen, casegen) = \
             self.parse_unit(first_line)
@@ -359,7 +339,6 @@ class Parser(object):
         Parses the definition of an intent (declaration and contents)
         and adds the relevant info to the list of intents.
         """
-        # print_DBG("intent: "+first_line.strip())
         # Manage the intent declaration
         (intent_name, intent_arg, intent_variation, randgen, percentgen, casegen) = \
             self.parse_unit(first_line)
@@ -495,84 +474,13 @@ class Parser(object):
                 slot_val = alt_slot_substring[1:].strip()
                 text = text.replace(alt_slot_substring, "").rstrip()
 
-        tokens = self._tokenize(text)
+        tokens = self.tokenizer.tokenize(text)
         rules = self._make_rules_from_tokens(tokens)
 
         if accept_slot_val:
             return (slot_val, rules)
         return rules
-
-    def _tokenize(self, text):
-        # Split string in list of words and raw units (as strings)
-        tokens = []
-        current = ""
-
-        escaped = False
-        inside_choice = False
-        for c in text:
-            # Manage escapement
-            if escaped:
-                current += c
-                escaped = False
-                continue
-            # elif c == pu.COMMENT_SYM_DEPRECATED:
-            #     break
-            elif inside_choice:
-                if c == pu.CHOICE_CLOSE_SYM:
-                    tokens.append(current + c)
-                    current = ""
-                    inside_choice = False
-                else:
-                    current += c
-            elif c == pu.ESCAPE_SYM:
-                escaped = True
-                current += c
-            elif c.isspace():
-                if not pu.is_unit_start(current) and not pu.is_choice(current):  # End of word
-                    if current != "":
-                        tokens.append(current)
-                    tokens.append(' ')
-                    current = ""
-                elif current == "" and \
-                        len(tokens) > 0 and tokens[-1] == ' ':
-                    continue  # Double space in-between words
-                else:
-                    current += c
-            elif c == pu.UNIT_CLOSE_SYM:
-                if pu.is_unit_start(current):
-                    tokens.append(current + c)
-                    current = ""
-                else:
-                    print_warn("Inconsistent use of the unit close symbol (" +
-                               pu.UNIT_CLOSE_SYM + ") at line " + str(self.line_nb) +
-                               " of file '" + self.in_file.name +
-                               "'. Consider escaping them if they are " +
-                               "not supposed to close a unit.\nThe generation will " +
-                               "however continue, considering it as a normal character.")
-                    current += c
-            elif c == pu.CHOICE_CLOSE_SYM:
-                print_warn("Inconsistent use of the choice close symbol (" +
-                           pu.CHOICE_CLOSE_SYM + ") at line " + str(self.line_nb) +
-                           " of file '" + self.in_file.name +
-                           "'. Consider escaping them if they are " +
-                           "not supposed to close a unit.\nThe generation will " +
-                           "however continue, considering it as a normal character.")
-                current += c
-            elif c == pu.CHOICE_OPEN_SYM:
-                if current != "":
-                    tokens.append(current)
-                inside_choice = True
-                current = c
-            elif pu.is_start_unit_sym(c) and current != pu.ALIAS_SYM and \
-                    current != pu.SLOT_SYM and current != pu.INTENT_SYM:
-                if current != "":
-                    tokens.append(current)
-                current = c
-            else:  # Any other character
-                current += c
-        if current != "":
-            tokens.append(current)
-        return tokens
+        
 
     def _make_rules_from_tokens(self, tokens):
         # [str] -> [RuleContent]
