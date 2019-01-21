@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [1.3.2] - 2018-01-21
+## [1.3.2] - 2019-01-21
 ### Added
 - Wiki explaining the whole syntax of template files and the usage of the program
 - Examples for the wiki
