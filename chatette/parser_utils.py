@@ -272,7 +272,7 @@ def find_nb_testing_examples_asked(intent_text):
 
 def remove_escapement(text):
     # pylint: disable=anomalous-backslash-in-string
-    """
+    r"""
     Returns `text` were all escaped characters
     have been removed their escapement character (e.g. `\?` becomes `?`).
     Note that escaped dollar sign ($) are kept escaped until generation

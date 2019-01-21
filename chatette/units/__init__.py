@@ -36,6 +36,9 @@ class Example(object):
     def __repr__(self):
         return "<'"+self.text+"' "+str(self.entities)+'>'
 
+    def __hash__(self):
+        return hash(self.text+str(self.entities))
+
 
 def may_change_leading_case(text):
     """
@@ -180,7 +183,7 @@ class UnitDefinition(object):
         if arg_value is not None and self.argument_identifier is not None:
             example_text = self.arg_regex.sub(arg_value, example_text)
             # pylint: disable=anomalous-backslash-in-string
-            example_text = example_text.replace("\$", "$")
+            example_text = example_text.replace(r"\$", "$")
 
         return Example(example_text, example_entities)
 
@@ -229,7 +232,7 @@ class UnitDefinition(object):
             for (i, ex) in enumerate(generated_examples):
                 ex.text = self.arg_regex.sub(arg_value, ex.text)
                 # pylint: disable=anomalous-backslash-in-string
-                generated_examples[i].text = ex.text.replace("\$", "$")
+                generated_examples[i].text = ex.text.replace(r"\$", "$")
 
         # Apply casegen
         if self.casegen and self.can_have_casegen():

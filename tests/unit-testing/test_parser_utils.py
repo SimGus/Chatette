@@ -34,12 +34,12 @@ class TestStripComments(object):
         assert strip_comments(s) == "other"
 
     def test_old_comments_escaped(self):
-        s = "test \; not a comment"
+        s = r"test \; not a comment"
         assert strip_comments(s) == s
-        s = "\;not a comment\t;comment"
+        s = r"\;"+"not a comment\t;comment"
         assert strip_comments(s) == "\;not a comment"
-        s = "\ttest\; no comment; comment"
-        assert strip_comments(s) == "\ttest\; no comment"
+        s = "\ttest"+r"\; no comment; comment"
+        assert strip_comments(s) == "\ttest"+r"\; no comment"
     
     def test_only_new_comments(self):
         strings = ["// comment", "//", "\t//", "//this is a comment",
@@ -58,12 +58,12 @@ class TestStripComments(object):
         assert strip_comments(s) == "other"
 
     def test_new_comments_escaped(self):
-        s = "test \// not a comment"
+        s = r"test \// not a comment"
         assert strip_comments(s) == s
-        s = "\/\/not a comment\t//comment"
+        s = r"\/\/"+"not a comment\t//comment"
         assert strip_comments(s) == "\/\/not a comment"
-        s = "\ttest\// no comment// comment"
-        assert strip_comments(s) == "\ttest\// no comment"
+        s = "\ttest"+r"\// no comment// comment"
+        assert strip_comments(s) == "\ttest"+r"\// no comment"
 
     def test_old_and_new_comments(self):
         s = "test // new comment ; old comment"
@@ -323,7 +323,7 @@ class TestRemoveEscapement(object):
         assert remove_escapement("\$") == "\$"
 
     def test_several_words_escaped(self):
-        s = "test\? with several \? escapements\|"
+        s = r"test\? with several \? escapements\|"
         assert remove_escapement(s) == "test? with several ? escapements|"
-        s = "\[another [test\?] with] escapement\$2"
+        s = r"\[another [test\?] with] escapement\$2"
         assert remove_escapement(s) == "[another [test?] with] escapement\$2"
