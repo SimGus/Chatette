@@ -8,92 +8,79 @@
 
 ![*Chatette* logo](https://raw.githubusercontent.com/SimGus/Chatette/master/public/images/chatette-logo.png)
 
-*Chatette* is a Python script that helps you generate training datasets for the [*Rasa NLU*](https://github.com/RasaHQ/rasa_nlu "rasa-nlu GitHub repository") Python package.
+*Chatette* is a Python script that generates training datasets for the Python package [*Rasa NLU*](https://github.com/RasaHQ/rasa_nlu "rasa-nlu GitHub repository") from template files.
 If you want to make large datasets of example data for Natural Language Understanding tasks without too much of a headache, *Chatette* is a project for you.
 
 Specifically, *Chatette* implements a Domain Specific Language (*DSL*) that allows you to define templates to generate a large number of sentences. Those sentences are then saved in the input format of *Rasa NLU*.
 
 The *DSL* used is a superset of the excellent project [*Chatito*](https://github.com/rodrigopivi/Chatito "Chatito's GitHub repository") created by Rodrigo Pimentel. (*Note: the DSL is actually a superset of Chatito v2.1.x for Rasa NLU, not for all possible adapters.*)
 
+# Installation
+To run *Chatette*, you will need to have [Python](https://www.python.org/) installed.
+*Chatette* works with both Python 2.7 and 3.x (>= 3.3).
+
+*Chatette* is available on [PyPI](https://pypi.org/project/chatette), and can thus be installed using `pip`:
+```sh
+pip install chatette
+```
+
+**Alternatively**, you can clone the [GitHub repository](https://github.com/SimGus/Chatette) and install the requirements:
+```sh
+pip install -r requirements/common.txt
+```
+You can then run the module by using the commands below in the cloned directory.
+
 # How to use *Chatette*?
 
 ## Input and output data
 
 The data that *Chatette* uses and generates is loaded from and saved to files. We thus have:
-- The **input file** containing the templates.
+- The **input file(s)** containing the templates.
+  There is no need for a specific file extension. The syntax of the *DSL* to make those templates is described on the [wiki](https://github.com/SimGus/Chatette/wiki).
 
-   There is no need for a specific file extension. The syntax of the *DSL* to make those templates is described in the [syntax specification](syntax-specs.md).
-   Note that templates can be divided into several files, with one *master* file linking them all together (described in the [syntax specification](syntax-specs.md)).
-
-- The **output file**, a *JSON* file containing data that can be directly fed to *Rasa NLU*.
+- The **output file**, a *JSON* file containing data that can be directly fed to *Rasa NLU*. It is also possible to use a *JSONL* format in the output.
 
 ## Running *Chatette*
-
-To run *Chatette*, you will need to have [Python](https://www.python.org/) installed.
-*Chatette* works with both Python 2.x and 3.x.
-
-Install *Chatette* via `pip`:
-```bash
-pip install chatette
-```
-
-(Alternatively, you can clone the [GitHub repository](https://github.com/SimGus/Chatette) and run the module by using the commands below in the cloned directory.)
-
-Then simply run the following command:
+Once installed, run the following command:
 ```bash
 python -m chatette <path_to_template>
 ```
-or
-```bash
-python3 -m chatette <path_to_template>
-```
+where `python` is your Python interpreter (some operating systems use `python3` as the alias to the Python 3.x interpreter).
 
 You can specify the name of the output file as follows:
 ```bash
 python -m chatette <path_to_template> -o <output_directory_path>
 ```
-or
-```bash
-python3 -m chatette <path_to_template> --output <output_directory_path>
-```
-The output file(s) will then be saved in numbered `.json` files in `<output_directory_path>/train` and `<output_directory_path>/test` (`<output_directory_path>` is specified with respect to the directory from which the script is being executed). If you didn't specify a path for the output directory, the default one is `output`.
 
-### Other program arguments
-A bunch of more specific program arguments exist to allow for a more controlled execution of the program.
-Here is a list of those arguments:
+`<output_directory_path>` is specified relatively to the directory from which the script is being executed.
+The output file(s) will then be saved in numbered `.json` files in `<output_directory_path>/train` and `<output_directory_path>/test`. If you didn't specify a path for the output directory, the default one is `output`.
 
-- `-v` or `--version`: prints the version number of the program.
-
-- `-s` or `--seed` followed by any string (without spaces): sets the random generator seed to the string that follows the argument.
-If you execute Chatette twice with the same seed on the exact same template, the generated output(s) is guaranteed to be exactly the same on both executions.
-
-- `-l` or `--local`: changes the output path to be specified with respect to the directory in which the template file is, rather than the current working directory.
-
-- `-a` or `--adapter`: changes which adapter will be used to write the output (defaults to the *Rasa NLU* adapter). Currently, two adapters exist: one to produce files that can be used as input to *Rasa NLU* and one that makes `.jsonl` files containing *JSON* representations of the examples. The possible values for this arguments are thus `rasa` or `jsonl`.
+Other program arguments and are described [in the wiki](https://github.com/SimGus/Chatette/wiki).
 
 # *Chatette* vs *Chatito*?
 
-A perfectly legitimate question could be:
+A perfectly legitimate question is:
 > Why does *Chatette* exist when *Chatito* already fulfills the same purposes?
 
-The reason comes from the different goals of the two projects:
+The two projects actually have different goals:
 
 *Chatito* aims at a generic but powerful *DSL*, that should stay simple. While it is perfectly fine for small projects, when projects get larger, this simplicity may become a burden: your template file becomes overwhelmingly large, to the point you get lost inside it.
 
-*Chatette* defines a more complex *DSL* to be able to manage larger projects. Here is a non-exhaustive list of features that can help with that:
+*Chatette* defines a more complex *DSL* to be able to manage larger projects and tries to stay as interoperable with *Chatito* as possible.
+Here is a non-exhaustive list of features *Chatette* has and that can help manage large projects:
 
 - Ability to break down templates into multiple files
-- ~~Support for comments inside template files~~ (*Note: this is now possible in Chatito v2.1.x too*)
-- Word group syntax that allows to define parts of sentences that might not be generated in every example
+- Word group syntax that allows to modify the generation behavior of parts of sentences
 - Possibility to specify the probability of generating some parts of the sentences
+- Random generation of some parts of the sentences linked to that of other parts
 - Choice syntax to prevent copy-pasting rules with only a few changes
 - Ability to define the value of each slot whatever the generated example
 - Syntax for generating words with different case for the leading letter
-- Argument support so that some templates may be filled by given words
-- Indentation must simply be somewhat coherent
+- Argument support so that some templates may be filled by different strings in different situations
+- Indentation is permissive and must only be somewhat coherent
 - Support for synonyms
 
-As previously mentioned, the *DSL* used by *Chatette* is a superset of the one used by *Chatito*. This means that input files used for *Chatito* are completely usable with *Chatette* (not the other way around). Hence, it is easy to get from *Chatito* to *Chatette*.
+As the *Chatette*'s DSL is a superset of *Chatito*'s one, input files used for *Chatito* are completely usable with *Chatette* (not the other way around). Hence, it is easy to get from *Chatito* to *Chatette*.
 
 As an example, this *Chatito* data:
 ```
@@ -125,11 +112,11 @@ As an example, this *Chatito* data:
 @[toilet#plural]
     toilets
 ```
-could be directly given as input to *Chatette*, but this *Chatette* template would produce the same thing:
+could be directly given as input to *Chatette*, but this *Chatette* template would produce the same results:
 ```
 // This template defines different ways to ask for the location of toilets (Chatette version)
 %[&ask_toilet](3)
-    ~[sorry?] ~[tell me] where the {@[toilet#singular] is/@[toilet#plural] are} [please?]\?
+    ~[sorry?] ~[tell me] where the {@[toilet#singular] is/@[toilet#plural] are} [please?]?
 
 ~[sorry]
     sorry
@@ -154,8 +141,7 @@ Beware that, as always with machine learning, having too much data may cause you
 Note that *Chatette* is named after *Chatito*, as *-ette* in French could be translated to *-ita* or *-ito* in Spanish.
 
 # Development
-
-Install development requirements:
+For developers, you can clone the [repo](https://github.com/SimGus/Chatette) and install the development requirements:
 
 ```pip install -r requirements/develop.txt```
 
@@ -171,7 +157,13 @@ Run pytest:
 
 ```tox -e pytest```
 
-# Creators
+You can also install the module as editable using `pip`:
+```sh
+pip install -e <path-to-cloned-repo>
+```
+You can then run *Chatette* as if you installed it from PyPI.
+
+# Credits
 ## Author and maintainer
 - [SimGus](https://github.com/SimGus)
 
