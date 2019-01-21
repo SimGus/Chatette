@@ -1,4 +1,6 @@
-# *Chatette* dataset generator
+# *Chatette* dataset generator &nbsp;&nbsp;&nbsp;&nbsp; [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Chatette%3A+an+open-source+Python+package+to+easily+generate+datasets+for+Rasa+NLU&url=https://pypi.org/project/chatette&hashtags=rasa,rasaNLU,chatbots,conversationalAI)
+
+
 
 <!--[![Github All Releases](https://img.shields.io/github/downloads/SimGus/Chatette/total.svg)](https://github.com/SimGus/Chatette)-->
 [![PyPI package](https://badge.fury.io/py/chatette.svg)](https://badge.fury.io/py/chatette)
