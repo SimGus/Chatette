@@ -6,7 +6,7 @@
 - [ ] add a way to specify a rule on several consecutive lines
 
 - [ ] add an adapter to output raw lists of questions (rather than a JSON file)
-- [ ] add an adapter for *Snips*
+- [ ] add an adapter for *Snips*, *DialogFlow* and *IBM Watson*
 - [ ] add default aliases and slots
 
 - [ ] add opposite `randgen` names
