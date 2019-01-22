@@ -17,6 +17,7 @@
 - [ ] add a flag to enable/disable the slot = slot synonym behavior (cf. https://github.com/rodrigopivi/Chatito/issues/50)
 - [ ] add a way to make some generation mandatory in the training set, test set or both (cf. https://github.com/rodrigopivi/Chatito/issues/51)
 - [ ] add custom annotations as *Chatito* does
+- [ ] add support for any sub-rule's modifier for choices
 
 - [ ] add regex to rasa JSON file
 
