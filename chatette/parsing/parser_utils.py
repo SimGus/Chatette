@@ -23,6 +23,11 @@ INTENT_SYM = '%'
 UNIT_OPEN_SYM = '['  # This shouldn't be changed
 UNIT_CLOSE_SYM = ']'  # id.
 
+ANNOTATION_OPEN_SYM = '('
+ANNOTATION_CLOSE_SYM = ')'
+ANNOTATION_SEP = ','
+ANNOTATION_ASSIGNMENT_SYM = ':'
+
 CHOICE_OPEN_SYM = r'{'
 CHOICE_CLOSE_SYM = r'}'
 CHOICE_SEP = '/'  # TODO: deprecate and rather use '|'
@@ -112,6 +117,8 @@ class LineType(Enum):
 
 def strip_comments(text):
     """Returns the text without the comments (and right stripped)."""
+    if text is None or text == "":
+        return None
     match = PATTERN_COMMENT.search(text)
     match_deprecated = PATTERN_COMMENT_DEPRECATED.search(text)
     if match_deprecated is not None:
@@ -127,10 +134,6 @@ def strip_comments(text):
         if match.start() <= match_deprecated.start():
             return text[:match.start()].rstrip()
         return text[:match_deprecated.start()].rstrip()
-
-def is_irrelevant_line(line):
-     """Returns `True` if the line `line` (a string) should be ignored."""
-     return strip_comments(line) == ''
 
 
 def get_top_level_line_type(line, stripped_line):

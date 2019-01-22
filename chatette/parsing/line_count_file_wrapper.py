@@ -18,6 +18,8 @@ class LineCountFileWrapper(object):
 
     def close(self):
         return self.f.close()
+    def closed(self):
+        return self.f.closed
 
     def readline(self):
         self.line_nb += 1

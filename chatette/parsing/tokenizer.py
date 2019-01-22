@@ -5,7 +5,7 @@ Contains the tokenizer used by the parser.
 
 import io, os
 
-from chatette.utils import print_warn
+from chatette.utils import print_warn, print_DBG
 import chatette.parsing.parser_utils as pu
 from chatette.parsing.line_count_file_wrapper import LineCountFileWrapper
 
@@ -17,6 +17,8 @@ class Tokenizer(object):
         if master_filename is not None:
             self.master_file_dir = os.path.dirname(master_filename)
             self.current_file = LineCountFileWrapper(master_filename)
+
+        self._expecting_definition = False  # `True` after a declaration initiator
 
     def open_file(self, filename):
         """
@@ -30,7 +32,8 @@ class Tokenizer(object):
 
     def close_files(self):
         for f in self.opened_files:
-            f.close()
+            if not f.closed:
+                f.close()
         if self.current_file is not None and not self.current_file.closed:
             self.current_file.close()
 
@@ -44,6 +47,12 @@ class Tokenizer(object):
 
     def get_file_information(self):
         return (self.current_file.name, self.current_file.line_nb)
+
+
+    def fail(self, exception):
+        """Closes all files before raising an exception."""
+        self.close_files()
+        raise exception
 
 
     def read_line(self):
@@ -69,10 +78,10 @@ class Tokenizer(object):
         An irrelevant line is an empty or comment line.
         """
         while True:
-            line_str = self.read_line()
+            line_str = pu.strip_comments(self.read_line())
             if line_str is None:
                 break
-            if pu.is_irrelevant_line(line_str):
+            if line_str == "":
                 continue
             yield self.new_tokenize(line_str)
 
@@ -85,7 +94,188 @@ class Tokenizer(object):
         `["~", "[", "alias", "?", "]", " ", "word.", "[", "&", "group", "]"]`.
         @pre: `text` is not `None` or ''.
         """
-        return text.split()
+        print_DBG("tokenizing:"+text)
+        tokens = []
+        current_token = ""
+
+        def store_current_token():
+            if current_token != "":
+                tokens.append(current_token)
+            return ""
+
+        indentation = Tokenizer._get_indentation(text)
+        if indentation is not None:
+            tokens.append(indentation)
+            text = text.lstrip()
+
+        if indentation is None and text[0] == pu.INCLUDE_FILE_SYM:
+            return [pu.INCLUDE_FILE_SYM, text[1:]]
+        
+        nb_closing_brackets_expected = 0  # For unit declaration initiators and references
+        expecting_percent_gen = False  # True in a sub-rule after a `?`
+        after_unit_declaration = False
+        inside_annotation = False  # For parentheses after declaration initiator
+        inside_choice = False
+        next_char_escaped = False
+
+        for (i,c) in enumerate(text):
+            # Escapement
+            if next_char_escaped:
+                current_token += c
+                next_char_escaped = False
+            elif c == pu.ESCAPE_SYM:
+                next_char_escaped = True
+            # Unit special characters
+            elif c == pu.ALIAS_SYM:
+                current_token = store_current_token()
+                tokens.append(c)
+            elif c == pu.SLOT_SYM:
+                current_token = store_current_token()
+                tokens.append(c)
+            elif c == pu.INTENT_SYM:
+                current_token = store_current_token()
+                tokens.append(c)
+            # Unit brackets
+            elif c == pu.UNIT_OPEN_SYM:
+                current_token = store_current_token()
+                tokens.append(c)
+                nb_closing_brackets_expected += 1
+            elif c == pu.UNIT_CLOSE_SYM:
+                if nb_closing_brackets_expected < 1:
+                    self.fail(SyntaxError("Inconsistent use of unit brackets "+
+                                          "(too many closing unit symbols '"+
+                                          pu.UNIT_CLOSE_SYM+"').",
+                                          (self.current_file.name,
+                                          self.current_file.line_nb, i, text)))
+                current_token = store_current_token()
+                tokens.append(c)
+                nb_closing_brackets_expected -= 1
+                if indentation is None and nb_closing_brackets_expected == 0:
+                    after_unit_declaration = True
+            # Choice
+            elif c == pu.CHOICE_OPEN_SYM:
+                if inside_choice:
+                    self.fail(SyntaxError("Nested choices are not supported. "+
+                                          "Did you mean to escape it ('"+
+                                          pu.ESCAPE_SYM+pu.CHOICE_OPEN_SYM+
+                                          "' instead of '"+pu.CHOICE_OPEN_SYM+
+                                          "'?",
+                                          (self.current_file.name,
+                                          self.current_file.line_nb, i, text)))
+                current_token = store_current_token()
+                tokens.append(c)
+                inside_choice = True
+            elif c == pu.CHOICE_CLOSE_SYM:
+                if not inside_choice:
+                    self.fail(SyntaxError("Cannot close a choice before "+
+                                          "opening it. Did you mean to escape "+
+                                          "it ('"+pu.ESCAPE_SYM+
+                                          pu.CHOICE_CLOSE_SYM+"' instead of '"+
+                                          pu.CHOICE_CLOSE_SYM+"'?"),
+                                          (self.current_file.name,
+                                          self.current_file.line_nb, i, text))
+                current_token = store_current_token()
+                tokens.append(c)
+                inside_choice = False
+            elif inside_choice and c == pu.CHOICE_SEP:
+                current_token = store_current_token()
+                tokens.append(c)
+            # Inside unit
+            elif nb_closing_brackets_expected > 0 and c == pu.VARIATION_SYM:
+                current_token = store_current_token()
+                tokens.append(c)
+            elif nb_closing_brackets_expected > 0 and c == pu.RAND_GEN_SYM:
+                current_token = store_current_token()
+                tokens.append(c)
+                expecting_percent_gen = True
+            elif nb_closing_brackets_expected > 0 and expecting_percent_gen and c == pu.PERCENT_GEN_SYM:
+                current_token = store_current_token()
+                tokens.append(c)
+                expecting_percent_gen = False
+            elif nb_closing_brackets_expected > 0 and c == pu.CASE_GEN_SYM:
+                current_token = store_current_token()
+                tokens.append(c)
+            elif nb_closing_brackets_expected > 0 and c == pu.ARG_SYM:
+                current_token = store_current_token()
+                tokens.append(c)
+            # Inside choice
+            elif inside_choice and c == pu.RAND_GEN_SYM:
+                current_token = store_current_token()
+                tokens.append(c)
+            elif inside_choice and c == pu.CASE_GEN_SYM:
+                current_token = store_current_token()
+                tokens.append(c)
+            # Slot alternative value
+            elif nb_closing_brackets_expected == 0 and c == pu.ALT_SLOT_VALUE_NAME_SYM:
+                current_token = store_current_token()
+                tokens.append(c)
+            # Annotation
+            elif after_unit_declaration and c == pu.ANNOTATION_OPEN_SYM:
+                current_token = store_current_token()
+                tokens.append(c)
+                inside_annotation = True
+                after_unit_declaration = False
+            elif inside_annotation and c == pu.ANNOTATION_CLOSE_SYM:
+                current_token = store_current_token()
+                tokens.append(c)
+                inside_annotation = False
+            elif inside_annotation and c == pu.ANNOTATION_ASSIGNMENT_SYM:
+                current_token = store_current_token()
+                tokens.append(c)
+            elif inside_annotation and c == pu.ANNOTATION_SEP:
+                current_token = store_current_token()
+                tokens.append(c)
+            # Spaces
+            elif c.isspace():
+                if not current_token.isspace():
+                    store_current_token()
+                    current_token = c
+            # Other
+            else:
+                if current_token.isspace() and not c.isspace():
+                    current_token = store_current_token()
+                current_token += c
+                if after_unit_declaration:
+                    after_unit_declaration = False
+        store_current_token()
+
+        if nb_closing_brackets_expected > 0:
+            self.fail(SyntaxError("Line ends with open unit(s).",
+                                  (self.current_file.name,
+                                   self.current_file.line_nb, 0, text)))
+        if inside_annotation:
+            self.fail(SyntaxError("Line ends with an open annotation.",
+                                  (self.current_file.name,
+                                   self.current_file.line_nb, 0, text)))
+        if inside_choice:
+            self.fail(SyntaxError("Line ends with open choice(s).",
+                                  (self.current_file.name,
+                                   self.current_file.line_nb, 0, text)))
+        if next_char_escaped:
+            self.fail(SyntaxError("Line ends with unexpected escapement '"+
+                                  pu.ESCAPE_SYM+"'.",
+                                  (self.current_file.name,
+                                   self.current_file.line_nb, 0, text)))
+        
+        return tokens
+
+
+
+    @staticmethod
+    def _get_indentation(text):
+        """
+        Returns a string that is made
+        of all the spaces at the beginning of `text`.
+        """
+        i = 0
+        length = len(text)
+        indentation = ""
+        while i < length and text[i].isspace():
+            indentation += text[i]
+            i += 1
+        if indentation != "":
+            return indentation
+        return None
 
 
     def tokenize(self, text, line_nb=None, in_file_name=None):

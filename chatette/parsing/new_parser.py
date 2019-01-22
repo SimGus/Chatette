@@ -18,3 +18,4 @@ class Parser(object):
     def parse(self):
         for token_line in self.tokenizer.next_tokenized_line():
             print(self.tokenizer.get_file_information(), token_line)
+        self.tokenizer.close_files()
