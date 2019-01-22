@@ -1,15 +1,92 @@
 """
-Module `chatette.tokenizer`
+Module `chatette.parsing.tokenizer`
 Contains the tokenizer used by the parser.
 """
 
+import io, os
+
 from chatette.utils import print_warn
 import chatette.parsing.parser_utils as pu
+from chatette.parsing.line_count_file_wrapper import LineCountFileWrapper
 
 
 class Tokenizer(object):
-    def __init__(self):
-        pass
+    def __init__(self, master_filename=None):  # TODO remove default values
+        self.current_file = None
+        self.opened_files = []
+        if master_filename is not None:
+            self.master_file_dir = os.path.dirname(master_filename)
+            self.current_file = LineCountFileWrapper(master_filename)
+
+    def open_file(self, filename):
+        """
+        Stores the current file for future use and opens `filename`.
+        `filename` is given relatively to the master file.
+        """
+        if self.current_file is not None:
+            self.opened_files.append(self.current_file)
+        filepath = os.path.join(self.master_file_dir, filename)
+        self.current_file = LineCountFileWrapper(filepath)
+
+    def close_files(self):
+        for f in self.opened_files:
+            f.close()
+        if self.current_file is not None and not self.current_file.closed:
+            self.current_file.close()
+
+    def close_current_file(self):
+        if self.current_file is not None:
+            self.current_file.close()
+        if len(self.opened_files) > 0:
+            self.current_file = self.opened_files.pop()
+        else:
+            self.current_file = None
+
+    def get_file_information(self):
+        return (self.current_file.name, self.current_file.line_nb)
+
+
+    def read_line(self):
+        """
+        Reads a line of `self.current_file` and returns it without the trailing
+        new line (`\n`).
+        If the file was entirely read, closes it and continues to read the
+        file that was previously being read (returning its next line).
+        Returns `None` if there is no file left to read.
+        """
+        line = self.current_file.readline()
+        while line == '':  # EOF
+            self.close_current_file()
+            if self.current_file is None:  # No more files to read
+                return None
+            else:
+                line = self.current_file.readline()
+        return line.rstrip()
+
+    def next_tokenized_line(self):
+        """
+        Yields the next relevant line of the current file as a list of tokens.
+        An irrelevant line is an empty or comment line.
+        """
+        while True:
+            line_str = self.read_line()
+            if line_str is None:
+                break
+            if pu.is_irrelevant_line(line_str):
+                continue
+            yield self.new_tokenize(line_str)
+
+
+    def new_tokenize(self, text):
+        """
+        Returns a tokenized version of the string `text`,
+        i.e. a list of strings that make up words or special characters.
+        The string `~[alias?] word. [&group]` would be tokenized into
+        `["~", "[", "alias", "?", "]", " ", "word.", "[", "&", "group", "]"]`.
+        @pre: `text` is not `None` or ''.
+        """
+        return text.split()
+
 
     def tokenize(self, text, line_nb=None, in_file_name=None):
         """Splits a string in a list of tokens (as strings)"""

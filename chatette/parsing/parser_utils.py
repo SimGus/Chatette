@@ -128,6 +128,10 @@ def strip_comments(text):
             return text[:match.start()].rstrip()
         return text[:match_deprecated.start()].rstrip()
 
+def is_irrelevant_line(line):
+     """Returns `True` if the line `line` (a string) should be ignored."""
+     return strip_comments(line) == ''
+
 
 def get_top_level_line_type(line, stripped_line):
     """
