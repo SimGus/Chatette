@@ -413,11 +413,11 @@ class Parser(object):
 
     def get_definition(self, def_name, unit_type):
         def_list = None
-        if unit_type == pu.Unit.alias:
+        if unit_type == pu.SubRuleType.alias:
             def_list = self.alias_definitions
-        elif unit_type == pu.Unit.slot:
+        elif unit_type == pu.SubRuleType.slot:
             def_list = self.slot_definitions
-        elif unit_type == pu.Unit.intent:
+        elif unit_type == pu.SubRuleType.intent:
             def_list = self.intent_definitions
         else:
             raise ValueError("Tried to get a definition with wrong type (expected" +
@@ -425,9 +425,9 @@ class Parser(object):
 
         if def_name not in def_list:
             type_str = "alias"
-            if unit_type == pu.Unit.slot:
+            if unit_type == pu.SubRuleType.slot:
                 type_str = "slot"
-            elif unit_type == pu.Unit.intent:
+            elif unit_type == pu.SubRuleType.intent:
                 type_str = "intent"
             raise ValueError("Couldn't find a definition for " + type_str + " '" +
                              def_name + "' (did you mean to use the word group "+
@@ -497,7 +497,7 @@ class Parser(object):
                 continue
 
             unit_type = pu.get_unit_type(string)
-            if unit_type == pu.Unit.word_group:
+            if unit_type == pu.SubRuleType.word_group:
                 (name, arg_value, variation, randgen, percentgen, casegen) = \
                     self.parse_unit(string)
                 if name is None:
@@ -514,12 +514,12 @@ class Parser(object):
                                                   casegen=casegen,
                                                   randgen=randgen,
                                                   percentage_gen=percentgen))
-            elif unit_type == pu.Unit.choice:
+            elif unit_type == pu.SubRuleType.choice:
                 choice = self.parse_choice(string, not no_leading_space)
                 if choice is not None:
                     rules.append(self.parse_choice(string,
                                                    not no_leading_space))
-            elif unit_type == pu.Unit.alias:
+            elif unit_type == pu.SubRuleType.alias:
                 (name, arg_value, variation, randgen, percentgen, casegen) = \
                     self.parse_unit(string)
                 if name is None:
@@ -529,7 +529,7 @@ class Parser(object):
                 rules.append(AliasRuleContent(name, not no_leading_space,
                                               variation, arg_value, casegen,
                                               randgen, percentgen, self))
-            elif unit_type == pu.Unit.slot:
+            elif unit_type == pu.SubRuleType.slot:
                 (name, arg_value, variation, randgen, percentgen, casegen) = \
                     self.parse_unit(string)
                 if name is None:
@@ -539,7 +539,7 @@ class Parser(object):
                 rules.append(SlotRuleContent(name, not no_leading_space,
                                              variation, arg_value, casegen,
                                              randgen, percentgen, self))
-            else:  # Unit.intent
+            else:  # SubRuleType.intent
                 (name, arg_value, variation, randgen, percentgen, casegen) = \
                     self.parse_unit(string)
                 if name is None:

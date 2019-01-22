@@ -18,7 +18,7 @@ class Tokenizer(object):
             self.master_file_dir = os.path.dirname(master_filename)
             self.current_file = LineCountFileWrapper(master_filename)
 
-        self._expecting_definition = False  # `True` after a declaration initiator
+        self._last_read_line = None
 
     def open_file(self, filename):
         """
@@ -53,6 +53,14 @@ class Tokenizer(object):
         """Closes all files before raising an exception."""
         self.close_files()
         raise exception
+    def syntax_error(self, message, line=None, line_index=0):
+        """Makes an exception to be raised after closing all files."""
+        if line is None:
+            line = self._last_read_line
+        exception = SyntaxError(message, (self.current_file.name,
+                                          self.current_file.line_nb,
+                                          line_index, line))
+        self.fail(exception)
 
 
     def read_line(self):
@@ -68,9 +76,10 @@ class Tokenizer(object):
             self.close_current_file()
             if self.current_file is None:  # No more files to read
                 return None
-            else:
-                line = self.current_file.readline()
-        return line.rstrip()
+            line = self.current_file.readline()
+        line = line.rstrip()
+        self._last_read_line = line
+        return line
 
     def next_tokenized_line(self):
         """
@@ -85,7 +94,6 @@ class Tokenizer(object):
                 continue
             yield self.new_tokenize(line_str)
 
-
     def new_tokenize(self, text):
         """
         Returns a tokenized version of the string `text`,
@@ -94,7 +102,6 @@ class Tokenizer(object):
         `["~", "[", "alias", "?", "]", " ", "word.", "[", "&", "group", "]"]`.
         @pre: `text` is not `None` or ''.
         """
-        print_DBG("tokenizing:"+text)
         tokens = []
         current_token = ""
 
@@ -142,11 +149,9 @@ class Tokenizer(object):
                 nb_closing_brackets_expected += 1
             elif c == pu.UNIT_CLOSE_SYM:
                 if nb_closing_brackets_expected < 1:
-                    self.fail(SyntaxError("Inconsistent use of unit brackets "+
-                                          "(too many closing unit symbols '"+
-                                          pu.UNIT_CLOSE_SYM+"').",
-                                          (self.current_file.name,
-                                          self.current_file.line_nb, i, text)))
+                    self.syntax_error("Inconsistent use of unit brackets "+
+                                      "(too many closing unit symbols '"+
+                                      pu.UNIT_CLOSE_SYM+"').", text, i)
                 current_token = store_current_token()
                 tokens.append(c)
                 nb_closing_brackets_expected -= 1
@@ -155,25 +160,22 @@ class Tokenizer(object):
             # Choice
             elif c == pu.CHOICE_OPEN_SYM:
                 if inside_choice:
-                    self.fail(SyntaxError("Nested choices are not supported. "+
-                                          "Did you mean to escape it ('"+
-                                          pu.ESCAPE_SYM+pu.CHOICE_OPEN_SYM+
-                                          "' instead of '"+pu.CHOICE_OPEN_SYM+
-                                          "'?",
-                                          (self.current_file.name,
-                                          self.current_file.line_nb, i, text)))
+                    self.syntax_error("Nested choices are not supported. "+
+                                      "Did you mean to escape it ('"+
+                                      pu.ESCAPE_SYM+pu.CHOICE_OPEN_SYM+
+                                      "' instead of '"+pu.CHOICE_OPEN_SYM+"'?",
+                                      text, i)
                 current_token = store_current_token()
                 tokens.append(c)
                 inside_choice = True
             elif c == pu.CHOICE_CLOSE_SYM:
                 if not inside_choice:
-                    self.fail(SyntaxError("Cannot close a choice before "+
-                                          "opening it. Did you mean to escape "+
-                                          "it ('"+pu.ESCAPE_SYM+
-                                          pu.CHOICE_CLOSE_SYM+"' instead of '"+
-                                          pu.CHOICE_CLOSE_SYM+"'?"),
-                                          (self.current_file.name,
-                                          self.current_file.line_nb, i, text))
+                    self.syntax_error("Cannot close a choice before "+
+                                      "opening it. Did you mean to escape "+
+                                      "it ('"+pu.ESCAPE_SYM+
+                                      pu.CHOICE_CLOSE_SYM+"' instead of '"+
+                                      pu.CHOICE_CLOSE_SYM+"'?",
+                                      text, i)
                 current_token = store_current_token()
                 tokens.append(c)
                 inside_choice = False
@@ -240,22 +242,14 @@ class Tokenizer(object):
         store_current_token()
 
         if nb_closing_brackets_expected > 0:
-            self.fail(SyntaxError("Line ends with open unit(s).",
-                                  (self.current_file.name,
-                                   self.current_file.line_nb, 0, text)))
+            self.syntax_error("Line ends with open unit(s).", text, i)
         if inside_annotation:
-            self.fail(SyntaxError("Line ends with an open annotation.",
-                                  (self.current_file.name,
-                                   self.current_file.line_nb, 0, text)))
+            self.syntax_error("Line ends with an open annotation.", text, i)
         if inside_choice:
-            self.fail(SyntaxError("Line ends with open choice(s).",
-                                  (self.current_file.name,
-                                   self.current_file.line_nb, 0, text)))
+            self.syntax_error("Line ends with open choice(s).", text, i)
         if next_char_escaped:
-            self.fail(SyntaxError("Line ends with unexpected escapement '"+
-                                  pu.ESCAPE_SYM+"'.",
-                                  (self.current_file.name,
-                                   self.current_file.line_nb, 0, text)))
+            self.syntax_error("Line ends with unexpected escapement '"+
+                              pu.ESCAPE_SYM+"'.", text, i)
         
         return tokens
 

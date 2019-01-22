@@ -207,17 +207,17 @@ class TestGetUnitType(object):
     
     def test_units(self):
         unit = "[unit]"
-        assert get_unit_type(unit) == Unit.word_group
+        assert get_unit_type(unit) == SubRuleType.word_group
         unit = "[word group]"
-        assert get_unit_type(unit) == Unit.word_group
+        assert get_unit_type(unit) == SubRuleType.word_group
         unit = "~[alias] //comment"
-        assert get_unit_type(unit) == Unit.alias
+        assert get_unit_type(unit) == SubRuleType.alias
         unit = "@[slot]"
-        assert get_unit_type(unit) == Unit.slot
+        assert get_unit_type(unit) == SubRuleType.slot
         unit = "%[intent]"
-        assert get_unit_type(unit) == Unit.intent
+        assert get_unit_type(unit) == SubRuleType.intent
         unit = "{choice/choice 2?}"
-        assert get_unit_type(unit) == Unit.choice
+        assert get_unit_type(unit) == SubRuleType.choice
         
 
 

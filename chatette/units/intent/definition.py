@@ -11,7 +11,7 @@ class IntentDefinition(UnitDefinition):
     containing all the rules it can generate from.
     """
 
-    def __init__(self, name, rules=None, arg=None, casegen=False):
+    def __init__(self, name, rules=None, arg=[], casegen=False):
         super(IntentDefinition, self).__init__(name, rules=rules, arg=arg, casegen=casegen)
 
         if rules is None:
