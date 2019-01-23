@@ -20,12 +20,13 @@ class Parser(object):
         self.tokenizer = Tokenizer(master_filename)
         
         self._expecting_rule = False
-        self._current_parsed_declaration = None
-        self._expected_indentation = None
+        self._currently_parsed_declaration = None  # 3-tuple
+        self._expected_indentation = None  # str
 
         self.alias_definitions = dict()
         self.slot_definitions = dict()
         self.intent_definitions = dict()
+
 
     def parse(self):
         """
@@ -35,13 +36,13 @@ class Parser(object):
         """
         print_DBG("Parsing master file: "+self.tokenizer.get_file_information()[0])
         for token_line in self.tokenizer.next_tokenized_line():
-            print("line:",token_line)
             if not token_line[0].isspace():
-                self.parse_declaration_initiator(token_line)
+                self._parse_declaration_initiator(token_line)
                 self._expecting_rule = True
+                self._expected_indentation = None
             else:
-                # self.parse_rule(token_line)
-                self._expecting_rule = False  # Not expecting rule but rule allowed
+                self._parse_rule(token_line)
+                self._expecting_rule = False  # Not expecting but still allowed
         self.tokenizer.close_files()
 
         # TEMP
@@ -49,7 +50,7 @@ class Parser(object):
         print("slots:",self.slot_definitions)
         print("intents:",self.intent_definitions)
     
-    def parse_declaration_initiator(self, token_line):
+    def _parse_declaration_initiator(self, token_line):
         """Parses a line (as tokens) that contains a declaration initiator."""
         if self._expecting_rule:
             self.tokenizer.syntax_error("Expected a generation rule, got a "+
@@ -75,6 +76,7 @@ class Parser(object):
                 nb_examples_asked = pu.find_nb_examples_asked(annotation_interior)
         
         self.create_unit(unit_type, unit_name, modifiers, nb_examples_asked)
+        self._currently_parsed_declaration = (unit_type, unit_name, modifiers)
     
     def create_unit(self, unit_type, unit_name, modifiers,
                     nb_examples_asked=None):
@@ -109,4 +111,28 @@ class Parser(object):
         else:  # Not allowed anymore
             self.tokenizer.syntax_error("The "+unit_type.name+" "+unit_name+
                                         " was declared several times.")
-        
+
+
+    def _parse_rule(self, tokens):
+        """
+        Parses the list of string `tokens` that represents a rule in a
+        template file. Add the rule to the declaration currently being parsed.
+        """
+        # TODO check rule is valid
+        print("PARSING RULE:",tokens)
+
+        self._check_indentation(tokens[0])
+        for sub_rule_tokens in pu.next_sub_rule_tokens(tokens[1:]):
+            print(sub_rule_tokens)
+
+    def _check_indentation(self, indentation):
+        """
+        Checks that the str `indentation` is the same
+        as the expected indentation from the last parsed rule.
+        Raises a `SyntaxError` if it isn't.
+        """
+        if self._expected_indentation is None:
+            self._expected_indentation = indentation
+            return
+        if indentation != self._expected_indentation:
+            self.tokenizer.syntax_error("Inconsistent indentation.")

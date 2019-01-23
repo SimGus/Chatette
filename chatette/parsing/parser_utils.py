@@ -159,6 +159,10 @@ def is_special_sym(text):
            text == PERCENT_GEN_SYM or text == CASE_GEN_SYM or \
            text == CASE_GEN_SYM or text == ARG_SYM
 
+def is_unit_type_sym(text):
+    """Returns `True` if `text` is a unit special symbol (`~`, `@` or `%`)."""
+    return text == ALIAS_SYM or text == SLOT_SYM or text == INTENT_SYM
+
 
 def get_unit_type_from_sym(sym):
     """
@@ -445,6 +449,42 @@ def find_name_and_modifiers(tokens_unit_inside):
     return {"name": unit_name, "casegen": casegen, "randgen": randgen_name,
             "percentgen": percentgen, "variation": variation,
             "argument": argument}
+
+
+def next_sub_rule_tokens(tokens):
+    """
+    Yields the next sub-rule from a rule
+    represented as tokens (i.e. a list of str).
+    @pre: `tokens` represents a valid rule.
+    """
+    current_sub_rule = []
+    stop_with_char = None
+    reading_sub_rule = False
+    for token in tokens:
+        if reading_sub_rule:
+            if token == stop_with_char:
+                current_sub_rule.append(token)
+                yield current_sub_rule
+                current_sub_rule = []
+                stop_with_char = None
+                reading_sub_rule = False
+            else:
+                current_sub_rule.append(token)
+        else:  # Looking for the start of a sub-rule
+            if is_start_unit_sym(token):  # Unit reference starting point
+                current_sub_rule.append(token)
+                reading_sub_rule = True
+                stop_with_char = UNIT_CLOSE_SYM
+            elif token == UNIT_OPEN_SYM:  # Word group starting point
+                current_sub_rule.append(token)
+                reading_sub_rule = True
+                stop_with_char = UNIT_CLOSE_SYM
+            elif token == CHOICE_OPEN_SYM:  # Word group starting point
+                current_sub_rule.append(token)
+                reading_sub_rule = True
+                stop_with_char = CHOICE_CLOSE_SYM
+            else:  # Word
+                yield [token]
 
 
 def get_top_level_line_type(line, stripped_line):
