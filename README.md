@@ -60,6 +60,7 @@ The output file(s) will then be saved in numbered `.json` files in `<output_dire
 Other program arguments and are described [in the wiki](https://github.com/SimGus/Chatette/wiki).
 
 # *Chatette* vs *Chatito*?
+*TL;DR: **main selling point**: it is easier to deal with large projects using* Chatette, *and you can transform a* Chatito *project into a* Chatette *one without any modification.*
 
 A perfectly legitimate question is:
 > Why does *Chatette* exist when *Chatito* already fulfills the same purposes?
