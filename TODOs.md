@@ -44,6 +44,7 @@
 - [ ] *Docs* add a representation of the architecture of the project
 - [ ] *Docs* multilingual
 - [ ] *Docs* specify which version of *Rasa NLU* *chatette* can work with
+- [ ] *Docs* explain '/' syntax for alternative slot value
 
 ## Done
 
