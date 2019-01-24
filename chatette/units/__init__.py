@@ -125,8 +125,8 @@ class UnitDefinition(object):
                 return True
         return False
 
-    def add_rule(self, rule, variation_name=None, slot_val=None):
-        # (RuleContent, str, str) -> ()
+    def add_rule(self, rule, variation_name=None):
+        # (RuleContent, str) -> ()
         if variation_name is None:
             self.rules.append(rule)
         else:
@@ -139,8 +139,8 @@ class UnitDefinition(object):
                 self.variations[variation_name].append(rule)
             self.rules.append(rule)
 
-    def add_rules(self, rules, variation_name=None, slot_val=None):
-        # ([RuleContent], str, str) -> ()
+    def add_rules(self, rules, variation_name=None):
+        # ([RuleContent], str) -> ()
         self.rules.extend(rules)
         if variation_name is not None:
             if variation_name == "":
@@ -287,7 +287,7 @@ class UnitDefinition(object):
             for content in rule:
                 content.print_DBG(4)
         for variation in self.variations:
-            print("\t\tvariation " + variation)
+            print("\t\tvariation: " + variation)
             for rule in self.variations[variation]:
                 print("\t\t\trule:")
                 for content in rule:
@@ -381,7 +381,7 @@ class RuleContent(object):
         if self.variation_name is not None:
             result += '#'+self.variation_name
         if self.randgen is not None:
-            result += '?'+self.randgen
+            result += '?'+str(self.randgen)
             if self.percentgen != 50:
                 result += '/'+str(self.percentgen)
         if self.arg_value is not None:

@@ -7,7 +7,8 @@ from chatette.units import Example, RuleContent, may_change_leading_case, \
 
 class GroupWordRuleContent(RuleContent):
     """
-    Represents a word group token inside a rule
+    Represents a word group token inside a rule.
+    `name` is actually the words as a string.
     Accepted modifiers:
         - leading-space: bool
         - casegen: bool

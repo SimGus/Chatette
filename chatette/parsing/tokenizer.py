@@ -53,10 +53,12 @@ class Tokenizer(object):
         """Closes all files before raising an exception."""
         self.close_files()
         raise exception
-    def syntax_error(self, message, line=None, line_index=0):
+    def syntax_error(self, message, line=None, line_index=0, word_to_find=None):
         """Makes an exception to be raised after closing all files."""
         if line is None:
             line = self._last_read_line
+        if word_to_find is not None:
+            line_index = line.find(word_to_find)
         exception = SyntaxError(message, (self.current_file.name,
                                           self.current_file.line_nb,
                                           line_index, line))
@@ -128,7 +130,10 @@ class Tokenizer(object):
         for (i,c) in enumerate(text):
             # Escapement
             if next_char_escaped:
-                current_token += c
+                if c == pu.ARG_SYM:  # Remove `\$` on generation
+                    current_token += pu.ESCAPE_SYM+c
+                else:
+                    current_token += c
                 next_char_escaped = False
             elif c == pu.ESCAPE_SYM:
                 next_char_escaped = True

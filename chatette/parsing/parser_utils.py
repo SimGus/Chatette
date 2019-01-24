@@ -302,7 +302,8 @@ def check_declaration_validity(tokens_unit_inside):
 def check_reference_validity(tokens_unit_inside):
     """
     Check that the interior of a reference is syntactically legal.
-    Raises a `SyntaxError` if the reference is invalid.
+    Deals with word groups as well.
+    Raises a `SyntaxError` if the reference or word group is invalid.
     The constraints checked are:
     - there is only one modifier of each type
     - `/` is not there unless `?` is there
@@ -310,6 +311,22 @@ def check_reference_validity(tokens_unit_inside):
     - `&` is at the beginning of the declaration (or nowhere)
     - there is a name after `#`
     - there is a name either after `&` or at the beginning
+    """
+    pass # TODO
+
+def check_choice_validity(tokens_choice_inside):
+    """
+    Check that the interior of a reference is syntactically legal.
+    Deals with word groups as well.
+    Raises a `SyntaxError` if the reference or word group is invalid.
+    The constraints checked are:
+    - there is only one modifier of each type
+    - `/` is not there unless `?` is there
+    - there is a number between 0 and 100 if `/` is present
+    - `&` is at the beginning of the declaration (or nowhere)
+    - there is a name after `#`
+    - there is a name either after `&` or at the beginning
+    - choices are separated by '/'
     """
     pass # TODO
 
@@ -324,11 +341,30 @@ def find_name(tokens_inside_unit):
         return tokens_inside_unit[1]
     return tokens_inside_unit[0]
 
+def find_words(tokens_inside_word_group):
+    """
+    Finds the words in the tokens that represent the interior of a word group.
+    Returns the list of those words in sequence.
+    @pre: there is no syntax error in this part.
+    """
+    words = []
+    for token in tokens_inside_word_group:
+        if token == CASE_GEN_SYM:
+            continue
+        if  token == RAND_GEN_SYM or token == VARIATION_SYM \
+            or token == ARG_SYM:
+            return words
+        words.append(token)
+    return words
+
+
 def find_modifiers_decl(tokens_inside_decl):
     """
     Finds and create a representation of the modifiers from a list of tokens
     representing the inside of a unit declaration. Returns the representation.
-    @pre: there is no syntax error in this part.
+    If the percentage of generation was present but couldn't be 
+    @pre: there is no syntax error in this part (except possibly for
+          percentage of generation).
     """
     modifiers = mods.UnitDeclarationModifiersRepr()
 
@@ -337,8 +373,6 @@ def find_modifiers_decl(tokens_inside_decl):
         modifiers.casegen = True
         i += 1
     
-    expecting_randgen_name = False
-    expecting_percentgen = False
     expecting_variation = False
     expecting_argument = False
     while i < len(tokens_inside_decl):
@@ -354,6 +388,116 @@ def find_modifiers_decl(tokens_inside_decl):
             modifiers.argument_name = tokens_inside_decl[i]
             expecting_argument = False
         i += 1
+
+    return modifiers
+
+def find_modifiers_reference(tokens_inside_reference):
+    """
+    Finds and create a representation of the modifiers from a list of tokens
+    representing the inside of a reference. Returns the representation.
+    @pre: there is no syntax error in this part.
+    """
+    modifiers = mods.ReferenceModifiersRepr()
+
+    i = 0
+    if tokens_inside_reference[0] == CASE_GEN_SYM:
+        modifiers.casegen = True
+        i += 1
+    
+    expecting_randgen_name = False
+    expecting_percentgen = False
+    expecting_variation = False
+    expecting_argument = False
+    while i < len(tokens_inside_reference):
+        if tokens_inside_reference[i] == RAND_GEN_SYM:
+            expecting_randgen_name = True
+            modifiers.randgen_name = ""
+        elif tokens_inside_reference[i] == PERCENT_GEN_SYM:
+            expecting_percentgen = True
+            expecting_randgen_name = False
+            modifiers.percentage_randgen = ""
+        elif tokens_inside_reference[i] == VARIATION_SYM:
+            expecting_variation = True
+        elif tokens_inside_reference[i] == ARG_SYM:
+            expecting_argument = True
+            modifiers.argument_value = ""
+        elif expecting_randgen_name:
+            modifiers.randgen_name = tokens_inside_reference[i]
+            expecting_randgen_name = False
+        elif expecting_percentgen:
+            modifiers.percentage_randgen = int(tokens_inside_reference[i])
+            expecting_percentgen = False
+        elif expecting_variation:
+            modifiers.variation_name = tokens_inside_reference[i]
+            expecting_variation = False
+        elif expecting_argument:
+            modifiers.argument_value = tokens_inside_reference[i]
+            expecting_argument = False
+        i += 1
+
+    return modifiers
+
+def find_modifiers_word_group(tokens_inside_word_group):
+    """
+    Finds and create a representation of the modifiers from a list of tokens
+    representing the inside of a word group. Returns the representation.
+    @pre: there is no syntax error in this part.
+    """
+    modifiers = mods.WordGroupModifiersRepr()
+
+    i = 0
+    if tokens_inside_word_group[0] == CASE_GEN_SYM:
+        modifiers.casegen = True
+        i += 1
+    
+    expecting_randgen_name = False
+    expecting_percentgen = False
+    while i < len(tokens_inside_word_group):
+        if tokens_inside_word_group[i] == RAND_GEN_SYM:
+            expecting_randgen_name = True
+            modifiers.randgen_name = ""
+        elif tokens_inside_word_group[i] == PERCENT_GEN_SYM:
+            expecting_percentgen = True
+            expecting_randgen_name = False
+            modifiers.percentage_randgen = ""
+        elif expecting_randgen_name:
+            modifiers.randgen_name = tokens_inside_word_group[i]
+            expecting_randgen_name = False
+        elif expecting_percentgen:
+            modifiers.percentage_randgen = int(tokens_inside_word_group[i])
+            expecting_percentgen = False
+        i += 1
+
+    return modifiers
+
+def find_modifiers_choice(tokens_inside_choice):
+    """
+    Finds and create a representation of the modifiers from a list of tokens
+    representing the inside of a choice. Returns the representation.
+    @pre: there is no syntax error in this part.
+    """
+    modifiers = mods.ChoiceModifiersRepr()
+
+    i = 0
+    if tokens_inside_choice[0] == CASE_GEN_SYM:
+        modifiers.casegen = True
+        i += 1
+    
+    # expecting_percentgen = False
+    while i < len(tokens_inside_choice):
+        if tokens_inside_choice[i] == RAND_GEN_SYM:
+            modifiers.randgen = True
+        # elif tokens_inside_choice[i] == PERCENT_GEN_SYM:
+        #     expecting_percentgen = True
+        #     modifiers.percentage_randgen = ""
+        # elif expecting_percentgen:
+        #     modifiers.percentage_randgen = tokens_inside_choice[i]
+        #     expecting_percentgen = False
+        i += 1
+    # if not modifiers.randgen:
+    #     modifiers.percentage_randgen = 50
+    # else:
+    #     modifiers.percentage_randgen = int(modifiers.percentage_randgen)
 
     return modifiers
 
@@ -391,6 +535,65 @@ def find_nb_examples_asked(annotation_interior):
     except ValueError:
         return None
     return (nb_train, nb_test)
+
+
+def find_alt_slot_and_index(slot_rule_tokens):
+    """
+    Returns the index of the equal sign and the alt slot value as a 2-tuple,
+    from the tokens representing a slot rule. Returns `None` if no alt slot
+    value was found.
+    @pre: there is no syntax error in this part.
+    """
+    try:
+        index = slot_rule_tokens.index(ALT_SLOT_VALUE_NAME_SYM)
+    except ValueError:
+        return None
+    alt_slot_val = slot_rule_tokens[index+1]
+    if alt_slot_val == ' ':
+        try:
+            alt_slot_val = slot_rule_tokens[index+2]
+        except IndexError:
+            alt_slot_val = ""
+    return (index, alt_slot_val)
+
+
+# def get_choices(choice_interior_tokens):
+#     """
+#     Returns a list of choices (as str) from the tokens that represent
+#     the interior of a choice.
+#     @pre: there is no syntax error in this part.
+#     """
+#     choices = []
+#     current_choice = ""
+#     for token in choice_interior_tokens:
+#         if token == CASE_GEN_SYM:
+#             continue
+#         elif token == RAND_GEN_SYM:
+#             break
+#         elif token == CHOICE_SEP:
+#             choices.append(current_choice)
+#             current_choice = ""
+#         else:
+#             current_choice += token
+#     choices.append(current_choice)
+#     return choices
+def next_choice_tokens(choice_interior_tokens):
+    """
+    Yields the next choice as a list of tokens in `choice_interior_tokens`.
+    @pre: there is no syntax error in this part.
+    """
+    current_choice = []
+    for token in choice_interior_tokens:
+        if token == CASE_GEN_SYM:
+            continue
+        elif token == RAND_GEN_SYM:
+            break
+        elif token == CHOICE_SEP:
+            yield current_choice
+            current_choice = []
+        else:
+            current_choice.append(token)
+    yield current_choice
 
 
 def find_name_and_modifiers(tokens_unit_inside):
@@ -485,6 +688,49 @@ def next_sub_rule_tokens(tokens):
                 stop_with_char = CHOICE_CLOSE_SYM
             else:  # Word
                 yield [token]
+
+
+def is_sub_rule_word(sub_rule_tokens):
+    """
+    Returns `True` if the list of str `sub_rule_tokens` represents a word.
+    @pre: considers `sub_rule_tokens` is never a single space.
+    """
+    return len(sub_rule_tokens) == 1
+def is_sub_rule_word_group(sub_rule_tokens):
+    """
+    Returns `True` if the list of str `sub_rule_tokens`
+    represents a word group.
+    @pre: considers `sub_rule_tokens` to be a valid sub-rule.
+    """
+    return sub_rule_tokens[0] == UNIT_OPEN_SYM
+def is_sub_rule_choice(sub_rule_tokens):
+    """
+    Returns `True` if the list of str `sub_rule_tokens`
+    represents a choice.
+    @pre: considers `sub_rule_tokens` to be a valid sub-rule.
+    """
+    return sub_rule_tokens[0] == CHOICE_OPEN_SYM
+def is_sub_rule_alias_ref(sub_rule_tokens):
+    """
+    Returns `True` if the list of str `sub_rule_tokens`
+    represents an alias reference.
+    @pre: considers `sub_rule_tokens` to be a valid sub-rule.
+    """
+    return sub_rule_tokens[0] == ALIAS_SYM
+def is_sub_rule_slot_ref(sub_rule_tokens):
+    """
+    Returns `True` if the list of str `sub_rule_tokens`
+    represents a slot reference.
+    @pre: considers `sub_rule_tokens` to be a valid sub-rule.
+    """
+    return sub_rule_tokens[0] == SLOT_SYM
+def is_sub_rule_intent_ref(sub_rule_tokens):
+    """
+    Returns `True` if the list of str `sub_rule_tokens`
+    represents an intent reference.
+    @pre: considers `sub_rule_tokens` to be a valid sub-rule.
+    """
+    return sub_rule_tokens[0] == INTENT_SYM
 
 
 def get_top_level_line_type(line, stripped_line):

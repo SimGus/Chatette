@@ -21,6 +21,7 @@ class AliasRuleContent(RuleContent):
 
     def __init__(self, name, leading_space=False, variation_name=None, arg_value=None,
                  casegen=False, randgen=None, percentage_gen=50, parser=None):
+        # TODO replace parser by self definition
         super(AliasRuleContent, self).__init__(name, leading_space=leading_space,
                                                variation_name=variation_name,
                                                arg_value=arg_value, casegen=casegen,

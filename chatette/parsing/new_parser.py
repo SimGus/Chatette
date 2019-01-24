@@ -1,12 +1,23 @@
+"""
+Module `chatette.parsing.new_parser`
+Contains the (new) parser that reads and parses template files
+and transforms the information they contain into dictionaries
+of unit definitions.
+"""
+
 import os
 
 from chatette.utils import print_DBG, print_warn
 import chatette.parsing.parser_utils as pu
 from chatette.parsing.tokenizer import Tokenizer
 
-from chatette.units.alias import AliasDefinition
-from chatette.units.slot import SlotDefinition
-from chatette.units.intent import IntentDefinition
+from chatette.units.word.rule_content import WordRuleContent
+from chatette.units.word.group_rule_content import GroupWordRuleContent
+from chatette.units.choice import ChoiceRuleContent
+from chatette.units.alias import AliasDefinition, AliasRuleContent
+from chatette.units.slot import SlotDefinition, \
+                                SlotRuleContent, DummySlotValRuleContent
+from chatette.units.intent import IntentDefinition, IntentRuleContent
 
 
 class Parser(object):
@@ -46,9 +57,7 @@ class Parser(object):
         self.tokenizer.close_files()
 
         # TEMP
-        print("aliases:",self.alias_definitions)
-        print("slots:",self.slot_definitions)
-        print("intents:",self.intent_definitions)
+        self.print_DBG()
     
     def _parse_declaration_initiator(self, token_line):
         """Parses a line (as tokens) that contains a declaration initiator."""
@@ -119,11 +128,47 @@ class Parser(object):
         template file. Add the rule to the declaration currently being parsed.
         """
         # TODO check rule is valid
-        print("PARSING RULE:",tokens)
+        if self._currently_parsed_declaration is None:
+            self.tokenizer.syntax_error("Got a rule outside of "+
+                                        "a unit declaration.")
 
         self._check_indentation(tokens[0])
+
+        # Remove alternative slot rule if necessary
+        alt_slot_value = None  # TODO DummySlotVal absolutely need to be managed differently
+        if self._currently_parsed_declaration[0] == pu.UnitType.slot:
+            answer = pu.find_alt_slot_and_index(tokens)
+            if answer is not None:
+                (end_index, alt_slot_value) = answer
+                tokens = tokens[:end_index]
+
+        sub_rules = []
+        leading_space = False
         for sub_rule_tokens in pu.next_sub_rule_tokens(tokens[1:]):
-            print(sub_rule_tokens)
+            if len(sub_rule_tokens) == 1 and sub_rule_tokens[0] == ' ':
+                leading_space = True
+                continue
+
+            sub_rule = self._make_sub_rule_from_tokens(sub_rule_tokens,
+                                                       leading_space)
+            if alt_slot_value is not None:
+                sub_rules = [DummySlotValRuleContent(alt_slot_value, sub_rule)]
+                alt_slot_value = None
+            sub_rules.append(sub_rule)
+            
+            leading_space = False
+
+        relevant_dict = None
+        if self._currently_parsed_declaration[0] == pu.UnitType.alias:
+            relevant_dict = self.alias_definitions
+        elif self._currently_parsed_declaration[0] == pu.UnitType.slot:
+            relevant_dict = self.slot_definitions
+        else:  # intent
+            relevant_dict = self.intent_definitions
+        
+        name = self._currently_parsed_declaration[1]
+        variation_name = self._currently_parsed_declaration[2].variation_name
+        relevant_dict[name].add_rule(sub_rules, variation_name)
 
     def _check_indentation(self, indentation):
         """
@@ -136,3 +181,95 @@ class Parser(object):
             return
         if indentation != self._expected_indentation:
             self.tokenizer.syntax_error("Inconsistent indentation.")
+
+    def _make_sub_rule_from_tokens(self, sub_rule_tokens, leading_space):
+        if pu.is_sub_rule_word(sub_rule_tokens):
+            word_text = sub_rule_tokens[0]
+            word = WordRuleContent(word_text, leading_space)
+            return word
+        elif pu.is_sub_rule_word_group(sub_rule_tokens):
+            group_interior_tokens = sub_rule_tokens[1:-1]
+            words = pu.find_words(group_interior_tokens)
+            words_str = ''.join(words)
+            modifiers = pu.find_modifiers_word_group(group_interior_tokens)
+            # TODO check modifiers
+            word_group = \
+                GroupWordRuleContent(words_str, leading_space,
+                                        casegen=modifiers.casegen,
+                                        randgen=modifiers.randgen_name,
+                                        percentage_gen=modifiers.percentage_randgen)
+            return word_group
+        elif pu.is_sub_rule_choice(sub_rule_tokens):
+            choice_interior_tokens = sub_rule_tokens[1:-1]
+            modifiers = pu.find_modifiers_choice(choice_interior_tokens)
+            choice = ChoiceRuleContent(''.join(choice_interior_tokens),
+                                        leading_space,
+                                        casegen=modifiers.casegen,
+                                        randgen=modifiers.randgen)#,
+                                        #percentage_gen=modifiers.percentage_randgen)
+            for choice_tokens in pu.next_choice_tokens(choice_interior_tokens):
+                current_leading_space = False
+                current_choice_sub_rules = []
+                for choice_sub_rule_tokens in pu.next_sub_rule_tokens(choice_tokens):
+                    if choice_sub_rule_tokens == ' ':
+                        current_leading_space = True
+                        continue
+                    choice_sub_rule = \
+                        self._make_sub_rule_from_tokens(choice_sub_rule_tokens,
+                                                        current_leading_space)
+                    current_choice_sub_rules.append(choice_sub_rule)
+                    current_leading_space = False
+                choice.add_choice(current_choice_sub_rules)
+            return choice
+        elif pu.is_sub_rule_alias_ref(sub_rule_tokens):
+            alias_interior_tokens = sub_rule_tokens[2:-1]
+            name = pu.find_name(alias_interior_tokens)
+            modifiers = pu.find_modifiers_reference(alias_interior_tokens)
+            # TODO check modifiers
+            alias = AliasRuleContent(name, leading_space,
+                                        modifiers.variation_name,
+                                        modifiers.argument_value,
+                                        modifiers.casegen,
+                                        modifiers.randgen_name,
+                                        modifiers.percentage_randgen, self)
+            return alias
+        elif pu.is_sub_rule_slot_ref(sub_rule_tokens):
+            slot_interior_tokens = sub_rule_tokens[2:-1]
+            name = pu.find_name(slot_interior_tokens)
+            modifiers = pu.find_modifiers_reference(slot_interior_tokens)
+            # TODO check modifiers
+            slot = SlotRuleContent(name, leading_space,
+                                    modifiers.variation_name,
+                                    modifiers.argument_value,
+                                    modifiers.casegen,
+                                    modifiers.randgen_name,
+                                    modifiers.percentage_randgen, self)
+            return slot
+        elif pu.is_sub_rule_intent_ref(sub_rule_tokens):
+            intent_interior_tokens = sub_rule_tokens[2:-1]
+            name = pu.find_name(intent_interior_tokens)
+            modifiers = pu.find_modifiers_reference(intent_interior_tokens)
+            # TODO check modifiers
+            intent = IntentRuleContent(name, leading_space,
+                                        modifiers.variation_name,
+                                        modifiers.argument_value,
+                                        modifiers.casegen,
+                                        modifiers.randgen_name,
+                                        modifiers.percentage_randgen, self)
+            return intent
+        else:
+            self.tokenizer.syntax_error("Invalid type of sub-rule.",
+                                        word_to_find=sub_rule_tokens[0])
+
+
+    def print_DBG(self):
+        print("Aliases:")
+        for alias_name in self.alias_definitions:
+            self.alias_definitions[alias_name].print_DBG()
+        print("Slots:")
+        for slot_name in self.slot_definitions:
+            self.slot_definitions[slot_name].print_DBG()
+        print("Intents:")
+        for intent_name in self.intent_definitions:
+            self.intent_definitions[intent_name].print_DBG()
+        print()

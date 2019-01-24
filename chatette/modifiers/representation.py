@@ -16,17 +16,26 @@ class UnitDeclarationModifiersRepr(BaseModifiersRepr):
         self.variation_name = variation_name
         self.argument_name = argument_name
 
-class SubRuleModifiersRepr(BaseModifiersRepr):
+class WordGroupModifiersRepr(BaseModifiersRepr):
+    def __init__(self, case_generation=False, randgen_name=None,
+                 percentage_randgen=50):
+        super(WordGroupModifiersRepr, self).__init__(case_generation)
+        self.randgen_name = randgen_name
+        self.percentage_randgen = percentage_randgen
+
+class ChoiceModifiersRepr(BaseModifiersRepr):
+    def __init__(self, case_generation=False, randgen=False):#,
+                #  percentage_randgen=50):
+        super(ChoiceModifiersRepr, self).__init__(case_generation)
+        self.randgen = randgen
+        # self.percentage_randgen = percentage_randgen
+
+class ReferenceModifiersRepr(BaseModifiersRepr):
     def __init__(self, case_generation=False, randgen_name=None,
                  percentage_randgen=50, variation_name=None,
                  argument_value=None):
-        super(SubRuleModifiersRepr, self).__init__(case_generation)
+        super(ReferenceModifiersRepr, self).__init__(case_generation)
         self.randgen_name = randgen_name
         self.percentage_randgen = percentage_randgen
         self.variation_name = variation_name
         self.argument_value = argument_value
-
-class ChoiceModifiersRepr(BaseModifiersRepr):
-    def __init__(self, case_generation=False, randgen=False):
-        super(ChoiceModifiersRepr, self).__init__(case_generation)
-        self.randgen = randgen

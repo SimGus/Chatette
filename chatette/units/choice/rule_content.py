@@ -21,7 +21,7 @@ class ChoiceRuleContent(RuleContent):
                  arg_value=None, casegen=False, randgen=None, percentage_gen=None,
                  parser=None):
         # NOTE: its name would be the unparsed text as a string
-        if randgen is not None and randgen != "":
+        if randgen is not None and randgen != "" and type(randgen) != bool:
             raise SyntaxError("Choices cannot have a named randgen, " +
                               "as was the case for '" + name + "': " + randgen +
                               " ('?' unescaped?)")
@@ -33,8 +33,8 @@ class ChoiceRuleContent(RuleContent):
             raise SyntaxError("Choices cannot have an argument, as was the " +
                               "case for '" + name + "' ('$' unescaped?)")
         if percentage_gen is not None:
-            raise SyntaxError("Choices cannot have an percentage for random" +
-                              "generation, as was the case for '" + name + "' ('/' unescaped?)")
+            raise SyntaxError("Choices cannot have an percentage for random " +
+                              "generation, as was the case for '" + name + "'.")
 
         super(ChoiceRuleContent, self).__init__(
             name,
