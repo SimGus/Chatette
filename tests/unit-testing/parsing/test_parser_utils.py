@@ -72,6 +72,72 @@ class TestStripComments(object):
         assert strip_comments(s) == "test"
 
 
+class TestRemoveEscapement(object):
+    def test_empty(self):
+        assert remove_escapement("") == ""
+
+    def test_no_escapement(self):
+        strings = ["word", "several different words",
+                   "sentence with a [word group].", "%[intent](1) // comment",
+                   "sentence with ~[alias?/90] ans @[slot]!", "{choice/too}"]
+        for s in strings:
+            assert remove_escapement(s) == s
+    
+    def test_single_escaped_special_symbols(self):
+        assert remove_escapement("\?") == "?"
+        assert remove_escapement("\;") == ";"
+        assert remove_escapement("\/") == "/"
+        assert remove_escapement("\//") == "//"
+        assert remove_escapement("\/\/") == "//"
+        assert remove_escapement("\[") == "["
+        assert remove_escapement("\]") == "]"
+        assert remove_escapement("\{") == "{"
+        assert remove_escapement("\}") == "}"
+        assert remove_escapement("\~") == "~"
+        assert remove_escapement("\@") == "@"
+        assert remove_escapement("\%") == "%"
+        assert remove_escapement("\#") == "#"
+        assert remove_escapement("\&") == "&"
+        assert remove_escapement("\|") == "|"
+        assert remove_escapement("\=") == "="
+        
+        assert remove_escapement("\$") == "\$"
+
+    def test_several_words_escaped(self):
+        s = r"test\? with several \? escapements\|"
+        assert remove_escapement(s) == "test? with several ? escapements|"
+        s = r"\[another [test\?] with] escapement\$2"
+        assert remove_escapement(s) == "[another [test?] with] escapement\$2"
+
+
+class TestIsStartUnitSym(object):
+    def test_not_unit_start_sym(self):
+        symbols = ['', ' ', '\t', 'a', '0', '/', ';', '|', '{', ']', '}',
+                   '(', ')']
+        for sym in symbols:
+            assert not is_start_unit_sym(sym)
+
+    def test_not_char(self):
+        objects = ["word", 0, False, str, ['a', '['], {1: 0}, None]
+        for o in objects:
+            assert not is_start_unit_sym(o)
+
+    def test_unit_start_sym(self):
+        unit_open_sym = '['
+        assert is_start_unit_sym(unit_open_sym)
+        alias_sym = '~'
+        assert is_start_unit_sym(alias_sym)
+        slot_sym = '@'
+        assert is_start_unit_sym(slot_sym)
+        intent_sym = '%'
+        assert is_start_unit_sym(intent_sym)
+    
+    def test_unit_start_word(self):
+        words = ["[unit]", "~[alias]", "@[slot]", "%[intent]"]
+        for w in words:
+            assert not is_start_unit_sym(w)
+
+
 # class TestGetTopLevelLineType(object):
 #     def test_incorrect_lines(self):
 #         lines = ["something", "nothing", "\tsomething incorrect", "a\t"]
@@ -112,33 +178,6 @@ class TestStripComments(object):
 #         lines = ["|include", "|file//comment", "|filename ; comment"]
 #         for l in lines:
 #             assert get_top_level_line_type(l, l.lstrip()) == LineType.include_file
-
-class TestIsStartUnitSym(object):
-    def test_not_unit_start_sym(self):
-        symbols = ['', ' ', '\t', 'a', '0', '/', ';', '|', '{', ']', '}',
-                   '(', ')']
-        for sym in symbols:
-            assert not is_start_unit_sym(sym)
-
-    def test_not_char(self):
-        objects = ["word", 0, False, str, ['a', '['], {1: 0}, None]
-        for o in objects:
-            assert not is_start_unit_sym(o)
-
-    def test_unit_start_sym(self):
-        unit_open_sym = '['
-        assert is_start_unit_sym(unit_open_sym)
-        alias_sym = '~'
-        assert is_start_unit_sym(alias_sym)
-        slot_sym = '@'
-        assert is_start_unit_sym(slot_sym)
-        intent_sym = '%'
-        assert is_start_unit_sym(intent_sym)
-    
-    def test_unit_start_word(self):
-        words = ["[unit]", "~[alias]", "@[slot]", "%[intent]"]
-        for w in words:
-            assert not is_start_unit_sym(w)
 
 
 # class TestIsUnitStart(object):
@@ -289,41 +328,3 @@ class TestIsStartUnitSym(object):
 #                    "'test: 42'", "training :58, test: 42", "test:42,'train':38"]
 #         for i in intents:
 #             assert find_nb_testing_examples_asked(i) == 42
-
-
-class TestRemoveEscapement(object):
-    def test_empty(self):
-        assert remove_escapement("") == ""
-
-    def test_no_escapement(self):
-        strings = ["word", "several different words",
-                   "sentence with a [word group].", "%[intent](1) // comment",
-                   "sentence with ~[alias?/90] ans @[slot]!", "{choice/too}"]
-        for s in strings:
-            assert remove_escapement(s) == s
-    
-    def test_single_escaped_special_symbols(self):
-        assert remove_escapement("\?") == "?"
-        assert remove_escapement("\;") == ";"
-        assert remove_escapement("\/") == "/"
-        assert remove_escapement("\//") == "//"
-        assert remove_escapement("\/\/") == "//"
-        assert remove_escapement("\[") == "["
-        assert remove_escapement("\]") == "]"
-        assert remove_escapement("\{") == "{"
-        assert remove_escapement("\}") == "}"
-        assert remove_escapement("\~") == "~"
-        assert remove_escapement("\@") == "@"
-        assert remove_escapement("\%") == "%"
-        assert remove_escapement("\#") == "#"
-        assert remove_escapement("\&") == "&"
-        assert remove_escapement("\|") == "|"
-        assert remove_escapement("\=") == "="
-        
-        assert remove_escapement("\$") == "\$"
-
-    def test_several_words_escaped(self):
-        s = r"test\? with several \? escapements\|"
-        assert remove_escapement(s) == "test? with several ? escapements|"
-        s = r"\[another [test\?] with] escapement\$2"
-        assert remove_escapement(s) == "[another [test?] with] escapement\$2"

@@ -47,51 +47,9 @@ INCLUDE_FILE_SYM = '|'
 RESERVED_VARIATION_NAMES = ["all-variations-aggregation", "rules",
                             "nb-gen-asked", "arg"]
 
-# This regex finds patterns like this `[name#variation?randgen/percentgen]`
-# with `variation`, `randgen` and `percentgen` optional
-PATTERN_UNIT_NAME = \
-    re.compile(
-        r"\[(?P<casegen>" + CASE_GEN_SYM + r")?" +
-        r"(?P<name>(?:\\[\\" + VARIATION_SYM + PERCENT_GEN_SYM +
-        r"?\$\[\]]|[^\\\[\]" + VARIATION_SYM + PERCENT_GEN_SYM +
-        r"?\$\n]+)+)[^\]]*\]"
-    )
-PATTERN_RANDGEN = re.compile(
-    r"(?<!\\)\?(?P<randgen>(?:\\[\\\[\]" + VARIATION_SYM +
-    PERCENT_GEN_SYM + r"?\$]|[^\\\[\]" + VARIATION_SYM +
-    PERCENT_GEN_SYM + r"?\$\n]+)*)" +
-    r"(?:" + PERCENT_GEN_SYM + r"(?P<percentgen>[0-9]+))?"
-)
-PATTERN_VARIATION = re.compile(
-    r"(?<!\\)" + VARIATION_SYM +
-    r"(?P<var>(?:\\[\\\[\]" + VARIATION_SYM + PERCENT_GEN_SYM +
-    r"?\$]|[^\\\[\]" + VARIATION_SYM + PERCENT_GEN_SYM +
-    r"?\$\n]+)+)"
-)
-PATTERN_ARG = re.compile(
-    r"(?<!\\)\$(?P<arg>(?:\\[\\\[\]" + VARIATION_SYM + PERCENT_GEN_SYM
-    + r"?\$]|[^\\\[\]" + VARIATION_SYM + PERCENT_GEN_SYM +
-    r"?\$\n]+)+)"
-)
-# TODO make this reflect the state of the symbols defined before
-# pattern_modifiers = \
-#     re.compile(
-#         r"\[(?P<casegen>&)?"+
-#         r"(?P<name>[^#\[\]\?/\$]*)"+
-#         r"(?:\$(?P<arg>[^#\[\]?/\$]*))?"+
-#         r"(?:#(?P<variation>[^#\[\]\?/\$]*))?"+
-#         r"(?:\?(?P<randgen>[^#\[\]\?/\$]*)(?:/(?P<percentgen>[^#\[\]\?/\$]*))?)?\]"
-#     )
+
 PATTERN_COMMENT_DEPRECATED = re.compile(r"(?<!\\)" + COMMENT_SYM_DEPRECATED)
 PATTERN_COMMENT = re.compile(r"(?<!\\)" + COMMENT_MARKER)
-
-_NB_TRAINING_GEN_NAME = "train(ing)?"
-_NB_TEST_GEN_NAME = "test(ing)?"
-PATTERN_NB_EXAMPLES_ASKED = re.compile(r"\]\((?P<nbgen>[0-9]+)\)")
-PATTERN_NB_TRAINING_EXAMPLES_ASKED = \
-    re.compile(r"'?" + _NB_TRAINING_GEN_NAME + r"'?\s*:\s*'?(?P<nbgen>[0-9]+)'?")
-PATTERN_NB_TEST_EXAMPLES_ASKED = \
-    re.compile(r"'?" + _NB_TEST_GEN_NAME + r"'?\s*:\s*'?(?P<nbgen_test>[0-9]+)'?")
 
 PATTERN_NB_TRAIN_EX_KEY = re.compile(r"'?train(ing)?'?")
 PATTERN_NB_TEST_EX_KEY = re.compile(r"'?test(ing)?'?")
@@ -149,6 +107,35 @@ def strip_comments(text):
         if match.start() <= match_deprecated.start():
             return text[:match.start()].rstrip()
         return text[:match_deprecated.start()].rstrip()
+
+def remove_escapement(text):
+    # pylint: disable=anomalous-backslash-in-string
+    r"""
+    Returns `text` were all escaped characters
+    have been removed their escapement character (e.g. `\?` becomes `?`).
+    Note that escaped dollar sign ($) are kept escaped until generation
+    to avoid a possible bug with argument replacement.
+    """
+    if text is None:
+        return None
+    if ESCAPE_SYM not in text:
+        return text
+    # Note there might be better ways to do this with regexes
+    # (but they have fixed-length negative lookback)
+    result = ""
+    escaped = False
+    for c in text:
+        if escaped and c == ARG_SYM:  # Keep \$ until generation
+            result += ESCAPE_SYM + ARG_SYM
+            escaped = False
+        elif escaped:
+            result += c
+            escaped = False
+        elif c == ESCAPE_SYM:
+            escaped = True
+        else:
+            result += c
+    return result
 
 
 def is_special_sym(text):
@@ -858,6 +845,42 @@ def is_sub_rule_intent_ref(sub_rule_tokens):
     return sub_rule_tokens[0] == INTENT_SYM
 
 
+# This regex finds patterns like this `[name#variation?randgen/percentgen]`
+# with `variation`, `randgen` and `percentgen` optional
+# PATTERN_UNIT_NAME = \
+#     re.compile(
+#         r"\[(?P<casegen>" + CASE_GEN_SYM + r")?" +
+#         r"(?P<name>(?:\\[\\" + VARIATION_SYM + PERCENT_GEN_SYM +
+#         r"?\$\[\]]|[^\\\[\]" + VARIATION_SYM + PERCENT_GEN_SYM +
+#         r"?\$\n]+)+)[^\]]*\]"
+#     )
+# PATTERN_RANDGEN = re.compile(
+#     r"(?<!\\)\?(?P<randgen>(?:\\[\\\[\]" + VARIATION_SYM +
+#     PERCENT_GEN_SYM + r"?\$]|[^\\\[\]" + VARIATION_SYM +
+#     PERCENT_GEN_SYM + r"?\$\n]+)*)" +
+#     r"(?:" + PERCENT_GEN_SYM + r"(?P<percentgen>[0-9]+))?"
+# )
+# PATTERN_VARIATION = re.compile(
+#     r"(?<!\\)" + VARIATION_SYM +
+#     r"(?P<var>(?:\\[\\\[\]" + VARIATION_SYM + PERCENT_GEN_SYM +
+#     r"?\$]|[^\\\[\]" + VARIATION_SYM + PERCENT_GEN_SYM +
+#     r"?\$\n]+)+)"
+# )
+# PATTERN_ARG = re.compile(
+#     r"(?<!\\)\$(?P<arg>(?:\\[\\\[\]" + VARIATION_SYM + PERCENT_GEN_SYM
+#     + r"?\$]|[^\\\[\]" + VARIATION_SYM + PERCENT_GEN_SYM +
+#     r"?\$\n]+)+)"
+# )
+
+# _NB_TRAINING_GEN_NAME = "train(ing)?"
+# _NB_TEST_GEN_NAME = "test(ing)?"
+# PATTERN_NB_EXAMPLES_ASKED = re.compile(r"\]\((?P<nbgen>[0-9]+)\)")
+# PATTERN_NB_TRAINING_EXAMPLES_ASKED = \
+#     re.compile(r"'?" + _NB_TRAINING_GEN_NAME + r"'?\s*:\s*'?(?P<nbgen>[0-9]+)'?")
+# PATTERN_NB_TEST_EXAMPLES_ASKED = \
+#     re.compile(r"'?" + _NB_TEST_GEN_NAME + r"'?\s*:\s*'?(?P<nbgen_test>[0-9]+)'?")
+
+
 # def get_top_level_line_type(line, stripped_line):
 #     """
 #     Returns the type of a top-level line (Note: this is expected to never
@@ -960,33 +983,3 @@ def is_sub_rule_intent_ref(sub_rule_tokens):
 #     if nb_testing_examples_asked_str is None:
 #         return None
 #     return int(nb_testing_examples_asked_str)
-
-
-def remove_escapement(text):
-    # pylint: disable=anomalous-backslash-in-string
-    r"""
-    Returns `text` were all escaped characters
-    have been removed their escapement character (e.g. `\?` becomes `?`).
-    Note that escaped dollar sign ($) are kept escaped until generation
-    to avoid a possible bug with argument replacement.
-    """
-    if text is None:
-        return None
-    if ESCAPE_SYM not in text:
-        return text
-    # Note there might be better ways to do this with regexes
-    # (but they have fixed-length negative lookback)
-    result = ""
-    escaped = False
-    for c in text:
-        if escaped and c == ARG_SYM:  # Keep \$ until generation
-            result += ESCAPE_SYM + ARG_SYM
-            escaped = False
-        elif escaped:
-            result += c
-            escaped = False
-        elif c == ESCAPE_SYM:
-            escaped = True
-        else:
-            result += c
-    return result
