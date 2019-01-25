@@ -206,7 +206,7 @@ class Parser(object):
 
     def _make_sub_rule_from_tokens(self, sub_rule_tokens, leading_space):
         if pu.is_sub_rule_word(sub_rule_tokens):
-            word_text = sub_rule_tokens[0]
+            word_text = pu.remove_escapement(sub_rule_tokens[0])
             word = WordRuleContent(word_text, leading_space)
             return word
         if pu.is_sub_rule_word_group(sub_rule_tokens):
@@ -214,7 +214,7 @@ class Parser(object):
             self._check_sub_rule_validity(group_interior_tokens,
                                           pu.SubRuleType.word_group)
             words = pu.find_words(group_interior_tokens)
-            words_str = ''.join(words)
+            words_str = pu.remove_escapement(''.join(words))
             modifiers = pu.find_modifiers_word_group(group_interior_tokens)
             word_group = \
                 GroupWordRuleContent(words_str, leading_space,

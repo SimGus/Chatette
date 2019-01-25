@@ -191,7 +191,6 @@ def get_declaration_interior(tokens):
         starting_index += 1
     starting_index += 1
     if starting_index >= length:
-        print("s",starting_index,tokens)
         return None
 
     end_index = starting_index
@@ -204,7 +203,6 @@ def get_declaration_interior(tokens):
         end_index += 1
     end_index -= 1
     if end_index >= length:
-        print("e:",end_index,tokens)
         return None
 
     return tokens[starting_index:end_index]
@@ -501,7 +499,7 @@ def find_name(tokens_inside_unit):
           and not is_special_sym(tokens_inside_unit[start_index])):
         name += tokens_inside_unit[start_index]
         start_index += 1
-    return name
+    return remove_escapement(name)
 
 def find_words(tokens_inside_word_group):
     """
@@ -551,6 +549,9 @@ def find_modifiers_decl(tokens_inside_decl):
         elif expecting_argument:
             modifiers.argument_name = tokens_inside_decl[i]
         i += 1
+
+    modifiers.variation_name = remove_escapement(modifiers.variation_name)
+    modifiers.argument_name = remove_escapement(modifiers.argument_name)
 
     return modifiers
 
@@ -607,6 +608,10 @@ def find_modifiers_reference(tokens_inside_reference):
             modifiers.argument_value += tokens_inside_reference[i]
         i += 1
 
+    modifiers.randgen_name = remove_escapement(modifiers.randgen_name)
+    modifiers.variation_name = remove_escapement(modifiers.variation_name)
+    modifiers.argument_value = remove_escapement(modifiers.argument_value)
+
     return modifiers
 
 def find_modifiers_word_group(tokens_inside_word_group):
@@ -639,6 +644,8 @@ def find_modifiers_word_group(tokens_inside_word_group):
             modifiers.percentage_randgen = int(tokens_inside_word_group[i])
             expecting_percentgen = False
         i += 1
+
+    modifiers.randgen_name = remove_escapement(modifiers.randgen_name)
 
     return modifiers
 
@@ -739,7 +746,7 @@ def find_alt_slot_and_index(slot_rule_tokens):
         while i < len(slot_rule_tokens):
             alt_slot_val += slot_rule_tokens[i]
             i += 1
-        return (index, alt_slot_val)
+        return (index, remove_escapement(alt_slot_val))
     return None
 
 
@@ -965,6 +972,8 @@ def remove_escapement(text):
     Note that escaped dollar sign ($) are kept escaped until generation
     to avoid a possible bug with argument replacement.
     """
+    if text is None:
+        return None
     if ESCAPE_SYM not in text:
         return text
     # Note there might be better ways to do this with regexes

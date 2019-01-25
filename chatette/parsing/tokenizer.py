@@ -128,12 +128,10 @@ class Tokenizer(object):
         for (i,c) in enumerate(text):
             # Escapement
             if next_char_escaped:
-                if c == pu.ARG_SYM:  # Remove `\$` on generation
-                    current_token += pu.ESCAPE_SYM+c
-                else:
-                    current_token += c
+                current_token += c
                 next_char_escaped = False
             elif c == pu.ESCAPE_SYM:
+                current_token += c  # Remove escapement later on
                 next_char_escaped = True
             # Unit special characters
             elif c == pu.ALIAS_SYM:
