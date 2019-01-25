@@ -110,6 +110,45 @@ class TestRemoveEscapement(object):
         assert remove_escapement(s) == "[another [test?] with] escapement\$2"
 
 
+class TestIsSpecialSym(object):
+    def test_empty(self):
+        assert not is_special_sym(None)
+        assert not is_special_sym("")
+    
+    def test_long_text(self):
+        assert not is_special_sym("text")
+        assert not is_special_sym("/Another test/")
+    
+    def test_not_special_char(self):
+        symbols = ['a', ' ', '\t', '!']
+        for sym in symbols:
+            assert not is_special_sym(sym)
+    
+    def test_special_char(self):
+        symbols = ['~', '@', '%', '[', ']', '#', '?', '/', '&', '$']
+        for sym in symbols:
+            assert is_special_sym(sym)
+
+
+class TestIsUnitTypeSym(object):
+    def test_empty(self):
+        assert not is_unit_type_sym("")
+    
+    def test_long_text(self):
+        assert not is_unit_type_sym("text")
+        assert not is_unit_type_sym("~long test")
+    
+    def test_not_special_char(self):
+        symbols = ['a', ' ', '\\', '!', '?']
+        for sym in symbols:
+            assert not is_unit_type_sym(sym)
+    
+    def test_special_char(self):
+        symbols = ['~', '@', '%']
+        for sym in symbols:
+            assert is_unit_type_sym(sym)
+
+
 class TestIsStartUnitSym(object):
     def test_not_unit_start_sym(self):
         symbols = ['', ' ', '\t', 'a', '0', '/', ';', '|', '{', ']', '}',

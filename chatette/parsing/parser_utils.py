@@ -135,7 +135,7 @@ def is_special_sym(text):
            text == UNIT_OPEN_SYM or text == UNIT_CLOSE_SYM or \
            text == VARIATION_SYM or text == RAND_GEN_SYM or \
            text == PERCENT_GEN_SYM or text == CASE_GEN_SYM or \
-           text == CASE_GEN_SYM or text == ARG_SYM
+           text == ARG_SYM
 
 def is_unit_type_sym(text):
     """Returns `True` if `text` is a unit special symbol (`~`, `@` or `%`)."""
