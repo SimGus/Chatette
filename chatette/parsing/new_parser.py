@@ -68,16 +68,17 @@ class Parser(object):
         print_DBG("Parsing master file: "+self.tokenizer.get_file_information()[0])
         for token_line in self.tokenizer.next_tokenized_line():
             if not token_line[0].isspace():
-                self._parse_declaration_initiator(token_line)
-                self._expecting_rule = True
+                if token_line[0] == pu.INCLUDE_FILE_SYM:
+                    self.tokenizer.open_file(token_line[1])
+                    print_DBG("Parsing file: "+self.tokenizer.get_file_information()[0])
+                else:
+                    self._parse_declaration_initiator(token_line)
+                    self._expecting_rule = True
                 self._expected_indentation = None
             else:
                 self._parse_rule(token_line)
                 self._expecting_rule = False  # Not expecting but still allowed
         self.tokenizer.close_files()
-
-        # TEMP
-        self.print_DBG()
     
     def _parse_declaration_initiator(self, token_line):
         """Parses a line (as tokens) that contains a declaration initiator."""

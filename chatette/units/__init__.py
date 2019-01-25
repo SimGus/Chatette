@@ -37,10 +37,10 @@ class Example(object):
         return "<'"+self.text+"' "+str(self.entities)+'>'
 
     def __hash__(self):
-        return hash( (self.text, self.entities) )
+        return hash(self.text+str(self.entities))  # NOTE: those hashes seem inconsistent when testing whether an example was already generated (intent/definition.py:80)
 
     def __eq__(self, other):
-        return self.text == other.text and self.entities == other.entities
+        return self.__dict__ == other.__dict__
     def __ne__(self, other):
         return not self.__eq__(other)
 

@@ -11,12 +11,10 @@ from chatette.parsing.line_count_file_wrapper import LineCountFileWrapper
 
 
 class Tokenizer(object):
-    def __init__(self, master_filename=None):  # TODO remove default values
-        self.current_file = None
+    def __init__(self, master_filename):
+        self.master_file_dir = os.path.dirname(master_filename)
+        self.current_file = LineCountFileWrapper(master_filename)
         self.opened_files = []
-        if master_filename is not None:
-            self.master_file_dir = os.path.dirname(master_filename)
-            self.current_file = LineCountFileWrapper(master_filename)
 
         self._last_read_line = None
 

@@ -57,16 +57,16 @@ class IntentDefinition(UnitDefinition):
                     for (i, ex) in enumerate(self.generate_all())
                     if i < max_nb_examples
                 ]
-            else:
-                all_examples = [
-                    IntentExample(self.name, ex.text.strip(), ex.entities)
-                    for (i, ex) in enumerate(self.generate_all())
-                    if i < max_nb_examples
-                ]
-                return [
-                    ex
-                    for ex in all_examples if ex not in training_examples
-                ]
+
+            all_examples = [
+                IntentExample(self.name, ex.text.strip(), ex.entities)
+                for (i, ex) in enumerate(self.generate_all())
+                if i < max_nb_examples
+            ]
+            return [
+                ex
+                for ex in all_examples if ex not in training_examples
+            ]
 
         if nb_examples_asked > max_nb_examples:
             nb_examples_asked = max_nb_examples
@@ -74,30 +74,29 @@ class IntentDefinition(UnitDefinition):
         if nb_examples_asked < nb_possible_ex / 2:  # QUESTION: should this be /2?
             generated_examples = []
             for _ in range(nb_examples_asked):
-                while True:
+                nb_iterations = 0
+                while nb_iterations < 50:  # 50 is completely arbitrary
                     current_example = self.generate_random()
                     current_example.text = current_example.text.strip()  # Strip for safety
-                    if (    current_example not in generated_examples
+                    if (    current_example not in generated_examples  # NOTE: this doesn't seem to work?
                         and (training_examples is None
                              or current_example not in training_examples)):
-                        print("'"+str(current_example)+"' not in",generated_examples)
                         generated_examples.append(
                             IntentExample(self.name, current_example.text,
                                           current_example.entities))
-
                         break
-
+                    nb_iterations += 1
             return generated_examples
-        else:
-            all_examples = [
-                IntentExample(self.name, ex.text.strip(), ex.entities)
-                for ex in self.generate_all()
-            ]
 
-            if training_examples is None:
-                return random.sample(all_examples, nb_examples_asked)
-            random.shuffle(all_examples)
-            return [
-                ex for ex in all_examples
-                if ex not in training_examples
-            ]
+        all_examples = [
+            IntentExample(self.name, ex.text.strip(), ex.entities)
+            for ex in self.generate_all()
+        ]
+
+        if training_examples is None:
+            return random.sample(all_examples, nb_examples_asked)
+        random.shuffle(all_examples)
+        return [
+            ex for ex in all_examples
+            if ex not in training_examples
+        ]

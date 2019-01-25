@@ -11,8 +11,7 @@ from chatette import __version__
 from chatette.adapters import JsonListAdapter
 from chatette.adapters.rasa import RasaAdapter
 from chatette.generator import Generator
-from chatette.parsing.parser import Parser
-from chatette.parsing.new_parser import Parser as NewParser
+from chatette.parsing.new_parser import Parser
 from chatette.utils import print_DBG
 
 
@@ -74,21 +73,10 @@ def main():
     if args.seed is not None:
         random_seed(args.seed)
 
-    #======== Test new parser ==============
-    print_DBG("new parser")
-    new_parser = NewParser(template_file_path)
-    new_parser.parse()
-    print_DBG("end new parser")
-    #=======================================
+    parser = Parser(template_file_path)
+    parser.parse()
 
-    #======= Old parser ==================
-    with io.open(template_file_path, 'r') as in_file:
-        parser = Parser(in_file)
-        parser.parse()
-        # parser.print_DBG()
-    #======================================
-
-    generator = Generator(new_parser)
+    generator = Generator(parser)
     synonyms = generator.get_entities_synonyms()
 
     if args.adapter == 'rasa':
