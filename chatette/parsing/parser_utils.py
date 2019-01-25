@@ -669,7 +669,7 @@ def find_nb_examples_asked(annotation_interior):
     expecting_train = False
     expecting_test = False
     for token in annotation_interior:
-        if len(token) > 1:
+        if token != ANNOTATION_ASSIGNMENT_SYM:
             if PATTERN_NB_TRAIN_EX_KEY.match(token):
                 expecting_train = True
             elif PATTERN_NB_TEST_EX_KEY.match(token):
@@ -680,6 +680,8 @@ def find_nb_examples_asked(annotation_interior):
             elif expecting_test:
                 nb_test = token
                 expecting_test = False
+            else:
+                nb_train = token
 
     if nb_train is None and nb_test is None:
         return None
@@ -720,37 +722,22 @@ def find_alt_slot_and_index(slot_rule_tokens):
     return (index, alt_slot_val)
 
 
-# def get_choices(choice_interior_tokens):
-#     """
-#     Returns a list of choices (as str) from the tokens that represent
-#     the interior of a choice.
-#     @pre: there is no syntax error in this part.
-#     """
-#     choices = []
-#     current_choice = ""
-#     for token in choice_interior_tokens:
-#         if token == CASE_GEN_SYM:
-#             continue
-#         elif token == RAND_GEN_SYM:
-#             break
-#         elif token == CHOICE_SEP:
-#             choices.append(current_choice)
-#             current_choice = ""
-#         else:
-#             current_choice += token
-#     choices.append(current_choice)
-#     return choices
 def next_choice_tokens(choice_interior_tokens):
     """
     Yields the next choice as a list of tokens in `choice_interior_tokens`.
     @pre: there is no syntax error in this part.
     """
     current_choice = []
-    for token in choice_interior_tokens:
+    for (i,token) in enumerate(choice_interior_tokens):
         if token == CASE_GEN_SYM:
             continue
         elif token == RAND_GEN_SYM:
-            break
+            if i == len(choice_interior_tokens)-1:  # Random generation symbol
+                # NOTE: this should be changed if named randgen or percentgen
+                #       is supported in the future.
+                break
+            else:  # Not a random generation symbol
+                current_choice.append(token)
         elif token == CHOICE_SEP:
             yield current_choice
             current_choice = []
@@ -758,63 +745,6 @@ def next_choice_tokens(choice_interior_tokens):
             current_choice.append(token)
     yield current_choice
 
-
-def find_name_and_modifiers(tokens_unit_inside):
-    """
-    Finds the name and modifiers of the unit 
-    from the tokens that represent the interior of
-    a unit declaration or reference (inside the brackets).
-    HACK: Returns the information as a dictionary.
-    Returns `None` if nothing was found.
-    """
-    casegen = False
-    randgen_name = None
-    percentgen = None
-    variation = None
-    argument = None
-    unit_name = None
-
-    i = 0
-    if tokens_unit_inside[0] == CASE_GEN_SYM:
-        casegen = True
-        i += 1
-    
-    expecting_randgen_name = False
-    expecting_percentgen = False
-    expecting_variation = False
-    expecting_argument = False
-    while i < len(tokens_unit_inside):
-        if tokens_unit_inside[i] == RAND_GEN_SYM:
-            expecting_randgen_name = True
-            randgen_name = ""
-        elif tokens_unit_inside[i] == PERCENT_GEN_SYM:
-            expecting_percentgen = True
-            percentgen = ""
-        elif tokens_unit_inside[i] == VARIATION_SYM:
-            expecting_variation = True
-            variation = ""
-        elif tokens_unit_inside[i] == ARG_SYM:
-            expecting_argument = True
-            argument = ""
-        elif expecting_randgen_name:
-            randgen_name = tokens_unit_inside[i]
-            expecting_randgen_name = False
-        elif expecting_percentgen:
-            percentgen = tokens_unit_inside[i]
-            expecting_percentgen = False
-        elif expecting_variation:
-            variation = tokens_unit_inside[i]
-            expecting_variation = False
-        elif expecting_argument:
-            argument = tokens_unit_inside[i]
-            expecting_argument = False
-        else:
-            unit_name = tokens_unit_inside[i]
-        i += 1
-
-    return {"name": unit_name, "casegen": casegen, "randgen": randgen_name,
-            "percentgen": percentgen, "variation": variation,
-            "argument": argument}
 
 
 def next_sub_rule_tokens(tokens):

@@ -101,7 +101,7 @@ class Parser(object):
         nb_examples_asked = None
         if unit_type == pu.UnitType.intent:
             annotation_interior = pu.get_annotation_interior(token_line)
-            if annotation_interior is not None and len(annotation_interior) > 2:
+            if annotation_interior is not None and len(annotation_interior) > 0:
                 nb_examples_asked = pu.find_nb_examples_asked(annotation_interior)
         
         self.create_unit(unit_type, unit_name, modifiers, nb_examples_asked)

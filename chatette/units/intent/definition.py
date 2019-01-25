@@ -30,7 +30,7 @@ class IntentDefinition(UnitDefinition):
         Generates all the examples that were asked (i.e. as much examples
         as asked). The number of generated examples is tied to a maximum though TODO.
         When `training_examples` is `None`, this will generate the training examples
-        (i.e. the number of training examples asked), otherwise, it will generate
+        (i.e. the number of training examples asked); otherwise, it will generate
         examples that are not in `training_examples` (if possible).
         """
         if training_examples is None and self.nb_training_examples_asked is None:
@@ -77,8 +77,10 @@ class IntentDefinition(UnitDefinition):
                 while True:
                     current_example = self.generate_random()
                     current_example.text = current_example.text.strip()  # Strip for safety
-                    if current_example not in generated_examples and \
-                            (training_examples is None or current_example not in training_examples):
+                    if (    current_example not in generated_examples
+                        and (training_examples is None
+                             or current_example not in training_examples)):
+                        print("'"+str(current_example)+"' not in",generated_examples)
                         generated_examples.append(
                             IntentExample(self.name, current_example.text,
                                           current_example.entities))

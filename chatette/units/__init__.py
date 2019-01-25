@@ -37,7 +37,12 @@ class Example(object):
         return "<'"+self.text+"' "+str(self.entities)+'>'
 
     def __hash__(self):
-        return hash(self.text+str(self.entities))
+        return hash( (self.text, self.entities) )
+
+    def __eq__(self, other):
+        return self.text == other.text and self.entities == other.entities
+    def __ne__(self, other):
+        return not self.__eq__(other)
 
 
 def may_change_leading_case(text):
