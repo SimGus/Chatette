@@ -94,9 +94,8 @@ class IntentDefinition(UnitDefinition):
 
             if training_examples is None:
                 return random.sample(all_examples, nb_examples_asked)
-            else:
-                random.shuffle(all_examples)
-                return [
-                    ex for ex in all_examples
-                    if ex not in training_examples
-                ]
+            random.shuffle(all_examples)
+            return [
+                ex for ex in all_examples
+                if ex not in training_examples
+            ]

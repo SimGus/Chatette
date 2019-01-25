@@ -257,7 +257,6 @@ def check_declaration_validity(tokens_unit_inside):
                           "of a unit declaration.")
     
     if casegen_count == 0 and is_special_sym(tokens_unit_inside[0]):
-        print("a")
         raise SyntaxError("Unit declarations must be named.")
     elif casegen_count == 1 and len(tokens_unit_inside) <= 1:
         raise SyntaxError("Unit declarations must be named.")
@@ -302,8 +301,7 @@ def check_declaration_validity(tokens_unit_inside):
 def check_reference_validity(tokens_unit_inside):
     """
     Check that the interior of a reference is syntactically legal.
-    Deals with word groups as well.
-    Raises a `SyntaxError` if the reference or word group is invalid.
+    Raises a `SyntaxError` if the reference is invalid.
     The constraints checked are:
     - there is only one modifier of each type
     - `/` is not there unless `?` is there
@@ -312,23 +310,178 @@ def check_reference_validity(tokens_unit_inside):
     - there is a name after `#`
     - there is a name either after `&` or at the beginning
     """
-    pass # TODO
+    casegen_count = tokens_unit_inside.count(CASE_GEN_SYM)
+    if casegen_count > 1:
+        raise SyntaxError("There can be only one case generation modifier "+
+                          "in a unit reference.")
+    if casegen_count == 1 and tokens_unit_inside.index(CASE_GEN_SYM) != 0:
+        raise SyntaxError("Case generation modifiers have to be at the start "+
+                          "of a unit reference.")
+    
+    if casegen_count == 0 and is_special_sym(tokens_unit_inside[0]):
+        raise SyntaxError("Unit references must be named.")
+    elif casegen_count == 1 and len(tokens_unit_inside) <= 1:
+        raise SyntaxError("Unit references must be named.")
+    elif casegen_count == 1 and is_special_sym(tokens_unit_inside[1]):
+        raise SyntaxError("Unit references must be named.")
+    
+    variation_count = tokens_unit_inside.count(VARIATION_SYM)
+    if variation_count > 1:
+        raise SyntaxError("There can be only one variation modifier "+
+                          "in a unit reference.")
+    if variation_count == 1:
+        variation_name_index = tokens_unit_inside.index(VARIATION_SYM)+1
+        if     variation_name_index >= len(tokens_unit_inside) \
+            or is_special_sym(tokens_unit_inside[variation_name_index]):
+            raise SyntaxError("Variations must be named.")
+        variation_name = tokens_unit_inside[variation_name_index]
+        if variation_name in RESERVED_VARIATION_NAMES:
+            raise SyntaxError("The following variation names are reserved: "+
+                              str(RESERVED_VARIATION_NAMES)+". Please don't "+
+                              "use them.")
+    
+    argument_count = tokens_unit_inside.count(ARG_SYM)
+    if argument_count > 1:
+        raise SyntaxError("There can be only one argument modifier "+
+                          "per unit reference.")
+    # if argument_count == 1:
+    #     argument_name_index = tokens_unit_inside.index(ARG_SYM)+1
+    #     if     argument_name_index >= len(tokens_unit_inside) \
+    #         or is_special_sym(tokens_unit_inside[argument_name_index]):
+    #         raise SyntaxError("Arguments must be named.")
+    
+    randgen_count = tokens_unit_inside.count(RAND_GEN_SYM)
+    if randgen_count > 1:
+        raise SyntaxError("There can be only one random generation modifier "+
+                          "per unit reference.")
+    percentgen_count = tokens_unit_inside.count(PERCENT_GEN_SYM)
+    if percentgen_count > 1:
+        raise SyntaxError("There can be only one percentage for generation "+
+                          "modifier per unit reference.")
+    if percentgen_count == 1 and randgen_count == 0:
+        raise SyntaxError("There cannot be a percentage for generation "+
+                          "modifier if there is no random generation modifier "+
+                          "(did you mean to escape '"+PERCENT_GEN_SYM+"'?)")
+    if percentgen_count == 1:
+        index_randgen = tokens_unit_inside.index(RAND_GEN_SYM)
+        index_percentgen = tokens_unit_inside.index(PERCENT_GEN_SYM)
+        if index_randgen > index_percentgen:
+            raise SyntaxError("A percentage for generation modifier must "+
+                              "always be right after the random generation "+
+                              "modifier.")
+        if index_percentgen == len(tokens_unit_inside)-1:
+            raise SyntaxError("No percentage found after the special symbol "+
+                              "for percentage modifier.")
+        try:
+            percentgen = int(tokens_unit_inside[index_percentgen+1])
+        except ValueError:
+            raise SyntaxError("Percentage for generation modifiers need to be "+
+                              "an integer.")
+        if percentgen < 0 or percentgen > 100:
+            raise SyntaxError("Percentage for generation modifiers need to be "+
+                              "between 0 and 100.")
 
 def check_choice_validity(tokens_choice_inside):
     """
-    Check that the interior of a reference is syntactically legal.
+    Check that the interior of a choice is syntactically legal.
     Deals with word groups as well.
-    Raises a `SyntaxError` if the reference or word group is invalid.
+    Raises a `SyntaxError` if the choice is invalid.
     The constraints checked are:
     - there is only one modifier of each type
-    - `/` is not there unless `?` is there
-    - there is a number between 0 and 100 if `/` is present
+    - `#` are not there
     - `&` is at the beginning of the declaration (or nowhere)
-    - there is a name after `#`
-    - there is a name either after `&` or at the beginning
-    - choices are separated by '/'
+    - choices are separated by '/' (not checked as there can be 0 or 1 choice)
     """
-    pass # TODO
+    casegen_count = tokens_choice_inside.count(CASE_GEN_SYM)
+    if casegen_count > 1:
+        raise SyntaxError("There can be only one case generation modifier "+
+                          "in a choice.")
+    if casegen_count == 1 and tokens_choice_inside.index(CASE_GEN_SYM) != 0:
+        raise SyntaxError("Case generation modifiers have to be at the start "+
+                          "of a choice.")
+    
+    variation_count = tokens_choice_inside.count(VARIATION_SYM)
+    if variation_count > 0:
+        raise SyntaxError("Choices cannot take variation modifiers.")
+    
+    argument_count = tokens_choice_inside.count(ARG_SYM)
+    if argument_count > 0:
+        raise SyntaxError("Choices cannot take an argument.")
+    
+    randgen_count = tokens_choice_inside.count(RAND_GEN_SYM)
+    if randgen_count > 1:
+        raise SyntaxError("There can be only one random generation modifier "+
+                          "per choice.")
+    if randgen_count == 1:
+        index_randgen = tokens_choice_inside.index(RAND_GEN_SYM)
+        if (    index_randgen+1 < len(tokens_choice_inside)
+            and not is_special_sym(tokens_choice_inside[index_randgen+1])):
+            raise SyntaxError("Random generation modifiers cannot be named "+
+                              "for choices.")
+
+    # TODO: deprecate `/` as choice separators AND percentgen
+    # percentgen_count = tokens_choice_inside.count(PERCENT_GEN_SYM)
+    # if percentgen_count > 0:
+    #     raise SyntaxError("Choices cannot take a percentage for generation "+
+    #                       "modifier.")
+
+def check_word_group_validity(tokens_word_group_inside):
+    """
+    Check that the interior of a choice is syntactically legal.
+    Deals with word groups as well.
+    Raises a `SyntaxError` if the choice is invalid.
+    The constraints checked are:
+    - there is only one modifier of each type
+    - `/` and `#` are not there
+    - `&` is at the beginning of the declaration (or nowhere)
+    - choices are separated by '/' (not checked as there can be 0 or 1 choice)
+    """
+    casegen_count = tokens_word_group_inside.count(CASE_GEN_SYM)
+    if casegen_count > 1:
+        raise SyntaxError("There can be only one case generation modifier "+
+                          "in a word group.")
+    if casegen_count == 1 and tokens_word_group_inside.index(CASE_GEN_SYM) != 0:
+        raise SyntaxError("Case generation modifiers have to be at the start "+
+                          "of a word group.")
+    
+    variation_count = tokens_word_group_inside.count(VARIATION_SYM)
+    if variation_count > 0:
+        raise SyntaxError("Word groups cannot take variation modifiers.")
+    
+    argument_count = tokens_word_group_inside.count(ARG_SYM)
+    if argument_count > 0:
+        raise SyntaxError("Word groups cannot take arguments.")
+    
+    randgen_count = tokens_word_group_inside.count(RAND_GEN_SYM)
+    if randgen_count > 1:
+        raise SyntaxError("There can be only one random generation modifier "+
+                          "per word group.")
+    percentgen_count = tokens_word_group_inside.count(PERCENT_GEN_SYM)
+    if percentgen_count > 1:
+        raise SyntaxError("There can be only one percentage for generation "+
+                          "modifier per word group.")
+    if percentgen_count == 1 and randgen_count == 0:
+        raise SyntaxError("There cannot be a percentage for generation "+
+                          "modifier if there is no random generation modifier "+
+                          "(did you mean to escape '"+PERCENT_GEN_SYM+"'?)")
+    if percentgen_count == 1:
+        index_randgen = tokens_word_group_inside.index(RAND_GEN_SYM)
+        index_percentgen = tokens_word_group_inside.index(PERCENT_GEN_SYM)
+        if index_randgen > index_percentgen:
+            raise SyntaxError("A percentage for generation modifier must "+
+                              "always be right after the random generation "+
+                              "modifier.")
+        if index_percentgen == len(tokens_word_group_inside)-1:
+            raise SyntaxError("No percentage found after the special symbol "+
+                              "for percentage modifier.")
+        try:
+            percentgen = int(tokens_word_group_inside[index_percentgen+1])
+        except ValueError:
+            raise SyntaxError("Percentage for generation modifiers need to be "+
+                              "an integer.")
+        if percentgen < 0 or percentgen > 100:
+            raise SyntaxError("Percentage for generation modifiers need to be "+
+                              "between 0 and 100.")
 
 
 def find_name(tokens_inside_unit):

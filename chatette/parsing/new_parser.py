@@ -74,7 +74,7 @@ class Parser(object):
         try:
             pu.check_declaration_validity(declaration_interior)
         except SyntaxError as e:
-            self.tokenizer.syntax_error(e.__str__())
+            self.tokenizer.syntax_error(str(e))
         
         unit_name = pu.find_name(declaration_interior)
         modifiers = pu.find_modifiers_decl(declaration_interior)
@@ -187,20 +187,23 @@ class Parser(object):
             word_text = sub_rule_tokens[0]
             word = WordRuleContent(word_text, leading_space)
             return word
-        elif pu.is_sub_rule_word_group(sub_rule_tokens):
+        if pu.is_sub_rule_word_group(sub_rule_tokens):
             group_interior_tokens = sub_rule_tokens[1:-1]
+            self._check_sub_rule_validity(group_interior_tokens,
+                                          pu.SubRuleType.word_group)
             words = pu.find_words(group_interior_tokens)
             words_str = ''.join(words)
             modifiers = pu.find_modifiers_word_group(group_interior_tokens)
-            # TODO check modifiers
             word_group = \
                 GroupWordRuleContent(words_str, leading_space,
                                         casegen=modifiers.casegen,
                                         randgen=modifiers.randgen_name,
                                         percentage_gen=modifiers.percentage_randgen)
             return word_group
-        elif pu.is_sub_rule_choice(sub_rule_tokens):
+        if pu.is_sub_rule_choice(sub_rule_tokens):
             choice_interior_tokens = sub_rule_tokens[1:-1]
+            self._check_sub_rule_validity(choice_interior_tokens,
+                                          pu.SubRuleType.choice)
             modifiers = pu.find_modifiers_choice(choice_interior_tokens)
             choice = ChoiceRuleContent(''.join(choice_interior_tokens),
                                         leading_space,
@@ -221,45 +224,65 @@ class Parser(object):
                     current_leading_space = False
                 choice.add_choice(current_choice_sub_rules)
             return choice
-        elif pu.is_sub_rule_alias_ref(sub_rule_tokens):
-            alias_interior_tokens = sub_rule_tokens[2:-1]
-            name = pu.find_name(alias_interior_tokens)
-            modifiers = pu.find_modifiers_reference(alias_interior_tokens)
-            # TODO check modifiers
-            alias = AliasRuleContent(name, leading_space,
-                                        modifiers.variation_name,
-                                        modifiers.argument_value,
-                                        modifiers.casegen,
-                                        modifiers.randgen_name,
-                                        modifiers.percentage_randgen, self)
-            return alias
-        elif pu.is_sub_rule_slot_ref(sub_rule_tokens):
-            slot_interior_tokens = sub_rule_tokens[2:-1]
-            name = pu.find_name(slot_interior_tokens)
-            modifiers = pu.find_modifiers_reference(slot_interior_tokens)
-            # TODO check modifiers
-            slot = SlotRuleContent(name, leading_space,
-                                    modifiers.variation_name,
-                                    modifiers.argument_value,
-                                    modifiers.casegen,
-                                    modifiers.randgen_name,
-                                    modifiers.percentage_randgen, self)
-            return slot
-        elif pu.is_sub_rule_intent_ref(sub_rule_tokens):
-            intent_interior_tokens = sub_rule_tokens[2:-1]
-            name = pu.find_name(intent_interior_tokens)
-            modifiers = pu.find_modifiers_reference(intent_interior_tokens)
-            # TODO check modifiers
-            intent = IntentRuleContent(name, leading_space,
-                                        modifiers.variation_name,
-                                        modifiers.argument_value,
-                                        modifiers.casegen,
-                                        modifiers.randgen_name,
-                                        modifiers.percentage_randgen, self)
-            return intent
-        else:
+
+        if (   len(sub_rule_tokens) == 0 
+            or not pu.is_unit_type_sym(sub_rule_tokens[0])):
+            # Not any type of sub-rule detected
             self.tokenizer.syntax_error("Invalid type of sub-rule.",
                                         word_to_find=sub_rule_tokens[0])
+
+        interior_tokens = sub_rule_tokens[2:-1]
+        name = pu.find_name(interior_tokens)
+        if pu.is_sub_rule_alias_ref(sub_rule_tokens):
+            self._check_sub_rule_validity(interior_tokens,
+                                          pu.SubRuleType.alias)
+            modifiers = pu.find_modifiers_reference(interior_tokens)
+            alias = AliasRuleContent(name, leading_space,
+                                     modifiers.variation_name,
+                                     modifiers.argument_value,
+                                     modifiers.casegen,
+                                     modifiers.randgen_name,
+                                     modifiers.percentage_randgen, self)
+            return alias
+        if pu.is_sub_rule_slot_ref(sub_rule_tokens):
+            self._check_sub_rule_validity(interior_tokens,
+                                          pu.SubRuleType.slot)
+            modifiers = pu.find_modifiers_reference(interior_tokens)
+            slot = SlotRuleContent(name, leading_space,
+                                   modifiers.variation_name,
+                                   modifiers.argument_value,
+                                   modifiers.casegen,
+                                   modifiers.randgen_name,
+                                   modifiers.percentage_randgen, self)
+            return slot
+        if pu.is_sub_rule_intent_ref(sub_rule_tokens):
+            self._check_sub_rule_validity(interior_tokens,
+                                          pu.SubRuleType.intent)
+            modifiers = pu.find_modifiers_reference(interior_tokens)
+            intent = IntentRuleContent(name, leading_space,
+                                       modifiers.variation_name,
+                                       modifiers.argument_value,
+                                       modifiers.casegen,
+                                       modifiers.randgen_name,
+                                       modifiers.percentage_randgen, self)
+            return intent
+
+    def _check_sub_rule_validity(self, interior_tokens, sub_rule_type):
+        """
+        Checks that the sub-rule represented by `interior_tokens` is
+        syntactically valid.
+        """
+        try:
+            if sub_rule_type == pu.SubRuleType.word_group:
+                pu.check_word_group_validity(interior_tokens)
+            elif sub_rule_type == pu.SubRuleType.choice:
+                pu.check_choice_validity(interior_tokens)
+            elif sub_rule_type in (pu.SubRuleType.alias,
+                                   pu.SubRuleType.slot,
+                                   pu.SubRuleType.intent):
+                pu.check_reference_validity(interior_tokens)
+        except SyntaxError as e:
+            self.tokenizer.syntax_error(str(e))
 
 
     def print_DBG(self):
