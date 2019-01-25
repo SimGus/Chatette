@@ -195,7 +195,6 @@ class UnitDefinition(object):
 
         relevant_rules = self.rules
         if variation_name is not None:
-            print("variations:",self.variations)
             if variation_name in self.variations:
                 relevant_rules = self.variations[variation_name]
             else:
