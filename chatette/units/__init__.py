@@ -132,17 +132,18 @@ class UnitDefinition(object):
 
     def add_rule(self, rule, variation_name=None):
         # (RuleContent, str) -> ()
-        if variation_name is None:
-            self.rules.append(rule)
-        else:
+        self.rules.append(rule)
+        if variation_name is not None:
             if variation_name == "":
                 raise SyntaxError("Defining a " + self.type + " with an empty name" +
                                   "is not allowed")
             if variation_name not in self.variations:
+                print("Creating var",variation_name,"in",self.type,self.name)
                 self.variations[variation_name] = [rule]
+                print("Variations:",self.variations)
+                print("Rules:",self.rules)
             else:
                 self.variations[variation_name].append(rule)
-            self.rules.append(rule)
 
     def add_rules(self, rules, variation_name=None):
         # ([RuleContent], str) -> ()
@@ -197,6 +198,7 @@ class UnitDefinition(object):
 
         relevant_rules = self.rules
         if variation_name is not None:
+            print("variations:",self.variations)
             if variation_name in self.variations:
                 relevant_rules = self.variations[variation_name]
             else:

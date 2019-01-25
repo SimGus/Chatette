@@ -139,9 +139,9 @@ class Parser(object):
 
         if unit_name not in relevant_dict:
             relevant_dict[unit_name] = new_unit
-        else:  # Not allowed anymore
-            self.tokenizer.syntax_error("The "+unit_type.name+" "+unit_name+
-                                        " was declared several times.")
+        elif modifiers.variation_name is None:  # Not allowed anymore
+            self.tokenizer.syntax_error("The "+unit_type.name+" '"+unit_name+
+                                        "' was declared several times.")
 
 
     def _parse_rule(self, tokens):
