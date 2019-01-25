@@ -539,16 +539,17 @@ def find_modifiers_decl(tokens_inside_decl):
     expecting_argument = False
     while i < len(tokens_inside_decl):
         if tokens_inside_decl[i] == VARIATION_SYM:
-            expecting_variation = True
-        elif tokens_inside_decl[i] == ARG_SYM:
-            expecting_argument = True
             modifiers.argument_name = ""
+            expecting_variation = True
+            expecting_argument = False
+        elif tokens_inside_decl[i] == ARG_SYM:
+            modifiers.argument_name = ""
+            expecting_variation = False
+            expecting_argument = True
         elif expecting_variation:
             modifiers.variation_name = tokens_inside_decl[i]
-            expecting_variation = False
         elif expecting_argument:
             modifiers.argument_name = tokens_inside_decl[i]
-            expecting_argument = False
         i += 1
 
     return modifiers
@@ -572,29 +573,38 @@ def find_modifiers_reference(tokens_inside_reference):
     expecting_argument = False
     while i < len(tokens_inside_reference):
         if tokens_inside_reference[i] == RAND_GEN_SYM:
-            expecting_randgen_name = True
             modifiers.randgen_name = ""
+            expecting_randgen_name = True
+            expecting_percentgen = False
+            expecting_variation = False
+            expecting_argument = False
         elif tokens_inside_reference[i] == PERCENT_GEN_SYM:
-            expecting_percentgen = True
-            expecting_randgen_name = False
             modifiers.percentage_randgen = ""
-        elif tokens_inside_reference[i] == VARIATION_SYM:
-            expecting_variation = True
-        elif tokens_inside_reference[i] == ARG_SYM:
-            expecting_argument = True
-            modifiers.argument_value = ""
-        elif expecting_randgen_name:
-            modifiers.randgen_name = tokens_inside_reference[i]
             expecting_randgen_name = False
+            expecting_percentgen = True
+            expecting_variation = False
+            expecting_argument = False
+        elif tokens_inside_reference[i] == VARIATION_SYM:
+            modifiers.variation_name = ""
+            expecting_randgen_name = False
+            expecting_percentgen = False
+            expecting_variation = True
+            expecting_argument = False
+        elif tokens_inside_reference[i] == ARG_SYM:
+            modifiers.argument_value = ""
+            expecting_randgen_name = False
+            expecting_percentgen = False
+            expecting_variation = False
+            expecting_argument = True
+        elif expecting_randgen_name:
+            modifiers.randgen_name += tokens_inside_reference[i]
         elif expecting_percentgen:
             modifiers.percentage_randgen = int(tokens_inside_reference[i])
             expecting_percentgen = False
         elif expecting_variation:
-            modifiers.variation_name = tokens_inside_reference[i]
-            expecting_variation = False
+            modifiers.variation_name += tokens_inside_reference[i]
         elif expecting_argument:
-            modifiers.argument_value = tokens_inside_reference[i]
-            expecting_argument = False
+            modifiers.argument_value += tokens_inside_reference[i]
         i += 1
 
     return modifiers
@@ -616,15 +626,15 @@ def find_modifiers_word_group(tokens_inside_word_group):
     expecting_percentgen = False
     while i < len(tokens_inside_word_group):
         if tokens_inside_word_group[i] == RAND_GEN_SYM:
-            expecting_randgen_name = True
             modifiers.randgen_name = ""
+            expecting_randgen_name = True
+            expecting_percentgen = False
         elif tokens_inside_word_group[i] == PERCENT_GEN_SYM:
+            modifiers.percentage_randgen = ""
             expecting_percentgen = True
             expecting_randgen_name = False
-            modifiers.percentage_randgen = ""
         elif expecting_randgen_name:
             modifiers.randgen_name = tokens_inside_word_group[i]
-            expecting_randgen_name = False
         elif expecting_percentgen:
             modifiers.percentage_randgen = int(tokens_inside_word_group[i])
             expecting_percentgen = False
@@ -720,13 +730,17 @@ def find_alt_slot_and_index(slot_rule_tokens):
         index = slot_rule_tokens.index(ALT_SLOT_VALUE_NAME_SYM)
     except ValueError:
         return None
-    alt_slot_val = slot_rule_tokens[index+1]
-    if alt_slot_val == ' ':
-        try:
-            alt_slot_val = slot_rule_tokens[index+2]
-        except IndexError:
+    if index+1 < len(slot_rule_tokens):
+        i = index+1
+        alt_slot_val = slot_rule_tokens[i]
+        if alt_slot_val == ' ':
             alt_slot_val = ""
-    return (index, alt_slot_val)
+        i += 1
+        while i < len(slot_rule_tokens):
+            alt_slot_val += slot_rule_tokens[i]
+            i += 1
+        return (index, alt_slot_val)
+    return None
 
 
 def next_choice_tokens(choice_interior_tokens):
