@@ -75,17 +75,6 @@ class SubRuleType(Enum):  # TODO move this into unit defintions
     choice = 6  # choice with contained units
 
 
-class LineType(Enum):
-    """Enumeration of all possible types of lines in an input file."""
-    # UNUSED IN NEW PARSER
-    empty = 1
-    comment = 2
-    alias_declaration = 3
-    slot_declaration = 4
-    intent_declaration = 5
-    include_file = 6
-
-
 def strip_comments(text):
     """Returns the text without the comments (and right stripped)."""
     if text is None:
@@ -879,6 +868,17 @@ def is_sub_rule_intent_ref(sub_rule_tokens):
 #     re.compile(r"'?" + _NB_TRAINING_GEN_NAME + r"'?\s*:\s*'?(?P<nbgen>[0-9]+)'?")
 # PATTERN_NB_TEST_EXAMPLES_ASKED = \
 #     re.compile(r"'?" + _NB_TEST_GEN_NAME + r"'?\s*:\s*'?(?P<nbgen_test>[0-9]+)'?")
+
+
+# class LineType(Enum):
+#     """Enumeration of all possible types of lines in an input file."""
+#     # UNUSED IN NEW PARSER
+#     empty = 1
+#     comment = 2
+#     alias_declaration = 3
+#     slot_declaration = 4
+#     intent_declaration = 5
+#     include_file = 6
 
 
 # def get_top_level_line_type(line, stripped_line):
