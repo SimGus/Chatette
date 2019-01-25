@@ -94,6 +94,7 @@
 
 # Bugs
 
+- **BUG**: possible to have several times the same example generated (doesn't seem to hash examples consistently => comparison are inconsistent in lists)
 - **BUG**: arguments are not given down when an argument is transmitted as the argument of a token
 - **BUG**: wrong generation when putting an alias inside a word group
 - **BUG**: encoding errors under Windows

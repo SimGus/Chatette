@@ -59,6 +59,7 @@ class Parser(object):
         
         return relevant_dict[definition_name]
 
+
     def parse(self):
         """
         Parses the master file and subsequent files and

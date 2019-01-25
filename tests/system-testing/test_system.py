@@ -8,7 +8,7 @@ import io, shutil
 
 import pytest
 
-from chatette.parsing.parser import Parser
+from chatette.parsing.new_parser import Parser
 from chatette.generator import Generator
 from chatette.adapters import RasaAdapter, JsonListAdapter
 
@@ -39,9 +39,8 @@ class ChatetteFacade(object):
         return ChatetteFacade.instance
 
     def run(self, template_filepath):
-        with io.open(template_filepath, 'r') as in_file:
-            parser = Parser(in_file)
-            parser.parse()
+        parser = Parser(template_filepath)
+        parser.parse()
 
         self.generator = Generator(parser)
         self.train_examples = list(self.generator.generate_train())

@@ -119,6 +119,7 @@ class SubRuleType(Enum):  # TODO move this into unit defintions
 
 class LineType(Enum):
     """Enumeration of all possible types of lines in an input file."""
+    # UNUSED IN NEW PARSER
     empty = 1
     comment = 2
     alias_declaration = 3
@@ -492,9 +493,15 @@ def find_name(tokens_inside_unit):
     a unit declaration or reference (inside the brackets (excluded)).
     @pre: there is no syntax error in this part.
     """
+    start_index = 0
     if tokens_inside_unit[0] == CASE_GEN_SYM:
-        return tokens_inside_unit[1]
-    return tokens_inside_unit[0]
+        start_index = 1
+    name = ""
+    while (   start_index < len(tokens_inside_unit)
+          and not is_special_sym(tokens_inside_unit[start_index])):
+        name += tokens_inside_unit[start_index]
+        start_index += 1
+    return name
 
 def find_words(tokens_inside_word_group):
     """
