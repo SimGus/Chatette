@@ -81,10 +81,15 @@ def main():
     print_DBG("end new parser")
     #=======================================
 
+    #======= Old parser ==================
     with io.open(template_file_path, 'r') as in_file:
         parser = Parser(in_file)
         parser.parse()
         # parser.print_DBG()
+    #======================================
+
+    generator = Generator(new_parser)
+    synonyms = generator.get_entities_synonyms()
 
     if args.adapter == 'rasa':
         # pylint: disable=redefined-variable-type
@@ -94,9 +99,6 @@ def main():
         adapter = JsonListAdapter()
     else:
         raise ValueError("Unknown adapter was selected")
-
-    generator = Generator(parser)
-    synonyms = generator.get_entities_synonyms()
 
     train_examples = list(generator.generate_train())
     if train_examples:

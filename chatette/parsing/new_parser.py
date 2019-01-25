@@ -39,6 +39,26 @@ class Parser(object):
         self.intent_definitions = dict()
 
 
+    def get_definition(self, definition_name, unit_type):
+        """Returns the definition for unit with name `definition_name`."""
+        # TODO replace SubRuleType by UnitType
+        if unit_type == pu.SubRuleType.alias:
+            relevant_dict = self.alias_definitions
+        elif unit_type == pu.SubRuleType.slot:
+            relevant_dict = self.slot_definitions
+        elif unit_type == pu.SubRuleType:
+            relevant_dict = self.intent_definitions
+        else:
+            raise ValueError("Tried to get a definition with wrong type "+
+                             "(expected alias, slot or intent)")
+        
+        if definition_name not in relevant_dict:
+            raise ValueError("Couldn't find a definition for "+unit_type.name+
+                             " '"+definition_name+"' (did you mean to use "+
+                             "the word group '["+definition_name+"]'?)")
+        
+        return relevant_dict[definition_name]
+
     def parse(self):
         """
         Parses the master file and subsequent files and

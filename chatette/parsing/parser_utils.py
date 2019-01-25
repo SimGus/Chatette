@@ -28,6 +28,7 @@ ANNOTATION_OPEN_SYM = '('
 ANNOTATION_CLOSE_SYM = ')'
 ANNOTATION_SEP = ','
 ANNOTATION_ASSIGNMENT_SYM = ':'
+ANNOTATION_IGNORED_SYM = "'"
 
 CHOICE_OPEN_SYM = r'{'
 CHOICE_CLOSE_SYM = r'}'
@@ -229,6 +230,7 @@ def get_annotation_interior(tokens):
         elif tokens[end_index] == ANNOTATION_CLOSE_SYM:
             nb_closing_brackets_expected -= 1
         end_index += 1
+    end_index -= 1
     if end_index >= length:
         return None
 
@@ -678,6 +680,14 @@ def find_nb_examples_asked(annotation_interior):
             elif expecting_test:
                 nb_test = token
                 expecting_test = False
+
+    if nb_train is None and nb_test is None:
+        return None
+
+    if nb_train is not None:
+        nb_train = nb_train.replace(ANNOTATION_IGNORED_SYM, "")
+    if nb_test is not None:
+        nb_test = nb_test.replace(ANNOTATION_IGNORED_SYM, "")
     
     try:
         nb_train = int(nb_train)
