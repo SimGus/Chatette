@@ -138,10 +138,7 @@ class UnitDefinition(object):
                 raise SyntaxError("Defining a " + self.type + " with an empty name" +
                                   "is not allowed")
             if variation_name not in self.variations:
-                print("Creating var",variation_name,"in",self.type,self.name)
                 self.variations[variation_name] = [rule]
-                print("Variations:",self.variations)
-                print("Rules:",self.rules)
             else:
                 self.variations[variation_name].append(rule)
 
