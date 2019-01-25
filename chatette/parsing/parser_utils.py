@@ -165,6 +165,11 @@ def is_unit_type_sym(text):
     """Returns `True` if `text` is a unit special symbol (`~`, `@` or `%`)."""
     return text == ALIAS_SYM or text == SLOT_SYM or text == INTENT_SYM
 
+def is_start_unit_sym(char):
+    """Checks if character `char` is the starting character of a special unit."""
+    return (char == UNIT_OPEN_SYM or char == ALIAS_SYM or \
+            char == SLOT_SYM or char == INTENT_SYM)
+
 
 def get_unit_type_from_sym(sym):
     """
@@ -511,8 +516,7 @@ def find_words(tokens_inside_word_group):
     for token in tokens_inside_word_group:
         if token == CASE_GEN_SYM:
             continue
-        if  token == RAND_GEN_SYM or token == VARIATION_SYM \
-            or token == ARG_SYM:
+        if  token in (RAND_GEN_SYM, VARIATION_SYM, ARG_SYM):
             return words
         words.append(token)
     return words
@@ -854,114 +858,108 @@ def is_sub_rule_intent_ref(sub_rule_tokens):
     return sub_rule_tokens[0] == INTENT_SYM
 
 
-def get_top_level_line_type(line, stripped_line):
-    """
-    Returns the type of a top-level line (Note: this is expected to never
-    be called for something else than a top-level line).
-    Returns `None` if the top-level line is invalid.
-    """
-    if stripped_line == "":
-        return LineType.empty
-    elif stripped_line.startswith(COMMENT_MARKER):
-        return LineType.comment
-    elif stripped_line.startswith(COMMENT_SYM_DEPRECATED):
-        deprecations.warn_semicolon_comments()
-        return LineType.comment
-    elif line.startswith(ALIAS_SYM):
-        return LineType.alias_declaration
-    elif line.startswith(SLOT_SYM):
-        return LineType.slot_declaration
-    elif line.startswith(INTENT_SYM):
-        return LineType.intent_declaration
-    elif line.startswith(INCLUDE_FILE_SYM):
-        return LineType.include_file
-    return None
+# def get_top_level_line_type(line, stripped_line):
+#     """
+#     Returns the type of a top-level line (Note: this is expected to never
+#     be called for something else than a top-level line).
+#     Returns `None` if the top-level line is invalid.
+#     """
+#     if stripped_line == "":
+#         return LineType.empty
+#     elif stripped_line.startswith(COMMENT_MARKER):
+#         return LineType.comment
+#     elif stripped_line.startswith(COMMENT_SYM_DEPRECATED):
+#         deprecations.warn_semicolon_comments()
+#         return LineType.comment
+#     elif line.startswith(ALIAS_SYM):
+#         return LineType.alias_declaration
+#     elif line.startswith(SLOT_SYM):
+#         return LineType.slot_declaration
+#     elif line.startswith(INTENT_SYM):
+#         return LineType.intent_declaration
+#     elif line.startswith(INCLUDE_FILE_SYM):
+#         return LineType.include_file
+#     return None
 
 
-def is_start_unit_sym(char):
-    """Checks if character `char` is the starting character of a special unit."""
-    return (char == UNIT_OPEN_SYM or char == ALIAS_SYM or \
-            char == SLOT_SYM or char == INTENT_SYM)
+# def is_unit_start(text):
+#     """Checks if the string `text` is the start of a special unit."""
+#     return (len(text) > 0 and is_start_unit_sym(text[0]))
 
 
-def is_unit_start(text):
-    """Checks if the string `text` is the start of a special unit."""
-    return (len(text) > 0 and is_start_unit_sym(text[0]))
+# def is_choice(text):
+#     """Checks if the string `text` is a choice."""
+#     return (len(text) > 0 and text.startswith(CHOICE_OPEN_SYM))
 
 
-def is_choice(text):
-    """Checks if the string `text` is a choice."""
-    return (len(text) > 0 and text.startswith(CHOICE_OPEN_SYM))
+# def is_word(text):
+#     """Checks if the string `text` is a word alone (i.e. not a special unit)."""
+#     return not (len(text) <= 0 or text.isspace() or \
+#                 text.startswith(CHOICE_OPEN_SYM) or is_unit_start(text))
 
 
-def is_word(text):
-    """Checks if the string `text` is a word alone (i.e. not a special unit)."""
-    return not (len(text) <= 0 or text.isspace() or \
-                text.startswith(CHOICE_OPEN_SYM) or is_unit_start(text))
+# def get_unit_type(unit_text):
+#     """This function expects a string representing a unit"""
+#     if unit_text.startswith(UNIT_OPEN_SYM):
+#         return SubRuleType.word_group
+#     elif unit_text.startswith(ALIAS_SYM):
+#         return SubRuleType.alias
+#     elif unit_text.startswith(SLOT_SYM):
+#         return SubRuleType.slot
+#     elif unit_text.startswith(INTENT_SYM):
+#         return SubRuleType.intent
+#     elif unit_text.startswith(CHOICE_OPEN_SYM):
+#         return SubRuleType.choice
+#     else:
+#         raise RuntimeError("Internal error: tried to get the unit type of " +
+#                            "something that was not a unit: '" + unit_text + "'")
 
 
-def get_unit_type(unit_text):
-    """This function expects a string representing a unit"""
-    if unit_text.startswith(UNIT_OPEN_SYM):
-        return SubRuleType.word_group
-    elif unit_text.startswith(ALIAS_SYM):
-        return SubRuleType.alias
-    elif unit_text.startswith(SLOT_SYM):
-        return SubRuleType.slot
-    elif unit_text.startswith(INTENT_SYM):
-        return SubRuleType.intent
-    elif unit_text.startswith(CHOICE_OPEN_SYM):
-        return SubRuleType.choice
-    else:
-        raise RuntimeError("Internal error: tried to get the unit type of " +
-                           "something that was not a unit: '" + unit_text + "'")
+# def find_nb_training_examples_asked(intent_text):
+#     """
+#     Finds the number of training examples asked for the provided intent string
+#     and returns it (or `None` if it wasn't provided).
+#     Raises a `ValueError` if the match is not an integer (shouldn't happen).
+#     """
+#     nb_training_examples_asked_str = None
+#     one_found = False
+#     patterns_list = [PATTERN_NB_EXAMPLES_ASKED,
+#                      PATTERN_NB_TRAINING_EXAMPLES_ASKED]
+#     for current_pattern in patterns_list:
+#         for match in current_pattern.finditer(intent_text):
+#             if one_found:
+#                 raise SyntaxError("Expected only one number of training " +
+#                                   "examples asked in " + intent_text)
+#             else:
+#                 one_found = True
+#             match = match.groupdict()
+
+#             nb_training_examples_asked_str = match["nbgen"]
+#     if nb_training_examples_asked_str is None:
+#         return None
+#     return int(nb_training_examples_asked_str)
 
 
-def find_nb_training_examples_asked(intent_text):
-    """
-    Finds the number of training examples asked for the provided intent string
-    and returns it (or `None` if it wasn't provided).
-    Raises a `ValueError` if the match is not an integer (shouldn't happen).
-    """
-    nb_training_examples_asked_str = None
-    one_found = False
-    patterns_list = [PATTERN_NB_EXAMPLES_ASKED,
-                     PATTERN_NB_TRAINING_EXAMPLES_ASKED]
-    for current_pattern in patterns_list:
-        for match in current_pattern.finditer(intent_text):
-            if one_found:
-                raise SyntaxError("Expected only one number of training " +
-                                  "examples asked in " + intent_text)
-            else:
-                one_found = True
-            match = match.groupdict()
+# def find_nb_testing_examples_asked(intent_text):
+#     """
+#     Finds the number of testing examples asked for the provided intent string
+#     and returns it (or `None` if it wasn't provided).
+#     Raises a `ValueError` if the match is not an integer (shouldn't happen).
+#     """
+#     nb_testing_examples_asked_str = None
+#     one_found = False
+#     for match in PATTERN_NB_TEST_EXAMPLES_ASKED.finditer(intent_text):
+#         if one_found:
+#             raise SyntaxError("Expected only one number of testing " +
+#                               "examples asked in '" + intent_text + "'")
+#         else:
+#             one_found = True
+#         match = match.groupdict()
 
-            nb_training_examples_asked_str = match["nbgen"]
-    if nb_training_examples_asked_str is None:
-        return None
-    return int(nb_training_examples_asked_str)
-
-
-def find_nb_testing_examples_asked(intent_text):
-    """
-    Finds the number of testing examples asked for the provided intent string
-    and returns it (or `None` if it wasn't provided).
-    Raises a `ValueError` if the match is not an integer (shouldn't happen).
-    """
-    nb_testing_examples_asked_str = None
-    one_found = False
-    for match in PATTERN_NB_TEST_EXAMPLES_ASKED.finditer(intent_text):
-        if one_found:
-            raise SyntaxError("Expected only one number of testing " +
-                              "examples asked in '" + intent_text + "'")
-        else:
-            one_found = True
-        match = match.groupdict()
-
-        nb_testing_examples_asked_str = match["nbgen_test"]
-    if nb_testing_examples_asked_str is None:
-        return None
-    return int(nb_testing_examples_asked_str)
+#         nb_testing_examples_asked_str = match["nbgen_test"]
+#     if nb_testing_examples_asked_str is None:
+#         return None
+#     return int(nb_testing_examples_asked_str)
 
 
 def remove_escapement(text):
