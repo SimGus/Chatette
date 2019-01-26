@@ -4,6 +4,7 @@
 - [ ] accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax
 - [ ] add some kind of optional version number within template files
 - [ ] add a way to specify a rule on several consecutive lines
+- [ ] add a program argument to use old parser
 
 - [ ] add an adapter to output raw lists of questions (rather than a JSON file)
 - [ ] add an adapter for *Snips*
