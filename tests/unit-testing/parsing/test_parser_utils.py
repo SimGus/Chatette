@@ -175,3 +175,106 @@ class TestIsStartUnitSym(object):
         words = ["[unit]", "~[alias]", "@[slot]", "%[intent]"]
         for w in words:
             assert not is_start_unit_sym(w)
+
+
+class TestGetUnitTypeFromSym(object):
+    def test_empty(self):
+        assert get_unit_type_from_sym("") is None
+    
+    def test_long_text(self):
+        assert get_unit_type_from_sym("text") is None
+        assert get_unit_type_from_sym("~long test") is None
+    
+    def test_not_unit_start_sym(self):
+        symbols = ['a', ' ', '\t', '?', '#', '[', '}']
+        for sym in symbols:
+            assert get_unit_type_from_sym(sym) is None
+    
+    def test_special_sym(self):
+        assert get_unit_type_from_sym('~') == UnitType.alias
+        assert get_unit_type_from_sym('@') == UnitType.slot
+        assert get_unit_type_from_sym('%') == UnitType.intent
+
+
+class TestIsSubRuleWord(object):
+    def test_empty(self):
+        assert not is_sub_rule_word("")
+
+    def test_not_words(self):
+        tokens_list = [["~", "[", "alias", "]"],
+                       ["%", "[", "intent", "?", "rand", "]"],
+                       ["[", "word", "group", "?", "]"],
+                       ["{", "choice", "/", "2", "}"]]
+        for tokens in tokens_list:
+            assert not is_sub_rule_word(tokens)
+    
+    def test_words(self):
+        tokens_list = [["word"], ["other"], ["\?"]]
+        for tokens in tokens_list:
+            assert is_sub_rule_word(tokens)
+
+
+class TestIsSubRuleWordGroup(object):
+    def test_not_word_groups(self):
+        tokens_list = [["word"],
+                       ["~", "[", "alias", "]"],
+                       ["%", "[", "intent", "?", "rand", "]"],
+                       ["{", "choice", "/", "2", "}"]]
+        for tokens in tokens_list:
+            assert not is_sub_rule_word_group(tokens)
+    
+    def test_word_groups(self):
+        tokens_list = [["[", "word", "]"], ["[", "word", "group", "]"],
+                       ["[", "&", "word", "group", "\?", "?", "rand", "]"]]
+        for tokens in tokens_list:
+            assert is_sub_rule_word_group(tokens)
+
+
+class TestIsSubRuleChoice(object):
+    def test_not_choices(self):
+        tokens_list = [["word"],
+                       ["~", "[", "alias", "]"],
+                       ["%", "[", "intent", "?", "rand", "]"],
+                       ["[", "word", "group", "?", "]"]]
+        for tokens in tokens_list:
+            assert not is_sub_rule_choice(tokens)
+
+    def test_choices(self):
+        tokens_list = [["{", "choice", "}"], ["{", "choice", "/", "2", "}"],
+                       ["{", "choice", "word", "/", "[", "word", "group", "]", "}"],
+                       ["{", "choice", "/", "choice", "?", "}"]]
+        for tokens in tokens_list:
+            assert is_sub_rule_choice(tokens)
+
+
+class TestIsSubRuleAliasRef(object):
+    def test_not_aliases(self):
+        tokens_list = [["word"],
+                       ["%", "[", "intent", "?", "rand", "]"],
+                       ["[", "word", "group", "?", "]"],
+                       ["{", "choice", "/", "2", "}"]]
+        for tokens in tokens_list:
+            assert not is_sub_rule_alias_ref(tokens)
+    
+    def test_aliases(self):
+        tokens_list = [["~", "[", "alias", "]"], ["~", "[", "&", "a", "?", "]"],
+                       ["~", "[", "alias", "?", "rand", "gen", "]"]]
+        for tokens in tokens_list:
+            assert is_sub_rule_alias_ref(tokens)
+
+
+class TestIsSubRuleSlotRef(object):
+    def test_not_slots(self):
+        tokens_list = [["word"],
+                       ["~", "[", "alias", "]"],
+                       ["%", "[", "intent", "?", "rand", "]"],
+                       ["[", "word", "group", "?", "]"],
+                       ["{", "choice", "/", "2", "}"]]
+        for tokens in tokens_list:
+            assert not is_sub_rule_slot_ref(tokens)
+
+    def test_slots(self):
+        tokens_list = [["@", "[", "slot", "]"], ["@", "[", "s", "?", "r", "]"],
+                       ["@", "[", "&", "slot", "?", "rand", "gen", "]"]]
+        for tokens in tokens_list:
+            assert is_sub_rule_slot_ref(tokens)
