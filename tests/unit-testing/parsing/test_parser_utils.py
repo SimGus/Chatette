@@ -278,3 +278,20 @@ class TestIsSubRuleSlotRef(object):
                        ["@", "[", "&", "slot", "?", "rand", "gen", "]"]]
         for tokens in tokens_list:
             assert is_sub_rule_slot_ref(tokens)
+
+
+class TestIsSubRuleIntentRef(object):
+    def test_not_intents(self):
+        tokens_list = [["word"],
+                       ["~", "[", "alias", "]"],
+                       ["@", "[", "slot", "?", "rand", "]"],
+                       ["[", "word", "group", "?", "]"],
+                       ["{", "choice", "/", "2", "}"]]
+        for tokens in tokens_list:
+            assert not is_sub_rule_intent_ref(tokens)
+
+    def test_intents(self):
+        tokens_list = [["%", "[", "intent", "]"], ["%", "[", "i", "?", "r", "]"],
+                       ["%", "[", "intent", "?", "rand", " ", "gen", "/", "1", "]"]]
+        for tokens in tokens_list:
+            assert is_sub_rule_intent_ref(tokens)
