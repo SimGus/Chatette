@@ -13,8 +13,8 @@ import os
 import re
 
 from chatette.utils import print_DBG, print_warn
-import chatette.parsing.parser_utils as pu
-from chatette.parsing.tokenizer import Tokenizer
+import chatette.parsing.old_parser_utils as pu
+from chatette.parsing.old_tokenizer import Tokenizer
 from chatette.units.alias import AliasDefinition, AliasRuleContent
 from chatette.units.choice import ChoiceRuleContent
 from chatette.units.intent import IntentDefinition, IntentRuleContent

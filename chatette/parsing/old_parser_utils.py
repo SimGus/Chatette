@@ -8,6 +8,21 @@ import re
 
 from chatette import deprecations
 import chatette.parsing.parser_utils as pu
+from chatette.parsing.parser_utils import SubRuleType
+
+ALIAS_SYM = pu.ALIAS_SYM
+SLOT_SYM = pu.SLOT_SYM
+INTENT_SYM = pu.INTENT_SYM
+ESCAPE_SYM = pu.ESCAPE_SYM
+CHOICE_OPEN_SYM = pu.CHOICE_OPEN_SYM
+CHOICE_CLOSE_SYM = pu.CHOICE_CLOSE_SYM
+UNIT_CLOSE_SYM = pu.UNIT_CLOSE_SYM
+ARG_SYM = pu.ARG_SYM
+RAND_GEN_SYM = pu.RAND_GEN_SYM
+CASE_GEN_SYM = pu.CASE_GEN_SYM
+ALT_SLOT_VALUE_NAME_SYM = pu.ALT_SLOT_VALUE_NAME_SYM
+
+RESERVED_VARIATION_NAMES = pu.RESERVED_VARIATION_NAMES
 
 # This regex finds patterns like this `[name#variation?randgen/percentgen]`
 # with `variation`, `randgen` and `percentgen` optional
@@ -54,6 +69,18 @@ class LineType(Enum):
     slot_declaration = 4
     intent_declaration = 5
     include_file = 6
+
+
+def strip_comments(text):
+    """Returns the string `text` without the comments."""
+    return pu.strip_comments(text)
+
+def is_start_unit_sym(char):
+    """Checks if character `char` is the starting character of a special unit."""
+    return pu.is_start_unit_sym(char)
+
+def remove_escapement(text):
+    return pu.remove_escapement(text)
 
 
 def get_top_level_line_type(line, stripped_line):
