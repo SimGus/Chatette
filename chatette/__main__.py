@@ -99,8 +99,7 @@ class Facade(object):
         self.generator = None
     @classmethod
     def from_args(cls, args):
-        return Facade(args.input, args.output, args.adapter, args.local,
-                      args.seed)
+        return cls(args.input, args.output, args.adapter, args.local, args.seed)
 
     @staticmethod
     def get_or_create(master_file_path, output_dir_path, adapter_str=None,
@@ -127,11 +126,11 @@ class Facade(object):
 
         train_examples = list(self.generator.generate_train())
         if train_examples:
-            self.adapter.write(os.path.join(dir_path, "train"),
+            self.adapter.write(os.path.join(self.output_dir_path, "train"),
                                train_examples, synonyms)
         test_examples = list(self.generator.generate_test(train_examples))
         if test_examples:
-            self.adapter.write(os.path.join(dir_path, "test"),
+            self.adapter.write(os.path.join(self.output_dir_path, "test"),
                                test_examples, synonyms)
         print_DBG("Generation over")
 
