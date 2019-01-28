@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import argparse
-import io
 import os
 import sys
 from random import seed as random_seed
@@ -68,7 +67,7 @@ def main():
         dir_path = os.path.join(dir_path, "output")
     else:
         dir_path = os.path.join(dir_path, args.output)
-    
+
     # Initialize the random number generator
     if args.seed is not None:
         random_seed(args.seed)

@@ -88,7 +88,7 @@ def with_leading_lower(text):
 
 
 def may_get_leading_space(text):
-    return (text != "" and not text.startswith(' '))  # TODO: Add '\t'?
+    return text != "" and not text.startswith(' ')  # TODO: Add '\t'?
 
 
 class UnitDefinition(object):
@@ -113,7 +113,7 @@ class UnitDefinition(object):
         self.variations = dict()
 
         self.casegen = casegen  # IDEA: don't make the casegen variation agnostic
-    
+
     def __repr__(self):
         result = self.type+":"+self.name
         if self.casegen:
