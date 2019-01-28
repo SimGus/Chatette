@@ -46,6 +46,7 @@
 - [ ] *Docs* multilingual
 - [ ] *Docs* specify which version of *Rasa NLU* *chatette* can work with
 - [ ] *Docs* explain '/' syntax for alternative slot value
+- [ ] *Docs* explain that redefining a unit silently appends the rules to the already declared unit (with the same modifiers as the first time)
 
 ## Done
 
