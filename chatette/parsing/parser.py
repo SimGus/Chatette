@@ -5,9 +5,7 @@ and transforms the information they contain into dictionaries
 of unit definitions.
 """
 
-import os
-
-from chatette.utils import print_DBG, print_warn
+from chatette.utils import print_DBG
 import chatette.parsing.parser_utils as pu
 from chatette.parsing.tokenizer import Tokenizer
 
@@ -26,10 +24,10 @@ class Parser(object):
     This class will parse the input file(s)
     and create an internal representation of its contents.
     """
-    
+
     def __init__(self, master_filename):
         self.tokenizer = Tokenizer(master_filename)
-        
+
         self._expecting_rule = False
         self._currently_parsed_declaration = None  # 3-tuple
         self._expected_indentation = None  # str
@@ -51,19 +49,19 @@ class Parser(object):
         else:
             raise ValueError("Tried to get a definition with wrong type "+
                              "(expected alias, slot or intent)")
-        
+
         if definition_name not in relevant_dict:
             raise ValueError("Couldn't find a definition for "+unit_type.name+
                              " '"+definition_name+"' (did you mean to use "+
                              "the word group '["+definition_name+"]'?)")
-        
+
         return relevant_dict[definition_name]
 
 
     def parse(self):
         """
         Parses the master file and subsequent files and
-        transforms the information parsed into a dictionary of 
+        transforms the information parsed into a dictionary of
         declaration names -> rules.
         """
         print_DBG("Parsing master file: "+self.tokenizer.get_file_information()[0])
@@ -80,15 +78,15 @@ class Parser(object):
                 self._parse_rule(token_line)
                 self._expecting_rule = False  # Not expecting but still allowed
         self.tokenizer.close_files()
-    
+
     def _parse_declaration_initiator(self, token_line):
         """Parses a line (as tokens) that contains a declaration initiator."""
         if self._expecting_rule:
             self.tokenizer.syntax_error("Expected a generation rule, got a "+
                                         "unit declaration instead.")
-        
+
         unit_type = pu.get_unit_type_from_sym(token_line[0])
-        
+
         declaration_interior = pu.get_declaration_interior(token_line)
         if declaration_interior is None:
             self.tokenizer.syntax_error("Couldn't find a valid unit declaration.")
@@ -97,7 +95,7 @@ class Parser(object):
             pu.check_declaration_validity(declaration_interior)
         except SyntaxError as e:
             self.tokenizer.syntax_error(str(e))
-        
+
         unit_name = pu.find_name(declaration_interior)
         modifiers = pu.find_modifiers_decl(declaration_interior)
         nb_examples_asked = None
@@ -105,10 +103,10 @@ class Parser(object):
             annotation_interior = pu.get_annotation_interior(token_line)
             if annotation_interior is not None and len(annotation_interior) > 0:
                 nb_examples_asked = pu.find_nb_examples_asked(annotation_interior)
-        
+
         self.create_unit(unit_type, unit_name, modifiers, nb_examples_asked)
         self._currently_parsed_declaration = (unit_type, unit_name, modifiers)
-    
+
     def create_unit(self, unit_type, unit_name, modifiers,
                     nb_examples_asked=None):
         """
@@ -149,7 +147,6 @@ class Parser(object):
         Parses the list of string `tokens` that represents a rule in a
         template file. Add the rule to the declaration currently being parsed.
         """
-        # TODO check rule is valid
         if self._currently_parsed_declaration is None:
             self.tokenizer.syntax_error("Got a rule outside of "+
                                         "a unit declaration.")
@@ -177,7 +174,7 @@ class Parser(object):
                 sub_rules = [DummySlotValRuleContent(alt_slot_value, sub_rule)]
                 alt_slot_value = None
             sub_rules.append(sub_rule)
-            
+
             leading_space = False
 
         relevant_dict = None
@@ -187,7 +184,7 @@ class Parser(object):
             relevant_dict = self.slot_definitions
         else:  # intent
             relevant_dict = self.intent_definitions
-        
+
         name = self._currently_parsed_declaration[1]
         variation_name = self._currently_parsed_declaration[2].variation_name
         relevant_dict[name].add_rule(sub_rules, variation_name)
@@ -218,9 +215,9 @@ class Parser(object):
             modifiers = pu.find_modifiers_word_group(group_interior_tokens)
             word_group = \
                 GroupWordRuleContent(words_str, leading_space,
-                                        casegen=modifiers.casegen,
-                                        randgen=modifiers.randgen_name,
-                                        percentage_gen=modifiers.percentage_randgen)
+                                     casegen=modifiers.casegen,
+                                     randgen=modifiers.randgen_name,
+                                     percentage_gen=modifiers.percentage_randgen)
             return word_group
         if pu.is_sub_rule_choice(sub_rule_tokens):
             choice_interior_tokens = sub_rule_tokens[1:-1]
@@ -228,10 +225,10 @@ class Parser(object):
                                           pu.SubRuleType.choice)
             modifiers = pu.find_modifiers_choice(choice_interior_tokens)
             choice = ChoiceRuleContent(''.join(choice_interior_tokens),
-                                        leading_space,
-                                        casegen=modifiers.casegen,
-                                        randgen=modifiers.randgen)#,
-                                        #percentage_gen=modifiers.percentage_randgen)
+                                       leading_space,
+                                       casegen=modifiers.casegen,
+                                       randgen=modifiers.randgen)#,
+                                       #percentage_gen=modifiers.percentage_randgen)
             for choice_tokens in pu.next_choice_tokens(choice_interior_tokens):
                 current_leading_space = False
                 current_choice_sub_rules = []
@@ -247,7 +244,7 @@ class Parser(object):
                 choice.add_choice(current_choice_sub_rules)
             return choice
 
-        if (   len(sub_rule_tokens) == 0 
+        if (   len(sub_rule_tokens) == 0
             or not pu.is_unit_type_sym(sub_rule_tokens[0])):
             # Not any type of sub-rule detected
             self.tokenizer.syntax_error("Invalid type of sub-rule.",

@@ -12,7 +12,7 @@ from __future__ import print_function
 import os
 import re
 
-from chatette.utils import print_DBG, print_warn
+from chatette.utils import print_DBG
 import chatette.parsing.old_parser_utils as pu
 from chatette.parsing.old_tokenizer import Tokenizer
 from chatette.units.alias import AliasDefinition, AliasRuleContent
@@ -480,7 +480,7 @@ class Parser(object):
         if accept_slot_val:
             return (slot_val, rules)
         return rules
-        
+
 
     def _make_rules_from_tokens(self, tokens):
         # [str] -> [RuleContent]

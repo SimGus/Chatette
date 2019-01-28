@@ -3,9 +3,8 @@ Module `chatette.parsing.tokenizer`
 Contains the tokenizer used by the parser.
 """
 
-import io, os
+import os
 
-from chatette.utils import print_warn, print_DBG
 import chatette.parsing.parser_utils as pu
 from chatette.parsing.line_count_file_wrapper import LineCountFileWrapper
 
@@ -117,7 +116,7 @@ class Tokenizer(object):
 
         if indentation is None and text[0] == pu.INCLUDE_FILE_SYM:
             return [pu.INCLUDE_FILE_SYM, text[1:]]
-        
+
         nb_closing_brackets_expected = 0  # For unit declaration initiators and references
         expecting_percent_gen = False  # True in a sub-rule after a `?`
         after_unit_declaration = False
@@ -125,7 +124,8 @@ class Tokenizer(object):
         inside_choice = False
         next_char_escaped = False
 
-        for (i,c) in enumerate(text):
+        i = 0
+        for (i, c) in enumerate(text):
             # Escapement
             if next_char_escaped:
                 current_token += c
@@ -251,7 +251,7 @@ class Tokenizer(object):
         if next_char_escaped:
             self.syntax_error("Line ends with unexpected escapement '"+
                               pu.ESCAPE_SYM+"'.", text, i)
-        
+
         return tokens
 
 

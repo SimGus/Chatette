@@ -143,8 +143,8 @@ def is_unit_type_sym(text):
 
 def is_start_unit_sym(char):
     """Checks if character `char` is the starting character of a special unit."""
-    return (char == UNIT_OPEN_SYM or char == ALIAS_SYM or \
-            char == SLOT_SYM or char == INTENT_SYM)
+    return char == UNIT_OPEN_SYM or char == ALIAS_SYM or \
+           char == SLOT_SYM or char == INTENT_SYM
 
 
 def get_unit_type_from_sym(sym):
@@ -237,14 +237,14 @@ def check_declaration_validity(tokens_unit_inside):
     if casegen_count == 1 and tokens_unit_inside.index(CASE_GEN_SYM) != 0:
         raise SyntaxError("Case generation modifiers have to be at the start "+
                           "of a unit declaration.")
-    
+
     if casegen_count == 0 and is_special_sym(tokens_unit_inside[0]):
         raise SyntaxError("Unit declarations must be named.")
     elif casegen_count == 1 and len(tokens_unit_inside) <= 1:
         raise SyntaxError("Unit declarations must be named.")
     elif casegen_count == 1 and is_special_sym(tokens_unit_inside[1]):
         raise SyntaxError("Unit declarations must be named.")
-    
+
     variation_count = tokens_unit_inside.count(VARIATION_SYM)
     if variation_count > 1:
         raise SyntaxError("There can be only one variation modifier "+
@@ -259,7 +259,7 @@ def check_declaration_validity(tokens_unit_inside):
             raise SyntaxError("The following variation names are reserved: "+
                               str(RESERVED_VARIATION_NAMES)+". Please don't "+
                               "use them.")
-    
+
     argument_count = tokens_unit_inside.count(ARG_SYM)
     if argument_count > 1:
         raise SyntaxError("There can be only one argument modifier "+
@@ -269,7 +269,7 @@ def check_declaration_validity(tokens_unit_inside):
         if     argument_name_index >= len(tokens_unit_inside) \
             or is_special_sym(tokens_unit_inside[argument_name_index]):
             raise SyntaxError("Arguments must be named.")
-    
+
     randgen_count = tokens_unit_inside.count(RAND_GEN_SYM)
     if randgen_count > 0:
         raise SyntaxError("Unit declarations cannot take a random generation "+
@@ -299,14 +299,14 @@ def check_reference_validity(tokens_unit_inside):
     if casegen_count == 1 and tokens_unit_inside.index(CASE_GEN_SYM) != 0:
         raise SyntaxError("Case generation modifiers have to be at the start "+
                           "of a unit reference.")
-    
+
     if casegen_count == 0 and is_special_sym(tokens_unit_inside[0]):
         raise SyntaxError("Unit references must be named.")
     elif casegen_count == 1 and len(tokens_unit_inside) <= 1:
         raise SyntaxError("Unit references must be named.")
     elif casegen_count == 1 and is_special_sym(tokens_unit_inside[1]):
         raise SyntaxError("Unit references must be named.")
-    
+
     variation_count = tokens_unit_inside.count(VARIATION_SYM)
     if variation_count > 1:
         raise SyntaxError("There can be only one variation modifier "+
@@ -321,7 +321,7 @@ def check_reference_validity(tokens_unit_inside):
             raise SyntaxError("The following variation names are reserved: "+
                               str(RESERVED_VARIATION_NAMES)+". Please don't "+
                               "use them.")
-    
+
     argument_count = tokens_unit_inside.count(ARG_SYM)
     if argument_count > 1:
         raise SyntaxError("There can be only one argument modifier "+
@@ -331,7 +331,7 @@ def check_reference_validity(tokens_unit_inside):
     #     if     argument_name_index >= len(tokens_unit_inside) \
     #         or is_special_sym(tokens_unit_inside[argument_name_index]):
     #         raise SyntaxError("Arguments must be named.")
-    
+
     randgen_count = tokens_unit_inside.count(RAND_GEN_SYM)
     if randgen_count > 1:
         raise SyntaxError("There can be only one random generation modifier "+
@@ -381,15 +381,15 @@ def check_choice_validity(tokens_choice_inside):
     if casegen_count == 1 and tokens_choice_inside.index(CASE_GEN_SYM) != 0:
         raise SyntaxError("Case generation modifiers have to be at the start "+
                           "of a choice.")
-    
+
     variation_count = tokens_choice_inside.count(VARIATION_SYM)
     if variation_count > 0:
         raise SyntaxError("Choices cannot take variation modifiers.")
-    
+
     argument_count = tokens_choice_inside.count(ARG_SYM)
     if argument_count > 0:
         raise SyntaxError("Choices cannot take an argument.")
-    
+
     randgen_count = tokens_choice_inside.count(RAND_GEN_SYM)
     if randgen_count > 1:
         raise SyntaxError("There can be only one random generation modifier "+
@@ -425,15 +425,15 @@ def check_word_group_validity(tokens_word_group_inside):
     if casegen_count == 1 and tokens_word_group_inside.index(CASE_GEN_SYM) != 0:
         raise SyntaxError("Case generation modifiers have to be at the start "+
                           "of a word group.")
-    
+
     variation_count = tokens_word_group_inside.count(VARIATION_SYM)
     if variation_count > 0:
         raise SyntaxError("Word groups cannot take variation modifiers.")
-    
+
     argument_count = tokens_word_group_inside.count(ARG_SYM)
     if argument_count > 0:
         raise SyntaxError("Word groups cannot take arguments.")
-    
+
     randgen_count = tokens_word_group_inside.count(RAND_GEN_SYM)
     if randgen_count > 1:
         raise SyntaxError("There can be only one random generation modifier "+
@@ -502,7 +502,7 @@ def find_modifiers_decl(tokens_inside_decl):
     """
     Finds and create a representation of the modifiers from a list of tokens
     representing the inside of a unit declaration. Returns the representation.
-    If the percentage of generation was present but couldn't be 
+    If the percentage of generation was present but couldn't be
     @pre: there is no syntax error in this part (except possibly for
           percentage of generation).
     """
@@ -512,7 +512,7 @@ def find_modifiers_decl(tokens_inside_decl):
     if tokens_inside_decl[0] == CASE_GEN_SYM:
         modifiers.casegen = True
         i += 1
-    
+
     expecting_variation = False
     expecting_argument = False
     while i < len(tokens_inside_decl):
@@ -547,7 +547,7 @@ def find_modifiers_reference(tokens_inside_reference):
     if tokens_inside_reference[0] == CASE_GEN_SYM:
         modifiers.casegen = True
         i += 1
-    
+
     expecting_randgen_name = False
     expecting_percentgen = False
     expecting_variation = False
@@ -606,7 +606,7 @@ def find_modifiers_word_group(tokens_inside_word_group):
     if tokens_inside_word_group[0] == CASE_GEN_SYM:
         modifiers.casegen = True
         i += 1
-    
+
     expecting_randgen_name = False
     expecting_percentgen = False
     while i < len(tokens_inside_word_group):
@@ -641,7 +641,7 @@ def find_modifiers_choice(tokens_inside_choice):
     if tokens_inside_choice[0] == CASE_GEN_SYM:
         modifiers.casegen = True
         i += 1
-    
+
     # expecting_percentgen = False
     while i < len(tokens_inside_choice):
         if tokens_inside_choice[i] == RAND_GEN_SYM:
@@ -694,7 +694,7 @@ def find_nb_examples_asked(annotation_interior):
         nb_train = nb_train.replace(ANNOTATION_IGNORED_SYM, "")
     if nb_test is not None:
         nb_test = nb_test.replace(ANNOTATION_IGNORED_SYM, "")
-    
+
     try:
         nb_train = int(nb_train)
         if nb_test is None:
@@ -736,7 +736,7 @@ def next_choice_tokens(choice_interior_tokens):
     @pre: there is no syntax error in this part.
     """
     current_choice = []
-    for (i,token) in enumerate(choice_interior_tokens):
+    for (i, token) in enumerate(choice_interior_tokens):
         if token == CASE_GEN_SYM:
             continue
         elif token == RAND_GEN_SYM:
