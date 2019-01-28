@@ -119,16 +119,19 @@ class Parser(object):
         new_unit = None
         relevant_dict = None
         if unit_type == pu.UnitType.alias:
-            new_unit = AliasDefinition(unit_name, [], modifiers.argument_name,
-                                       modifiers.casegen)
+            new_unit = AliasDefinition.from_mods_repr(unit_name, modifiers)
+            # new_unit = AliasDefinition(unit_name, [], modifiers.argument_name,
+            #                            modifiers.casegen)
             relevant_dict = self.alias_definitions
         elif unit_type == pu.UnitType.slot:
-            new_unit = SlotDefinition(unit_name, [], modifiers.argument_name,
-                                      modifiers.casegen)
+            new_unit = SlotDefinition.from_mods_repr(unit_name, modifiers)
+            # new_unit = SlotDefinition(unit_name, [], modifiers.argument_name,
+            #                           modifiers.casegen)
             relevant_dict = self.slot_definitions
         elif unit_type == pu.UnitType.intent:
-            new_unit = IntentDefinition(unit_name, [], modifiers.argument_name,
-                                        modifiers.casegen)
+            new_unit = IntentDefinition.from_mods_repr(unit_name, modifiers)
+            # new_unit = IntentDefinition(unit_name, [], modifiers.argument_name,
+            #                             modifiers.casegen)
             relevant_dict = self.intent_definitions
 
         if unit_type == pu.UnitType.intent and nb_examples_asked is not None:

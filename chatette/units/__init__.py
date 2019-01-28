@@ -113,6 +113,9 @@ class UnitDefinition(object):
         self.variations = dict()
 
         self.casegen = casegen  # IDEA: don't make the casegen variation agnostic
+    @classmethod
+    def from_mods_repr(cls, name, modifiers, rules=None):
+        return cls(name, rules, modifiers.argument_name, modifiers.casegen)
 
     def __repr__(self):
         result = self.type+":"+self.name
