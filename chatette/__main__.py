@@ -57,45 +57,83 @@ def main():
 
     args = argument_parser.parse_args()
 
-    template_file_path = args.input
-    if args.local:
-        dir_path = os.path.dirname(template_file_path)
-    else:
-        dir_path = os.getcwd()
+    facade = Facade.get_or_create_from_args(args)
+    facade.run()
 
-    if args.output is None:
-        dir_path = os.path.join(dir_path, "output")
-    else:
-        dir_path = os.path.join(dir_path, args.output)
 
-    # Initialize the random number generator
-    if args.seed is not None:
-        random_seed(args.seed)
+class Facade(object):
+    """
+    Facade of the whole program in charge of instantiating the different
+    components required for the parsing, generation and writing of the
+    relevant informations.
+    Implements the design patterns facade and singleton.
+    """
+    instance = None
+    def __init__(self, master_file_path, output_dir_path, adapter_str, local,
+                 seed):
+        self.master_file_path = master_file_path
+        if local:
+            self.output_dir_path = os.path.dirname(master_file_path)
+        else:
+            self.output_dir_path = os.getcwd()
+        if output_dir_path is None:
+            self.output_dir_path = os.path.join(self.output_dir_path, "output")
+        else:
+            self.output_dir_path = os.path.join(self.output_dir_path,
+                                                output_dir_path)
 
-    parser = Parser(template_file_path)
-    parser.parse()
+        # Initialize the random number generator
+        if seed is not None:
+            random_seed(seed)
 
-    generator = Generator(parser)
-    synonyms = generator.get_entities_synonyms()
+        if adapter_str is None:
+            self.adapter = None
+        elif adapter_str == "rasa":
+            self.adapter = RasaAdapter()
+        elif adapter_str == "jsonl":
+            self.adapter = JsonListAdapter()
+        else:
+            raise ValueError("Unknown adapter was selected")
 
-    if args.adapter == 'rasa':
-        # pylint: disable=redefined-variable-type
-        adapter = RasaAdapter()
-    elif args.adapter == 'jsonl':
-        # pylint: disable=redefined-variable-type
-        adapter = JsonListAdapter()
-    else:
-        raise ValueError("Unknown adapter was selected")
+        self.parser = None
+        self.generator = None
+    @classmethod
+    def from_args(cls, args):
+        return Facade(args.input, args.output, args.adapter, args.local,
+                      args.seed)
 
-    train_examples = list(generator.generate_train())
-    if train_examples:
-        adapter.write(os.path.join(dir_path, "train"), train_examples, synonyms)
+    @staticmethod
+    def get_or_create(master_file_path, output_dir_path, adapter_str=None,
+                      local=False, seed=None):
+        if Facade.instance is None:
+            instance = Facade(master_file_path, output_dir_path, adapter_str,
+                              local, seed)
+        return instance
+    @staticmethod
+    def get_or_create_from_args(args):
+        if Facade.instance is None:
+            instance = Facade.from_args(args)
+        return instance
 
-    test_examples = list(generator.generate_test(train_examples))
-    if test_examples:
-        adapter.write(os.path.join(dir_path, "test"), test_examples, synonyms)
+    def run(self):
+        """
+        Executes the parsing, generation and (if needed) writing of the output.
+        """
+        self.parser = Parser(self.master_file_path)
+        self.parser.parse()
 
-    print_DBG("Generation over")
+        self.generator = Generator(self.parser)
+        synonyms = self.generator.get_entities_synonyms()
+
+        train_examples = list(self.generator.generate_train())
+        if train_examples:
+            self.adapter.write(os.path.join(dir_path, "train"),
+                               train_examples, synonyms)
+        test_examples = list(self.generator.generate_test(train_examples))
+        if test_examples:
+            self.adapter.write(os.path.join(dir_path, "test"),
+                               test_examples, synonyms)
+        print_DBG("Generation over")
 
 
 if __name__ == "__main__":
