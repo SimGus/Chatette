@@ -86,3 +86,20 @@ class Facade(object):
             self.adapter.write(os.path.join(self.output_dir_path, "test"),
                                test_examples, synonyms)
         print_DBG("Generation over")
+    
+    def run_parsing(self):
+        """Executes the parsing alone."""
+        self.parser = Parser(self.master_file_path)
+        self.parser.parse()
+    
+
+    def print_stats(self):
+        if self.parser is None:
+            print("\tNo file parsed.")
+        else:
+            stats = self.parser.stats
+            print('\t', stats["#files"], "files parsed")
+            print('\t', stats["#declarations"], "declarations:",
+                  stats["#intents"], "intents,", stats["#slots"], "slots and",
+                  stats["#aliases"], "aliases")
+            print('\t', stats["#rules"], "rules")

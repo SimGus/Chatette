@@ -36,6 +36,9 @@ class Parser(object):
         self.slot_definitions = dict()
         self.intent_definitions = dict()
 
+        self.stats = {"#files": 1, "#declarations": 0, "#rules": 0,
+                      "#intents": 0, "#aliases": 0, "#slots": 0}
+
 
     def get_definition(self, definition_name, unit_type):
         """Returns the definition for unit with name `definition_name`."""
@@ -70,13 +73,16 @@ class Parser(object):
                 if token_line[0] == pu.INCLUDE_FILE_SYM:
                     self.tokenizer.open_file(token_line[1])
                     print_DBG("Parsing file: "+self.tokenizer.get_file_information()[0])
+                    self.stats["#files"] += 1
                 else:
                     self._parse_declaration_initiator(token_line)
                     self._expecting_rule = True
+                    self.stats["#declarations"] += 1
                 self._expected_indentation = None
             else:
                 self._parse_rule(token_line)
                 self._expecting_rule = False  # Not expecting but still allowed
+                self.stats["#rules"] += 1
         self.tokenizer.close_files()
 
     def _parse_declaration_initiator(self, token_line):
@@ -122,14 +128,17 @@ class Parser(object):
             new_unit = AliasDefinition(unit_name, [], modifiers.argument_name,
                                        modifiers.casegen)
             relevant_dict = self.alias_definitions
+            self.stats["#aliases"] += 1
         elif unit_type == pu.UnitType.slot:
             new_unit = SlotDefinition(unit_name, [], modifiers.argument_name,
                                       modifiers.casegen)
             relevant_dict = self.slot_definitions
+            self.stats["#slots"] += 1
         elif unit_type == pu.UnitType.intent:
             new_unit = IntentDefinition(unit_name, [], modifiers.argument_name,
                                         modifiers.casegen)
             relevant_dict = self.intent_definitions
+            self.stats["#intents"] += 1
 
         if unit_type == pu.UnitType.intent and nb_examples_asked is not None:
             (train_nb, test_nb) = nb_examples_asked
