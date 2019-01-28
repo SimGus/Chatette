@@ -52,7 +52,7 @@ class SlotDefinition(UnitDefinition):
             generated_example.text += generated_token.text
             generated_example.entities.extend(generated_token.entities)
 
-        if self.casegen and self.can_have_casegen():
+        if self.modifiers.casegen and self.can_have_casegen():
             generated_example.text = randomly_change_case(generated_example.text)
 
         # Replace `arg` inside the generated sentence
@@ -118,7 +118,7 @@ class SlotDefinition(UnitDefinition):
                     examples_from_current_rule = tmp_buffer
 
             # Replace `arg` inside generated sentences
-            if arg_value is not None and self.argument_identifier is not None:
+            if arg_value is not None and self.modifiers.argument_name is not None:
                 for ex in examples_from_current_rule:
                     ex.text = self._replace_arg(ex.text, arg_value)
                     for entity in ex.entities:
@@ -128,7 +128,7 @@ class SlotDefinition(UnitDefinition):
                                                             arg_value)
 
             # Apply casegen
-            if self.casegen and self.can_have_casegen():
+            if self.modifiers.casegen and self.can_have_casegen():
                 tmp_examples = []
                 for ex in examples_from_current_rule:
                     (lower_ex, upper_ex) = (deepcopy(ex), deepcopy(ex))
@@ -204,7 +204,7 @@ class SlotDefinition(UnitDefinition):
             else:
                 synonyms[slot_value].extend(current_examples)
 
-        if self.argument_identifier is not None:
+        if self.modifiers.argument_name is not None:
             (unprocessed_synonyms, synonyms) = (synonyms, dict())
             # Manage arguments
             for slot_value in unprocessed_synonyms:
@@ -237,7 +237,7 @@ class SlotDefinition(UnitDefinition):
     def _replace_arg(self, text, arg_value):
         """If needed, replaces the arguments by their value in `text`."""
         # (str, str) -> (str)
-        if arg_value is not None and self.argument_identifier is not None:
+        if arg_value is not None and self.modifiers.argument_name is not None:
             text = self.arg_regex.sub(arg_value, text)
             text = text.replace("\$", "$")
         return text

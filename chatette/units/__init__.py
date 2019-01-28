@@ -12,6 +12,7 @@ from random import randint
 from copy import deepcopy
 
 from chatette.utils import choose
+from chatette.modifiers.representation import UnitDeclarationModifiersRepr
 
 
 ENTITY_MARKER = "<<CHATETTE_ENTITY>>"
@@ -97,13 +98,15 @@ class UnitDefinition(object):
     def __init__(self, name, rules=None, arg=None, casegen=False):
         if rules is None:
             rules = []
-
         self.type = "unit"
 
         self.name = name
         self.rules = rules  # list of list of `RulesContent`s => [[RulesContent]]
 
-        self.argument_identifier = arg
+        self.modifiers = UnitDeclarationModifiersRepr(case_generation=casegen,
+                                                      argument_name=arg)
+
+        # self.argument_identifier = arg
         if arg is not None:
             PATTERN_ARG = r"(?<!\\)\$" + arg
             self.arg_regex = re.compile(PATTERN_ARG)
@@ -112,14 +115,14 @@ class UnitDefinition(object):
 
         self.variations = dict()
 
-        self.casegen = casegen  # IDEA: don't make the casegen variation agnostic
+        # self.casegen = casegen  # IDEA: don't make the casegen variation agnostic
     @classmethod
     def from_mods_repr(cls, name, modifiers, rules=None):
         return cls(name, rules, modifiers.argument_name, modifiers.casegen)
 
     def __repr__(self):
         result = self.type+":"+self.name
-        if self.casegen:
+        if self.modifiers.casegen:
             result = '&'+result
         return '<'+result+'>'
 
@@ -182,11 +185,11 @@ class UnitDefinition(object):
             example_text += generated_token.text
             example_entities.extend(generated_token.entities)
 
-        if self.casegen and self.can_have_casegen:
+        if self.modifiers.casegen and self.can_have_casegen:
             example_text = randomly_change_case(example_text)
 
         # Replace `arg` inside the generated sentence
-        if arg_value is not None and self.argument_identifier is not None:
+        if arg_value is not None and self.modifiers.argument_name is not None:
             example_text = self.arg_regex.sub(arg_value, example_text)
             # pylint: disable=anomalous-backslash-in-string
             example_text = example_text.replace(r"\$", "$")
@@ -234,14 +237,14 @@ class UnitDefinition(object):
             generated_examples.extend(examples_from_current_rule)
 
         # Replace `arg` inside generated sentences
-        if arg_value is not None and self.argument_identifier is not None:
+        if arg_value is not None and self.modifiers.argument_name is not None:
             for (i, ex) in enumerate(generated_examples):
                 ex.text = self.arg_regex.sub(arg_value, ex.text)
                 # pylint: disable=anomalous-backslash-in-string
                 generated_examples[i].text = ex.text.replace(r"\$", "$")
 
         # Apply casegen
-        if self.casegen and self.can_have_casegen():
+        if self.modifiers.casegen and self.can_have_casegen():
             tmp_examples = []
             for ex in generated_examples:
                 (lower_ex, upper_ex) = (deepcopy(ex), deepcopy(ex))
@@ -279,14 +282,14 @@ class UnitDefinition(object):
                     rule_nb_ex *= current_nb_ex
             nb_possible_ex += rule_nb_ex
 
-        if self.casegen:
+        if self.modifiers.casegen:
             nb_possible_ex *= 2
         return nb_possible_ex
 
     def print_DBG(self):
         print("\t" + self.type + ": " + self.name)
-        print("\t\targument: " + str(self.argument_identifier))
-        print("\t\tcasegen: " + str(self.casegen))
+        print("\t\targument: " + str(self.modifiers.argument_name))
+        print("\t\tcasegen: " + str(self.modifiers.casegen))
         print("\t\trules:")
         for rule in self.rules:
             print("\t\t\trule:")
