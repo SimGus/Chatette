@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import argparse
-import io
 import os
 import sys
 from random import seed as random_seed
@@ -11,7 +10,7 @@ from chatette import __version__
 from chatette.adapters import JsonListAdapter
 from chatette.adapters.rasa import RasaAdapter
 from chatette.generator import Generator
-from chatette.parsing import Parser
+from chatette.parsing.parser import Parser
 from chatette.utils import print_DBG
 
 
@@ -68,15 +67,16 @@ def main():
         dir_path = os.path.join(dir_path, "output")
     else:
         dir_path = os.path.join(dir_path, args.output)
-    
+
     # Initialize the random number generator
     if args.seed is not None:
         random_seed(args.seed)
 
-    with io.open(template_file_path, 'r') as in_file:
-        parser = Parser(in_file)
-        parser.parse()
-        # parser.print_DBG()
+    parser = Parser(template_file_path)
+    parser.parse()
+
+    generator = Generator(parser)
+    synonyms = generator.get_entities_synonyms()
 
     if args.adapter == 'rasa':
         # pylint: disable=redefined-variable-type
@@ -86,9 +86,6 @@ def main():
         adapter = JsonListAdapter()
     else:
         raise ValueError("Unknown adapter was selected")
-
-    generator = Generator(parser)
-    synonyms = generator.get_entities_synonyms()
 
     train_examples = list(generator.generate_train())
     if train_examples:

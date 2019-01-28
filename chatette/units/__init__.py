@@ -36,6 +36,14 @@ class Example(object):
     def __repr__(self):
         return "<'"+self.text+"' "+str(self.entities)+'>'
 
+    def __hash__(self):
+        return hash(self.text+str(self.entities))  # NOTE: those hashes seem inconsistent when testing whether an example was already generated (intent/definition.py:80)
+
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
 
 def may_change_leading_case(text):
     """
@@ -80,7 +88,7 @@ def with_leading_lower(text):
 
 
 def may_get_leading_space(text):
-    return (text != "" and not text.startswith(' '))  # TODO: Add '\t'?
+    return text != "" and not text.startswith(' ')  # TODO: Add '\t'?
 
 
 class UnitDefinition(object):
@@ -105,7 +113,7 @@ class UnitDefinition(object):
         self.variations = dict()
 
         self.casegen = casegen  # IDEA: don't make the casegen variation agnostic
-    
+
     def __repr__(self):
         result = self.type+":"+self.name
         if self.casegen:
@@ -122,11 +130,10 @@ class UnitDefinition(object):
                 return True
         return False
 
-    def add_rule(self, rule, variation_name=None, slot_val=None):
-        # (RuleContent, str, str) -> ()
-        if variation_name is None:
-            self.rules.append(rule)
-        else:
+    def add_rule(self, rule, variation_name=None):
+        # (RuleContent, str) -> ()
+        self.rules.append(rule)
+        if variation_name is not None:
             if variation_name == "":
                 raise SyntaxError("Defining a " + self.type + " with an empty name" +
                                   "is not allowed")
@@ -134,10 +141,9 @@ class UnitDefinition(object):
                 self.variations[variation_name] = [rule]
             else:
                 self.variations[variation_name].append(rule)
-            self.rules.append(rule)
 
-    def add_rules(self, rules, variation_name=None, slot_val=None):
-        # ([RuleContent], str, str) -> ()
+    def add_rules(self, rules, variation_name=None):
+        # ([RuleContent], str) -> ()
         self.rules.extend(rules)
         if variation_name is not None:
             if variation_name == "":
@@ -180,7 +186,7 @@ class UnitDefinition(object):
         if arg_value is not None and self.argument_identifier is not None:
             example_text = self.arg_regex.sub(arg_value, example_text)
             # pylint: disable=anomalous-backslash-in-string
-            example_text = example_text.replace("\$", "$")
+            example_text = example_text.replace(r"\$", "$")
 
         return Example(example_text, example_entities)
 
@@ -229,7 +235,7 @@ class UnitDefinition(object):
             for (i, ex) in enumerate(generated_examples):
                 ex.text = self.arg_regex.sub(arg_value, ex.text)
                 # pylint: disable=anomalous-backslash-in-string
-                generated_examples[i].text = ex.text.replace("\$", "$")
+                generated_examples[i].text = ex.text.replace(r"\$", "$")
 
         # Apply casegen
         if self.casegen and self.can_have_casegen():
@@ -284,7 +290,7 @@ class UnitDefinition(object):
             for content in rule:
                 content.print_DBG(4)
         for variation in self.variations:
-            print("\t\tvariation " + variation)
+            print("\t\tvariation: " + variation)
             for rule in self.variations[variation]:
                 print("\t\t\trule:")
                 for content in rule:
@@ -378,7 +384,7 @@ class RuleContent(object):
         if self.variation_name is not None:
             result += '#'+self.variation_name
         if self.randgen is not None:
-            result += '?'+self.randgen
+            result += '?'+str(self.randgen)
             if self.percentgen != 50:
                 result += '/'+str(self.percentgen)
         if self.arg_value is not None:

@@ -1,0 +1,25 @@
+# Contains all possible examples for the Chatette template file with the same name.
+single word group>>>a word group
+words and word groups>>>a word a group
+words and word groups>>>a group a word
+words and word groups>>>word group word group group
+casegen groups>>>casegened!
+casegen groups>>>Casegened!
+casegen groups>>>word casegened another
+casegen groups>>>word Casegened another
+casegen groups>>>word casegened Another
+casegen groups>>>word Casegened Another
+casegen intent>>>word group
+casegen intent>>>Word group
+casegen intent>>>word word group
+casegen intent>>>Word word group
+randgen>>>word maybe group
+randgen>>>word
+randgen>>>group maybe group
+randgen>>>group
+both>>>word
+both>>>word maybe casegened group
+both>>>word Maybe casegened group
+both>>>group
+both>>>group maybe casegened group
+both>>>group Maybe casegened group

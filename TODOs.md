@@ -4,9 +4,10 @@
 - [ ] accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax
 - [ ] add some kind of optional version number within template files
 - [ ] add a way to specify a rule on several consecutive lines
+- [ ] add a program argument to use old parser
 
 - [ ] add an adapter to output raw lists of questions (rather than a JSON file)
-- [ ] add an adapter for *Snips*
+- [ ] add an adapter for *Snips*, *DialogFlow* and *IBM Watson*
 - [ ] add default aliases and slots
 
 - [ ] add opposite `randgen` names
@@ -17,6 +18,7 @@
 - [ ] add a flag to enable/disable the slot = slot synonym behavior (cf. https://github.com/rodrigopivi/Chatito/issues/50)
 - [ ] add a way to make some generation mandatory in the training set, test set or both (cf. https://github.com/rodrigopivi/Chatito/issues/51)
 - [ ] add custom annotations as *Chatito* does
+- [ ] add support for any sub-rule's modifier for choices
 
 - [ ] add regex to rasa JSON file
 
@@ -43,6 +45,8 @@
 - [ ] *Docs* add a representation of the architecture of the project
 - [ ] *Docs* multilingual
 - [ ] *Docs* specify which version of *Rasa NLU* *chatette* can work with
+- [ ] *Docs* explain '/' syntax for alternative slot value
+- [ ] *Docs* explain that redefining a unit silently appends the rules to the already declared unit (with the same modifiers as the first time)
 
 ## Done
 
@@ -92,6 +96,7 @@
 
 # Bugs
 
+- **BUG**: possible to have several times the same example generated (doesn't seem to hash examples consistently => comparison are inconsistent in lists)
 - **BUG**: arguments are not given down when an argument is transmitted as the argument of a token
 - **BUG**: wrong generation when putting an alias inside a word group
 - **BUG**: encoding errors under Windows

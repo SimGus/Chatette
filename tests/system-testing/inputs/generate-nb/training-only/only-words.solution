@@ -1,0 +1,11 @@
+# Contains all possible examples for the Chatette template file with the same name.
+single word>>>Hello
+single word>>>Hi
+single word>>>hola
+several words>>>Two words
+several words>>>another set of several words
+several words>>>words with (special) symbols! :D
+casegen intent>>>word
+casegen intent>>>Word
+casegen intent>>>casegened word
+casegen intent>>>Casegened word

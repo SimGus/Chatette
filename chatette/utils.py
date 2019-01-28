@@ -31,22 +31,22 @@ def cast_to_unicode(anything):
     """
     if sys.version_info[0] == 3:
         return anything
+
     if isinstance(anything, str):
         return unicode(anything, "utf-8")
-    elif isinstance(anything, dict):
+    if isinstance(anything, dict):
         cast_dict = dict()
         for key in anything:
             cast_key = cast_to_unicode(key)
             cast_value = cast_to_unicode(anything[key])
             cast_dict[cast_key] = cast_value
         return cast_dict
-    elif isinstance(anything, list):
+    if isinstance(anything, list):
         cast_list = []
         for e in anything:
             cast_list.append(cast_to_unicode(e))
         return cast_list
-    else:
-        return anything
+    return anything
 
 
 def choose(array):

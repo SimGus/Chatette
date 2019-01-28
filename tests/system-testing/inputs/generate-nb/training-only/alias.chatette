@@ -1,0 +1,30 @@
+%[single](9)
+    ~[&alias]
+    ~[complex alias]
+    ~[cascading]
+    ~[variation]
+    
+%[multiple]('training': '6')
+    word ~[alias?]
+    ~[cascading] ~[cascading]
+    ~[variation#one] => ~[variation#two?/60]
+    
+%[arg](train: 3)
+    ~[arged#1$ARGUMENT]
+    ~[arged#2$other argument]
+    
+~[alias]
+    alias
+~[complex alias]
+    more complex alias
+    several words and a [&group]
+~[&cascading]
+    cascading ~[alias]
+~[variation#one]
+    variation one
+~[variation#two]
+    variation two
+~[arged#1$ARG]
+    arged ($ARG)
+~[arged#2$ARG]
+    second arg: $ARG

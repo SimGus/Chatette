@@ -5,6 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- Accept comment lines and empty lines inside unit definitions (not considered as a new rule)
+- Move tokenizer out of parser, move all code that is related to parsing into directory `parsing` and rename file `parsing.py` back to `parser.py`. Parsing might behave differently than it used to.
+
+### Fixed
+- Possible infinite loop during generation (with a lot of bad luck)
+<!--- Sometimes, duplicate examples when asking for less than half of all possible examples-->
+- (Invisible) warnings because of invalid control sequences in the code and the tests
 
 ## [1.3.2] - 2019-01-21
 ### Added

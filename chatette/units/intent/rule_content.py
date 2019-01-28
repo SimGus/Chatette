@@ -1,6 +1,6 @@
 from random import randint
 
-from chatette.parser_utils import Unit
+from chatette.parsing.parser_utils import SubRuleType
 from chatette.units import Example, RuleContent, may_get_leading_space, \
                            may_change_leading_case, randomly_change_case, \
                            with_leading_lower, with_leading_upper
@@ -29,7 +29,7 @@ class IntentRuleContent(RuleContent):
         self.casegen_checked = False
 
     def can_have_casegen(self):
-        return self.parser.get_definition(self.name, Unit.intent) \
+        return self.parser.get_definition(self.name, SubRuleType.intent) \
             .can_have_casegen()
 
     def check_casegen(self):
@@ -61,7 +61,7 @@ class IntentRuleContent(RuleContent):
                 # Generate this randgen
                 generated_randgens[self.randgen] = True
 
-        generated_example = self.parser.get_definition(self.name, Unit.intent) \
+        generated_example = self.parser.get_definition(self.name, SubRuleType.intent) \
             .generate_random(self.variation_name, self.arg_value)
 
         if self.casegen:
@@ -78,7 +78,7 @@ class IntentRuleContent(RuleContent):
         if self.randgen is not None:
             generated_examples.append(Example())
 
-        intents = self.parser.get_definition(self.name, Unit.intent) \
+        intents = self.parser.get_definition(self.name, SubRuleType.intent) \
             .generate_all(self.variation_name, self.arg_value)
 
         generated_examples.extend(intents)
@@ -100,7 +100,7 @@ class IntentRuleContent(RuleContent):
         return generated_examples
 
     def get_max_nb_generated_examples(self):
-        nb_possible_ex = self.parser.get_definition(self.name, Unit.intent) \
+        nb_possible_ex = self.parser.get_definition(self.name, SubRuleType.intent) \
             .get_max_nb_generated_examples(self.variation_name)
         if self.casegen:
             nb_possible_ex *= 2
