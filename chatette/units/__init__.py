@@ -95,30 +95,29 @@ def may_get_leading_space(text):
 class UnitDefinition(object):
     """Superclass representing a unit definition."""
 
-    def __init__(self, name, rules=None, arg=None, casegen=False):
-        if rules is None:
-            rules = []
+    def __init__(self, name, modifiers, rules=None):
         self.type = "unit"
 
         self.name = name
-        self.rules = rules  # list of list of `RulesContent`s => [[RulesContent]]
+        if rules is None:
+            self.rules = []
+        else:
+            self.rules = rules  # list of list of `RulesContent`s => [[RulesContent]]
 
-        self.modifiers = UnitDeclarationModifiersRepr(case_generation=casegen,
-                                                      argument_name=arg)
+        self.modifiers = modifiers
 
-        # self.argument_identifier = arg
-        if arg is not None:
-            PATTERN_ARG = r"(?<!\\)\$" + arg
+        if modifiers.argument_name is not None:
+            PATTERN_ARG = r"(?<!\\)\$" + modifiers.argument_name
             self.arg_regex = re.compile(PATTERN_ARG)
         else:
             self.arg_regex = None
 
         self.variations = dict()
-
-        # self.casegen = casegen  # IDEA: don't make the casegen variation agnostic
     @classmethod
-    def from_mods_repr(cls, name, modifiers, rules=None):
-        return cls(name, rules, modifiers.argument_name, modifiers.casegen)
+    def from_raw_var(cls, name, rules=None, arg=None, casegen=False):
+        modifiers = UnitDeclarationModifiersRepr(case_generation=casegen,
+                                                 argument_name=arg)
+        return cls(name, modifiers, rules)
 
     def __repr__(self):
         result = self.type+":"+self.name

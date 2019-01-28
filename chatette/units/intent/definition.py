@@ -11,11 +11,8 @@ class IntentDefinition(UnitDefinition):
     containing all the rules it can generate from.
     """
 
-    def __init__(self, name, rules=None, arg=[], casegen=False):
-        super(IntentDefinition, self).__init__(name, rules=rules, arg=arg, casegen=casegen)
-
-        if rules is None:
-            rules = []
+    def __init__(self, name, modifiers, rules=None):
+        super(IntentDefinition, self).__init__(name, modifiers, rules=rules)
 
         self.type = "intent"
         self.nb_training_examples_asked = None  # All possibilities will be generated TODO

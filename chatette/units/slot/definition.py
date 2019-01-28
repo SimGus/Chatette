@@ -12,9 +12,8 @@ class SlotDefinition(UnitDefinition):
     containing all the rules that it could generate.
     """
 
-    def __init__(self, name, rules=[], arg=None, casegen=False):
-        super(SlotDefinition, self).__init__(name, rules=rules, arg=arg,
-                                             casegen=casegen)
+    def __init__(self, name, modifiers, rules=[]):
+        super(SlotDefinition, self).__init__(name, modifiers, rules=rules)
         self.type = "slot"
         self.arg_values_encountered = []
 
