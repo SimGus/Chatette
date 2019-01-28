@@ -170,7 +170,10 @@ class Parser(object):
             sub_rule = self._make_sub_rule_from_tokens(sub_rule_tokens,
                                                        leading_space)
             if alt_slot_value is not None:
-                sub_rules = [DummySlotValRuleContent(alt_slot_value, sub_rule)]
+                if alt_slot_value != pu.ALT_SLOT_VALUE_FIRST_SYM:
+                    sub_rules = [DummySlotValRuleContent(alt_slot_value, sub_rule)]
+                else:
+                    sub_rules = [DummySlotValRuleContent(sub_rule.name, sub_rule)]
                 alt_slot_value = None
             sub_rules.append(sub_rule)
 

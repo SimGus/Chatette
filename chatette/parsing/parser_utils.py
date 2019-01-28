@@ -41,6 +41,7 @@ CASE_GEN_SYM = '&'
 ARG_SYM = '$'  # This shouldn't be changed
 
 ALT_SLOT_VALUE_NAME_SYM = '='
+ALT_SLOT_VALUE_FIRST_SYM = '/'
 
 INCLUDE_FILE_SYM = '|'
 
