@@ -1,6 +1,6 @@
 """
 Test module.
-Tests the functions in module 'chatette.utils'.
+Tests the functions in module 'chatette.parsing.parser_utils'.
 """
 
 import pytest
@@ -72,225 +72,6 @@ class TestStripComments(object):
         assert strip_comments(s) == "test"
 
 
-class TestGetTopLevelLineType(object):
-    def test_incorrect_lines(self):
-        lines = ["something", "nothing", "\tsomething incorrect", "a\t"]
-        for l in lines:
-            assert get_top_level_line_type(l, l.lstrip()) is None
-
-    def test_empty_lines(self):
-        lines = ["", "  ", "\t", "\t\t  \t"]
-        for l in lines:
-            assert get_top_level_line_type(l, l.lstrip()) == LineType.empty
-
-    def test_old_comment_lines(self):
-        lines = ["\t;comment", ";comment"]
-        for l in lines:
-            assert get_top_level_line_type(l, l.lstrip()) == LineType.comment
-
-    def test_new_comment_lines(self):
-        lines = ["\t//comment", "//comment\t"]
-        for l in lines:
-            assert get_top_level_line_type(l, l.lstrip()) == LineType.comment
-    
-    def test_alias_lines(self):
-        lines = ["~[alias]", "~[];comment", "~[alias] // comment\t"]
-        for l in lines:
-            assert get_top_level_line_type(l, l.lstrip()) == LineType.alias_declaration
-
-    def test_slot_lines(self):
-        lines = ["@[slot]", "@[];comment", "@[slot] // comment\t"]
-        for l in lines:
-            assert get_top_level_line_type(l, l.lstrip()) == LineType.slot_declaration
-
-    def test_intent_lines(self):
-        lines = ["%[intent]", "%[];comment", "%[intent] // comment\t"]
-        for l in lines:
-            assert get_top_level_line_type(l, l.lstrip()) == LineType.intent_declaration
-
-    def test_include_lines(self):
-        lines = ["|include", "|file//comment", "|filename ; comment"]
-        for l in lines:
-            assert get_top_level_line_type(l, l.lstrip()) == LineType.include_file
-
-class TestIsStartUnitSym(object):
-    def test_not_unit_start_sym(self):
-        symbols = ['', ' ', '\t', 'a', '0', '/', ';', '|', '{', ']', '}',
-                   '(', ')']
-        for sym in symbols:
-            assert not is_start_unit_sym(sym)
-
-    def test_not_char(self):
-        objects = ["word", 0, False, str, ['a', '['], {1: 0}, None]
-        for o in objects:
-            assert not is_start_unit_sym(o)
-
-    def test_unit_start_sym(self):
-        unit_open_sym = '['
-        assert is_start_unit_sym(unit_open_sym)
-        alias_sym = '~'
-        assert is_start_unit_sym(alias_sym)
-        slot_sym = '@'
-        assert is_start_unit_sym(slot_sym)
-        intent_sym = '%'
-        assert is_start_unit_sym(intent_sym)
-    
-    def test_unit_start_word(self):
-        words = ["[unit]", "~[alias]", "@[slot]", "%[intent]"]
-        for w in words:
-            assert not is_start_unit_sym(w)
-
-
-class TestIsUnitStart(object):
-    def test_empty(self):
-        assert not is_unit_start("")
-
-    def test_not_unit_start_word(self):
-        words = ["word", "\tother", "|includedfile"]
-        for w in words:
-            assert not is_unit_start(w)
-
-    def test_unit_start_word(self):
-        words = ["[unit]", "~[alias]", "@[slot]", "%[intent]"]
-        for w in words:
-            assert is_unit_start(w)
-
-
-class TestIsChoice(object):
-    def test_empty(self):
-        assert not is_choice("")
-    
-    def test_not_choice_word(self):
-        words = ["word", "[unit]", "~[alias]", "False", "\tword"]
-        for w in words:
-            assert not is_choice(w)
-
-    def test_choice_words(self):
-        words = ["{choice}", "{a/b}", "{"]
-        # The last one might be considered not a valid choice
-        # (not what is currently done in `is_choice`)
-        for w in words:
-            assert is_choice(w)
-
-
-class TestIsWord(object):
-    def test_empty(self):
-        assert not is_word("")
-    
-    def test_not_word(self):
-        strings = ["[unit]", "~[alias]", "@[slot]", "%[intent]", "{choice/a}",
-                   " ", "\t\t"]
-        for s in strings:
-            assert not is_word(s)
-    
-    def test_word(self):
-        words = ["word", "a", "other things", "test.", "?", "!"]
-        for w in words:
-            assert is_word(w)
-
-
-class TestGetUnitType(object):
-    def test_empty(self):
-        with pytest.raises(RuntimeError,
-                           message="Empty string does not raise an exception "+
-                                   "when trying to get its unit type."):
-            get_unit_type("")
-    
-    def test_not_units(self):
-        strings = ["word", "?", "several words"]
-        for s in strings:
-            with pytest.raises(RuntimeError, 
-                               message="Strings that are not units do not "+
-                                       "raise an exception when trying to get "+
-                                       "its unit type."):
-                get_unit_type(s)
-    
-    def test_units(self):
-        unit = "[unit]"
-        assert get_unit_type(unit) == Unit.word_group
-        unit = "[word group]"
-        assert get_unit_type(unit) == Unit.word_group
-        unit = "~[alias] //comment"
-        assert get_unit_type(unit) == Unit.alias
-        unit = "@[slot]"
-        assert get_unit_type(unit) == Unit.slot
-        unit = "%[intent]"
-        assert get_unit_type(unit) == Unit.intent
-        unit = "{choice/choice 2?}"
-        assert get_unit_type(unit) == Unit.choice
-        
-
-
-class TestFindNbTrainingExamplesAsked(object):
-    def test_empty(self):
-        assert find_nb_training_examples_asked("") is None
-
-    def test_no_intent(self):
-        strings = ["// comment", "word", "\tseveral words", "[word group]",
-                   "|includedfile", "sentence with nb in parentheses (12)"]
-        for s in strings:
-            assert find_nb_training_examples_asked(s) is None
-    
-    def test_no_nb_asked(self):
-        intents = ["%[intent]", "%[intent in several words]", "%[test]()",
-                   "%[intent] // comment"]
-        for i in intents:
-            assert find_nb_training_examples_asked(i) is None
-    
-    def test_several_nb(self):
-        # NOTE: The strings are very specific to the pattern being matched
-        strings = ["%[intent](1)('training':'5')", "](1)](2)",
-                   "'training':5,train: 8", "train:120 ('training: 3')"]
-        for s in strings:
-            with pytest.raises(SyntaxError,
-                               message="An intent with several numbers of "+
-                                       "examples to generate should raise "+
-                                       "a `SyntaxError`."):
-                print(find_nb_training_examples_asked(s))
-
-    def test_intents(self):
-        # NOTE: The strings are very specific to the pattern being matched
-        intents = ["%[intent](42)", "](42)", "'training':42", "train : '42'",
-                   "'train: 42'", "training :42, test: 58", "train:42,'test':38"]
-        for i in intents:
-            assert find_nb_training_examples_asked(i) == 42
-
-
-class TestFindNbTestingExamplesAsked(object):
-    def test_empty(self):
-        assert find_nb_testing_examples_asked("") is None
-
-    def test_no_intent(self):
-        strings = ["// comment", "word", "\tseveral words", "[word group]",
-                   "|includedfile", "sentence with nb in parentheses (12)"]
-        for s in strings:
-            assert find_nb_testing_examples_asked(s) is None
-    
-    def test_no_nb_asked(self):
-        intents = ["%[intent]", "%[intent in several words]", "%[test]()",
-                   "%[intent] // comment"]
-        for i in intents:
-            assert find_nb_testing_examples_asked(i) is None
-    
-    def test_several_nb(self):
-        # NOTE: The strings are very specific to the pattern being matched
-        strings = ["%[intent](test: 1)('testing':'5')", "test:1 'testing : 2'",
-                   "'testing':5,test: 8", "test:120 ('testing: 3')"]
-        for s in strings:
-            with pytest.raises(SyntaxError,
-                               message="An intent with several numbers of "+
-                                       "examples to generate should raise "+
-                                       "a `SyntaxError`."):
-                print(find_nb_testing_examples_asked(s))
-
-    def test_intents(self):
-        # NOTE: The strings are very specific to the pattern being matched
-        intents = ["%[intent](test:42)", "'testing':42", "test : '42'",
-                   "'test: 42'", "training :58, test: 42", "test:42,'train':38"]
-        for i in intents:
-            assert find_nb_testing_examples_asked(i) == 42
-
-
 class TestRemoveEscapement(object):
     def test_empty(self):
         assert remove_escapement("") == ""
@@ -327,3 +108,190 @@ class TestRemoveEscapement(object):
         assert remove_escapement(s) == "test? with several ? escapements|"
         s = r"\[another [test\?] with] escapement\$2"
         assert remove_escapement(s) == "[another [test?] with] escapement\$2"
+
+
+class TestIsSpecialSym(object):
+    def test_empty(self):
+        assert not is_special_sym(None)
+        assert not is_special_sym("")
+    
+    def test_long_text(self):
+        assert not is_special_sym("text")
+        assert not is_special_sym("/Another test/")
+    
+    def test_not_special_char(self):
+        symbols = ['a', ' ', '\t', '!']
+        for sym in symbols:
+            assert not is_special_sym(sym)
+    
+    def test_special_char(self):
+        symbols = ['~', '@', '%', '[', ']', '#', '?', '/', '&', '$']
+        for sym in symbols:
+            assert is_special_sym(sym)
+
+
+class TestIsUnitTypeSym(object):
+    def test_empty(self):
+        assert not is_unit_type_sym("")
+    
+    def test_long_text(self):
+        assert not is_unit_type_sym("text")
+        assert not is_unit_type_sym("~long test")
+    
+    def test_not_special_char(self):
+        symbols = ['a', ' ', '\\', '!', '?']
+        for sym in symbols:
+            assert not is_unit_type_sym(sym)
+    
+    def test_special_char(self):
+        symbols = ['~', '@', '%']
+        for sym in symbols:
+            assert is_unit_type_sym(sym)
+
+
+class TestIsStartUnitSym(object):
+    def test_not_unit_start_sym(self):
+        symbols = ['', ' ', '\t', 'a', '0', '/', ';', '|', '{', ']', '}',
+                   '(', ')']
+        for sym in symbols:
+            assert not is_start_unit_sym(sym)
+
+    def test_not_char(self):
+        objects = ["word", 0, False, str, ['a', '['], {1: 0}, None]
+        for o in objects:
+            assert not is_start_unit_sym(o)
+
+    def test_unit_start_sym(self):
+        unit_open_sym = '['
+        assert is_start_unit_sym(unit_open_sym)
+        alias_sym = '~'
+        assert is_start_unit_sym(alias_sym)
+        slot_sym = '@'
+        assert is_start_unit_sym(slot_sym)
+        intent_sym = '%'
+        assert is_start_unit_sym(intent_sym)
+    
+    def test_unit_start_word(self):
+        words = ["[unit]", "~[alias]", "@[slot]", "%[intent]"]
+        for w in words:
+            assert not is_start_unit_sym(w)
+
+
+class TestGetUnitTypeFromSym(object):
+    def test_empty(self):
+        assert get_unit_type_from_sym("") is None
+    
+    def test_long_text(self):
+        assert get_unit_type_from_sym("text") is None
+        assert get_unit_type_from_sym("~long test") is None
+    
+    def test_not_unit_start_sym(self):
+        symbols = ['a', ' ', '\t', '?', '#', '[', '}']
+        for sym in symbols:
+            assert get_unit_type_from_sym(sym) is None
+    
+    def test_special_sym(self):
+        assert get_unit_type_from_sym('~') == UnitType.alias
+        assert get_unit_type_from_sym('@') == UnitType.slot
+        assert get_unit_type_from_sym('%') == UnitType.intent
+
+
+class TestIsSubRuleWord(object):
+    def test_empty(self):
+        assert not is_sub_rule_word("")
+
+    def test_not_words(self):
+        tokens_list = [["~", "[", "alias", "]"],
+                       ["%", "[", "intent", "?", "rand", "]"],
+                       ["[", "word", "group", "?", "]"],
+                       ["{", "choice", "/", "2", "}"]]
+        for tokens in tokens_list:
+            assert not is_sub_rule_word(tokens)
+    
+    def test_words(self):
+        tokens_list = [["word"], ["other"], ["\?"]]
+        for tokens in tokens_list:
+            assert is_sub_rule_word(tokens)
+
+
+class TestIsSubRuleWordGroup(object):
+    def test_not_word_groups(self):
+        tokens_list = [["word"],
+                       ["~", "[", "alias", "]"],
+                       ["%", "[", "intent", "?", "rand", "]"],
+                       ["{", "choice", "/", "2", "}"]]
+        for tokens in tokens_list:
+            assert not is_sub_rule_word_group(tokens)
+    
+    def test_word_groups(self):
+        tokens_list = [["[", "word", "]"], ["[", "word", "group", "]"],
+                       ["[", "&", "word", "group", "\?", "?", "rand", "]"]]
+        for tokens in tokens_list:
+            assert is_sub_rule_word_group(tokens)
+
+
+class TestIsSubRuleChoice(object):
+    def test_not_choices(self):
+        tokens_list = [["word"],
+                       ["~", "[", "alias", "]"],
+                       ["%", "[", "intent", "?", "rand", "]"],
+                       ["[", "word", "group", "?", "]"]]
+        for tokens in tokens_list:
+            assert not is_sub_rule_choice(tokens)
+
+    def test_choices(self):
+        tokens_list = [["{", "choice", "}"], ["{", "choice", "/", "2", "}"],
+                       ["{", "choice", "word", "/", "[", "word", "group", "]", "}"],
+                       ["{", "choice", "/", "choice", "?", "}"]]
+        for tokens in tokens_list:
+            assert is_sub_rule_choice(tokens)
+
+
+class TestIsSubRuleAliasRef(object):
+    def test_not_aliases(self):
+        tokens_list = [["word"],
+                       ["%", "[", "intent", "?", "rand", "]"],
+                       ["[", "word", "group", "?", "]"],
+                       ["{", "choice", "/", "2", "}"]]
+        for tokens in tokens_list:
+            assert not is_sub_rule_alias_ref(tokens)
+    
+    def test_aliases(self):
+        tokens_list = [["~", "[", "alias", "]"], ["~", "[", "&", "a", "?", "]"],
+                       ["~", "[", "alias", "?", "rand", "gen", "]"]]
+        for tokens in tokens_list:
+            assert is_sub_rule_alias_ref(tokens)
+
+
+class TestIsSubRuleSlotRef(object):
+    def test_not_slots(self):
+        tokens_list = [["word"],
+                       ["~", "[", "alias", "]"],
+                       ["%", "[", "intent", "?", "rand", "]"],
+                       ["[", "word", "group", "?", "]"],
+                       ["{", "choice", "/", "2", "}"]]
+        for tokens in tokens_list:
+            assert not is_sub_rule_slot_ref(tokens)
+
+    def test_slots(self):
+        tokens_list = [["@", "[", "slot", "]"], ["@", "[", "s", "?", "r", "]"],
+                       ["@", "[", "&", "slot", "?", "rand", "gen", "]"]]
+        for tokens in tokens_list:
+            assert is_sub_rule_slot_ref(tokens)
+
+
+class TestIsSubRuleIntentRef(object):
+    def test_not_intents(self):
+        tokens_list = [["word"],
+                       ["~", "[", "alias", "]"],
+                       ["@", "[", "slot", "?", "rand", "]"],
+                       ["[", "word", "group", "?", "]"],
+                       ["{", "choice", "/", "2", "}"]]
+        for tokens in tokens_list:
+            assert not is_sub_rule_intent_ref(tokens)
+
+    def test_intents(self):
+        tokens_list = [["%", "[", "intent", "]"], ["%", "[", "i", "?", "r", "]"],
+                       ["%", "[", "intent", "?", "rand", " ", "gen", "/", "1", "]"]]
+        for tokens in tokens_list:
+            assert is_sub_rule_intent_ref(tokens)

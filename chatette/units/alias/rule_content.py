@@ -1,6 +1,6 @@
 from random import randint
 
-from chatette.parsing.parser_utils import Unit
+from chatette.parsing.parser_utils import SubRuleType
 from chatette.units import Example, RuleContent, may_get_leading_space, \
                            may_change_leading_case, randomly_change_case, \
                            with_leading_lower, with_leading_upper
@@ -21,6 +21,7 @@ class AliasRuleContent(RuleContent):
 
     def __init__(self, name, leading_space=False, variation_name=None, arg_value=None,
                  casegen=False, randgen=None, percentage_gen=50, parser=None):
+        # TODO replace parser by self definition
         super(AliasRuleContent, self).__init__(name, leading_space=leading_space,
                                                variation_name=variation_name,
                                                arg_value=arg_value, casegen=casegen,
@@ -29,7 +30,7 @@ class AliasRuleContent(RuleContent):
         self.casegen_checked = False
 
     def can_have_casegen(self):
-        return self.parser.get_definition(self.name, Unit.alias) \
+        return self.parser.get_definition(self.name, SubRuleType.alias) \
             .can_have_casegen()
 
     def check_casegen(self):
@@ -61,7 +62,7 @@ class AliasRuleContent(RuleContent):
                 # Generate this randgen
                 generated_randgens[self.randgen] = True
 
-        generated_example = self.parser.get_definition(self.name, Unit.alias) \
+        generated_example = self.parser.get_definition(self.name, SubRuleType.alias) \
             .generate_random(self.variation_name, self.arg_value)
 
         if self.casegen:
@@ -80,7 +81,7 @@ class AliasRuleContent(RuleContent):
         if self.randgen is not None:
             generated_examples.append(Example())
 
-        aliases = self.parser.get_definition(self.name, Unit.alias) \
+        aliases = self.parser.get_definition(self.name, SubRuleType.alias) \
             .generate_all(self.variation_name, self.arg_value)
 
         generated_examples.extend(aliases)
@@ -101,7 +102,7 @@ class AliasRuleContent(RuleContent):
         return generated_examples
 
     def get_max_nb_generated_examples(self):
-        nb_possible_ex = self.parser.get_definition(self.name, Unit.alias) \
+        nb_possible_ex = self.parser.get_definition(self.name, SubRuleType.alias) \
             .get_max_nb_generated_examples(self.variation_name)
         if self.casegen:
             nb_possible_ex *= 2

@@ -39,9 +39,8 @@ class ChatetteFacade(object):
         return ChatetteFacade.instance
 
     def run(self, template_filepath):
-        with io.open(template_filepath, 'r') as in_file:
-            parser = Parser(in_file)
-            parser.parse()
+        parser = Parser(template_filepath)
+        parser.parse()
 
         self.generator = Generator(parser)
         self.train_examples = list(self.generator.generate_train())
