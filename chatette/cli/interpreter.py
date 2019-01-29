@@ -6,11 +6,17 @@ Contains the interpreter that runs in a terminal in interactive mode.
 from __future__ import print_function
 
 from chatette import __version__
+from chatette.cli.terminal_writer import TerminalWriter
+from chatette.utils import print_DBG
+
+
+REDIRECTION_SYM = ">"
 
 
 class CommandLineInterpreter(object):
     def __init__(self, facade=None):
         self.facade = facade
+        self.print_wrapper = TerminalWriter()
         self.introduce()
 
     def introduce(self):
@@ -26,9 +32,13 @@ class CommandLineInterpreter(object):
     def wait_for_input(self):
         stop = False
         while not stop:
+            self.print_wrapper.reset()
             print(">>> ", end='')
-            command_str = input()
-            print("Got: '"+command_str+"'")
+            try:
+                command_str = input()
+            except EOFError:
+                break
+            print_DBG("Got: '"+command_str+"'")
             command_tokens = command_str.split()
             stop = self.interpret(command_tokens)
     
@@ -37,6 +47,9 @@ class CommandLineInterpreter(object):
         Calls the right function given the operation's name.
         Returns `True` if the loop should be stopped.
         """
+        self.print_wrapper.redirection_file_path = \
+            CommandLineInterpreter.find_redirection_file_path(command_tokens)
+        print_DBG("redirect: "+self.print_wrapper.redirection_file_path)
         operation_name = command_tokens[0].lower()
         if operation_name == "exit":
             return True
@@ -48,12 +61,24 @@ class CommandLineInterpreter(object):
             print("Unknown command")
         return False
 
+    @staticmethod
+    def find_redirection_file_path(tokens):
+        """
+        Finds the path of the file
+        which the output of a command should be redirected to and
+        returns it. Returns `None` if no redirection was found.
+        """
+        if len(tokens) < 3 or tokens[-2] != REDIRECTION_SYM:
+            return None
+        return tokens[-1]
+
 
     def print_stats(self):
         """Implements the command `stats`, printing parsing statistics."""
-        print("Statistics:")
+        self.print_wrapper.write("Statistics:")
         if self.facade is None:
-            print("\tNo file parsed.")
+            self.print_wrapper.write("\tNo file parsed.")
         else:
-            self.facade.print_stats()
+            stats = self.facade.get_stats_as_str()
+            self.print_wrapper.write(stats)
 

@@ -17,6 +17,17 @@ class Tokenizer(object):
 
         self._last_read_line = None
 
+    def redefine_master_file(self, master_filename):
+        """
+        Change the master file and open it.
+        If other files are still open, raise an exception.
+        """
+        if len(self.opened_files) > 0:
+            raise ValueError("Tried to change master file during parsing of "+
+                             "other files")
+        self.master_file_dir = os.path.dirname(master_filename)
+        self.current_file = LineCountFileWrapper(master_filename)
+
     def open_file(self, filename):
         """
         Stores the current file for future use and opens `filename`.

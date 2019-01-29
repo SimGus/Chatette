@@ -6,7 +6,7 @@ import sys
 
 from chatette import __version__
 from chatette.facade import Facade
-from chatette.cli import CommandLineInterpreter
+from chatette.cli.interpreter import CommandLineInterpreter
 
 
 def main():

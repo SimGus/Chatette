@@ -93,13 +93,14 @@ class Facade(object):
         self.parser.parse()
     
 
-    def print_stats(self):
+    def get_stats_as_str(self):
         if self.parser is None:
-            print("\tNo file parsed.")
-        else:
-            stats = self.parser.stats
-            print('\t', stats["#files"], "files parsed")
-            print('\t', stats["#declarations"], "declarations:",
-                  stats["#intents"], "intents,", stats["#slots"], "slots and",
-                  stats["#aliases"], "aliases")
-            print('\t', stats["#rules"], "rules")
+            return "\tNo file parsed."
+        stats = self.parser.stats
+        result = '\t' + str(stats["#files"]) + " files parsed\n" + \
+                 '\t' + str(stats["#declarations"]) + " declarations: " + \
+                 str(stats["#intents"]) + " intents, " + \
+                 str(stats["#slots"]) + " slots and " + \
+                 str(stats["#aliases"]) + " aliases\n" + \
+                 '\t' + str(stats["#rules"]) + " rules"
+        return result
