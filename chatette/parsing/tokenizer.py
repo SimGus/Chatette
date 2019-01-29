@@ -11,6 +11,7 @@ from chatette.parsing.line_count_file_wrapper import LineCountFileWrapper
 
 class Tokenizer(object):
     def __init__(self, master_filename):
+        self.master_file_paths = [master_filename]
         self.master_file_dir = os.path.dirname(master_filename)
         self.current_file = LineCountFileWrapper(master_filename)
         self.opened_files = []
@@ -25,6 +26,7 @@ class Tokenizer(object):
         if len(self.opened_files) > 0:
             raise ValueError("Tried to change master file during parsing of "+
                              "other files")
+        self.master_file_paths.append(master_filename)
         self.master_file_dir = os.path.dirname(master_filename)
         self.current_file = LineCountFileWrapper(master_filename)
 

@@ -39,6 +39,10 @@ class Parser(object):
         self.stats = {"#files": 1, "#declarations": 0, "#rules": 0,
                       "#intents": 0, "#aliases": 0, "#slots": 0}
 
+    def open_new_master_file(self, master_filepath):
+        self.tokenizer.redefine_master_file(master_filepath)
+        self.stats["#files"] += 1
+
 
     def get_definition(self, definition_name, unit_type):
         """Returns the definition for unit with name `definition_name`."""

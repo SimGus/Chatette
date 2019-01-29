@@ -24,7 +24,6 @@ class Facade(object):
     instance = None
     def __init__(self, master_file_path, output_dir_path, adapter_str, local,
                  seed):
-        self.master_file_path = master_file_path
         if local:
             self.output_dir_path = os.path.dirname(master_file_path)
         else:
@@ -48,7 +47,7 @@ class Facade(object):
         else:
             raise ValueError("Unknown adapter was selected")
 
-        self.parser = None
+        self.parser = Parser(master_file_path)
         self.generator = None
     @classmethod
     def from_args(cls, args):
@@ -71,7 +70,6 @@ class Facade(object):
         """
         Executes the parsing, generation and (if needed) writing of the output.
         """
-        self.parser = Parser(self.master_file_path)
         self.parser.parse()
 
         self.generator = Generator(self.parser)
@@ -89,7 +87,13 @@ class Facade(object):
     
     def run_parsing(self):
         """Executes the parsing alone."""
-        self.parser = Parser(self.master_file_path)
+        self.parser.parse()
+    
+    def parse_file(self, filepath):
+        """
+        Parses the new template file at `filepath` with the current parser.
+        """
+        self.parser.open_new_master_file(filepath)
         self.parser.parse()
     
 

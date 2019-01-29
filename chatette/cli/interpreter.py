@@ -14,7 +14,7 @@ REDIRECTION_SYM = ">"
 
 
 class CommandLineInterpreter(object):
-    def __init__(self, facade=None):
+    def __init__(self, facade):
         self.facade = facade
         self.print_wrapper = TerminalWriter()
         self.introduce()
@@ -25,8 +25,7 @@ class CommandLineInterpreter(object):
         asks the facade to execute the parsing of the master file if needed.
         """
         print("Chatette v"+__version__+" running in *interactive mode*.")
-        if self.facade is not None:
-            self.facade.run_parsing()
+        self.facade.run_parsing()
 
     
     def wait_for_input(self):
@@ -49,14 +48,14 @@ class CommandLineInterpreter(object):
         """
         self.print_wrapper.redirection_file_path = \
             CommandLineInterpreter.find_redirection_file_path(command_tokens)
-        print_DBG("redirect: "+self.print_wrapper.redirection_file_path)
+        print_DBG("redirect: "+str(self.print_wrapper.redirection_file_path))
         operation_name = command_tokens[0].lower()
         if operation_name == "exit":
             return True
         elif operation_name == "stats":
             self.print_stats()
         elif operation_name == "parse":
-            print("Parse (not yet supported)")
+            self.parse(command_tokens[1])
         else:
             print("Unknown command")
         return False
@@ -81,4 +80,11 @@ class CommandLineInterpreter(object):
         else:
             stats = self.facade.get_stats_as_str()
             self.print_wrapper.write(stats)
+    
+    def parse(self, filepath):
+        """
+        Implements the command `parse`,
+        parsing the template file at `filepath` using the current parser.
+        """
+        self.facade.parse_file(filepath)
 
