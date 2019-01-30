@@ -84,6 +84,7 @@ class Parser(object):
         if old_name in relevant_dict:
             relevant_dict[new_name] = relevant_dict[old_name]
             del relevant_dict[old_name]
+            relevant_dict[new_name].name = new_name
         else:
             raise KeyError("No unit named '"+old_name+"' was found")
 
