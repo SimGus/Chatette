@@ -6,7 +6,6 @@ Contains the interpreter that runs in a terminal in interactive mode.
 from __future__ import print_function
 
 from chatette import __version__
-from chatette.cli.terminal_writer import TerminalWriter
 from chatette.utils import print_DBG
 
 from chatette.cli.interactive_commands import exit_command, stats_command, \
@@ -17,7 +16,6 @@ from chatette.cli.interactive_commands import exit_command, stats_command, \
 class CommandLineInterpreter(object):
     def __init__(self, facade):
         self.facade = facade
-        self.print_wrapper = TerminalWriter()
         self.introduce()
 
     def introduce(self):
