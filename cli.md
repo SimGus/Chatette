@@ -30,7 +30,7 @@ There, several commands can be ran.
 
 - `parse <file-path>` will parse the file at `<file-path>` (relatively to the master template file).
 
-- `exist alias "<alias-name>"` will ask the program if an alias named `<alias-name>` was parsed. The program will answer if it does or not. The same kind of commands exist for slots and intents: `exist slot "<slot-name>"` and `exist intent "<intent-name>"`.
+- `exist alias "<alias-name>"` will ask the program if an alias named `<alias-name>` was parsed. The program will give information about the alias (namely its name, modifiers and number of rules) if it does and say it doesn't exist otherwise. The same kind of commands exist for slots and intents: `exist slot "<slot-name>"` and `exist intent "<intent-name>"`.
 
 - `show alias "<alias-name>"` will ask to show the rules that define alias `<alias-name>`. If it doesn't exist, an error is printed. The same thing exists for slots and intents: `show slot "<slot-name>"` and `show intent "<intent-name>"`.
 
