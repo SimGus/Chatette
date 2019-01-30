@@ -413,11 +413,11 @@ class Parser(object):
 
     def get_definition(self, def_name, unit_type):
         def_list = None
-        if unit_type == pu.SubRuleType.alias:
+        if unit_type == pu.UnitType.alias:
             def_list = self.alias_definitions
-        elif unit_type == pu.SubRuleType.slot:
+        elif unit_type == pu.UnitType.slot:
             def_list = self.slot_definitions
-        elif unit_type == pu.SubRuleType.intent:
+        elif unit_type == pu.UnitType.intent:
             def_list = self.intent_definitions
         else:
             raise ValueError("Tried to get a definition with wrong type (expected" +

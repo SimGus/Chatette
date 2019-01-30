@@ -58,6 +58,8 @@ class CommandLineInterpreter(object):
             self.print_stats()
         elif operation_name == "parse":
             self.parse(command_tokens[1])
+        elif operation_name == "exist":
+            self.verify_unit_existence(command_tokens)
         elif operation_name == "rename":
             self.rename_unit(command_tokens)
         else:
@@ -115,6 +117,24 @@ class CommandLineInterpreter(object):
         parsing the template file at `filepath` using the current parser.
         """
         self.facade.parse_file(filepath)
+
+    def verify_unit_existence(self, tokens):
+        """
+        Implements the command `exist`, which checks whether a unit is defined
+        and prints some information about it if it does.
+        """
+        if len(tokens) < 3:
+            self.print_wrapper.error_log("Missing some arguments -- usage:\n"+
+                                         'exist <unit-type> "<unit-name>"')
+            return
+        unit_type = CommandLineInterpreter.get_unit_type_from_str(tokens[1])
+        unit_name = CommandLineInterpreter.remove_quotes(tokens[2])
+        try:
+            unit = self.facade.parser.get_definition(unit_name, unit_type)
+            self.print_wrapper.write("OK")
+        except KeyError:
+            self.print_wrapper.write(unit_type.name.capitalize() + " '" + 
+                                     unit_name + "' is not defined.")
     
     def rename_unit(self, tokens):
         """
@@ -125,6 +145,7 @@ class CommandLineInterpreter(object):
             self.print_wrapper.error_log("Missing some arguments -- usage:\n"+
                                          'rename <unit-type> "<old-name>" '+
                                          '"<new-name>"')
+            return
         unit_type = CommandLineInterpreter.get_unit_type_from_str(tokens[1])
         if unit_type is None:
             self.print_wrapper.error_log("Unknown unit type: '"+str(tokens[1])+"'.")
