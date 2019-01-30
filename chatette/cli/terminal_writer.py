@@ -10,8 +10,8 @@ import io
 
 class TerminalWriter(object):
     """Wrapper of `print` that can write to stdout or to a file."""
-    def __init__(self):
-        self.redirection_file_path = None
+    def __init__(self, redirection_file_path=None):
+        self.redirection_file_path = redirection_file_path
 
     def reset(self):
         self.redirection_file_path = None
@@ -24,4 +24,5 @@ class TerminalWriter(object):
                 print(text, '\n', sep='', file=f)
     
     def error_log(self, text):
-        self.write("[ERROR] "+text)
+        processed_text = ''.join(['\t' + line for line in text.split('\n')])
+        self.write("[ERROR]"+processed_text)
