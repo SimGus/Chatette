@@ -296,6 +296,20 @@ class UnitDefinition(object):
                 for content in rule:
                     content.print_DBG(3)
         print("")
+    
+    def short_desc_str(self):
+        """
+        Returns a str representing a short description of this unit description.
+        """
+        desc = self.type+": '"+self.name+"'\nmodifiers:\n"
+        if self.casegen:
+            desc += "\t- casegen\n"
+        if self.argument_identifier is not None:
+            desc += "\t- argument: "+str(self.argument_identifier)+'\n'
+        if desc.endswith("modifiers:\n"):
+            desc += "\tNone\n"
+        desc += "Variations: "+str(len(self.variations))
+        return desc
 
 
 class RuleContent(object):

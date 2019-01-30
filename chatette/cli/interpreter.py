@@ -131,7 +131,7 @@ class CommandLineInterpreter(object):
         unit_name = CommandLineInterpreter.remove_quotes(tokens[2])
         try:
             unit = self.facade.parser.get_definition(unit_name, unit_type)
-            self.print_wrapper.write("OK")
+            self.print_wrapper.write(unit.short_desc_str())
         except KeyError:
             self.print_wrapper.write(unit_type.name.capitalize() + " '" + 
                                      unit_name + "' is not defined.")
