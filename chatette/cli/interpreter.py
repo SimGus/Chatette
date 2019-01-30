@@ -8,9 +8,11 @@ from __future__ import print_function
 from chatette import __version__
 from chatette.cli.terminal_writer import TerminalWriter
 from chatette.utils import print_DBG
+from chatette.parsing.parser_utils import UnitType
 
 
 REDIRECTION_SYM = ">"
+REDIRECTION_APPEND_SYM = ">>"  # TODO use this
 
 
 class CommandLineInterpreter(object):
@@ -56,6 +58,8 @@ class CommandLineInterpreter(object):
             self.print_stats()
         elif operation_name == "parse":
             self.parse(command_tokens[1])
+        elif operation_name == "rename":
+            self.rename_unit(command_tokens)
         else:
             print("Unknown command")
         return False
@@ -70,6 +74,30 @@ class CommandLineInterpreter(object):
         if len(tokens) < 3 or tokens[-2] != REDIRECTION_SYM:
             return None
         return tokens[-1]
+
+    @staticmethod
+    def get_unit_type_from_str(unit_type_str):
+        """
+        Transforms the string `unit_type_str`
+        into the corresponding `UnitType` value.
+        Returns `None` if there exist no corresponding `UnitType` value.
+        """
+        unit_type_str = unit_type_str.lower()
+        if unit_type_str == "alias":
+            return UnitType.alias
+        elif unit_type_str == "slot":
+            return UnitType.slot
+        elif unit_type_str == "intent":
+            return UnitType.intent
+        return None
+
+    @staticmethod
+    def remove_quotes(text):
+        """
+        Remove the double quotes at the beginning and end of `text` and
+        remove the escapement of other quotes.
+        """
+        return text[1:-1].replace(r'\"', '"')
 
 
     def print_stats(self):
@@ -87,4 +115,25 @@ class CommandLineInterpreter(object):
         parsing the template file at `filepath` using the current parser.
         """
         self.facade.parse_file(filepath)
-
+    
+    def rename_unit(self, tokens):
+        """
+        Implements the command `rename` which renames a unit
+        into something else. Displays an error if the unit wasn't found.
+        """
+        if len(tokens) < 4:
+            self.print_wrapper.error_log("Missing some arguments -- usage:\n"+
+                                         'rename <unit-type> "<old-name>" '+
+                                         '"<new-name>"')
+        unit_type = CommandLineInterpreter.get_unit_type_from_str(tokens[1])
+        if unit_type is None:
+            self.print_wrapper.error_log("Unknown unit type: '"+str(tokens[1])+"'.")
+        else:
+            old_name = CommandLineInterpreter.remove_quotes(tokens[2])
+            new_name = CommandLineInterpreter.remove_quotes(tokens[3])
+            try:
+                self.facade.parser.rename_unit(unit_type, old_name, new_name)
+            except KeyError:
+                self.print_wrapper.error_log("Couldn't find a unit named '"+
+                                             str(old_name)+"'.")
+        

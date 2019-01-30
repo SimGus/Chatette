@@ -22,3 +22,6 @@ class TerminalWriter(object):
         else:
             with io.open(self.redirection_file_path, 'a+') as f:
                 print(text, '\n', sep='', file=f)
+    
+    def error_log(self, text):
+        self.write("[ERROR] "+text)

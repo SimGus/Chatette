@@ -65,6 +65,30 @@ class Parser(object):
         return relevant_dict[definition_name]
 
 
+    def rename_unit(self, unit_type, old_name, new_name):
+        """
+        Renames the unit declaration of type `unit_type` from 
+        `old_name` to `new_name` (possibly replacing the unit with that name).
+        Raises a `KeyError` if `old_name` is not a declared unit.
+        @post: this can lead to inconsistent rules.
+        """
+        if unit_type == pu.UnitType.alias:
+            relevant_dict = self.alias_definitions
+        elif unit_type == pu.UnitType.slot:
+            relevant_dict = self.slot_definitions
+        elif unit_type == pu.UnitType:
+            relevant_dict = self.intent_definitions
+        else:
+            raise ValueError("Tried to rename a definition with wrong type "+
+                             "(expected alias, slot or intent)")
+        
+        if old_name in relevant_dict:
+            relevant_dict[new_name] = relevant_dict[old_name]
+            del relevant_dict[old_name]
+        else:
+            raise KeyError("No unit named '"+old_name+"' was found")
+
+
     def parse(self):
         """
         Parses the master file and subsequent files and
