@@ -5,21 +5,26 @@ the interactive mode, such that such a command will subclass this base class
 in order to implement the strategy design pattern.
 """
 
-
 from chatette.parsing.parser_utils import UnitType
-from chatette.cli.terminal_writer import TerminalWriter
+from chatette.cli.terminal_writer import TerminalWriter, RedirectionType
 
 
 REDIRECTION_SYM = ">"
-REDIRECTION_APPEND_SYM = ">>"  # TODO use this
+REDIRECTION_APPEND_SYM = ">>"
 
 
 class CommandStrategy(object):
     def __init__(self, command_str):
         self.command_tokens = CommandStrategy.tokenize(command_str)
-        redirection_filepath = \
+        redirection_tuple = \
                 CommandStrategy.find_redirection_file_path(self.command_tokens)
-        self.print_wrapper = TerminalWriter(redirection_filepath)
+        print("tup", redirection_tuple)
+        if redirection_tuple is None:
+            self.print_wrapper = TerminalWriter(None)
+        else:
+            (redirection_type, redirection_filepath) = redirection_tuple
+            self.print_wrapper = TerminalWriter(redirection_type,
+                                                redirection_filepath)
 
     @staticmethod
     def tokenize(command_str):
@@ -55,11 +60,18 @@ class CommandStrategy(object):
         """
         Finds the path of the file
         which the output of a command should be redirected to and
-        returns it. Returns `None` if no redirection was found.
+        returns it along with the type of redirection that it is (in a 2-tuple).
+        The type of redirection is an enumeration item of type
+        `RedirectionType`.
+        Returns `None` if no redirection was found.
         """
-        if len(tokens) < 3 or tokens[-2] != REDIRECTION_SYM:
+        if len(tokens) < 3:
             return None
-        return tokens[-1]
+        if tokens[-2] == REDIRECTION_APPEND_SYM:
+            return (RedirectionType.append, tokens[-1])
+        if tokens[-2] == REDIRECTION_SYM:
+            return (RedirectionType.truncate, tokens[-1])
+        return None
 
     @staticmethod
     def get_unit_type_from_str(unit_type_str):
@@ -84,6 +96,15 @@ class CommandStrategy(object):
         remove the escapement of other quotes.
         """
         return text[1:-1].replace(r'\"', '"')
+
+
+    def flush_output(self):
+        """
+        Asks the wrapper of print to flush its outputs
+        to the redirected file (if such a file exists).
+        """
+        self.print_wrapper.flush()
+
 
     def should_exit(self):
         """Returns `True` if the program should exit the interactive mode."""

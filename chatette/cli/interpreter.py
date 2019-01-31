@@ -43,6 +43,7 @@ class CommandLineInterpreter(object):
             if command.should_exit():
                 break
             command.execute(self.facade)
+            command.flush_output()
 
     @staticmethod
     def get_command(command_str):
