@@ -36,6 +36,10 @@ There, several commands can be ran.
 
 - `rename alias "<alias-name>" "<new-alias-name>"` will change the name of alias `<alias-name>` to `<new-alias-name>`. Similar commands exist for slots and intents.
 
+- `delete alias "<alias-name>"` will completely remove the alias `<alias-name>` from the parser's memory (as if it hadn't been in the parsed template file(s)). The same thing can be done for slots and intents.
+
+- `hide alias "<alias-name>"` will temorarily remove the alias `<alias-name>` from the parser's memory. `unhide alias "<alias-name>"` undoes this. The same thing can be done for slots and intents.
+
 - `examples alias "<alias-name>"` will ask for all the possible strings generated when referring to alias `<alias-name>`. `gen slot "<slot-name>"` and `gen intent "<intent-name>"` exist as well. An error is printed if the alias/slot/intent doesn't exist. Variations can also be selected by appending `#<variation-name>` to the name of the unit.
    
    If we add a number at the end of one of those commands (separated from the command by a whitespace), we ask to limit the answer to X strings (selected randomly from the possible strings). If X is larger than the number of possible strings, the command simply returns all the possible strings.
@@ -48,11 +52,7 @@ There, several commands can be ran.
    
 - `rule "<rule>"` will generate the rule using all the units that have been defined in the template file(s). We can redirect its outputs to a file as before. If you need to use double quotes in the rule, escape it with a backslash `\`.
 
-- `delete alias "<alias-name>"` will completely remove the alias `<alias-name>` from the parser's memory (as if it hadn't been in the parsed template file(s)). The same thing can be done for slots and intents.
-
-- `hide alias "<alias-name>"` will temorarily remove the alias `<alias-name>` from the parser's memory. `unhide alias "<alias-name>"` undoes this. The same thing can be done for slots and intents.
-
-- `read "<path-to-file>"` will read the file `<path-to-file>` and execute all the commands that are inside it sequentially. The commands and results will be printed on the command line as those executions are made.
+- `execute "<path-to-file>"` will read the file `<path-to-file>` and execute all the commands that are inside it sequentially. The commands and results will be printed on the command line as those executions are made. The commands in the file should be separated by newlines (thus, one command per line). Lines starting with `//` are ignored.
 
   Chatette can also directly read the commands from this file by calling the script with:
   ```bash
@@ -66,6 +66,20 @@ There, several commands can be ran.
 - `exit` or `Ctrl+D` (`EOF`) stops the interactive mode (and the script). `Ctrl+C` would work as well, but stops *chatette* directly without any exit message.
 
 For all those commands (except `exit`), appending `> <filename>` or `>> <filename>` will respectively write the results into a file named `<filename>` (creating the file if it doesn't exist, overwriting it if it does) or append the results into a file named `<filename>` (creating it if it doesn't exist).
+
+### Current advancement
+- [x] stats
+- [x] parse
+- [x] exist
+- [ ] show
+- [ ] delete
+- [ ] hide
+- [ ] unhide
+- [ ] examples
+- [ ] generate
+- [ ] rule
+- [ ] execute
+- [x] exit
 
 ### Regexes
 Rather than using `<alias-name>` for the name of the alias (resp. any unit), you can use regexes in all those commands, in the following way `/regex/flag` where `regex` is the regex (defined as it should be to work with `re` in Python) and `flag` can be one of the following:
