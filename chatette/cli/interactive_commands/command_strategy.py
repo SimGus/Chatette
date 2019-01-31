@@ -18,7 +18,6 @@ class CommandStrategy(object):
         self.command_tokens = CommandStrategy.tokenize(command_str)
         redirection_tuple = \
                 CommandStrategy.find_redirection_file_path(self.command_tokens)
-        print("tup", redirection_tuple)
         if redirection_tuple is None:
             self.print_wrapper = TerminalWriter(None)
         else:

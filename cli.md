@@ -38,7 +38,7 @@ There, several commands can be ran.
 
 - `delete alias "<alias-name>"` will completely remove the alias `<alias-name>` from the parser's memory (as if it hadn't been in the parsed template file(s)). The same thing can be done for slots and intents.
 
-- `hide alias "<alias-name>"` will temorarily remove the alias `<alias-name>` from the parser's memory. `unhide alias "<alias-name>"` undoes this. The same thing can be done for slots and intents.
+- `hide alias "<alias-name>"` will temorarily remove the alias `<alias-name>` from the parser's memory. `unhide alias "<alias-name>"` restores this alias definition (and can be executed after any other unit have been hidden). The same thing can be done for slots and intents.
 
 - `examples alias "<alias-name>"` will ask for all the possible strings generated when referring to alias `<alias-name>`. `examples slot "<slot-name>"` and `examples intent "<intent-name>"` exist as well. An error is printed if the alias/slot/intent doesn't exist. Variations can also be selected by appending `#<variation-name>` to the name of the unit.
    
@@ -63,7 +63,7 @@ There, several commands can be ran.
   python -m chatette <path-to-template-file> --interactive --command-file <path-to-command-file>
   ```
   
-- `exit` or `Ctrl+D` (`EOF`) stops the interactive mode (and the script). `Ctrl+C` would work as well, but stops *chatette* directly without any exit message.
+- `exit` or `Ctrl+D` (`EOF`) stops the interactive mode (and the script). `Ctrl+C` would work as well, but stops *Chatette* abruptly without any exit message.
 
 For all those commands (except `exit`), appending `> <filename>` or `>> <filename>` will respectively write the results into a file named `<filename>` (creating the file if it doesn't exist, overwriting it if it does) or append the results into a file named `<filename>` (creating it if it doesn't exist).
 

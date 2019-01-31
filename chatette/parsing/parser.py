@@ -87,7 +87,6 @@ class Parser(object):
         else:
             raise KeyError("No unit named '"+old_name+"' was found")
 
-
     def delete(self, unit_type, unit_name):
         """Deletes a unit definition."""
         if unit_type == pu.UnitType.alias:
