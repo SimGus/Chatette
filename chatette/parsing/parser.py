@@ -63,7 +63,6 @@ class Parser(object):
 
         return relevant_dict[definition_name]
 
-
     def rename_unit(self, unit_type, old_name, new_name):
         """
         Renames the unit declaration of type `unit_type` from 
@@ -87,6 +86,32 @@ class Parser(object):
             relevant_dict[new_name].name = new_name
         else:
             raise KeyError("No unit named '"+old_name+"' was found")
+
+
+    def delete(self, unit_type, unit_name):
+        """Deletes a unit definition."""
+        if unit_type == pu.UnitType.alias:
+            relevant_dict = self.alias_definitions
+            stat_key = "#aliases"
+        elif unit_type == pu.UnitType.slot:
+            relevant_dict = self.slot_definitions
+            stat_key = "#slots"
+        elif unit_type == pu.UnitType.intent:
+            relevant_dict = self.intent_definitions
+            stat_key = "#intents"
+        else:
+            raise ValueError("Tried to delete a definition with wrong type "+
+                             "(expected alias, slot or intent)")
+
+        if unit_name not in relevant_dict:
+            raise KeyError("Couldn't find a definition for " + unit_type.name +
+                           " '" + unit_name + "'.")
+        
+        nb_rules = relevant_dict[unit_name].get_nb_rules()
+        del relevant_dict[unit_name]
+        self.stats[stat_key] -= 1
+        self.stats["#declarations"] -= 1
+        self.stats["#rules"] -= nb_rules
 
 
     def parse(self):

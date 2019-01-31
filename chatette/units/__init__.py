@@ -130,6 +130,11 @@ class UnitDefinition(object):
                 return True
         return False
 
+    def get_nb_rules(self):
+        """Returns the number of rules this definition contains."""
+        return len(self.rules)
+
+
     def add_rule(self, rule, variation_name=None):
         # (RuleContent, str) -> ()
         self.rules.append(rule)
