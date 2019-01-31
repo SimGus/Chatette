@@ -32,6 +32,9 @@ class RenameCommand(CommandStrategy):
             new_name = CommandStrategy.remove_quotes(self.command_tokens[3])
             try:
                 facade.parser.rename_unit(unit_type, old_name, new_name)
+                self.print_wrapper.write(unit_type.name.capitalize() + " '" +
+                                         old_name + "' was successfully " +
+                                         "renamed to '" + new_name + "'.")
             except KeyError:
                 self.print_wrapper.error_log("Couldn't find a unit named '" +
                                              str(old_name) + "'.")

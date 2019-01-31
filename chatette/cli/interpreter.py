@@ -11,7 +11,8 @@ from chatette.utils import print_DBG
 from chatette.cli.interactive_commands import exit_command, stats_command, \
                                               parse_command, exist_command, \
                                               rename_command, delete_command, \
-                                              examples_command, hide_command
+                                              examples_command, hide_command, \
+                                              unhide_command
 
 
 class CommandLineInterpreter(object):
@@ -35,12 +36,14 @@ class CommandLineInterpreter(object):
             try:
                 command_str = input()
             except EOFError:
+                print("Exiting interactive mode")
                 break
             print_DBG("Got: '"+command_str+"'")
             command = CommandLineInterpreter.get_command(command_str)
             if command is None:
                 continue
             if command.should_exit():
+                print("Exiting interactive mode")
                 break
             command.execute(self.facade)
             command.flush_output()
@@ -65,6 +68,8 @@ class CommandLineInterpreter(object):
             return examples_command.ExamplesCommand(command_str)
         if operation_name == "hide":
             return hide_command.HideCommand(command_str)
+        if operation_name == "unhide":
+            return unhide_command.UnhideCommand(command_str)
         else:
             print("Unknown command")
         return None

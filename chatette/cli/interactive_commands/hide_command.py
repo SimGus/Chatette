@@ -30,7 +30,8 @@ class HideCommand(CommandStrategy):
             unit = facade.parser.get_definition(unit_name, unit_type)
             self.stored_units[unit_type.name][unit_name] = unit
             facade.parser.delete(unit_type, unit_name)
+            self.print_wrapper.write(unit_type.name.capitalize() + " '" +
+                                     unit_name + "' was successfully hidden.")
         except KeyError:
             self.print_wrapper.write(unit_type.name.capitalize() + " '" +
                                      unit_name + "' was not defined.")
-        print("stored", self.stored_units)

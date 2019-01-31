@@ -62,6 +62,7 @@ def main():
     else:
         cli = CommandLineInterpreter(facade)
         cli.wait_for_input()
+    print("End of script")
 
 
 if __name__ == "__main__":

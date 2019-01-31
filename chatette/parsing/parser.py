@@ -112,6 +112,31 @@ class Parser(object):
         self.stats["#declarations"] -= 1
         self.stats["#rules"] -= nb_rules
 
+    def add_definition(self, unit_type, unit_name, definition):
+        """Adds an already built definition to the list of declared units."""
+        if unit_type == pu.UnitType.alias:
+            relevant_dict = self.alias_definitions
+            stat_key = "#aliases"
+        elif unit_type == pu.UnitType.slot:
+            relevant_dict = self.slot_definitions
+            stat_key = "#slots"
+        elif unit_type == pu.UnitType.intent:
+            relevant_dict = self.intent_definitions
+            stat_key = "#intents"
+        else:
+            raise ValueError("Tried to delete a definition with wrong type "+
+                             "(expected alias, slot or intent)")
+
+        if unit_name in relevant_dict:
+            raise ValueError(unit_type.name.capitalize()+" '"+unit_name+"' " +
+                             "is already defined. Tried to add a definition " +
+                             "for it again.")
+        
+        relevant_dict[unit_name] = definition
+        self.stats[stat_key] += 1
+        self.stats["#declarations"] += 1
+        self.stats["#rules"] += definition.get_nb_rules()
+
 
     def parse(self):
         """
