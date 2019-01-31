@@ -40,7 +40,7 @@ There, several commands can be ran.
 
 - `hide alias "<alias-name>"` will temorarily remove the alias `<alias-name>` from the parser's memory. `unhide alias "<alias-name>"` undoes this. The same thing can be done for slots and intents.
 
-- `examples alias "<alias-name>"` will ask for all the possible strings generated when referring to alias `<alias-name>`. `gen slot "<slot-name>"` and `gen intent "<intent-name>"` exist as well. An error is printed if the alias/slot/intent doesn't exist. Variations can also be selected by appending `#<variation-name>` to the name of the unit.
+- `examples alias "<alias-name>"` will ask for all the possible strings generated when referring to alias `<alias-name>`. `examples slot "<slot-name>"` and `examples intent "<intent-name>"` exist as well. An error is printed if the alias/slot/intent doesn't exist. Variations can also be selected by appending `#<variation-name>` to the name of the unit.
    
    If we add a number at the end of one of those commands (separated from the command by a whitespace), we ask to limit the answer to X strings (selected randomly from the possible strings). If X is larger than the number of possible strings, the command simply returns all the possible strings.
    
@@ -67,7 +67,7 @@ There, several commands can be ran.
 
 For all those commands (except `exit`), appending `> <filename>` or `>> <filename>` will respectively write the results into a file named `<filename>` (creating the file if it doesn't exist, overwriting it if it does) or append the results into a file named `<filename>` (creating it if it doesn't exist).
 
-### Current advancement
+#### Current advancement
 - [x] stats
 - [x] parse
 - [x] exist
@@ -76,7 +76,7 @@ For all those commands (except `exit`), appending `> <filename>` or `>> <filenam
 - [x] delete
 - [ ] hide
 - [ ] unhide
-- [ ] examples
+- [x] examples
 - [ ] generate
 - [ ] rule
 - [ ] execute

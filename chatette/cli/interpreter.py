@@ -10,7 +10,8 @@ from chatette.utils import print_DBG
 
 from chatette.cli.interactive_commands import exit_command, stats_command, \
                                               parse_command, exist_command, \
-                                              rename_command, delete_command
+                                              rename_command, delete_command, \
+                                              examples_command
 
 
 class CommandLineInterpreter(object):
@@ -59,6 +60,8 @@ class CommandLineInterpreter(object):
             return rename_command.RenameCommand(command_str)
         if operation_name == "delete":
             return delete_command.DeleteCommand(command_str)
+        if operation_name == "examples":
+            return examples_command.ExamplesCommand(command_str)
         else:
             print("Unknown command")
         return None
