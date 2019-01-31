@@ -72,6 +72,7 @@ For all those commands (except `exit`), appending `> <filename>` or `>> <filenam
 - [x] parse
 - [x] exist
 - [ ] show
+- [x] rename
 - [ ] delete
 - [ ] hide
 - [ ] unhide
