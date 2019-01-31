@@ -36,8 +36,6 @@ class TerminalWriter(object):
             self.file_mode = 'w+'
     
     def write(self, text):
-        print("redir", self.redirection_file_path)
-        print("mode", self.file_mode)
         if self.redirection_file_path is None:
             print(text)
         else:
