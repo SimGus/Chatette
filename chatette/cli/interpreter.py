@@ -12,7 +12,7 @@ from chatette.cli.interactive_commands import exit_command, stats_command, \
                                               parse_command, exist_command, \
                                               rename_command, delete_command, \
                                               examples_command, hide_command, \
-                                              unhide_command
+                                              unhide_command, execute_command
 
 
 class CommandLineInterpreter(object):
@@ -30,6 +30,9 @@ class CommandLineInterpreter(object):
 
     
     def wait_for_input(self):
+        """
+        Waits for the user to type a command, interprets it and executes it.
+        """
         stop = False
         while True:
             print(">>> ", end='')
@@ -39,14 +42,41 @@ class CommandLineInterpreter(object):
                 print("Exiting interactive mode")
                 break
             print_DBG("Got: '"+command_str+"'")
-            command = CommandLineInterpreter.get_command(command_str)
-            if command is None:
-                continue
-            if command.should_exit():
+            stop = self.interpret_command(command_str)
+            if stop:
                 print("Exiting interactive mode")
                 break
-            command.execute(self.facade)
-            command.flush_output()
+    
+    def interpret_command(self, command_str):
+        """
+        Interprets the command `command_str` and executes it.
+        Returns `True` if the interactive mode should be exited.
+        """
+        command = CommandLineInterpreter.get_command(command_str)
+        if command is None:
+            return False
+        if command.should_exit():
+            return True
+        result = command.execute(self.facade)
+        if type(command) == execute_command.ExecuteCommand:
+            self.execute_commands(result)
+        command.flush_output()
+        return False
+
+    def execute_commands(self, commands):
+        """
+        Executes the list of commands `commands`
+        as if they had been typed in by the user.
+        Returns `True` if the interactive mode should be exited.
+        """
+        if commands is None:
+            return False
+        for cmd in commands:
+            stop = self.interpret_command(cmd)
+            if stop:
+                return True
+        return False
+
 
     @staticmethod
     def get_command(command_str):
@@ -70,7 +100,8 @@ class CommandLineInterpreter(object):
             return hide_command.HideCommand(command_str)
         if operation_name == "unhide":
             return unhide_command.UnhideCommand(command_str)
-        else:
-            print("Unknown command")
+        if operation_name == "execute":
+            return execute_command.ExecuteCommand(command_str)
+        print("Unknown command")
         return None
     

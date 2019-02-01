@@ -21,6 +21,7 @@ class CommandStrategy(object):
         if redirection_tuple is None:
             self.print_wrapper = TerminalWriter(None)
         else:
+            self.remove_redirection_tokens()
             (redirection_type, redirection_filepath) = redirection_tuple
             self.print_wrapper = TerminalWriter(redirection_type,
                                                 redirection_filepath)
@@ -63,6 +64,9 @@ class CommandStrategy(object):
         The type of redirection is an enumeration item of type
         `RedirectionType`.
         Returns `None` if no redirection was found.
+        Returns `(ignored, None)` if a redirection should be done to nowhere.
+        (This can be achieved by using the redirections symbols and providing
+        no filepath).
         """
         if len(tokens) < 3:
             return None
@@ -70,6 +74,9 @@ class CommandStrategy(object):
             return (RedirectionType.append, tokens[-1])
         if tokens[-2] == REDIRECTION_SYM:
             return (RedirectionType.truncate, tokens[-1])
+        if (   tokens[-1] == REDIRECTION_APPEND_SYM
+            or tokens[-1] == REDIRECTION_SYM):
+            return (None, None)
         return None
 
     @staticmethod
@@ -96,6 +103,18 @@ class CommandStrategy(object):
         """
         return text[1:-1].replace(r'\"', '"')
 
+    def remove_redirection_tokens(self):
+        """
+        Removes the tokens that represent a redirection
+        from `self.command_tokens`.
+        @pre: There are redirection tokens in the tokens.
+        """
+        if (   self.command_tokens[-2] == REDIRECTION_APPEND_SYM
+            or self.command_tokens[-2] == REDIRECTION_SYM):
+            self.command_tokens = self.command_tokens[:-2]
+        else:
+            self.command_tokens = self.command_tokens[:-1]
+
 
     def flush_output(self):
         """
@@ -106,7 +125,10 @@ class CommandStrategy(object):
 
 
     def should_exit(self):
-        """Returns `True` if the program should exit the interactive mode."""
+        """
+        Returns `True` if the program should exit the interactive mode.
+        This method should be overriden by subclasses.
+        """
         return False
 
     def execute(self, facade):
@@ -116,3 +138,4 @@ class CommandStrategy(object):
         This method should be overriden by subclasses.
         """
         raise NotImplementedError()
+    
