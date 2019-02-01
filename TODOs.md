@@ -42,6 +42,8 @@
 - [ ] refactor units to remove duplicated code: make modifiers act after the string has been generated
 - [ ] add more unit tests
 
+- [ ] *Docs* clearly state the objective (scope) of the program
+- [ ] *Docs* add a "contributors" part
 - [ ] *Docs* add a representation of the architecture of the project
 - [ ] *Docs* multilingual
 - [ ] *Docs* specify which version of *Rasa NLU* *chatette* can work with
