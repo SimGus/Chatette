@@ -15,7 +15,6 @@ from chatette.cli.terminal_writer import TerminalWriter, RedirectionType
 class ExecuteCommand(CommandStrategy):
     def __init__(self, command_str):
         super(ExecuteCommand, self).__init__(command_str)
-        # self.print_wrapper = TerminalWriter(RedirectionType.ignore)
 
     def execute(self, facade):
         """
