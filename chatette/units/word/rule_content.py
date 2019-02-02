@@ -33,8 +33,13 @@ class WordRuleContent(RuleContent):
                                               percentage_gen=None, parser=None)
         self.word = name
 
+
     def can_have_casegen(self):
         return may_change_leading_case(self.word)
+
+    def get_max_nb_generated_examples(self):
+        return 1
+
 
     def generate_random(self, arg_value=None):
         if self.leading_space:
@@ -48,5 +53,24 @@ class WordRuleContent(RuleContent):
 
         return [Example(self.word)]
 
-    def get_max_nb_generated_examples(self):
-        return 1
+
+    def as_string(self):
+        """
+        Returns the representation of the rule
+        as it would be written in a template file.
+        """
+        result = self.name
+        if self.casegen:
+            result = '&'+result
+        if self.variation_name is not None:
+            result += '#'+self.variation_name
+        if self.randgen is not None:
+            result += '?'+str(self.randgen)
+            if self.percentgen != 50:
+                result += '/'+str(self.percentgen)
+        if self.arg_value is not None:
+            result += '$'+self.arg_value
+        result = '[' + result + ']'
+        if self.leading_space:
+            result = ' '+result
+        return result
