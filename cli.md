@@ -79,7 +79,7 @@ For all those commands (except `exit`), appending `> <filename>` or `>> <filenam
 - [x] examples
 - [ ] generate
 - [ ] rule
-- [ ] execute
+- [x] execute
 - [x] exit
 
 ### Regexes
