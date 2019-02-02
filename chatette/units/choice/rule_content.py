@@ -49,6 +49,7 @@ class ChoiceRuleContent(RuleContent):
         self.choices = []
         self.casegen_checked = False
 
+
     def can_have_casegen(self):
         for choice in self.choices:
             if len(choice) > 0 and choice[0].can_have_casegen():
@@ -62,6 +63,25 @@ class ChoiceRuleContent(RuleContent):
                 self.casegen = False
             self.casegen_checked = True
 
+    def get_max_nb_generated_examples(self):
+        nb_possible_ex = 0
+        for choice in self.choices:
+            choice_nb_ex = 0
+            for token in choice:
+                current_nb_ex = token.get_max_nb_generated_examples()
+                if choice_nb_ex == 0:
+                    choice_nb_ex = current_nb_ex
+                else:
+                    choice_nb_ex *= current_nb_ex
+            nb_possible_ex += choice_nb_ex
+
+        if self.casegen:
+            nb_possible_ex *= 2
+        if self.randgen is not None:
+            nb_possible_ex += 1
+        return nb_possible_ex
+
+
     def add_choice(self, choice):
         # (RuleContent) -> ()
         if len(choice) <= 0:
@@ -74,6 +94,7 @@ class ChoiceRuleContent(RuleContent):
         if len(interesting_choices) <= 0:
             return
         self.choices.extend(interesting_choices)
+
 
     def generate_random(self, generated_randgens=None):
         if generated_randgens is None:
@@ -139,23 +160,6 @@ class ChoiceRuleContent(RuleContent):
 
         return generated_examples
 
-    def get_max_nb_generated_examples(self):
-        nb_possible_ex = 0
-        for choice in self.choices:
-            choice_nb_ex = 0
-            for token in choice:
-                current_nb_ex = token.get_max_nb_generated_examples()
-                if choice_nb_ex == 0:
-                    choice_nb_ex = current_nb_ex
-                else:
-                    choice_nb_ex *= current_nb_ex
-            nb_possible_ex += choice_nb_ex
-
-        if self.casegen:
-            nb_possible_ex *= 2
-        if self.randgen is not None:
-            nb_possible_ex += 1
-        return nb_possible_ex
 
     def print_DBG(self, nb_indent=0):
         indentation = nb_indent * '\t'
@@ -170,3 +174,24 @@ class ChoiceRuleContent(RuleContent):
             print(indentation + "\tChoice:")
             for token in choice:
                 token.print_DBG(nb_indent + 2)
+
+    def as_string(self):
+        """
+        Returns the representation of the rule
+        as it would be written in a template file.
+        """
+        result = self.name
+        if self.casegen:
+            result = '&'+result
+        if self.variation_name is not None:
+            result += '#'+self.variation_name
+        if self.randgen is not None:
+            result += '?'+str(self.randgen)
+            if self.percentgen != 50:
+                result += '/'+str(self.percentgen)
+        if self.arg_value is not None:
+            result += '$'+self.arg_value
+        result = '{' + result + '}'
+        if self.leading_space:
+            result = ' '+result
+        return result

@@ -30,6 +30,7 @@ class SlotRuleContent(RuleContent):
                                               parser=parser)
         self.casegen_checked = False
 
+
     def can_have_casegen(self):
         return self.parser.get_definition(self.name, UnitType.slot) \
             .can_have_casegen()
@@ -40,6 +41,17 @@ class SlotRuleContent(RuleContent):
             if not self.can_have_casegen():
                 self.casegen = False
             self.casegen_checked = True
+
+    def get_max_nb_generated_examples(self):
+        nb_possible_ex = self.parser.get_definition(self.name, UnitType.slot) \
+            .get_max_nb_generated_examples(self.variation_name)
+
+        if self.casegen:
+            nb_possible_ex *= 2
+        if self.randgen is not None:
+            nb_possible_ex += 1
+        return nb_possible_ex
+
 
     def generate_random(self, generated_randgens=None):
         if generated_randgens is None:
@@ -103,15 +115,27 @@ class SlotRuleContent(RuleContent):
 
         return generated_examples
 
-    def get_max_nb_generated_examples(self):
-        nb_possible_ex = self.parser.get_definition(self.name, UnitType.slot) \
-            .get_max_nb_generated_examples(self.variation_name)
 
+    def as_string(self):
+        """
+        Returns the representation of the rule
+        as it would be written in a template file.
+        """
+        result = self.name
         if self.casegen:
-            nb_possible_ex *= 2
+            result = '&'+result
+        if self.variation_name is not None:
+            result += '#'+self.variation_name
         if self.randgen is not None:
-            nb_possible_ex += 1
-        return nb_possible_ex
+            result += '?'+str(self.randgen)
+            if self.percentgen != 50:
+                result += '/'+str(self.percentgen)
+        if self.arg_value is not None:
+            result += '$'+self.arg_value
+        result = "@[" + result + ']'
+        if self.leading_space:
+            result = ' '+result
+        return result
 
 
 class DummySlotValRuleContent(RuleContent):
@@ -140,3 +164,6 @@ class DummySlotValRuleContent(RuleContent):
     def print_DBG(self, nb_indent=0):
         indentation = nb_indent * '\t'
         print(indentation + "Slot val: " + self.name)
+
+    def as_string(self):
+        return ""

@@ -9,6 +9,7 @@ from chatette.cli.interactive_commands.command_strategy import CommandStrategy
 
 
 class ShowCommand(CommandStrategy):
+    max_nb_rules_to_display = 12
     def __init__(self, command_str):
         super(ShowCommand, self).__init__(command_str)
     
@@ -31,8 +32,11 @@ class ShowCommand(CommandStrategy):
             self.print_wrapper.write(unit.short_desc_str())
             self.print_wrapper.write("Rules:")
             rules = unit.rules
-            for rule in rules:
-                self.print_wrapper.write('\t'+str(rule))
+            for (i, rule) in enumerate(rules):
+                if i >= self.max_nb_rules_to_display:
+                    break
+                rule_str = ''.join([sub_rule.as_string() for sub_rule in rule])
+                self.print_wrapper.write('\t'+rule_str)
         except KeyError:
             self.print_wrapper.write(unit_type.name.capitalize() + " '" +
                                      unit_name + "' is not defined.")
