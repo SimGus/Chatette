@@ -12,7 +12,7 @@ class ShowCommand(CommandStrategy):
     max_nb_rules_to_display = 12
     def __init__(self, command_str):
         super(ShowCommand, self).__init__(command_str)
-    
+
     def execute(self, facade):
         """
         Implements the command `show` which shows information about a specific
@@ -24,7 +24,7 @@ class ShowCommand(CommandStrategy):
             self.print_wrapper.error_log("Missing some arguments\nUsage: " +
                                          'show <unit-type> "<unit-name>"')
             return
-        
+
         unit_type = CommandStrategy.get_unit_type_from_str(self.command_tokens[1])
         unit_name = CommandStrategy.remove_quotes(self.command_tokens[2])
         try:

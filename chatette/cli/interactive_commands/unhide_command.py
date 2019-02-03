@@ -21,7 +21,7 @@ class UnhideCommand(CommandStrategy):
             self.print_wrapper.error_log("Missing some arguments\nUsage: " +
                                          'unhide <unit-type> "<unit-name>"')
             return
-        
+
         unit_type = CommandStrategy.get_unit_type_from_str(self.command_tokens[1])
         unit_name = CommandStrategy.remove_quotes(self.command_tokens[2])
         try:

@@ -10,7 +10,7 @@ from chatette.cli.interactive_commands.command_strategy import CommandStrategy
 class DeleteCommand(CommandStrategy):
     def __init__(self, command_str):
         super(DeleteCommand, self).__init__(command_str)
-    
+
     def execute(self, facade):
         """
         Implements the command `delete`, which removes a unit declaration

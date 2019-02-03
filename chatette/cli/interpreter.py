@@ -30,7 +30,7 @@ class CommandLineInterpreter(object):
         print("Chatette v"+__version__+" running in *interactive mode*.")
         self.facade.run_parsing()
 
-    
+
     def wait_for_input(self):
         """
         Waits for the user to type a command, interprets it and executes it.
@@ -48,7 +48,7 @@ class CommandLineInterpreter(object):
             if stop:
                 print("Exiting interactive mode")
                 break
-    
+
     def interpret_command(self, command_str):
         """
         Interprets the command `command_str` and executes it.
@@ -60,7 +60,7 @@ class CommandLineInterpreter(object):
         if command.should_exit():
             return True
         result = command.execute(self.facade)
-        if type(command) == execute_command.ExecuteCommand:
+        if isinstance(command, execute_command.ExecuteCommand):
             self.execute_commands(result)
         command.flush_output()
         return False
@@ -112,4 +112,3 @@ class CommandLineInterpreter(object):
             return generate_command.GenerateCommand(command_str)
         print("Unknown command")
         return None
-    

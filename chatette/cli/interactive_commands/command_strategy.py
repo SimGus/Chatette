@@ -54,7 +54,7 @@ class CommandStrategy(object):
         if current_token != "":
             tokens.append(current_token.rstrip())
         return tokens
-    
+
     @staticmethod
     def find_redirection_file_path(tokens):
         """
@@ -138,4 +138,3 @@ class CommandStrategy(object):
         This method should be overriden by subclasses.
         """
         raise NotImplementedError()
-    

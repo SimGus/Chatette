@@ -9,7 +9,6 @@ import io
 from chatette.cli.interactive_commands.command_strategy import CommandStrategy, \
                                                                REDIRECTION_SYM, \
                                                                REDIRECTION_APPEND_SYM
-from chatette.cli.terminal_writer import TerminalWriter, RedirectionType
 
 
 class ExecuteCommand(CommandStrategy):
@@ -23,9 +22,9 @@ class ExecuteCommand(CommandStrategy):
         """
         if len(self.command_tokens) < 2:
             self.print_wrapper.error_log("Missing some arguments\nUsage: " +
-                                        'execute <command-filepath>')
+                                         'execute <command-filepath>')
             return
-        
+
         with io.open(self.command_tokens[1], 'r') as command_file:
             commands = [line.rstrip() for line in command_file.readlines()
                                       if not line.lstrip().startswith("//")]
@@ -38,4 +37,4 @@ class ExecuteCommand(CommandStrategy):
                     if (    REDIRECTION_APPEND_SYM not in cmd
                         and REDIRECTION_SYM not in cmd):
                         commands[i] += text_to_append
-        return commands        
+        return commands

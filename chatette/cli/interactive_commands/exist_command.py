@@ -10,7 +10,7 @@ from chatette.cli.interactive_commands.command_strategy import CommandStrategy
 class ExistCommand(CommandStrategy):
     def __init__(self, command_str):
         super(ExistCommand, self).__init__(command_str)
-    
+
     def execute(self, facade):
         """
         Implements the command `exist`, which checks whether a unit is defined
@@ -26,5 +26,5 @@ class ExistCommand(CommandStrategy):
             unit = facade.parser.get_definition(unit_name, unit_type)
             self.print_wrapper.write(unit.short_desc_str())
         except KeyError:
-            self.print_wrapper.write(unit_type.name.capitalize() + " '" + 
+            self.print_wrapper.write(unit_type.name.capitalize() + " '" +
                                      unit_name + "' is not defined.")

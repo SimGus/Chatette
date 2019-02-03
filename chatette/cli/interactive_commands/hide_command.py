@@ -1,7 +1,7 @@
 """
 Module `chatette.cli.interactive_commands.hide_command`.
 Contains the strategy class that represents the interactive mode command
-`hide` which hides unit definitions (storing them somewhere to be able to 
+`hide` which hides unit definitions (storing them somewhere to be able to
 unhide them later).
 """
 
@@ -12,7 +12,7 @@ class HideCommand(CommandStrategy):
     stored_units = {"alias": dict(), "slot": dict(), "intent": dict()}
     def __init__(self, command_str):
         super(HideCommand, self).__init__(command_str)
-    
+
     def execute(self, facade):
         """
         Implements the command `hide` which deletes a unit defined
@@ -23,7 +23,7 @@ class HideCommand(CommandStrategy):
             self.print_wrapper.error_log("Missing some arguments\nUsage: " +
                                          'hide <unit-type> "<unit-name>"')
             return
-        
+
         unit_type = CommandStrategy.get_unit_type_from_str(self.command_tokens[1])
         unit_name = CommandStrategy.remove_quotes(self.command_tokens[2])
         try:

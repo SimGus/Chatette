@@ -10,7 +10,7 @@ from chatette.cli.interactive_commands.command_strategy import CommandStrategy
 class RenameCommand(CommandStrategy):
     def __init__(self, command_str):
         super(RenameCommand, self).__init__(command_str)
-    
+
     def execute(self, facade):
         """
         Implements the command `rename` which renames a unit
@@ -23,7 +23,7 @@ class RenameCommand(CommandStrategy):
             return
         unit_type = \
             CommandStrategy.get_unit_type_from_str(self.command_tokens[1])
-            
+
         if unit_type is None:
             self.print_wrapper.error_log("Unknown unit type: '" +
                                          str(self.command_tokens[1]) + "'.")

@@ -41,7 +41,7 @@ class TerminalWriter(object):
             self.file_mode = 'w+'
         else:
             self.file_mode = 'ignored'
-    
+
     def get_redirection(self):
         """
         Returns a 2-tuple containing the type and file path of the redirection.
@@ -58,7 +58,7 @@ class TerminalWriter(object):
             return (RedirectionType.truncate, self.redirection_file_path)
         return None
 
-    
+
     def write(self, text):
         if self.redirection_file_path is None and self.file_mode is None:
             print(text)
@@ -74,7 +74,7 @@ class TerminalWriter(object):
         processed_text = ''.join(['\t' + line for line in text.split('\n')])
         self.write("[ERROR]"+processed_text)
 
-    
+
     def flush(self):
         """
         Flushes the buffered text to the redirection file
@@ -89,4 +89,3 @@ class TerminalWriter(object):
                 with io.open(self.redirection_file_path, self.file_mode) as f:
                     print(self.buffered_text, '\n', sep='', file=f)
         self.buffered_text = None
-    

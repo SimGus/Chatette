@@ -70,6 +70,12 @@ class LineType(Enum):
     intent_declaration = 5
     include_file = 6
 
+class UnitType(Enum):
+    """Enumeration of all possible types of unit declarations."""
+    alias = 1
+    slot = 2
+    intent = 3
+
 
 def strip_comments(text):
     """Returns the string `text` without the comments."""

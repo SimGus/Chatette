@@ -22,7 +22,7 @@ class ExamplesCommand(CommandStrategy):
                                          'examples <unit-type> "<unit-name>" ' +
                                          "[<number-examples>]")
             return
-        
+
         unit_type = CommandStrategy.get_unit_type_from_str(self.command_tokens[1])
         unit_name = CommandStrategy.remove_quotes(self.command_tokens[2])
         nb_examples = None  # All examples should be generated
