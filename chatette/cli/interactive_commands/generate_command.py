@@ -46,5 +46,6 @@ class GenerateCommand(CommandStrategy):
         self.print_wrapper.write("Generated examples:")
         for ex in examples:
             # HACK: add a name of intent as ex is not especially a IntentExample
-            ex.name = "INTERACTIVE"
+            if not hasattr(ex, 'name'):
+                ex.name = "INTERACTIVE"
             self.print_wrapper.write(adapter.prepare_example(ex))
