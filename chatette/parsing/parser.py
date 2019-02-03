@@ -230,7 +230,8 @@ class Parser(object):
     def _parse_rule(self, tokens):
         """
         Parses the list of string `tokens` that represents a rule in a
-        template file. Add the rule to the declaration currently being parsed.
+        template file and
+        add the rule to the declaration currently being parsed.
         """
         if self._currently_parsed_declaration is None:
             self.tokenizer.syntax_error("Got a rule outside of "+
@@ -238,32 +239,7 @@ class Parser(object):
 
         self._check_indentation(tokens[0])
 
-        # Remove alternative slot rule if necessary
-        alt_slot_value = None  # TODO DummySlotVal absolutely need to be managed differently
-        if self._currently_parsed_declaration[0] == pu.UnitType.slot:
-            answer = pu.find_alt_slot_and_index(tokens)
-            if answer is not None:
-                (end_index, alt_slot_value) = answer
-                tokens = tokens[:end_index]
-
-        sub_rules = []
-        leading_space = False
-        for sub_rule_tokens in pu.next_sub_rule_tokens(tokens[1:]):
-            if len(sub_rule_tokens) == 1 and sub_rule_tokens[0] == ' ':
-                leading_space = True
-                continue
-
-            sub_rule = self._make_sub_rule_from_tokens(sub_rule_tokens,
-                                                       leading_space)
-            if alt_slot_value is not None:
-                if alt_slot_value != pu.ALT_SLOT_VALUE_FIRST_SYM:
-                    sub_rules = [DummySlotValRuleContent(alt_slot_value, sub_rule)]
-                else:
-                    sub_rules = [DummySlotValRuleContent(sub_rule.name, sub_rule)]
-                alt_slot_value = None
-            sub_rules.append(sub_rule)
-
-            leading_space = False
+        sub_rules = self.tokens_to_sub_rules(tokens[1:])
 
         relevant_dict = None
         if self._currently_parsed_declaration[0] == pu.UnitType.alias:
@@ -288,6 +264,36 @@ class Parser(object):
             return
         if indentation != self._expected_indentation:
             self.tokenizer.syntax_error("Inconsistent indentation.")
+
+    def tokens_to_sub_rules(self, tokens):
+        """Transforms a list of tokens into a list of sub-rules"""
+        # Remove alternative slot rule if necessary
+        alt_slot_value = None  # TODO DummySlotVal absolutely need to be managed differently
+        if self._currently_parsed_declaration[0] == pu.UnitType.slot:
+            answer = pu.find_alt_slot_and_index(tokens)
+            if answer is not None:
+                (end_index, alt_slot_value) = answer
+                tokens = tokens[:end_index]
+
+        sub_rules = []
+        leading_space = False
+        for sub_rule_tokens in pu.next_sub_rule_tokens(tokens):
+            if len(sub_rule_tokens) == 1 and sub_rule_tokens[0] == ' ':
+                leading_space = True
+                continue
+
+            sub_rule = self._make_sub_rule_from_tokens(sub_rule_tokens,
+                                                       leading_space)
+            if alt_slot_value is not None:
+                if alt_slot_value != pu.ALT_SLOT_VALUE_FIRST_SYM:
+                    sub_rules = [DummySlotValRuleContent(alt_slot_value, sub_rule)]
+                else:
+                    sub_rules = [DummySlotValRuleContent(sub_rule.name, sub_rule)]
+                alt_slot_value = None
+            sub_rules.append(sub_rule)
+
+            leading_space = False
+        return sub_rules
 
     def _make_sub_rule_from_tokens(self, sub_rule_tokens, leading_space):
         if pu.is_sub_rule_word(sub_rule_tokens):

@@ -6,6 +6,8 @@ can generate.
 """
 
 from chatette.cli.interactive_commands.command_strategy import CommandStrategy
+from chatette.units.alias.definition import AliasDefinition
+from chatette.units import ENTITY_MARKER
 
 
 class RuleCommand(CommandStrategy):
@@ -22,7 +24,7 @@ class RuleCommand(CommandStrategy):
                                          'rule "<rule>" [<number-of-examples]')
             return
         
-        rule = CommandStrategy.remove_quotes(self.command_tokens[1])
+        rule_str = CommandStrategy.remove_quotes(self.command_tokens[1])
         nb_examples = None
         if len(self.command_tokens) >= 3:
             try:
@@ -31,4 +33,14 @@ class RuleCommand(CommandStrategy):
                 self.print_wrapper.error_log("The number of examples asked (" +
                                              self.command_tokens[2] + ") is " +
                                              "a valid integer.")
-        # TODO
+        
+        rule_tokens = facade.parser.tokenizer.tokenize(rule_str)
+        rule = facade.parser.tokens_to_sub_rules(rule_tokens)
+        definition = AliasDefinition("INTERNAL", [rule])
+        try:
+            examples = definition.generate_nb_examples(nb_examples)
+            self.print_wrapper.write("Generated examples:")
+            for ex in examples:
+                self.print_wrapper.write(ex.text.replace(ENTITY_MARKER, ""))
+        except KeyError as e:
+            self.print_wrapper.error_log("Upon generation: " + str(e))

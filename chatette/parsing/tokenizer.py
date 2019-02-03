@@ -104,9 +104,9 @@ class Tokenizer(object):
                 break
             if line_str == "":
                 continue
-            yield self.new_tokenize(line_str)
+            yield self.tokenize(line_str)
 
-    def new_tokenize(self, text):
+    def tokenize(self, text):
         """
         Returns a tokenized version of the string `text`,
         i.e. a list of strings that make up words or special characters.
