@@ -13,7 +13,8 @@ from chatette.cli.interactive_commands import exit_command, stats_command, \
                                               rename_command, delete_command, \
                                               examples_command, hide_command, \
                                               unhide_command, execute_command, \
-                                              show_command, rule_command
+                                              show_command, rule_command, \
+                                              generate_command
 
 
 class CommandLineInterpreter(object):
@@ -107,6 +108,8 @@ class CommandLineInterpreter(object):
             return show_command.ShowCommand(command_str)
         if operation_name == "rule":
             return rule_command.RuleCommand(command_str)
+        if operation_name == "generate":
+            return generate_command.GenerateCommand(command_str)
         print("Unknown command")
         return None
     

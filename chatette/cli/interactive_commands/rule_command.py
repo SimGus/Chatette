@@ -23,7 +23,7 @@ class RuleCommand(CommandStrategy):
             self.print_wrapper.error_log("Missing some arguments\nUsage: " +
                                          'rule "<rule>" [<number-of-examples]')
             return
-        
+
         rule_str = CommandStrategy.remove_quotes(self.command_tokens[1])
         nb_examples = None
         if len(self.command_tokens) >= 3:
@@ -33,7 +33,7 @@ class RuleCommand(CommandStrategy):
                 self.print_wrapper.error_log("The number of examples asked (" +
                                              self.command_tokens[2] + ") is " +
                                              "a valid integer.")
-        
+
         rule_tokens = facade.parser.tokenizer.tokenize(rule_str)
         rule = facade.parser.tokens_to_sub_rules(rule_tokens)
         definition = AliasDefinition("INTERNAL", [rule])

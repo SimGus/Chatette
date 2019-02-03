@@ -10,8 +10,9 @@ from random import seed as random_seed
 from chatette.utils import print_DBG
 from chatette.parsing.parser import Parser
 from chatette.generator import Generator
-from chatette.adapters.rasa import RasaAdapter
-from chatette.adapters.jsonl import JsonListAdapter
+import chatette.adapters.factory as adapter_factory
+# from chatette.adapters.rasa import RasaAdapter
+# from chatette.adapters.jsonl import JsonListAdapter
 
 
 class Facade(object):
@@ -38,14 +39,7 @@ class Facade(object):
         if seed is not None:
             random_seed(seed)
 
-        if adapter_str is None:
-            self.adapter = None
-        elif adapter_str == "rasa":
-            self.adapter = RasaAdapter()
-        elif adapter_str == "jsonl":
-            self.adapter = JsonListAdapter()
-        else:
-            raise ValueError("Unknown adapter was selected")
+        self.adapter = adapter_factory.create_adapter(adapter_str)
 
         self.parser = Parser(master_file_path)
         self.generator = None
@@ -70,20 +64,8 @@ class Facade(object):
         """
         Executes the parsing, generation and (if needed) writing of the output.
         """
-        self.parser.parse()
-
-        self.generator = Generator(self.parser)
-        synonyms = self.generator.get_entities_synonyms()
-
-        train_examples = list(self.generator.generate_train())
-        if train_examples:
-            self.adapter.write(os.path.join(self.output_dir_path, "train"),
-                               train_examples, synonyms)
-        test_examples = list(self.generator.generate_test(train_examples))
-        if test_examples:
-            self.adapter.write(os.path.join(self.output_dir_path, "test"),
-                               test_examples, synonyms)
-        print_DBG("Generation over")
+        self.run_parsing()
+        self.run_generation()
     
     def run_parsing(self):
         """Executes the parsing alone."""
@@ -95,6 +77,30 @@ class Facade(object):
         """
         self.parser.open_new_master_file(filepath)
         self.parser.parse()
+
+    def run_generation(self, adapter_str=None):
+        """"
+        Runs the generation of all intents and writes them out to the output
+        file(s) using the adapter `adapter` if one is provided.
+        @pre: the parsing has been done.
+        """
+        if adapter_str is None:
+            adapter = self.adapter
+        else:
+            adapter = adapter_factory.create_adapter(adapter_str)
+
+        self.generator = Generator(self.parser)
+        synonyms = self.generator.get_entities_synonyms()
+
+        train_examples = list(self.generator.generate_train())
+        if train_examples:
+            adapter.write(os.path.join(self.output_dir_path, "train"),
+                          train_examples, synonyms)
+        test_examples = list(self.generator.generate_test(train_examples))
+        if test_examples:
+            adapter.write(os.path.join(self.output_dir_path, "test"),
+                          test_examples, synonyms)
+        print_DBG("Generation over")
     
 
     def get_stats_as_str(self):

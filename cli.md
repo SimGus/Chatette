@@ -44,11 +44,11 @@ There, several commands can be ran.
    
    If we add a number at the end of one of those commands (separated from the command by a whitespace), we ask to limit the answer to X strings (selected randomly from the possible strings). If X is larger than the number of possible strings, the command simply returns all the possible strings.
    
-- `generate <adapter> alias "<alias-name>"` generates all possible strings and format them as they would if adapter `<adapter>` was used. Similar commands for slots and intents exist. Again, appending a number at the end of the command limits the number of examples generated.
+- `generate <adapter> alias "<alias-name>"` generates all possible strings and formats them as they would if adapter `<adapter>` was used. Similar commands for slots and intents exist. Again, appending a number at the end of the command limits the number of examples generated.
 
   Two adapters currently exist: `rasa` and `jsonl`.
   
-  `generate` alone will execute the generation as it would have executed in non-interactive mode.
+  `generate` alone will execute the generation as it would have executed in non-interactive mode. Adding the adapter's name will make this generation use this adapter.
    
 - `rule "<rule>"` will generate the rule using all the units that have been defined in the template file(s). We can redirect its outputs to a file as before. If you need to use double quotes in the rule, escape it with a backslash `\`.
 
