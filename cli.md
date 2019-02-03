@@ -77,7 +77,7 @@ For all those commands (except `exit`), appending `> <filename>` or `>> <filenam
 - [x] hide
 - [x] unhide
 - [x] examples
-- [ ] generate
+- [x] generate
 - [x] rule
 - [x] execute
 - [x] exit
