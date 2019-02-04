@@ -15,7 +15,7 @@ from chatette.cli.interactive_commands import exit_command, stats_command, \
                                               unhide_command, execute_command, \
                                               show_command, rule_command, \
                                               generate_command, \
-                                              add_rule_command
+                                              add_rule_command, declare_command
 
 
 class CommandLineInterpreter(object):
@@ -113,5 +113,7 @@ class CommandLineInterpreter(object):
             return generate_command.GenerateCommand(command_str)
         if operation_name == "add-rule":
             return add_rule_command.AddRuleCommand(command_str)
+        if operation_name == "declare":
+            return declare_command.DeclareCommand(command_str)
         print("Unknown command")
         return None

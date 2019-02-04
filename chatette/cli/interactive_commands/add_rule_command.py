@@ -1,5 +1,5 @@
 """
-Module `chatette.cli.interactive_commnads.add_rule_command`.
+Module `chatette.cli.interactive_commands.add_rule_command`.
 Contains the strategy class that represents the interactive mode command
 `add-rule` which allows to add a rule to a unit definition.
 """

@@ -88,8 +88,8 @@ For all those commands (except `exit`), appending `> <filename>` or `>> <filenam
 - [x] unhide
 - [x] examples
 - [x] generate
-- [ ] declare
-- [ ] add-rule
+- [x] declare
+- [x] add-rule
 - [ ] set-modifier
 - [x] rule
 - [ ] save
