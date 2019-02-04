@@ -5,12 +5,16 @@ the interactive mode, such that such a command will subclass this base class
 in order to implement the strategy design pattern.
 """
 
+import re
+
 from chatette.parsing.parser_utils import UnitType
 from chatette.cli.terminal_writer import TerminalWriter, RedirectionType
 
 
 REDIRECTION_SYM = ">"
 REDIRECTION_APPEND_SYM = ">>"
+
+REGEX_SYM = '/'
 
 
 class CommandStrategy(object):
@@ -102,6 +106,56 @@ class CommandStrategy(object):
         remove the escapement of other quotes.
         """
         return text[1:-1].replace(r'\"', '"')
+
+    @staticmethod
+    def get_name_as_regex(text):
+        """
+        If a regex is used within `text`,
+        returns a compiled regex that is able to find all units with a name
+        that matches some pattern.
+        Returns `None` otherwise.
+        """
+        if text.startswith(REGEX_SYM) and text.endswith(REGEX_SYM):
+            return re.compile(text[1:-1].replace('\\'+REGEX_SYM, REGEX_SYM))
+        return None
+    
+    @staticmethod
+    def next_matching_unit_name(parser, unit_type, regex):
+        """
+        Yields the next unit name of type `unit_type`
+        whose name matches `regex`.
+        """
+        if unit_type == UnitType.alias:
+            relevant_dict = parser.alias_definitions
+        elif unit_type == UnitType.slot:
+            relevant_dict = parser.slot_definitions
+        elif unit_type == UnitType.intent:
+            relevant_dict = parser.intent_definitions
+        else:
+            raise ValueError("Unexpected unit type when matching regex: " + 
+                             str(unit_type))
+        for unit_name in relevant_dict:
+            if regex.match(unit_name):
+                yield unit_name
+    @staticmethod
+    def get_all_matching_unit_name(parser, unit_type, regex):
+        """
+        Returns a list of unit names of type `unit_type`
+        whose name matches `regex`.
+        NOTE: this is used with 'delete' command since the generator that
+              returns the same data cannot be used in that case (dict changes
+              size during iteration).
+        """
+        if unit_type == UnitType.alias:
+            relevant_dict = parser.alias_definitions
+        elif unit_type == UnitType.slot:
+            relevant_dict = parser.slot_definitions
+        elif unit_type == UnitType.intent:
+            relevant_dict = parser.intent_definitions
+        else:
+            raise ValueError("Unexpected unit type when matching regex: " + 
+                             str(unit_type))
+        return [name for name in relevant_dict if regex.match(name)]
 
     def remove_redirection_tokens(self):
         """

@@ -5,3 +5,9 @@
 //    duplicate
 @[slot#var]
     slot with variation = slot;older comment
+    
+    
+~[something]
+    something
+~[some2]
+    some 2
