@@ -10,8 +10,6 @@ from chatette.adapters.factory import create_adapter
 
 
 class GenerateCommand(CommandStrategy):
-    def __init__(self, command_str):
-        super(GenerateCommand, self).__init__(command_str)
 
     def execute(self, facade):
         """

@@ -8,8 +8,6 @@ from chatette.cli.interactive_commands.command_strategy import CommandStrategy
 
 
 class ParseCommand(CommandStrategy):
-    def __init__(self, command_str):
-        super(ParseCommand, self).__init__(command_str)
 
     def execute(self, facade):
         """

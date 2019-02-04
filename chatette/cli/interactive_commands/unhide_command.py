@@ -9,8 +9,6 @@ from chatette.cli.interactive_commands.hide_command import HideCommand
 
 
 class UnhideCommand(CommandStrategy):
-    def __init__(self, command_str):
-        super(UnhideCommand, self).__init__(command_str)
 
     def execute(self, facade):
         """

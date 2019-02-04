@@ -8,8 +8,6 @@ from chatette.cli.interactive_commands.command_strategy import CommandStrategy
 
 
 class ExitCommand(CommandStrategy):
-    def __init__(self, command_str):
-        super(ExitCommand, self).__init__(command_str)
 
     def execute(self, facade):
         pass
