@@ -61,6 +61,13 @@ def choose(array):
     return array[randint(0, array_len - 1)]
 
 
+def rchop(string, ending):
+    """Removes a substring at the end of a string."""
+    if string.endswith(ending):
+        return string[:-len(ending)]
+    return string
+
+
 if __name__ == "__main__":
     # pylint: disable=wrong-import-position
     import warnings

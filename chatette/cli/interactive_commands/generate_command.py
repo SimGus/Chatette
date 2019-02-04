@@ -38,16 +38,15 @@ class GenerateCommand(CommandStrategy):
         adapter = create_adapter(adapter_str)
 
         unit_type = CommandStrategy.get_unit_type_from_str(self.command_tokens[2])
-        unit_regex = CommandStrategy.get_name_as_regex(self.command_tokens[3])
+        unit_regex = self.get_name_as_regex(self.command_tokens[3])
         if unit_regex is None:
             unit_name = CommandStrategy.remove_quotes(self.command_tokens[3])
             self._generate_unit(facade, adapter, unit_type, unit_name)
         else:
             count = 0
-            for unit_name in \
-                CommandStrategy.next_matching_unit_name(facade.parser,
-                                                        unit_type,
-                                                        unit_regex):
+            for unit_name in self.next_matching_unit_name(facade.parser,
+                                                          unit_type,
+                                                          unit_regex):
                 self._generate_unit(facade, adapter, unit_type, unit_name)
                 count += 1
             if count == 0:

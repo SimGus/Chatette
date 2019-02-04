@@ -13,7 +13,7 @@ class ShowCommand(CommandStrategy):
     max_nb_rules_to_display = 12
     def __init__(self, command_str):
         super(ShowCommand, self).__init__(command_str)
-    
+
     def execute_on_unit(self, facade, unit_type, unit_name):
         try:
             unit = facade.parser.get_definition(unit_name, unit_type)

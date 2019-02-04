@@ -7,6 +7,7 @@ in order to implement the strategy design pattern.
 
 import re
 
+from chatette.utils import rchop
 from chatette.parsing.parser_utils import UnitType
 from chatette.cli.terminal_writer import TerminalWriter, RedirectionType
 
@@ -30,6 +31,7 @@ class CommandStrategy(object):
             (redirection_type, redirection_filepath) = redirection_tuple
             self.print_wrapper = TerminalWriter(redirection_type,
                                                 redirection_filepath)
+        self._is_regex_global = None
 
     @staticmethod
     def tokenize(command_str):
@@ -108,20 +110,30 @@ class CommandStrategy(object):
         """
         return text[1:-1].replace(r'\"', '"')
 
-    @staticmethod
-    def get_name_as_regex(text):
+    def get_name_as_regex(self, text):
         """
         If a regex is used within `text`,
         returns a compiled regex that is able to find all units with a name
         that matches some pattern.
         Returns `None` otherwise.
         """
-        if text.startswith(REGEX_SYM) and text.endswith(REGEX_SYM):
-            return re.compile(text[1:-1].replace('\\'+REGEX_SYM, REGEX_SYM))
+        if text.startswith(REGEX_SYM) and (   text.endswith(REGEX_SYM)
+                                           or text[-2] == REGEX_SYM
+                                           or text[-3] == REGEX_SYM):
+            splitted_str = [e for e in text.split(REGEX_SYM) if e != ""]
+            if len(splitted_str) == 1:
+                return re.compile(text[1:-1].replace('\\'+REGEX_SYM, REGEX_SYM))
+
+            flags = splitted_str[-1]
+            text_without_flags = rchop(text, flags)
+            self._is_regex_global = 'g' in flags
+            if 'i' in flags:
+                return re.compile(text_without_flags[1:-1].replace('\\'+REGEX_SYM, REGEX_SYM),
+                                    re.IGNORECASE)
+            return re.compile(text_without_flags[1:-1].replace('\\'+REGEX_SYM, REGEX_SYM))
         return None
-    
-    @staticmethod
-    def next_matching_unit_name(parser, unit_type, regex):
+
+    def next_matching_unit_name(self, parser, unit_type, regex):
         """
         Yields the next unit name of type `unit_type`
         whose name matches `regex`.
@@ -133,11 +145,16 @@ class CommandStrategy(object):
         elif unit_type == UnitType.intent:
             relevant_dict = parser.intent_definitions
         else:
-            raise ValueError("Unexpected unit type when matching regex: " + 
+            raise ValueError("Unexpected unit type when matching regex: " +
                              str(unit_type))
-        for unit_name in relevant_dict:
-            if regex.match(unit_name):
-                yield unit_name
+        if self._is_regex_global:
+            for unit_name in relevant_dict:
+                if regex.search(unit_name):
+                    yield unit_name
+        else:
+            for unit_name in relevant_dict:
+                if regex.match(unit_name):
+                    yield unit_name
     @staticmethod
     def get_all_matching_unit_name(parser, unit_type, regex):
         """
@@ -154,8 +171,10 @@ class CommandStrategy(object):
         elif unit_type == UnitType.intent:
             relevant_dict = parser.intent_definitions
         else:
-            raise ValueError("Unexpected unit type when matching regex: " + 
+            raise ValueError("Unexpected unit type when matching regex: " +
                              str(unit_type))
+        if self._is_regex_global:
+            return [name for name in relevant_dict if regex.search(name)]
         return [name for name in relevant_dict if regex.match(name)]
 
     def remove_redirection_tokens(self):
@@ -200,22 +219,21 @@ class CommandStrategy(object):
             return
 
         unit_type = CommandStrategy.get_unit_type_from_str(self.command_tokens[1])
-        unit_regex = CommandStrategy.get_name_as_regex(self.command_tokens[2])
+        unit_regex = self.get_name_as_regex(self.command_tokens[2])
         if unit_regex is None:
             unit_name = CommandStrategy.remove_quotes(self.command_tokens[2])
             self.execute_on_unit(facade, unit_type, unit_name)
         else:
             count = 0
-            for unit_name in \
-                CommandStrategy.next_matching_unit_name(facade.parser,
-                                                        unit_type,
-                                                        unit_regex):
+            for unit_name in self.next_matching_unit_name(facade.parser,
+                                                          unit_type,
+                                                          unit_regex):
                 self.execute_on_unit(facade, unit_type, unit_name)
                 count += 1
             if count == 0:
                 self.print_wrapper.write("No " + unit_type.name + " matched.")
         self.finish_execution(facade)
-    
+
     def execute_on_unit(self, facade, unit_type, unit_name):
         """
         Executes the command on a specific unit.
