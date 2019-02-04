@@ -57,5 +57,6 @@ class SetModifierCommand(CommandStrategy):
             self.print_wrapper.write("Invalid modifier selected (can be "+
                                      "'casegen' or 'arg').")
             return
-        self.print_wrapper.write("Modifier successfully changed.")
+        self.print_wrapper.write("Modifier for " + unit_type.name + " '" +
+                                 unit_name + "' successfully changed.")
 
