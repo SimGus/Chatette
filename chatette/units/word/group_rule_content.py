@@ -98,3 +98,24 @@ class GroupWordRuleContent(RuleContent):
         if self.randgen is not None:
             nb_possible_ex += 1
         return nb_possible_ex
+
+    def as_string(self):
+        """
+        Returns the representation of the rule
+        as it would be written in a template file.
+        """
+        result = self.name
+        if self.casegen:
+            result = '&'+result
+        if self.variation_name is not None:
+            result += '#'+self.variation_name
+        if self.randgen is not None:
+            result += '?'+str(self.randgen)
+            if self.percentgen != 50:
+                result += '/'+str(self.percentgen)
+        if self.arg_value is not None:
+            result += '$'+self.arg_value
+        result = '[' + result + ']'
+        if self.leading_space:
+            result = ' '+result
+        return result
