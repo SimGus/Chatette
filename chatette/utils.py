@@ -68,6 +68,19 @@ def rchop(string, ending):
     return string
 
 
+def str_to_bool(text):
+    """
+    Transforms the strings 'True' and 'False' to their boolean counterparts.
+    Raises a `ValueError` if `text` is neither of them.
+    """
+    text = text.lower()
+    if text == "true":
+        return True
+    if text == "false":
+        return False
+    raise ValueError("Cannot convert '" + str(text) + "' into a boolean")
+
+
 if __name__ == "__main__":
     # pylint: disable=wrong-import-position
     import warnings

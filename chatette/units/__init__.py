@@ -105,16 +105,18 @@ class UnitDefinition(object):
         self.name = name
         self.rules = rules  # list of list of `RulesContent`s => [[RulesContent]]
 
-        self.argument_identifier = arg
-        if arg is not None:
-            PATTERN_ARG = r"(?<!\\)\$" + arg
+        self.set_arg(arg)
+
+        self.variations = dict()
+        self.casegen = casegen  # IDEA: don't make the casegen variation agnostic
+    
+    def set_arg(self, argument_identifier):
+        self.argument_identifier = argument_identifier
+        if argument_identifier is not None:
+            PATTERN_ARG = r"(?<!\\)\$" + argument_identifier
             self.arg_regex = re.compile(PATTERN_ARG)
         else:
             self.arg_regex = None
-
-        self.variations = dict()
-
-        self.casegen = casegen  # IDEA: don't make the casegen variation agnostic
 
     def __repr__(self):
         result = self.type+":"+self.name
