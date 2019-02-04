@@ -18,6 +18,7 @@ REGEX_SYM = '/'
 
 
 class CommandStrategy(object):
+    usage_str = "Undefined"  # Should be overriden by subclasses
     def __init__(self, command_str):
         self.command_tokens = CommandStrategy.tokenize(command_str)
         redirection_tuple = \
@@ -187,8 +188,48 @@ class CommandStrategy(object):
 
     def execute(self, facade):
         """
-        Executes the command represented by this object.
+        Executes the whole command represented by this object.
         `facade` is a facade to the whole system (contains links to the parser).
-        This method should be overriden by subclasses.
+        This method can be overriden by subclasses if a different algorithm is
+        required.
+        """
+        # TODO support variations
+        if len(self.command_tokens) < 3:
+            self.print_wrapper.error_log("Missing some arguments\nUsage: " +
+                                         self.usage_str)
+            return
+
+        unit_type = CommandStrategy.get_unit_type_from_str(self.command_tokens[1])
+        unit_regex = CommandStrategy.get_name_as_regex(self.command_tokens[2])
+        if unit_regex is None:
+            unit_name = CommandStrategy.remove_quotes(self.command_tokens[2])
+            self.execute_on_unit(facade, unit_type, unit_name)
+        else:
+            count = 0
+            for unit_name in \
+                CommandStrategy.next_matching_unit_name(facade.parser,
+                                                        unit_type,
+                                                        unit_regex):
+                self.execute_on_unit(facade, unit_type, unit_name)
+                count += 1
+            if count == 0:
+                self.print_wrapper.write("No " + unit_type.name + " matched.")
+        self.finish_execution(facade)
+    
+    def execute_on_unit(self, facade, unit_type, unit_name):
+        """
+        Executes the command on a specific unit.
+        This method HAS to be overriden by subclasses if they don't override
+        `execute`.
         """
         raise NotImplementedError()
+
+    def finish_execution(self, facade):
+        """
+        This function is executed at the end of the command and
+        can be overriden to implement things such as cleaning up or changing
+        the size of dictionaries and list that were being iterated over.
+        NOTE: it is called no matter what happened before (the command worked
+              or failed).
+        """
+        pass

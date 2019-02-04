@@ -38,14 +38,30 @@ class GenerateCommand(CommandStrategy):
         adapter = create_adapter(adapter_str)
 
         unit_type = CommandStrategy.get_unit_type_from_str(self.command_tokens[2])
-        unit_name = CommandStrategy.remove_quotes(self.command_tokens[3])
+        unit_regex = CommandStrategy.get_name_as_regex(self.command_tokens[3])
+        if unit_regex is None:
+            unit_name = CommandStrategy.remove_quotes(self.command_tokens[3])
+            self._generate_unit(facade, adapter, unit_type, unit_name)
+        else:
+            count = 0
+            for unit_name in \
+                CommandStrategy.next_matching_unit_name(facade.parser,
+                                                        unit_type,
+                                                        unit_regex):
+                self._generate_unit(facade, adapter, unit_type, unit_name)
+                count += 1
+            if count == 0:
+                self.print_wrapper.write("No " + unit_type.name + " matched.")
 
+    def _generate_unit(self, facade, adapter, unit_type, unit_name):
         definition = facade.parser.get_definition(unit_name, unit_type)
         examples = definition.generate_all()
 
-        self.print_wrapper.write("Generated examples:")
+        self.print_wrapper.write("Generated examples for " + unit_type.name +
+                                 " '" + unit_name + "':'")
         for ex in examples:
             # HACK: add a name of intent as ex is not especially a IntentExample
             if not hasattr(ex, 'name'):
                 ex.name = "INTERACTIVE"
             self.print_wrapper.write(adapter.prepare_example(ex))
+        self.print_wrapper.write("")

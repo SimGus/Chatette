@@ -23,7 +23,21 @@ class UnhideCommand(CommandStrategy):
             return
 
         unit_type = CommandStrategy.get_unit_type_from_str(self.command_tokens[1])
-        unit_name = CommandStrategy.remove_quotes(self.command_tokens[2])
+        unit_regex = CommandStrategy.get_name_as_regex(self.command_tokens[2])
+        if unit_regex is None:
+            unit_name = CommandStrategy.remove_quotes(self.command_tokens[2])
+            self.execute_on_unit(facade, unit_type, unit_name)
+        else:
+            unit_names = [unit_name
+                          for unit_name in HideCommand.stored_units[unit_type.name]
+                          if unit_regex.match(unit_name)]
+            if len(unit_names) == 0:
+                self.print_wrapper.write("No " + unit_type.name + " matched.")
+                
+            for unit_name in unit_names:
+                self.execute_on_unit(facade, unit_type, unit_name)
+
+    def execute_on_unit(self, facade, unit_type, unit_name):
         try:
             unit = HideCommand.stored_units[unit_type.name][unit_name]
             facade.parser.add_definition(unit_type, unit_name, unit)

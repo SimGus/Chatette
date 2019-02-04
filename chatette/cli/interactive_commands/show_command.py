@@ -9,24 +9,12 @@ from chatette.cli.interactive_commands.command_strategy import CommandStrategy
 
 
 class ShowCommand(CommandStrategy):
+    usage_str = 'show <unit-type> "<unit-name>"'
     max_nb_rules_to_display = 12
     def __init__(self, command_str):
         super(ShowCommand, self).__init__(command_str)
-
-    def execute(self, facade):
-        """
-        Implements the command `show` which shows information about a specific
-        unit definition and lists its rules (or just several of them if there
-        are too many rules).
-        """
-        # TODO support variations
-        if len(self.command_tokens) < 3:
-            self.print_wrapper.error_log("Missing some arguments\nUsage: " +
-                                         'show <unit-type> "<unit-name>"')
-            return
-
-        unit_type = CommandStrategy.get_unit_type_from_str(self.command_tokens[1])
-        unit_name = CommandStrategy.remove_quotes(self.command_tokens[2])
+    
+    def execute_on_unit(self, facade, unit_type, unit_name):
         try:
             unit = facade.parser.get_definition(unit_name, unit_type)
             self.print_wrapper.write(unit.short_desc_str())
@@ -37,6 +25,7 @@ class ShowCommand(CommandStrategy):
                     break
                 rule_str = ''.join([sub_rule.as_string() for sub_rule in rule])
                 self.print_wrapper.write('\t'+rule_str)
+            self.print_wrapper.write("")
         except KeyError:
             self.print_wrapper.write(unit_type.name.capitalize() + " '" +
                                      unit_name + "' is not defined.")
