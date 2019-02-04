@@ -49,8 +49,18 @@ There, several commands can be ran.
   Two adapters currently exist: `rasa` and `jsonl`.
   
   `generate` alone will execute the generation as it would have executed in non-interactive mode. Adding the adapter's name will make this generation use this adapter.
+
+- `declare alias "<alias-name>"` creates a new alias named `<alias-name>` in the parser. It will have no rules and no modifiers. Similar commands exist for slots and intents.
+
+- `add-rule alias "<alias-name>" "<rule>"` adds a rule to the definition of an alias named `<alias-name>` (if it exists). Similar commands exist for slots and intents.
+
+- `set-modifier alias "<alias-name>" "<modifier-name>" "<value>"` changes the value of the modifier `<modifier-name>` of the alias `<alias-name>`. Similar commands exist for slots and intents.
+
+  Beware that you could get exceptions later on if you set modifiers to invalid or incoherent values.
    
 - `rule "<rule>"` will generate the rule using all the units that have been defined in the template file(s). We can redirect its outputs to a file as before. If you need to use double quotes in the rule, escape it with a backslash `\`.
+
+- `save <file-path>` will create (or truncate) a file at `<file-path>` and save the configuration of the parser as templates. You will then be able to use this file as a template file later on with all the units you declared and modified during the interactive session.
 
 - `execute "<path-to-file>"` will read the file `<path-to-file>` and execute all the commands that are inside it sequentially. The commands and results will be printed on the command line as those executions are made. The commands in the file should be separated by newlines (thus, one command per line). Lines starting with `//` are ignored.
 
@@ -78,7 +88,11 @@ For all those commands (except `exit`), appending `> <filename>` or `>> <filenam
 - [x] unhide
 - [x] examples
 - [x] generate
+- [ ] declare
+- [ ] add-rule
+- [ ] set-modifier
 - [x] rule
+- [ ] save
 - [x] execute
 - [x] exit
 
