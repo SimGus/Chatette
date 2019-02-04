@@ -101,6 +101,7 @@
 - **BUG**: wrong generation when putting an alias inside a word group
 - **BUG**: encoding errors under Windows
 - **BUG**: synonyms are synonyms of themselves (look at simple airport example)
+- **BUG**: when using `save` command, variations print several times the same rule
 
 ## To confirm
 

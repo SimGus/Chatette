@@ -1,7 +1,8 @@
 from __future__ import print_function
 from random import randint
 
-from chatette.parsing.parser_utils import UnitType, remove_escapement
+from chatette.parsing.parser_utils import UnitType, remove_escapement, \
+                                          add_escapement_back
 from chatette.units import Example, RuleContent, may_get_leading_space, \
                            may_change_leading_case, randomly_change_case, \
                            with_leading_lower, with_leading_upper
@@ -121,7 +122,7 @@ class SlotRuleContent(RuleContent):
         Returns the representation of the rule
         as it would be written in a template file.
         """
-        result = self.name
+        result = add_escapement_back(self.name)
         if self.casegen:
             result = '&'+result
         if self.variation_name is not None:

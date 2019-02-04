@@ -100,3 +100,15 @@ class IntentDefinition(UnitDefinition):
             ex for ex in all_examples
             if ex not in training_examples
         ]
+
+
+    def _get_template_decl(self, variation=None):
+        result = '%' + \
+                 super(IntentDefinition, self)._get_template_decl(variation)
+        if self.nb_training_examples_asked is not None:
+            result += "(train:" + str(self.nb_training_examples_asked)
+            if self.nb_testing_examples_asked is not None:
+                result += ", test:" + str(self.nb_testing_examples_asked) + ')'
+        elif self.nb_testing_examples_asked is not None:
+            result += "(test:" + str(self.nb_testing_examples_asked) +')'
+        return result

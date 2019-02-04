@@ -11,5 +11,8 @@ class AliasDefinition(UnitDefinition):
         super(AliasDefinition, self).__init__(name, rules=rules, arg=arg,
                                               casegen=casegen)
         self.type = "alias"
+    
+    def _get_template_decl(self, variation=None):
+        return '~' + super(AliasDefinition, self)._get_template_decl(variation)
 
     # Everything else is in the superclass

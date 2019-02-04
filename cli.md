@@ -92,7 +92,7 @@ For all those commands (except `exit`), appending `> <filename>` or `>> <filenam
 - [x] add-rule
 - [x] set-modifier
 - [x] rule
-- [ ] save
+- [x] save
 - [x] execute
 - [x] exit
 

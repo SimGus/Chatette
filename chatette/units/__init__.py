@@ -12,6 +12,7 @@ import random
 from copy import deepcopy
 
 from chatette.utils import choose
+from chatette.parsing.parser_utils import add_escapement_back
 
 
 ENTITY_MARKER = "<<CHATETTE_ENTITY>>"
@@ -345,6 +346,62 @@ class UnitDefinition(object):
         desc += "Variations: "+str(len(self.variations))
         return desc
 
+    def get_template_description(self):
+        """
+        Returns a string that should be equal to the definition of the unit
+        in the template files (i.e. a template string on one or several lines).
+        """
+        result = self._get_template_decl() + '\n'
+        rules_str = '\n'.join(['\t' + e for e in self._get_template_rules()]) + \
+                    '\n'
+        if not rules_str.isspace():
+            result += rules_str
+        else:
+            result = ""
+        for variation_name in self.variations:
+            current = self._get_template_decl(variation_name) + '\n'
+            rules_str += '\n'.join(
+                            ['\t' + e
+                             for e in self._get_template_rules(variation_name)]
+                           ) + '\n'
+            if not rules_str.isspace():
+                result += current + rules_str
+        return result
+    def _get_template_decl(self, variation=None):
+        """
+        Returns the template string representing the declaration line of this
+        unit definition (with potentially a variation).
+        Subclasses should override this method.
+        """
+        # TODO use parser utils variables
+        result = '['
+        if self.casegen:
+            result += '&'
+        result += self.name
+        if variation is not None:
+            if variation not in self.variations:
+                raise ValueError("Tried to get template for a unit declaration " +
+                                "with an invalid variation name")
+            result += '#' + variation
+        if self.argument_identifier is not None:
+            result += '$' + self.argument_identifier
+        result += ']'
+        return result
+    def _get_template_rules(self, variation=None):
+        """
+        Returns a list of template string that represent each rule of this unit
+        (potentially with a variation).
+        This method may need to be overriden by subclasses.
+        """
+        rules = self.rules
+        if variation is not None:
+            rules = self.variations[variation]
+        rule_templates = []
+        for rule in rules:
+            rule_templates.append(''.join([sub_rule.as_string()
+                                           for sub_rule in rule]))
+        return rule_templates
+
 
 class RuleContent(object):
     """
@@ -446,7 +503,7 @@ class RuleContent(object):
         Returns the representation of the rule
         as it would be written in a template file.
         """
-        result = self.name
+        result = add_escapement_back(self.name)
         if self.casegen:
             result = '&'+result
         if self.variation_name is not None:

@@ -251,4 +251,22 @@ class SlotDefinition(UnitDefinition):
         # (str) -> (bool)
         return (self.arg_regex.search(text) is not None)
 
+
+    def _get_template_decl(self, variation=None):
+        return '@' + super(SlotDefinition, self)._get_template_decl(variation)
+    def _get_template_rules(self, variation=None):
+        rules = self.rules
+        if variation is not None:
+            rules = self.variations[variation]
+        rule_templates = []
+        for rule in rules:
+            alt_slot_val = None
+            if isinstance(rule[0], DummySlotValRuleContent):
+                alt_slot_val = rule[0].name
+            rule_templates.append(''.join([sub_rule.as_string()
+                                           for sub_rule in rule]))
+            if alt_slot_val is not None:
+                rule_templates[-1] += " = " + alt_slot_val
+        return rule_templates
+
     # Everything else is in the superclass

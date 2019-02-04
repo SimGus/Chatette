@@ -126,8 +126,24 @@ def remove_escapement(text):
         else:
             result += c
     return result
+def add_escapement_back(text):
+    escaped_text = ""
+    for c in text:
+        if should_be_escaped_char(c):
+            escaped_text += ESCAPE_SYM + c
+        else:
+            escaped_text += c
+    return escaped_text
 
 
+def should_be_escaped_char(text):
+    """
+    Returns `True` if `text` is 1 character that must be escaped in order to be
+    considered part of a word.
+    """
+    return is_special_sym(text) or text == COMMENT_MARKER \
+                                or text == COMMENT_SYM_DEPRECATED \
+                                or text == ALT_SLOT_VALUE_NAME_SYM
 def is_special_sym(text):
     """Returns `True` if `text` is a string made of only 1 special character."""
     if text is None or len(text) != 1:
@@ -136,7 +152,8 @@ def is_special_sym(text):
            text == UNIT_OPEN_SYM or text == UNIT_CLOSE_SYM or \
            text == VARIATION_SYM or text == RAND_GEN_SYM or \
            text == PERCENT_GEN_SYM or text == CASE_GEN_SYM or \
-           text == ARG_SYM
+           text == ARG_SYM or text == CHOICE_OPEN_SYM or \
+           text == CHOICE_CLOSE_SYM
 
 def is_unit_type_sym(text):
     """Returns `True` if `text` is a unit special symbol (`~`, `@` or `%`)."""

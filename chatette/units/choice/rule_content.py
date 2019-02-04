@@ -180,7 +180,7 @@ class ChoiceRuleContent(RuleContent):
         Returns the representation of the rule
         as it would be written in a template file.
         """
-        result = self.name
+        result = self.name  # NOTE escapement shouldn't be added back here
         if self.casegen:
             result = '&'+result
         if self.variation_name is not None:
