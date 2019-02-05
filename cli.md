@@ -66,12 +66,14 @@ There, several commands can be ran.
 
   Chatette can also directly read the commands from this file by calling the script with:
   ```bash
-  python -m chatette <path-to-template-file> -i -c <path-to-command-file>
+  python -m chatette <path-to-template-file> -I <path-to-command-file>
   ```
   or
   ```bash
-  python -m chatette <path-to-template-file> --interactive --command-file <path-to-command-file>
+  python -m chatette <path-to-template-file> --interactive-commands-file <path-to-command-file>
   ```
+
+  The option `-i` or `--interactive` may be added, but will result in the same behavior.
   
 - `exit` or `Ctrl+D` (`EOF`) stops the interactive mode (and the script). `Ctrl+C` would work as well, but stops *Chatette* abruptly without any exit message.
 

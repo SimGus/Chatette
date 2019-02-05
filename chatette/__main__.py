@@ -49,6 +49,11 @@ def main():
                                  required=False, action="store_true",
                                  default=False,
                                  help="Runs Chatette in interactive mode")
+    argument_parser.add_argument("-I", "--interactive-commands-file",
+                                 dest="interactive_commands_file",
+                                 required=False, default=None, type=str,
+                                 help="Path to a file containing interactive " +
+                                      "mode commands that will be directly run")
 
     if len(sys.argv[1:]) == 0:
         argument_parser.print_help()
@@ -57,12 +62,11 @@ def main():
     args = argument_parser.parse_args()
 
     facade = Facade.get_or_create_from_args(args)
-    if not args.interactive_mode:
+    if not args.interactive_mode and args.interactive_commands_file is None:
         facade.run()
     else:
-        cli = CommandLineInterpreter(facade)
+        cli = CommandLineInterpreter(facade, args.interactive_commands_file)
         cli.wait_for_input()
-    print("End of script")
 
 
 if __name__ == "__main__":

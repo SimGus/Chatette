@@ -20,17 +20,22 @@ REGEX_SYM = '/'
 
 class CommandStrategy(object):
     usage_str = "Undefined"  # Should be overriden by subclasses
-    def __init__(self, command_str):
+    def __init__(self, command_str, quiet=False):
         self.command_tokens = CommandStrategy.tokenize(command_str)
+
         redirection_tuple = \
                 CommandStrategy.find_redirection_file_path(self.command_tokens)
-        if redirection_tuple is None:
-            self.print_wrapper = TerminalWriter(None)
-        else:
+        if redirection_tuple is not None:
             self.remove_redirection_tokens()
             (redirection_type, redirection_filepath) = redirection_tuple
             self.print_wrapper = TerminalWriter(redirection_type,
                                                 redirection_filepath)
+        elif quiet:
+            self.print_wrapper = \
+                TerminalWriter(redirection_type=RedirectionType.quiet)
+        else:
+            self.print_wrapper = TerminalWriter(None)
+
         self._is_regex_global = None
 
     @staticmethod

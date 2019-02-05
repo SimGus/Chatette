@@ -12,6 +12,7 @@ from chatette.cli.interactive_commands.command_strategy import CommandStrategy, 
 
 
 class ExecuteCommand(CommandStrategy):
+    usage_str = 'execute <command-filepath>'
 
     def execute(self, facade):
         """
@@ -20,7 +21,7 @@ class ExecuteCommand(CommandStrategy):
         """
         if len(self.command_tokens) < 2:
             self.print_wrapper.error_log("Missing some arguments\nUsage: " +
-                                         'execute <command-filepath>')
+                                         self.usage_str)
             return
 
         with io.open(self.command_tokens[1], 'r') as command_file:

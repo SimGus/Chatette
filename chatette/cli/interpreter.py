@@ -4,6 +4,7 @@ Contains the interpreter that runs in a terminal in interactive mode.
 """
 
 from __future__ import print_function
+import io
 
 from chatette import __version__
 from chatette.utils import print_DBG
@@ -20,9 +21,30 @@ from chatette.cli.interactive_commands import exit_command, stats_command, \
 
 
 class CommandLineInterpreter(object):
-    def __init__(self, facade):
+    def __init__(self, facade, commands_file_path):
         self.facade = facade
         self.introduce()
+        if commands_file_path is not None:
+            self._execute_commands_file(commands_file_path)
+
+
+    def _execute_commands_file(self, commands_file_path):
+        """
+        Opens the file at `commands_file_path` and
+        execute all the commands that are inside it, one command per line
+        (except lines starting with `//`). Stops the execution if a line is not
+        a valid command.
+        """
+        print("Executing commands from file " + commands_file_path)
+        with io.open(commands_file_path, 'r') as f:
+            stop = False
+            for l in f:
+                if not l.isspace() and not l.lstrip().startswith("//"):
+                    stop = self.interpret_command(l.rstrip(), quiet=True)
+                    if stop:
+                        break
+        print("Execution of file over.")
+
 
     def introduce(self):
         """
@@ -31,7 +53,6 @@ class CommandLineInterpreter(object):
         """
         print("Chatette v"+__version__+" running in *interactive mode*.")
         self.facade.run_parsing()
-
 
     def wait_for_input(self):
         """
@@ -45,18 +66,17 @@ class CommandLineInterpreter(object):
             except EOFError:
                 print("Exiting interactive mode")
                 break
-            print_DBG("Got: '"+command_str+"'")
             stop = self.interpret_command(command_str)
             if stop:
                 print("Exiting interactive mode")
                 break
 
-    def interpret_command(self, command_str):
+    def interpret_command(self, command_str, quiet=False):
         """
         Interprets the command `command_str` and executes it.
         Returns `True` if the interactive mode should be exited.
         """
-        command = CommandLineInterpreter.get_command(command_str)
+        command = CommandLineInterpreter.get_command(command_str, quiet)
         if command is None:
             return False
         if command.should_exit():
@@ -83,42 +103,43 @@ class CommandLineInterpreter(object):
 
 
     @staticmethod
-    def get_command(command_str):
+    def get_command(command_str, quiet):
         """Factory method: creates the right command from the provided str."""
         operation_name = command_str.split(maxsplit=1)[0].lower()
         if operation_name == "exit":
-            return exit_command.ExitCommand(command_str)
+            return exit_command.ExitCommand(command_str, quiet)
         if operation_name == "stats":
-            return stats_command.StatsCommand(command_str)
+            return stats_command.StatsCommand(command_str, quiet)
         if operation_name == "parse":
-            return parse_command.ParseCommand(command_str)
+            return parse_command.ParseCommand(command_str, quiet)
         if operation_name == "exist":
-            return exist_command.ExistCommand(command_str)
+            return exist_command.ExistCommand(command_str, quiet)
         if operation_name == "rename":
-            return rename_command.RenameCommand(command_str)
+            return rename_command.RenameCommand(command_str, quiet)
         if operation_name == "delete":
-            return delete_command.DeleteCommand(command_str)
+            return delete_command.DeleteCommand(command_str, quiet)
         if operation_name == "examples":
-            return examples_command.ExamplesCommand(command_str)
+            return examples_command.ExamplesCommand(command_str, quiet)
         if operation_name == "hide":
-            return hide_command.HideCommand(command_str)
+            return hide_command.HideCommand(command_str, quiet)
         if operation_name == "unhide":
-            return unhide_command.UnhideCommand(command_str)
+            return unhide_command.UnhideCommand(command_str, quiet)
         if operation_name == "execute":
-            return execute_command.ExecuteCommand(command_str)
+            return execute_command.ExecuteCommand(command_str, quiet)
         if operation_name == "show":
-            return show_command.ShowCommand(command_str)
+            return show_command.ShowCommand(command_str, quiet)
         if operation_name == "rule":
-            return rule_command.RuleCommand(command_str)
+            return rule_command.RuleCommand(command_str, quiet)
         if operation_name == "generate":
-            return generate_command.GenerateCommand(command_str)
+            return generate_command.GenerateCommand(command_str, quiet)
         if operation_name == "add-rule":
-            return add_rule_command.AddRuleCommand(command_str)
+            return add_rule_command.AddRuleCommand(command_str, quiet)
         if operation_name == "declare":
-            return declare_command.DeclareCommand(command_str)
+            return declare_command.DeclareCommand(command_str, quiet)
         if operation_name == "set-modifier":
-            return set_modifier_command.SetModifierCommand(command_str)
+            return set_modifier_command.SetModifierCommand(command_str, quiet)
         if operation_name == "save":
-            return save_command.SaveCommand(command_str)
-        print("Unknown command")
+            return save_command.SaveCommand(command_str, quiet)
+        if not quiet:
+            print("Unknown command: " + operation_name)
         return None

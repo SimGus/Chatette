@@ -11,8 +11,8 @@ from chatette.cli.interactive_commands.command_strategy import CommandStrategy
 class HideCommand(CommandStrategy):
     usage_str = 'hide <unit-type> "<unit-name>"'
     stored_units = {"alias": dict(), "slot": dict(), "intent": dict()}
-    def __init__(self, command_str):
-        super(HideCommand, self).__init__(command_str)
+    def __init__(self, command_str, quiet=False):
+        super(HideCommand, self).__init__(command_str, quiet)
         self._units_to_delete = []
     
     def execute_on_unit(self, facade, unit_type, unit_name):

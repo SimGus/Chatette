@@ -9,8 +9,8 @@ from chatette.cli.interactive_commands.command_strategy import CommandStrategy
 
 class ExamplesCommand(CommandStrategy):
     usage_str = 'examples <unit-type> "<unit-name>" [<number-examples>]'
-    def __init__(self, command_str):
-        super(ExamplesCommand, self).__init__(command_str)
+    def __init__(self, command_str, quiet=False):
+        super(ExamplesCommand, self).__init__(command_str, quiet)
         self.nb_examples = None
 
     def execute_on_unit(self, facade, unit_type, unit_name):

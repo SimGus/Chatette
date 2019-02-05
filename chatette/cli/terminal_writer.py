@@ -13,7 +13,7 @@ from enum import Enum
 class RedirectionType(Enum):  # QUESTION is it possible to merge this with relevant strings?
     truncate = 1
     append = 2
-    ignore = 3
+    quiet = 3
 
 
 class TerminalWriter(object):
@@ -40,7 +40,7 @@ class TerminalWriter(object):
         elif redirection_type == RedirectionType.truncate:
             self.file_mode = 'w+'
         else:
-            self.file_mode = 'ignored'
+            self.file_mode = 'quiet'
 
     def get_redirection(self):
         """
@@ -50,8 +50,8 @@ class TerminalWriter(object):
         """
         if self.file_mode is None:
             return None
-        if self.file_mode == 'ignored':
-            return (RedirectionType.ignore, None)
+        if self.file_mode == 'quiet':
+            return (RedirectionType.quiet, None)
         if self.file_mode == 'a+':
             return (RedirectionType.append, self.redirection_file_path)
         if self.file_mode == 'w+':
@@ -62,7 +62,7 @@ class TerminalWriter(object):
     def write(self, text):
         if self.redirection_file_path is None and self.file_mode is None:
             print(text)
-        elif self.file_mode == 'ignored':
+        elif self.file_mode == 'quiet':
             return
         else:
             if self.buffered_text is None:

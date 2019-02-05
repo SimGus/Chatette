@@ -9,8 +9,8 @@ from chatette.cli.interactive_commands.command_strategy import CommandStrategy
 
 class DeleteCommand(CommandStrategy):
     usage_str = 'delete <unit-type> "<unit-name>"'
-    def __init__(self, command_str):
-        super(DeleteCommand, self).__init__(command_str)
+    def __init__(self, command_str, quiet=False):
+        super(DeleteCommand, self).__init__(command_str, quiet)
         self._units_to_delete = []
 
     def execute_on_unit(self, facade, unit_type, unit_name):
