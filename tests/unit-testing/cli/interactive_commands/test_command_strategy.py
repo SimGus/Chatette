@@ -89,3 +89,10 @@ class TestGetUnitTypeFromStr(object):
         assert CommandStrategy.get_unit_type_from_str("SLOT") == UnitType.slot
         assert CommandStrategy.get_unit_type_from_str("intent") == UnitType.intent
         assert CommandStrategy.get_unit_type_from_str("iNtENt") == UnitType.intent
+
+
+class TestRemoveQuotes(object):
+    def test(self):
+        assert CommandStrategy.remove_quotes('"quoted"') == "quoted"
+        assert CommandStrategy.remove_quotes('"the quotes"') == "the quotes"
+        assert CommandStrategy.remove_quotes('"escaped\""') == 'escaped"'
