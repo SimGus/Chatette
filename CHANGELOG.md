@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Interactive mode, executable using `-i` or `--interactive` program argument, with commands that give information or change the state of the parser after it read template files
+- Add program option `-I` or `--interactive-commands-file` to feed the script a file of commands that will be directly executed
 
 ### Changed
 - Accept comment lines and empty lines inside unit definitions (not considered as a new rule)
