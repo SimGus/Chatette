@@ -73,6 +73,9 @@ There, several commands can be ran.
   python -m chatette <path-to-template-file> --interactive-commands-file <path-to-command-file>
   ```
 
+  The interactive mode is entered after all the commands in the file have been executed,
+  unless an `exit` command is found (the script is stopped immediately).
+
   The option `-i` or `--interactive` may be added, but will result in the same behavior.
   
 - `exit` or `Ctrl+D` (`EOF`) stops the interactive mode (and the script). `Ctrl+C` would work as well, but stops *Chatette* abruptly without any exit message.

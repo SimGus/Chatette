@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Interactive mode, executable using `-i` or `--interactive` program argument, with commands that give information or change the state of the parser after it read template files
+
 ### Changed
 - Accept comment lines and empty lines inside unit definitions (not considered as a new rule)
 - Move tokenizer out of parser, move all code that is related to parsing into directory `parsing` and rename file `parsing.py` back to `parser.py`. Parsing might behave differently than it used to.

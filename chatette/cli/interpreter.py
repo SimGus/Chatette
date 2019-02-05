@@ -23,9 +23,11 @@ from chatette.cli.interactive_commands import exit_command, stats_command, \
 class CommandLineInterpreter(object):
     def __init__(self, facade, commands_file_path):
         self.facade = facade
+        self._dont_enter_interactive_mode = True
         self.introduce()
         if commands_file_path is not None:
-            self._execute_commands_file(commands_file_path)
+            self._dont_enter_interactive_mode = \
+                self._execute_commands_file(commands_file_path)
 
 
     def _execute_commands_file(self, commands_file_path):
@@ -34,16 +36,19 @@ class CommandLineInterpreter(object):
         execute all the commands that are inside it, one command per line
         (except lines starting with `//`). Stops the execution if a line is not
         a valid command.
+        Returns `True` if the interactive mode shouldn't be entered and 
+        `False` otherwise.
         """
         print("Executing commands from file " + commands_file_path)
+        stop = False
         with io.open(commands_file_path, 'r') as f:
-            stop = False
             for l in f:
                 if not l.isspace() and not l.lstrip().startswith("//"):
                     stop = self.interpret_command(l.rstrip(), quiet=True)
                     if stop:
                         break
         print("Execution of file over.")
+        return stop
 
 
     def introduce(self):
@@ -58,6 +63,8 @@ class CommandLineInterpreter(object):
         """
         Waits for the user to type a command, interprets it and executes it.
         """
+        if self._dont_enter_interactive_mode:
+            return
         stop = False
         while True:
             print(">>> ", end='')
