@@ -77,11 +77,12 @@ class CommandStrategy(object):
         The type of redirection is an enumeration item of type
         `RedirectionType`.
         Returns `None` if no redirection was found.
-        Returns `(ignored, None)` if a redirection should be done to nowhere.
+        Returns `(RedirectionType.quiet, None)` if a redirection should be done
+        to nowhere.
         (This can be achieved by using the redirections symbols and providing
         no filepath).
         """
-        if len(tokens) < 3:
+        if len(tokens) < 2:
             return None
         if tokens[-2] == REDIRECTION_APPEND_SYM:
             return (RedirectionType.append, tokens[-1])
@@ -89,7 +90,7 @@ class CommandStrategy(object):
             return (RedirectionType.truncate, tokens[-1])
         if (   tokens[-1] == REDIRECTION_APPEND_SYM
             or tokens[-1] == REDIRECTION_SYM):
-            return (None, None)
+            return (RedirectionType.quiet, None)
         return None
 
     @staticmethod
