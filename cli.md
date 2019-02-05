@@ -23,6 +23,8 @@ What do you need?
 >>>
 ```
 
+It is possible that arrow keys don't work in this prompt depending on which terminal emulator you use.
+
 ## Commands
 There, several commands can be ran.
 
