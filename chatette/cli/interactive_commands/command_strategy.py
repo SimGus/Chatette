@@ -52,11 +52,12 @@ class CommandStrategy(object):
         for word in splitted:
             if inside_token:
                 current_token += word + ' '
-                if word.endswith('"'):
+                if word.endswith('"') and (len(word) < 2 or word[-2] != '\\'):
                     inside_token = False
                     tokens.append(current_token.rstrip())
                     current_token = ""
-            elif word.startswith('"') and word.endswith('"'):
+            elif (    word.startswith('"') and word.endswith('"') \
+                  and (len(word) < 2 or word[-2] != '\\')):
                 tokens.append(word)
             elif word.startswith('"'):
                 inside_token = True
