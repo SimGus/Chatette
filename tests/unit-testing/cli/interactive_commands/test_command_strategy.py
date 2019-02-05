@@ -6,6 +6,7 @@ in module `chatette.cli.interactive_commands.command_strategy`.
 
 from chatette.cli.interactive_commands.command_strategy import CommandStrategy
 from chatette.cli.terminal_writer import RedirectionType
+from chatette.parsing.parser_utils import UnitType
 
 
 class TestSTokenize(object):
@@ -18,6 +19,7 @@ class TestSTokenize(object):
         assert CommandStrategy.tokenize("NOT-command") == ["NOT-command"]
         assert CommandStrategy.tokenize("NOT COMMAND") == ["NOT", "COMMAND"]
         assert CommandStrategy.tokenize('word "a name"') == ["word", '"a name"']
+        assert CommandStrategy.tokenize(' open "quote a') == ["open", '"quote a']
 
     def test_long_commands(self):
         assert CommandStrategy.tokenize('rule "~[a rule] tested"') == \
@@ -70,3 +72,20 @@ class TestFindRedirectionFilePath(object):
                (RedirectionType.quiet, None)
         assert CommandStrategy.find_redirection_file_path(self.to_tokens("command >  ")) == \
                (RedirectionType.quiet, None)
+
+
+class TestGetUnitTypeFromStr(object):
+    def test_wrong_str(self):
+        assert CommandStrategy.get_unit_type_from_str("") is None
+        assert CommandStrategy.get_unit_type_from_str("t") is None
+        assert CommandStrategy.get_unit_type_from_str("test") is None
+        assert CommandStrategy.get_unit_type_from_str("SOMETHING") is None
+        assert CommandStrategy.get_unit_type_from_str("\t\t ") is None
+    
+    def test_correct_str(self):
+        assert CommandStrategy.get_unit_type_from_str("alias") == UnitType.alias
+        assert CommandStrategy.get_unit_type_from_str("AliaS") == UnitType.alias
+        assert CommandStrategy.get_unit_type_from_str("slot") == UnitType.slot
+        assert CommandStrategy.get_unit_type_from_str("SLOT") == UnitType.slot
+        assert CommandStrategy.get_unit_type_from_str("intent") == UnitType.intent
+        assert CommandStrategy.get_unit_type_from_str("iNtENt") == UnitType.intent
