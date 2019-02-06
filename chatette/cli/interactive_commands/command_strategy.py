@@ -162,7 +162,7 @@ class CommandStrategy(object):
             for unit_name in relevant_dict:
                 if regex.match(unit_name):
                     yield unit_name
-    def get_all_matching_unit_name(self, parser, unit_type, regex):
+    def get_all_matching_unit_names(self, parser, unit_type, regex):
         """
         Returns a list of unit names of type `unit_type`
         whose name matches `regex`.
