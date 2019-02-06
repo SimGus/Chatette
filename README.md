@@ -1,21 +1,57 @@
-# *Chatette* dataset generator &nbsp;&nbsp;&nbsp; [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Chatette%3A+an+open-source+Python+package+to+easily+generate+datasets+for+Rasa+NLU&url=https://pypi.org/project/chatette&hashtags=rasa,rasaNLU,chatbots,conversationalAI)
+<p align="right">
+    <a href="https://twitter.com/intent/tweet?text=Chatette%3A+an+open-source+Python+package+to+easily+generate+datasets+for+Rasa+NLU&url=https://pypi.org/project/chatette&hashtags=rasa,rasaNLU,chatbots,conversationalAI"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social" alt="Tweet about it"></a>
+</p>
 
+<h1 align="center">
+    <a href="https://pypi.org/project/chatette">
+    <img src="https://raw.githubusercontent.com/SimGus/Chatette/master/public/images/chatette-logo.png" alt="Chatette logo" width=300>
+    </a>
+    <br/>
+    <i>Chatette</i>
+    <br/>
+</h1>
+
+<h4 align="center">A data generator for <i>Rasa NLU</i></h4>
+
+<p align="center">
+    <a href="https://badge.fury.io/py/chatette">
+        <img src="https://badge.fury.io/py/chatette.svg" alt="PyPI package">
+    </a>
+    <a href="https://github.com/SimGus/Chatette/blob/master/LICENSE">
+        <img src="https://img.shields.io/github/license/SimGus/Chatette.svg" alt="GitHub license">
+    </a>
+    <a href="https://travis-ci.org/SimGus/Chatette">
+        <img src="https://travis-ci.org/SimGus/Chatette.svg?branch=master" alt="Build status">
+    </a>
+    <a href="https://codecov.io/gh/SimGus/Chatette">
+        <img src="https://codecov.io/gh/SimGus/Chatette/branch/master/graph/badge.svg" alt="codecov">
+    </a>
+</p>
 <!--[![Github All Releases](https://img.shields.io/github/downloads/SimGus/Chatette/total.svg)](https://github.com/SimGus/Chatette)-->
-[![PyPI package](https://badge.fury.io/py/chatette.svg)](https://badge.fury.io/py/chatette)
-[![GitHub license](https://img.shields.io/github/license/SimGus/Chatette.svg)](https://github.com/SimGus/Chatette/blob/master/LICENSE)
-[![Build Status](https://travis-ci.org/SimGus/Chatette.svg?branch=master)](https://travis-ci.org/SimGus/Chatette)
-[![codecov](https://codecov.io/gh/SimGus/Chatette/branch/master/graph/badge.svg)](https://codecov.io/gh/SimGus/Chatette)
 
-![*Chatette* logo](https://raw.githubusercontent.com/SimGus/Chatette/master/public/images/chatette-logo.png)
+<p align="center">
+    <a href="#Installation">Installation</a> •
+    <a href="#How-to-use-Chatette?">How to use <i>Chatette</i>?</a> •
+    <a href="#Chatette-vs-Chatito?"><i>Chatette</i> vs <i>Chatito</i>?</a> •
+    <a href="#Development">Development</a> •
+    <a href="#Credits">Credits</a>
+</p>
 
 *Chatette* is a Python script that generates training datasets for the Python package [*Rasa NLU*](https://github.com/RasaHQ/rasa_nlu "rasa-nlu GitHub repository") from template files.
 If you want to make large datasets of example data for Natural Language Understanding tasks without too much of a headache, *Chatette* is a project for you.
 
-Specifically, *Chatette* implements a Domain Specific Language (*DSL*) that allows you to define templates to generate a large number of sentences. Those sentences are then saved in the input format of *Rasa NLU*.
+Specifically, *Chatette* implements a Domain Specific Language (*DSL*) that allows you to define templates to generate a large number of sentences, which are then saved in the input format of *Rasa NLU*.
 
 The *DSL* used is a superset of the excellent project [*Chatito*](https://github.com/rodrigopivi/Chatito "Chatito's GitHub repository") created by Rodrigo Pimentel. (*Note: the DSL is actually a superset of Chatito v2.1.x for Rasa NLU, not for all possible adapters.*)
 
-# Installation
+An interactive mode is available as well (mostly for testing purposes):
+
+<p align="center">
+    <img src="https://raw.githubusercontent.com/SimGus/Chatette/feature-cli/public/images/interactive-mode-short.gif" alt="Interactive mode">
+</p>
+<!--TODO change the url to master branch once it is out-->
+
+## Installation
 To run *Chatette*, you will need to have [Python](https://www.python.org/) installed.
 *Chatette* works with both Python 2.7 and 3.x (>= 3.3).
 
@@ -30,9 +66,9 @@ pip install -r requirements/common.txt
 ```
 You can then run the module by using the commands below in the cloned directory.
 
-# How to use *Chatette*?
+## How to use *Chatette*?
 
-## Input and output data
+### Input and output data
 
 The data that *Chatette* uses and generates is loaded from and saved to files. We thus have:
 - The **input file(s)** containing the templates.
@@ -40,7 +76,7 @@ The data that *Chatette* uses and generates is loaded from and saved to files. W
 
 - The **output file**, a *JSON* file containing data that can be directly fed to *Rasa NLU*. It is also possible to use a *JSONL* format in the output.
 
-## Running *Chatette*
+### Running *Chatette*
 Once installed, run the following command:
 ```bash
 python -m chatette <path_to_template>
@@ -57,7 +93,7 @@ The output file(s) will then be saved in numbered `.json` files in `<output_dire
 
 Other program arguments and are described [in the wiki](https://github.com/SimGus/Chatette/wiki).
 
-# *Chatette* vs *Chatito*?
+## *Chatette* vs *Chatito*?
 *TL;DR: **main selling point**: it is easier to deal with large projects using* Chatette, *and you can transform a* Chatito *project into a* Chatette *one without any modification.*
 
 A perfectly legitimate question is:
@@ -141,7 +177,7 @@ Beware that, as always with machine learning, having too much data may cause you
 
 Note that *Chatette* is named after *Chatito*, as *-ette* in French could be translated to *-ita* or *-ito* in Spanish.
 
-# Development
+## Development
 For developers, you can clone the [repo](https://github.com/SimGus/Chatette) and install the development requirements:
 
 ```pip install -r requirements/develop.txt```
@@ -164,13 +200,13 @@ pip install -e <path-to-cloned-repo>
 ```
 You can then run *Chatette* as if you installed it from PyPI.
 
-# Credits
-## Author and maintainer
+## Credits
+### Author and maintainer
 - [SimGus](https://github.com/SimGus)
 
 *Disclaimer: This is a side-project I'm not paid for, don't expect me to work 24/7 on it.*
 
-## Contributors
+### Contributors
 - [Vadim Fedorenko](https://github.com/meiblorn)
 
 Many thanks to him!
