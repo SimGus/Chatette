@@ -30,11 +30,11 @@
 <!--[![Github All Releases](https://img.shields.io/github/downloads/SimGus/Chatette/total.svg)](https://github.com/SimGus/Chatette)-->
 
 <p align="center">
-    <a href="#Installation">Installation</a> •
-    <a href="#How-to-use-Chatette?">How to use <i>Chatette</i>?</a> •
-    <a href="#Chatette-vs-Chatito?"><i>Chatette</i> vs <i>Chatito</i>?</a> •
-    <a href="#Development">Development</a> •
-    <a href="#Credits">Credits</a>
+    <a href="#installation">Installation</a> •
+    <a href="#how-to-use-chatette">How to use <i>Chatette</i>?</a> •
+    <a href="#chatette-vs-chatito"><i>Chatette</i> vs <i>Chatito</i>?</a> •
+    <a href="#development">Development</a> •
+    <a href="#credits">Credits</a>
 </p>
 
 *Chatette* is a Python script that generates training datasets for the Python package [*Rasa NLU*](https://github.com/RasaHQ/rasa_nlu "rasa-nlu GitHub repository") from template files.
