@@ -15,7 +15,7 @@
     what is your name?
 
 %[&ask identity](train:2)
-    are you @[name]
+    are you @[name]?
     
 ~[guys]
     all
