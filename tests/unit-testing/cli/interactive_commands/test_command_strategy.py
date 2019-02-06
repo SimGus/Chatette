@@ -23,6 +23,7 @@ class TestSTokenize(object):
         assert CommandStrategy.tokenize("NOT COMMAND") == ["NOT", "COMMAND"]
         assert CommandStrategy.tokenize('word "a name"') == ["word", '"a name"']
         assert CommandStrategy.tokenize(' open "quote a') == ["open", '"quote a']
+        assert CommandStrategy.tokenize("regex /with space/i") == ["regex", "/with space/i"]
 
     def test_long_commands(self):
         assert CommandStrategy.tokenize('rule "~[a rule] tested"') == \
@@ -34,6 +35,23 @@ class TestSTokenize(object):
     def test_escapement(self):
         assert CommandStrategy.tokenize('test "escaped \\" was here"') == \
                ["test", '"escaped \\" was here"']
+
+
+class TestIsEndRegex(object):
+    def test_empty(self):
+        assert not CommandStrategy._is_end_regex("")
+    
+    def test_not_regex(self):
+        assert not CommandStrategy._is_end_regex("test")
+        assert not CommandStrategy._is_end_regex("something")
+        assert not CommandStrategy._is_end_regex("a longer thing")
+        assert not CommandStrategy._is_end_regex("/special characters$^")
+    
+    def test_regexes(self):
+        assert CommandStrategy._is_end_regex("/something.*/")
+        assert CommandStrategy._is_end_regex("/something else/i")
+        assert CommandStrategy._is_end_regex("another /g")
+        assert CommandStrategy._is_end_regex("/a last thing/ig")
 
 
 class TestFindRedirectionFilePath(object):
