@@ -161,6 +161,7 @@ class Parser(object):
                 self._expecting_rule = False  # Not expecting but still allowed
                 self.stats["#rules"] += 1
         self.tokenizer.close_files()
+        print_DBG("Parsing finished!")
 
     def _parse_declaration_initiator(self, token_line):
         """Parses a line (as tokens) that contains a declaration initiator."""
