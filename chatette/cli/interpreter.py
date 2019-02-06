@@ -58,8 +58,7 @@ class CommandLineInterpreter(object):
         Tells the user they are in interactive mode and
         asks the facade to execute the parsing of the master file if needed.
         """
-        # print("Chatette v"+__version__+" running in *interactive mode*.")
-        print("Chatette v1.4.0-rc running in *interactive mode*.")
+        print("Chatette v"+__version__+" running in *interactive mode*.")
         self.facade.run_parsing()
 
     def wait_for_input(self):
