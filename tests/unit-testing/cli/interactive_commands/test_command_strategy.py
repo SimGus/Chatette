@@ -155,7 +155,10 @@ class TestShouldExit(object):
 
 
 class TestExecute(object):
-    pass # TODO
+    # NOTE: for coverage
+    def test(self):
+        with pytest.raises(NotImplementedError):
+            CommandStrategy("this is a command").execute(None)
 
 
 class TestExecuteOnUnit(object):
