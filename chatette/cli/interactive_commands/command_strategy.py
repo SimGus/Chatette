@@ -117,22 +117,22 @@ class CommandStrategy(object):
         """
         return text[1:-1].replace(r'\"', '"')
 
-    def get_name_as_regex(self, text):
+    def get_regex_name(self, name):
         """
-        If a regex is used within `text`,
+        If a regex is used within `name`,
         returns a compiled regex that is able to find all units with a name
         that matches some pattern.
         Returns `None` otherwise.
         """
-        if text.startswith(REGEX_SYM) and (   text.endswith(REGEX_SYM)
-                                           or text[-2] == REGEX_SYM
-                                           or text[-3] == REGEX_SYM):
-            splitted_str = [e for e in text.split(REGEX_SYM) if e != ""]
+        if name.startswith(REGEX_SYM) and (   name.endswith(REGEX_SYM)
+                                           or name[-2] == REGEX_SYM
+                                           or name[-3] == REGEX_SYM):
+            splitted_str = [e for e in name.split(REGEX_SYM) if e != ""]
             if len(splitted_str) == 1:
-                return re.compile(text[1:-1].replace('\\'+REGEX_SYM, REGEX_SYM))
+                return re.compile(name[1:-1].replace('\\'+REGEX_SYM, REGEX_SYM))
 
             flags = splitted_str[-1]
-            text_without_flags = rchop(text, flags)
+            text_without_flags = rchop(name, flags)
             self._is_regex_global = 'g' in flags
             if 'i' in flags:
                 return re.compile(text_without_flags[1:-1].replace('\\'+REGEX_SYM, REGEX_SYM),
@@ -189,6 +189,8 @@ class CommandStrategy(object):
         from `self.command_tokens`.
         @pre: There are redirection tokens in the tokens.
         """
+        if len(self.command_tokens) < 2:
+            return
         if (   self.command_tokens[-2] == REDIRECTION_APPEND_SYM
             or self.command_tokens[-2] == REDIRECTION_SYM):
             self.command_tokens = self.command_tokens[:-2]
@@ -225,7 +227,7 @@ class CommandStrategy(object):
             return
 
         unit_type = CommandStrategy.get_unit_type_from_str(self.command_tokens[1])
-        unit_regex = self.get_name_as_regex(self.command_tokens[2])
+        unit_regex = self.get_regex_name(self.command_tokens[2])
         if unit_regex is None:
             unit_name = CommandStrategy.remove_quotes(self.command_tokens[2])
             self.execute_on_unit(facade, unit_type, unit_name)

@@ -18,7 +18,7 @@ class AddRuleCommand(CommandStrategy):
             return
 
         unit_type = CommandStrategy.get_unit_type_from_str(self.command_tokens[1])
-        unit_regex = self.get_name_as_regex(self.command_tokens[2])
+        unit_regex = self.get_regex_name(self.command_tokens[2])
         rule_str = CommandStrategy.remove_quotes(self.command_tokens[3])
         if unit_regex is None:
             unit_name = CommandStrategy.remove_quotes(self.command_tokens[2])

@@ -20,7 +20,7 @@ class SetModifierCommand(CommandStrategy):
             return
 
         unit_type = CommandStrategy.get_unit_type_from_str(self.command_tokens[1])
-        unit_regex = self.get_name_as_regex(self.command_tokens[2])
+        unit_regex = self.get_regex_name(self.command_tokens[2])
 
         modifier_name = self.command_tokens[3]
         modifier_value = CommandStrategy.remove_quotes(self.command_tokens[4])

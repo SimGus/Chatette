@@ -21,7 +21,7 @@ class UnhideCommand(CommandStrategy):
             return
 
         unit_type = CommandStrategy.get_unit_type_from_str(self.command_tokens[1])
-        unit_regex = self.get_name_as_regex(self.command_tokens[2])
+        unit_regex = self.get_regex_name(self.command_tokens[2])
         if unit_regex is None:
             unit_name = CommandStrategy.remove_quotes(self.command_tokens[2])
             self.execute_on_unit(facade, unit_type, unit_name)
