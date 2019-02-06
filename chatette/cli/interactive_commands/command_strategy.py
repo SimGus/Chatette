@@ -49,24 +49,42 @@ class CommandStrategy(object):
         tokens = []
         current_token = ""
         inside_token = False
+        inside_regex = False
         for word in splitted:
             if inside_token:
-                current_token += word + ' '
+                current_token += ' ' + word
                 if word.endswith('"') and (len(word) < 2 or word[-2] != '\\'):
                     inside_token = False
                     tokens.append(current_token.rstrip())
+                    current_token = ""
+            elif inside_regex:
+                current_token += ' ' + word
+                if CommandStrategy._is_end_regex(word):
+                    inside_regex = False
+                    tokens.append(current_token)
                     current_token = ""
             elif (    word.startswith('"') and word.endswith('"') \
                   and (len(word) < 2 or word[-2] != '\\')):
                 tokens.append(word)
             elif word.startswith('"'):
                 inside_token = True
-                current_token += word + ' '
+                current_token += word
+            elif word.startswith("/") and CommandStrategy._is_end_regex(word):
+                tokens.append(word)
+            elif word.startswith("/"):
+                inside_regex = True
+                current_token += word
             else:  # not inside a token and not starting with "
                 tokens.append(word)
         if current_token != "":
             tokens.append(current_token.rstrip())
         return tokens
+    @staticmethod
+    def _is_end_regex(word):
+        """Returns `True` if `word` is the end of a regex."""
+        return    word.endswith("/") or word.endswith("/g") \
+               or word.endswith("/i") or word.endswith("/ig") \
+               or word.endswith("/gi")
 
     @staticmethod
     def find_redirection_file_path(tokens):
