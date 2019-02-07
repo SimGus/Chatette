@@ -207,8 +207,6 @@ class CommandStrategy(object):
         from `self.command_tokens`.
         @pre: There are redirection tokens in the tokens.
         """
-        if len(self.command_tokens) < 2:
-            return
         if (   self.command_tokens[-2] == REDIRECTION_APPEND_SYM
             or self.command_tokens[-2] == REDIRECTION_SYM):
             self.command_tokens = self.command_tokens[:-2]
