@@ -33,14 +33,14 @@ class TerminalWriter(object):
         @pre: `redirection_type` is of type `RedirectionType`.
         """
         if redirection_type is None:
-            self.file_mode = None
+            self._file_mode = None
             return
         if redirection_type == RedirectionType.append:
-            self.file_mode = 'a+'
+            self._file_mode = 'a+'
         elif redirection_type == RedirectionType.truncate:
-            self.file_mode = 'w+'
+            self._file_mode = 'w+'
         else:
-            self.file_mode = 'quiet'
+            self._file_mode = 'quiet'
 
     def get_redirection(self):
         """
@@ -48,21 +48,21 @@ class TerminalWriter(object):
         If this wrapper doesn't redirect to any file (or ignore prints),
         returns `None`.
         """
-        if self.file_mode is None:
+        if self._file_mode is None:
             return None
-        if self.file_mode == 'quiet':
+        if self._file_mode == 'quiet':
             return (RedirectionType.quiet, None)
-        if self.file_mode == 'a+':
+        if self._file_mode == 'a+':
             return (RedirectionType.append, self.redirection_file_path)
-        if self.file_mode == 'w+':
+        if self._file_mode == 'w+':
             return (RedirectionType.truncate, self.redirection_file_path)
         return None
 
 
     def write(self, text):
-        if self.redirection_file_path is None and self.file_mode is None:
+        if self.redirection_file_path is None and self._file_mode is None:
             print(text)
-        elif self.file_mode == 'quiet':
+        elif self._file_mode == 'quiet':
             return
         else:
             if self.buffered_text is None:
@@ -86,6 +86,6 @@ class TerminalWriter(object):
                 io.open(self.redirection_file_path, 'w+').close()
             # Write to the file if needed
             if self.buffered_text is not None:
-                with io.open(self.redirection_file_path, self.file_mode) as f:
+                with io.open(self.redirection_file_path, self._file_mode) as f:
                     print(self.buffered_text, '\n', sep='', file=f)
         self.buffered_text = None

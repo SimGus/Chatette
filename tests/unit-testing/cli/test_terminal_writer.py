@@ -11,32 +11,32 @@ class TestInitTerminalWriter(object):
         obj = TerminalWriter()
         assert obj.redirection_file_path is None
         assert obj.buffered_text is None
-        assert obj.file_mode == 'a+'
+        assert obj._file_mode == 'a+'
 
         obj = TerminalWriter(RedirectionType.append)
         assert obj.redirection_file_path is None
         assert obj.buffered_text is None
-        assert obj.file_mode == 'a+'
+        assert obj._file_mode == 'a+'
 
         obj = TerminalWriter(RedirectionType.truncate)
         assert obj.redirection_file_path is None
         assert obj.buffered_text is None
-        assert obj.file_mode == 'w+'
+        assert obj._file_mode == 'w+'
 
         obj = TerminalWriter(RedirectionType.quiet)
         assert obj.redirection_file_path is None
         assert obj.buffered_text is None
-        assert obj.file_mode == 'quiet'
+        assert obj._file_mode == 'quiet'
 
         obj = TerminalWriter(None)
         assert obj.redirection_file_path is None
         assert obj.buffered_text is None
-        assert obj.file_mode is None
+        assert obj._file_mode is None
 
         obj = TerminalWriter(redirection_file_path="test")
         assert obj.redirection_file_path == "test"
         assert obj.buffered_text is None
-        assert obj.file_mode == 'a+'
+        assert obj._file_mode == 'a+'
 
 
 class TestReset(object):
@@ -66,6 +66,11 @@ class TestGetRedirection(object):
 
         obj = TerminalWriter(redirection_file_path="test")
         assert obj.get_redirection() == (RedirectionType.append, "test")
+    
+    def test_incorrect_state(self):
+        obj = TerminalWriter()
+        obj._file_mode = "incorrect"
+        assert obj.get_redirection() is None
 
 
 class TestWrite(object):
