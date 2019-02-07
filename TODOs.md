@@ -101,7 +101,8 @@
 - **BUG**: wrong generation when putting an alias inside a word group
 - **BUG**: encoding errors under Windows
 - **BUG**: synonyms are synonyms of themselves (look at simple airport example)
-- **BUG**: when using `save` command, variations print several times the same rule
+- **BUG**: when using `save` command, `\$` are saved instead of `$`
+- **BUG**: when using `save` command, choice are appended `?True`
 
 ## To confirm
 
@@ -132,6 +133,7 @@
 - **fixed**: if a slot generated a certain string and this string could already be found somewhere before in the example, the first string was wrongly selected as the entity with the Rasa adapter
 - **fixed**: indentation error raised for lines with only spaces
 - **fixed**: when an empty alias definition is used, nothing is generated
+- **fixed**: when using `save` command, variations print several times the same rule
 
 # Ideas
 

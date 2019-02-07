@@ -358,6 +358,7 @@ class UnitDefinition(object):
             result += rules_str
         else:
             result = ""
+        rules_str = ""
         for variation_name in self.variations:
             current = self._get_template_decl(variation_name) + '\n'
             rules_str += '\n'.join(
