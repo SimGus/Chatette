@@ -535,7 +535,7 @@ def find_modifiers_decl(tokens_inside_decl):
     expecting_argument = False
     while i < len(tokens_inside_decl):
         if tokens_inside_decl[i] == VARIATION_SYM:
-            modifiers.argument_name = ""
+            modifiers.variation_name = ""
             expecting_variation = True
             expecting_argument = False
         elif tokens_inside_decl[i] == ARG_SYM:
