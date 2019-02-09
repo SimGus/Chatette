@@ -1,5 +1,5 @@
 from chatette.units import Example, RuleContent, may_change_leading_case
-from chatette.parsing.parser_utils import add_escapement_back
+from chatette.parsing.parser_utils import add_escapement_back_in_word
 
 
 class WordRuleContent(RuleContent):
@@ -61,5 +61,5 @@ class WordRuleContent(RuleContent):
         as it would be written in a template file.
         """
         if self.leading_space:
-            return ' ' + add_escapement_back(self.name)
-        return add_escapement_back(self.name)
+            return ' ' + add_escapement_back_in_word(self.name)
+        return add_escapement_back_in_word(self.name)

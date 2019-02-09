@@ -12,7 +12,7 @@ import random
 from copy import deepcopy
 
 from chatette.utils import choose
-from chatette.parsing.parser_utils import add_escapement_back
+from chatette.parsing.parser_utils import add_escapement_back_in_sub_rule
 
 
 ENTITY_MARKER = "<<CHATETTE_ENTITY>>"
@@ -504,7 +504,7 @@ class RuleContent(object):
         Returns the representation of the rule
         as it would be written in a template file.
         """
-        result = add_escapement_back(self.name)
+        result = add_escapement_back_in_sub_rule(self.name)
         if self.casegen:
             result = '&'+result
         if self.variation_name is not None:

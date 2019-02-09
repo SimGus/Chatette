@@ -101,8 +101,8 @@
 - **BUG**: wrong generation when putting an alias inside a word group
 - **BUG**: encoding errors under Windows
 - **BUG**: synonyms are synonyms of themselves (look at simple airport example)
-- **BUG**: when using `save` command, `\$` are saved instead of `$`
-- **BUG**: when using `save` command, choice are appended `?True`
+- **BUG**: choices get a randgen when there is 1 `?` somewhere in their content
+- **BUG**: several `?` in a choice's content crash the program (because of randgen)
 
 ## To confirm
 
@@ -134,6 +134,8 @@
 - **fixed**: indentation error raised for lines with only spaces
 - **fixed**: when an empty alias definition is used, nothing is generated
 - **fixed**: when using `save` command, variations print several times the same rule
+- **fixed**: when using `save` command, `\$` are saved instead of `$`
+- **fixed**: when using `save` command, choice are appended `?True`
 
 # Ideas
 

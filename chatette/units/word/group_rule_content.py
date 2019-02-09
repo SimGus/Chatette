@@ -3,7 +3,7 @@ from random import randint
 from chatette.units import Example, RuleContent, may_change_leading_case, \
                            may_get_leading_space, randomly_change_case, \
                            with_leading_lower, with_leading_upper
-from chatette.parsing.parser_utils import add_escapement_back
+from chatette.parsing.parser_utils import add_escapement_back_in_group
 
 
 class GroupWordRuleContent(RuleContent):
@@ -105,7 +105,7 @@ class GroupWordRuleContent(RuleContent):
         Returns the representation of the rule
         as it would be written in a template file.
         """
-        result = add_escapement_back(self.name)
+        result = add_escapement_back_in_group(self.name)
         if self.casegen:
             result = '&'+result
         if self.variation_name is not None:
