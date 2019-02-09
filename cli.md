@@ -56,7 +56,7 @@ There, several commands can be ran.
 
 - `add-rule alias "<alias-name>" "<rule>"` adds a rule to the definition of an alias named `<alias-name>` (if it exists). Similar commands exist for slots and intents.
 
-- `set-modifier alias "<alias-name>" <modifier-name> "<value>"` changes the value of the modifier `<modifier-name>` of the alias `<alias-name>`. Similar commands exist for slots and intents. Since those are unit declarations, the only modifiers they accept are "case generation" (`"True"` or `"False"` (case-insensitive)) and "argument identifier" (any string). Modifier names are thus `casegen` and `arg`.
+- `set-modifier alias "<alias-name>" <modifier-name> "<value>"` changes the value of the modifier `<modifier-name>` of the alias `<alias-name>`. Similar commands exist for slots and intents. Since those are unit declarations, the only modifiers they accept are "case generation" (`"True"` or `"False"` (case-insensitive)) and "argument identifier" (any string). Modifier names are thus `casegen` and `arg` (or alternatively `&` and `$`, if you want to be more concise).
 
   Beware that you could get exceptions later on if you set modifiers to invalid or incoherent values.
    
