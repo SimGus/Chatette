@@ -203,5 +203,4 @@ class ChoiceRuleContent(RuleContent):
         result = '{' + result + '}'
         if self.leading_space:
             result = ' '+result
-        print("choice is:",result)
         return result
