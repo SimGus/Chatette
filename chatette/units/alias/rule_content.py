@@ -93,6 +93,7 @@ class AliasRuleContent(RuleContent):
         if self.randgen is not None:
             generated_examples.append(Example())
 
+        print("generating aliases:",self.name)
         aliases = self.parser.get_definition(self.name, UnitType.alias) \
             .generate_all(self.variation_name, self.arg_value)
 
