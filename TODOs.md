@@ -101,7 +101,6 @@
 - **BUG**: wrong generation when putting an alias inside a word group
 - **BUG**: encoding errors under Windows
 - **BUG**: synonyms are synonyms of themselves (look at simple airport example)
-- **BUG**: several `?` in a choice's content crash the program (because of randgen)
 
 ## To confirm
 
@@ -136,6 +135,7 @@
 - **fixed**: when using `save` command, `\$` are saved instead of `$`
 - **fixed**: when using `save` command, choice are appended `?True`
 - **fixed**: choices get a randgen when there is 1 `?` somewhere in their content
+- **fixed**: several `?` in a choice's content crash the program (because of randgen)
 
 # Ideas
 

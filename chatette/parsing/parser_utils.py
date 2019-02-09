@@ -537,17 +537,6 @@ def check_choice_validity(tokens_choice_inside):
     if argument_count > 0:
         raise SyntaxError("Choices cannot take an argument.")
 
-    randgen_count = tokens_choice_inside.count(RAND_GEN_SYM)
-    if randgen_count > 1:
-        raise SyntaxError("There can be only one random generation modifier "+
-                          "per choice.")
-    if randgen_count == 1:
-        index_randgen = tokens_choice_inside.index(RAND_GEN_SYM)
-        if (    index_randgen+1 < len(tokens_choice_inside)
-            and not is_special_sym(tokens_choice_inside[index_randgen+1])):
-            raise SyntaxError("Random generation modifiers cannot be named "+
-                              "for choices.")
-
     # TODO: deprecate `/` as choice separators AND percentgen
     # percentgen_count = tokens_choice_inside.count(PERCENT_GEN_SYM)
     # if percentgen_count > 0:
