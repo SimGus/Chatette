@@ -784,26 +784,10 @@ def find_modifiers_choice(tokens_inside_choice):
     """
     modifiers = mods.ChoiceModifiersRepr()
 
-    i = 0
     if tokens_inside_choice[0] == CASE_GEN_SYM:
         modifiers.casegen = True
-        i += 1
-
-    # expecting_percentgen = False
-    while i < len(tokens_inside_choice):
-        if tokens_inside_choice[i] == RAND_GEN_SYM:
-            modifiers.randgen = True
-        # elif tokens_inside_choice[i] == PERCENT_GEN_SYM:
-        #     expecting_percentgen = True
-        #     modifiers.percentage_randgen = ""
-        # elif expecting_percentgen:
-        #     modifiers.percentage_randgen = tokens_inside_choice[i]
-        #     expecting_percentgen = False
-        i += 1
-    # if not modifiers.randgen:
-    #     modifiers.percentage_randgen = 50
-    # else:
-    #     modifiers.percentage_randgen = int(modifiers.percentage_randgen)
+    if tokens_inside_choice[-1] == RAND_GEN_SYM:
+        modifiers.randgen = True
 
     return modifiers
 

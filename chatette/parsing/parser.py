@@ -318,7 +318,9 @@ class Parser(object):
             choice_interior_tokens = sub_rule_tokens[1:-1]
             self._check_sub_rule_validity(choice_interior_tokens,
                                           pu.SubRuleType.choice)
+            print("for choice",sub_rule_tokens)
             modifiers = pu.find_modifiers_choice(choice_interior_tokens)
+            print("randgen",modifiers.randgen)
             choice = ChoiceRuleContent(''.join(choice_interior_tokens),
                                        leading_space,
                                        casegen=modifiers.casegen,
