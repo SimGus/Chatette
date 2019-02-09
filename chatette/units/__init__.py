@@ -109,7 +109,7 @@ class UnitDefinition(object):
 
         self.modifiers = modifiers
 
-        self.set_arg(arg)
+        self.set_arg(modifiers.argument_name)
 
         self.variations = dict()
     @classmethod
