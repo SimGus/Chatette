@@ -11,11 +11,24 @@ from chatette.parsing.line_count_file_wrapper import LineCountFileWrapper
 
 class Tokenizer(object):
     def __init__(self, master_filename):
+        self.master_file_paths = [master_filename]
         self.master_file_dir = os.path.dirname(master_filename)
         self.current_file = LineCountFileWrapper(master_filename)
         self.opened_files = []
 
         self._last_read_line = None
+
+    def redefine_master_file(self, master_filename):
+        """
+        Change the master file and open it.
+        If other files are still open, raise an exception.
+        """
+        if len(self.opened_files) > 0:
+            raise ValueError("Tried to change master file during parsing of "+
+                             "other files")
+        self.master_file_paths.append(master_filename)
+        self.master_file_dir = os.path.dirname(master_filename)
+        self.current_file = LineCountFileWrapper(master_filename)
 
     def open_file(self, filename):
         """
@@ -91,9 +104,9 @@ class Tokenizer(object):
                 break
             if line_str == "":
                 continue
-            yield self.new_tokenize(line_str)
+            yield self.tokenize(line_str)
 
-    def new_tokenize(self, text):
+    def tokenize(self, text):
         """
         Returns a tokenized version of the string `text`,
         i.e. a list of strings that make up words or special characters.

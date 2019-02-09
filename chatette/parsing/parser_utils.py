@@ -127,16 +127,162 @@ def remove_escapement(text):
             result += c
     return result
 
+# NOTE: there should be a most pretty way to deal with escapement
+#       (especially when putting it back into strings).
+
+def add_escapement_back_for_not_comments(text):
+    """
+    Considering that `text` contains no comment,
+    escape comment markers and returns the new text.
+    This function is needed because comment markers are several characters long.
+    @pre: there is no comments anymore in `text`.
+    """
+    return text.replace(COMMENT_MARKER, ESCAPE_SYM+COMMENT_MARKER)
+def add_escapement_back_in_sub_rule(text):
+    """
+    Put back escapement where it belongs for sub-rules
+    (words and word groups) where escapement have been removed.
+    """
+    # BUG $ are always escaped
+    escaped_text = ""
+    for c in text:
+        if should_be_escaped_char(c):
+            escaped_text += ESCAPE_SYM + c
+        else:
+            escaped_text += c
+    return add_escapement_back_for_not_comments(escaped_text)
+def add_escapement_back_in_word(text):
+    """
+    Put escapement back where it belongs in words
+    where escapement has been removed.
+    """
+    escaped_text = ""
+    for c in text:
+        if c == ESCAPE_SYM or is_boundary_sym(c) or is_comment_sym(c):
+            escaped_text += ESCAPE_SYM + c
+        else:
+            escaped_text += c
+    escaped_text = add_escapement_back_for_not_comments(escaped_text)
+    return escaped_text.replace(ESCAPE_SYM+ESCAPE_SYM+ARG_SYM, ESCAPE_SYM+ARG_SYM)
+def add_escapement_back_in_group(text):
+    """
+    Put escapement back where it belongs in word groups
+    where escapement has been removed.
+    """
+    escaped_text = ""
+    for c in text:
+        if (   c == ESCAPE_SYM or is_boundary_sym(c)
+            or is_group_modifier_sym(c) or is_comment_sym(c)):
+            escaped_text += ESCAPE_SYM + c
+        else:
+            escaped_text += c
+    escaped_text = add_escapement_back_for_not_comments(escaped_text)
+    return escaped_text.replace(ESCAPE_SYM+ESCAPE_SYM+ARG_SYM, ESCAPE_SYM+ARG_SYM)
+def add_escapement_back_in_unit_ref(unit_name):
+    """
+    Put back escapement where it belongs for unit names in references
+    where escapement have been removed.
+    """
+    escaped_text = ""
+    for c in unit_name:
+        if (   c == ESCAPE_SYM or is_boundary_sym(c) or is_comment_sym(c)
+            or is_unit_ref_modifier_sym(c)):
+            escaped_text += ESCAPE_SYM + c
+        else:
+            escaped_text += c
+    return add_escapement_back_for_not_comments(escaped_text)
+def add_escapement_back_in_choice_item(text):
+    """
+    Put escapement back where it belongs in choice items
+    where escapement has been removed.
+    Add escapement only in items where escapement has already been added,
+    not knowing they are part of a choice.
+    """
+    escaped_text = ""
+    escaped = False
+    for c in text:
+        if escaped:
+            escaped_text += c
+            escaped = False
+        if c == ESCAPE_SYM:
+            escaped_text += c
+            escaped = True
+        if is_choice_special_sym(c):
+            escaped_text += ESCAPE_SYM + c
+        else:
+            escaped_text += c
+    return escaped_text
+def add_escapement_back_in_unit_decl(unit_name):
+    """
+    Put back escapement where it belongs for unit names in declarations
+    where escapement have been removed.
+    NOTE: not used at the moment
+    """
+    escaped_text = ""
+    for c in unit_name:
+        if (   c == ESCAPE_SYM or is_boundary_sym(c)
+            or is_unit_decl_modifier_sym or is_arg_sym(c) or is_comment_sym(c)):
+            escaped_text += ESCAPE_SYM + c
+        else:
+            escaped_text += c
+    return add_escapement_back_for_not_comments(escaped_text)
+
+
+def should_be_escaped_char(text):
+    """
+    Returns `True` if `text` is 1 character that must be escaped in order to be
+    considered part of a word.
+    """
+    return is_special_sym(text) or text == COMMENT_MARKER \
+                                or text == COMMENT_SYM_DEPRECATED \
+                                or text == ALT_SLOT_VALUE_NAME_SYM
 
 def is_special_sym(text):
     """Returns `True` if `text` is a string made of only 1 special character."""
-    if text is None or len(text) != 1:
-        return False
     return text == ALIAS_SYM or text == SLOT_SYM or text == INTENT_SYM or \
            text == UNIT_OPEN_SYM or text == UNIT_CLOSE_SYM or \
            text == VARIATION_SYM or text == RAND_GEN_SYM or \
            text == PERCENT_GEN_SYM or text == CASE_GEN_SYM or \
-           text == ARG_SYM
+           text == ARG_SYM or text == CHOICE_OPEN_SYM or \
+           text == CHOICE_CLOSE_SYM
+def is_comment_sym(text):
+    """Returns `True` iff `text` is a symbol introducing a comment."""
+    return text in (COMMENT_MARKER, COMMENT_SYM_DEPRECATED)
+def is_boundary_sym(text):
+    """
+    Returns `True` iff `text` is a symbol
+    that makes the boundaries of special sub-rules.
+    """
+    return text in (ALIAS_SYM, SLOT_SYM, INTENT_SYM, UNIT_OPEN_SYM,
+                    UNIT_CLOSE_SYM, CHOICE_OPEN_SYM, CHOICE_CLOSE_SYM)
+def is_arg_sym(text):
+    """Returns `True` iff `text` is the special symbol introducing arguments."""
+    return text == ARG_SYM
+def is_group_modifier_sym(text):
+    """
+    Returns `True` iff `text` is a special symbol introducing a modifier that
+    can label word groups.
+    """
+    return text in (CASE_GEN_SYM, RAND_GEN_SYM, PERCENT_GEN_SYM)
+def is_unit_ref_modifier_sym(text):
+    """
+    Returns `True` iff ´text´ is a special symbol introducing a modifier that
+    can label unit references.
+    """
+    return text in (CASE_GEN_SYM, RAND_GEN_SYM, PERCENT_GEN_SYM, VARIATION_SYM,
+                    ARG_SYM)
+def is_unit_decl_modifier_sym(text):
+    """
+    Returns `True` iff `text` is a special symbol introducing a modifier that
+    can label unit declarations.
+    """
+    return text in (CASE_GEN_SYM, VARIATION_SYM, ARG_SYM)
+def is_choice_special_sym(text):
+    """
+    Returns `True` iff `text` is a special symbol in a choice (and in nothing
+    else). This doesn't take into account boundary symbols.
+    """
+    return text == CHOICE_SEP
 
 def is_unit_type_sym(text):
     """Returns `True` if `text` is a unit special symbol (`~`, `@` or `%`)."""
@@ -391,17 +537,6 @@ def check_choice_validity(tokens_choice_inside):
     if argument_count > 0:
         raise SyntaxError("Choices cannot take an argument.")
 
-    randgen_count = tokens_choice_inside.count(RAND_GEN_SYM)
-    if randgen_count > 1:
-        raise SyntaxError("There can be only one random generation modifier "+
-                          "per choice.")
-    if randgen_count == 1:
-        index_randgen = tokens_choice_inside.index(RAND_GEN_SYM)
-        if (    index_randgen+1 < len(tokens_choice_inside)
-            and not is_special_sym(tokens_choice_inside[index_randgen+1])):
-            raise SyntaxError("Random generation modifiers cannot be named "+
-                              "for choices.")
-
     # TODO: deprecate `/` as choice separators AND percentgen
     # percentgen_count = tokens_choice_inside.count(PERCENT_GEN_SYM)
     # if percentgen_count > 0:
@@ -518,7 +653,7 @@ def find_modifiers_decl(tokens_inside_decl):
     expecting_argument = False
     while i < len(tokens_inside_decl):
         if tokens_inside_decl[i] == VARIATION_SYM:
-            modifiers.argument_name = ""
+            modifiers.variation_name = ""
             expecting_variation = True
             expecting_argument = False
         elif tokens_inside_decl[i] == ARG_SYM:
@@ -638,26 +773,10 @@ def find_modifiers_choice(tokens_inside_choice):
     """
     modifiers = mods.ChoiceModifiersRepr()
 
-    i = 0
     if tokens_inside_choice[0] == CASE_GEN_SYM:
         modifiers.casegen = True
-        i += 1
-
-    # expecting_percentgen = False
-    while i < len(tokens_inside_choice):
-        if tokens_inside_choice[i] == RAND_GEN_SYM:
-            modifiers.randgen = True
-        # elif tokens_inside_choice[i] == PERCENT_GEN_SYM:
-        #     expecting_percentgen = True
-        #     modifiers.percentage_randgen = ""
-        # elif expecting_percentgen:
-        #     modifiers.percentage_randgen = tokens_inside_choice[i]
-        #     expecting_percentgen = False
-        i += 1
-    # if not modifiers.randgen:
-    #     modifiers.percentage_randgen = 50
-    # else:
-    #     modifiers.percentage_randgen = int(modifiers.percentage_randgen)
+    if tokens_inside_choice[-1] == RAND_GEN_SYM:
+        modifiers.randgen = True
 
     return modifiers
 

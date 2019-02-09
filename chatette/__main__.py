@@ -2,16 +2,11 @@
 # -*- coding: utf-8 -*-
 
 import argparse
-import os
 import sys
-from random import seed as random_seed
 
 from chatette import __version__
-from chatette.adapters import JsonListAdapter
-from chatette.adapters.rasa import RasaAdapter
-from chatette.generator import Generator
-from chatette.parsing.parser import Parser
-from chatette.utils import print_DBG
+from chatette.facade import Facade
+from chatette.cli.interpreter import CommandLineInterpreter
 
 
 def main():
@@ -26,15 +21,13 @@ def main():
     argument_parser.add_argument("input", type=str,
                                  help="Path to master template file")
 
+    argument_parser.add_argument("-v", "--version", action="version",
+                                 version="%(prog)s v"+__version__,
+                                 help="Print the version number of the module")
+
     argument_parser.add_argument("-o", "--out", dest="output", required=False,
                                  type=str, default=None,
                                  help="Output directory path")
-
-    argument_parser.add_argument("-s", "--seed", dest="seed", required=False,
-                                 type=str, default=None,
-                                 help="Seed for the random generator " +
-                                      "(any string without spaces will work)")
-
     argument_parser.add_argument("-l", "--local", dest="local", required=False,
                                  action="store_true", default=False,
                                  help="Change the base directory for output " +
@@ -47,9 +40,20 @@ def main():
                                  help="Write adapter. Possible values: "+
                                       "['rasa', 'jsonl']")
 
-    argument_parser.add_argument("-v", "--version", action="version",
-                                 version="%(prog)s v"+__version__,
-                                 help="Print the version number of the module")
+    argument_parser.add_argument("-s", "--seed", dest="seed", required=False,
+                                 type=str, default=None,
+                                 help="Seed for the random generator " +
+                                      "(any string without spaces will work)")
+                                      
+    argument_parser.add_argument("-i", "--interactive", dest="interactive_mode",
+                                 required=False, action="store_true",
+                                 default=False,
+                                 help="Runs Chatette in interactive mode")
+    argument_parser.add_argument("-I", "--interactive-commands-file",
+                                 dest="interactive_commands_file",
+                                 required=False, default=None, type=str,
+                                 help="Path to a file containing interactive " +
+                                      "mode commands that will be directly run")
 
     if len(sys.argv[1:]) == 0:
         argument_parser.print_help()
@@ -57,45 +61,12 @@ def main():
 
     args = argument_parser.parse_args()
 
-    template_file_path = args.input
-    if args.local:
-        dir_path = os.path.dirname(template_file_path)
+    facade = Facade.get_or_create_from_args(args)
+    if not args.interactive_mode and args.interactive_commands_file is None:
+        facade.run()
     else:
-        dir_path = os.getcwd()
-
-    if args.output is None:
-        dir_path = os.path.join(dir_path, "output")
-    else:
-        dir_path = os.path.join(dir_path, args.output)
-
-    # Initialize the random number generator
-    if args.seed is not None:
-        random_seed(args.seed)
-
-    parser = Parser(template_file_path)
-    parser.parse()
-
-    generator = Generator(parser)
-    synonyms = generator.get_entities_synonyms()
-
-    if args.adapter == 'rasa':
-        # pylint: disable=redefined-variable-type
-        adapter = RasaAdapter()
-    elif args.adapter == 'jsonl':
-        # pylint: disable=redefined-variable-type
-        adapter = JsonListAdapter()
-    else:
-        raise ValueError("Unknown adapter was selected")
-
-    train_examples = list(generator.generate_train())
-    if train_examples:
-        adapter.write(os.path.join(dir_path, "train"), train_examples, synonyms)
-
-    test_examples = list(generator.generate_test(train_examples))
-    if test_examples:
-        adapter.write(os.path.join(dir_path, "test"), test_examples, synonyms)
-
-    print_DBG("Generation over")
+        cli = CommandLineInterpreter(facade, args.interactive_commands_file)
+        cli.wait_for_input()
 
 
 if __name__ == "__main__":

@@ -24,7 +24,6 @@
 
 - [ ] add a command line argument to specifiy the max number of examples to generate
 - [ ] add bulk generation
-- [ ] add interactive mode (generate what the user asks through a CLI)
 - [ ] wipe the output directory before writing new files
 
 - [ ] use more list/dict comprehensions (faster than using `append`)
@@ -41,6 +40,8 @@
 - [ ] complete refactor of the code: the code is almost unmaintainable
 - [ ] refactor units to remove duplicated code: make modifiers act after the string has been generated
 - [ ] add more unit tests
+
+- [ ] *Interactive mode*: add support for variations and argument values in relevant commands
 
 - [ ] *Docs* clearly state the objective (scope) of the program
 - [ ] *Docs* add a "contributors" part
@@ -95,6 +96,7 @@
 - [x] add a `--version` program argument
 - [x] use python's built-in `DeprecationWarning` rather (print a warning for deprecations)
 - [x] *Docs* make a wiki rather than a markdown file
+- [x] add interactive mode (generate what the user asks through a CLI)
 
 # Bugs
 
@@ -133,6 +135,11 @@
 - **fixed**: if a slot generated a certain string and this string could already be found somewhere before in the example, the first string was wrongly selected as the entity with the Rasa adapter
 - **fixed**: indentation error raised for lines with only spaces
 - **fixed**: when an empty alias definition is used, nothing is generated
+- **fixed**: when using `save` command, variations print several times the same rule
+- **fixed**: when using `save` command, `\$` are saved instead of `$`
+- **fixed**: when using `save` command, choice are appended `?True`
+- **fixed**: choices get a randgen when there is 1 `?` somewhere in their content
+- **fixed**: several `?` in a choice's content crash the program (because of randgen)
 
 # Ideas
 

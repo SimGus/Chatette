@@ -36,26 +36,106 @@ class Parser(object):
         self.slot_definitions = dict()
         self.intent_definitions = dict()
 
+        self.stats = {"#files": 1, "#declarations": 0, "#rules": 0,
+                      "#intents": 0, "#aliases": 0, "#slots": 0}
+
+    def open_new_master_file(self, master_filepath):
+        self.tokenizer.redefine_master_file(master_filepath)
+        self.stats["#files"] += 1
+
 
     def get_definition(self, definition_name, unit_type):
         """Returns the definition for unit with name `definition_name`."""
-        # TODO replace SubRuleType by UnitType
-        if unit_type == pu.SubRuleType.alias:
+        if unit_type == pu.UnitType.alias:
             relevant_dict = self.alias_definitions
-        elif unit_type == pu.SubRuleType.slot:
+        elif unit_type == pu.UnitType.slot:
             relevant_dict = self.slot_definitions
-        elif unit_type == pu.SubRuleType:
+        elif unit_type == pu.UnitType.intent:
             relevant_dict = self.intent_definitions
         else:
             raise ValueError("Tried to get a definition with wrong type "+
                              "(expected alias, slot or intent)")
 
         if definition_name not in relevant_dict:
-            raise ValueError("Couldn't find a definition for "+unit_type.name+
-                             " '"+definition_name+"' (did you mean to use "+
-                             "the word group '["+definition_name+"]'?)")
+            raise KeyError("Couldn't find a definition for "+unit_type.name+
+                           " '"+definition_name+"' (did you mean to use "+
+                           "the word group '["+definition_name+"]'?)")
 
         return relevant_dict[definition_name]
+
+    def rename_unit(self, unit_type, old_name, new_name):
+        """
+        Renames the unit declaration of type `unit_type` from 
+        `old_name` to `new_name` (possibly replacing the unit with that name).
+        Raises a `KeyError` if `old_name` is not a declared unit.
+        @post: this can lead to inconsistent rules.
+        """
+        if unit_type == pu.UnitType.alias:
+            relevant_dict = self.alias_definitions
+        elif unit_type == pu.UnitType.slot:
+            relevant_dict = self.slot_definitions
+        elif unit_type == pu.UnitType:
+            relevant_dict = self.intent_definitions
+        else:
+            raise ValueError("Tried to rename a definition with wrong type "+
+                             "(expected alias, slot or intent)")
+        
+        if old_name in relevant_dict:
+            relevant_dict[new_name] = relevant_dict[old_name]
+            del relevant_dict[old_name]
+            relevant_dict[new_name].name = new_name
+        else:
+            raise KeyError("No unit named '"+old_name+"' was found")
+
+    def delete(self, unit_type, unit_name):
+        """Deletes a unit definition."""
+        if unit_type == pu.UnitType.alias:
+            relevant_dict = self.alias_definitions
+            stat_key = "#aliases"
+        elif unit_type == pu.UnitType.slot:
+            relevant_dict = self.slot_definitions
+            stat_key = "#slots"
+        elif unit_type == pu.UnitType.intent:
+            relevant_dict = self.intent_definitions
+            stat_key = "#intents"
+        else:
+            raise ValueError("Tried to delete a definition with wrong type "+
+                             "(expected alias, slot or intent)")
+
+        if unit_name not in relevant_dict:
+            raise KeyError("Couldn't find a definition for " + unit_type.name +
+                           " '" + unit_name + "'.")
+        
+        nb_rules = relevant_dict[unit_name].get_nb_rules()
+        del relevant_dict[unit_name]
+        self.stats[stat_key] -= 1
+        self.stats["#declarations"] -= 1
+        self.stats["#rules"] -= nb_rules
+
+    def add_definition(self, unit_type, unit_name, definition):
+        """Adds an already built definition to the list of declared units."""
+        if unit_type == pu.UnitType.alias:
+            relevant_dict = self.alias_definitions
+            stat_key = "#aliases"
+        elif unit_type == pu.UnitType.slot:
+            relevant_dict = self.slot_definitions
+            stat_key = "#slots"
+        elif unit_type == pu.UnitType.intent:
+            relevant_dict = self.intent_definitions
+            stat_key = "#intents"
+        else:
+            raise ValueError("Tried to delete a definition with wrong type "+
+                             "(expected alias, slot or intent)")
+
+        if unit_name in relevant_dict:
+            raise ValueError(unit_type.name.capitalize()+" '"+unit_name+"' " +
+                             "is already defined. Tried to add a definition " +
+                             "for it again.")
+        
+        relevant_dict[unit_name] = definition
+        self.stats[stat_key] += 1
+        self.stats["#declarations"] += 1
+        self.stats["#rules"] += definition.get_nb_rules()
 
 
     def parse(self):
@@ -70,14 +150,18 @@ class Parser(object):
                 if token_line[0] == pu.INCLUDE_FILE_SYM:
                     self.tokenizer.open_file(token_line[1])
                     print_DBG("Parsing file: "+self.tokenizer.get_file_information()[0])
+                    self.stats["#files"] += 1
                 else:
                     self._parse_declaration_initiator(token_line)
                     self._expecting_rule = True
+                    self.stats["#declarations"] += 1
                 self._expected_indentation = None
             else:
                 self._parse_rule(token_line)
                 self._expecting_rule = False  # Not expecting but still allowed
+                self.stats["#rules"] += 1
         self.tokenizer.close_files()
+        print_DBG("Parsing finished!")
 
     def _parse_declaration_initiator(self, token_line):
         """Parses a line (as tokens) that contains a declaration initiator."""
@@ -123,16 +207,19 @@ class Parser(object):
             # new_unit = AliasDefinition(unit_name, [], modifiers.argument_name,
             #                            modifiers.casegen)
             relevant_dict = self.alias_definitions
+            self.stats["#aliases"] += 1
         elif unit_type == pu.UnitType.slot:
             new_unit = SlotDefinition(unit_name, modifiers)
             # new_unit = SlotDefinition(unit_name, [], modifiers.argument_name,
             #                           modifiers.casegen)
             relevant_dict = self.slot_definitions
+            self.stats["#slots"] += 1
         elif unit_type == pu.UnitType.intent:
             new_unit = IntentDefinition(unit_name, modifiers)
             # new_unit = IntentDefinition(unit_name, [], modifiers.argument_name,
             #                             modifiers.casegen)
             relevant_dict = self.intent_definitions
+            self.stats["#intents"] += 1
 
         if unit_type == pu.UnitType.intent and nb_examples_asked is not None:
             (train_nb, test_nb) = nb_examples_asked
@@ -147,7 +234,8 @@ class Parser(object):
     def _parse_rule(self, tokens):
         """
         Parses the list of string `tokens` that represents a rule in a
-        template file. Add the rule to the declaration currently being parsed.
+        template file and
+        add the rule to the declaration currently being parsed.
         """
         if self._currently_parsed_declaration is None:
             self.tokenizer.syntax_error("Got a rule outside of "+
@@ -155,32 +243,7 @@ class Parser(object):
 
         self._check_indentation(tokens[0])
 
-        # Remove alternative slot rule if necessary
-        alt_slot_value = None  # TODO DummySlotVal absolutely need to be managed differently
-        if self._currently_parsed_declaration[0] == pu.UnitType.slot:
-            answer = pu.find_alt_slot_and_index(tokens)
-            if answer is not None:
-                (end_index, alt_slot_value) = answer
-                tokens = tokens[:end_index]
-
-        sub_rules = []
-        leading_space = False
-        for sub_rule_tokens in pu.next_sub_rule_tokens(tokens[1:]):
-            if len(sub_rule_tokens) == 1 and sub_rule_tokens[0] == ' ':
-                leading_space = True
-                continue
-
-            sub_rule = self._make_sub_rule_from_tokens(sub_rule_tokens,
-                                                       leading_space)
-            if alt_slot_value is not None:
-                if alt_slot_value != pu.ALT_SLOT_VALUE_FIRST_SYM:
-                    sub_rules = [DummySlotValRuleContent(alt_slot_value, sub_rule)]
-                else:
-                    sub_rules = [DummySlotValRuleContent(sub_rule.name, sub_rule)]
-                alt_slot_value = None
-            sub_rules.append(sub_rule)
-
-            leading_space = False
+        sub_rules = self.tokens_to_sub_rules(tokens[1:])
 
         relevant_dict = None
         if self._currently_parsed_declaration[0] == pu.UnitType.alias:
@@ -205,6 +268,36 @@ class Parser(object):
             return
         if indentation != self._expected_indentation:
             self.tokenizer.syntax_error("Inconsistent indentation.")
+
+    def tokens_to_sub_rules(self, tokens):
+        """Transforms a list of tokens into a list of sub-rules"""
+        # Remove alternative slot rule if necessary
+        alt_slot_value = None  # TODO DummySlotVal absolutely need to be managed differently
+        if self._currently_parsed_declaration[0] == pu.UnitType.slot:
+            answer = pu.find_alt_slot_and_index(tokens)
+            if answer is not None:
+                (end_index, alt_slot_value) = answer
+                tokens = tokens[:end_index]
+
+        sub_rules = []
+        leading_space = False
+        for sub_rule_tokens in pu.next_sub_rule_tokens(tokens):
+            if len(sub_rule_tokens) == 1 and sub_rule_tokens[0] == ' ':
+                leading_space = True
+                continue
+
+            sub_rule = self._make_sub_rule_from_tokens(sub_rule_tokens,
+                                                       leading_space)
+            if alt_slot_value is not None:
+                if alt_slot_value != pu.ALT_SLOT_VALUE_FIRST_SYM:
+                    sub_rules = [DummySlotValRuleContent(alt_slot_value, sub_rule)]
+                else:
+                    sub_rules = [DummySlotValRuleContent(sub_rule.name, sub_rule)]
+                alt_slot_value = None
+            sub_rules.append(sub_rule)
+
+            leading_space = False
+        return sub_rules
 
     def _make_sub_rule_from_tokens(self, sub_rule_tokens, leading_space):
         if pu.is_sub_rule_word(sub_rule_tokens):
