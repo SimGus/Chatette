@@ -8,7 +8,8 @@ in order to implement the strategy design pattern.
 import re
 
 from chatette.utils import rchop
-from chatette.parsing.parser_utils import UnitType
+from chatette.parsing.parser_utils import UnitType, \
+                                          ALIAS_SYM, SLOT_SYM, INTENT_SYM
 from chatette.cli.terminal_writer import TerminalWriter, RedirectionType
 
 
@@ -119,11 +120,11 @@ class CommandStrategy(object):
         Returns `None` if there exist no corresponding `UnitType` value.
         """
         unit_type_str = unit_type_str.lower()
-        if unit_type_str in ("alias", '~'):
+        if unit_type_str in ("alias", ALIAS_SYM):
             return UnitType.alias
-        if unit_type_str in ("slot", '@'):
+        if unit_type_str in ("slot", SLOT_SYM):
             return UnitType.slot
-        if unit_type_str in ("intent", '%'):
+        if unit_type_str in ("intent", INTENT_SYM):
             return UnitType.intent
         return None
 

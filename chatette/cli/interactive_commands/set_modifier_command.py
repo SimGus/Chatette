@@ -7,6 +7,7 @@ declaration.
 
 from chatette.cli.interactive_commands.command_strategy import CommandStrategy
 from chatette.utils import str_to_bool
+from chatette.parsing.parser_utils import CASE_GEN_SYM, ARG_SYM
 
 
 class SetModifierCommand(CommandStrategy):
@@ -43,7 +44,7 @@ class SetModifierCommand(CommandStrategy):
     def _set_modifier(self, parser, unit_type, unit_name, modifier_name, value):
         unit = parser.get_definition(unit_name, unit_type)
         modifier_name = modifier_name.lower()
-        if modifier_name in ("casegen", '&'):
+        if modifier_name in ("casegen", CASE_GEN_SYM):
             try:
                 value = str_to_bool(value)
                 unit.casegen = value
@@ -51,7 +52,7 @@ class SetModifierCommand(CommandStrategy):
                 self.print_wrapper.write("Invalid value for case generation " +
                                          "modifier (True or False).")
                 return
-        elif modifier_name in ("arg", '$'):
+        elif modifier_name in ("arg", ARG_SYM):
             unit.set_arg(value)
         else:
             self.print_wrapper.write("Invalid modifier selected (can be "+
