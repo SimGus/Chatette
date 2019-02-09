@@ -102,14 +102,18 @@ class TestGetUnitTypeFromStr(object):
         assert CommandStrategy.get_unit_type_from_str("test") is None
         assert CommandStrategy.get_unit_type_from_str("SOMETHING") is None
         assert CommandStrategy.get_unit_type_from_str("\t\t ") is None
+        assert CommandStrategy.get_unit_type_from_str("@%~") is None
 
     def test_correct_str(self):
         assert CommandStrategy.get_unit_type_from_str("alias") == UnitType.alias
         assert CommandStrategy.get_unit_type_from_str("AliaS") == UnitType.alias
+        assert CommandStrategy.get_unit_type_from_str('~') == UnitType.alias
         assert CommandStrategy.get_unit_type_from_str("slot") == UnitType.slot
         assert CommandStrategy.get_unit_type_from_str("SLOT") == UnitType.slot
+        assert CommandStrategy.get_unit_type_from_str('@') == UnitType.slot
         assert CommandStrategy.get_unit_type_from_str("intent") == UnitType.intent
         assert CommandStrategy.get_unit_type_from_str("iNtENt") == UnitType.intent
+        assert CommandStrategy.get_unit_type_from_str('%') == UnitType.intent
 
 
 class TestRemoveQuotes(object):

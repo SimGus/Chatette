@@ -84,6 +84,8 @@ There, several commands can be ran.
 
 For all those commands (except `exit`), appending `> <filename>` or `>> <filename>` will respectively write the results into a file named `<filename>` (creating the file if it doesn't exist, overwriting it if it does) or append the results into a file named `<filename>` (creating it if it doesn't exist).
 
+Moreover, in all those commands, you can replace the keyword `alias`, `slot` and `intent` respectively by `~`, `@` and `%`. The whitespaces around those characters should still be present.
+
 #### Current advancement
 - [x] stats
 - [x] parse

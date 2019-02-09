@@ -119,11 +119,11 @@ class CommandStrategy(object):
         Returns `None` if there exist no corresponding `UnitType` value.
         """
         unit_type_str = unit_type_str.lower()
-        if unit_type_str == "alias":
+        if unit_type_str in ("alias", '~'):
             return UnitType.alias
-        if unit_type_str == "slot":
+        if unit_type_str in ("slot", '@'):
             return UnitType.slot
-        if unit_type_str == "intent":
+        if unit_type_str in ("intent", '%'):
             return UnitType.intent
         return None
 
