@@ -24,7 +24,6 @@
 
 - [ ] add a command line argument to specifiy the max number of examples to generate
 - [ ] add bulk generation
-- [ ] add interactive mode (generate what the user asks through a CLI)
 - [ ] wipe the output directory before writing new files
 
 - [ ] use more list/dict comprehensions (faster than using `append`)
@@ -41,6 +40,8 @@
 - [ ] complete refactor of the code: the code is almost unmaintainable
 - [ ] refactor units to remove duplicated code: make modifiers act after the string has been generated
 - [ ] add more unit tests
+
+- [ ] *Interactive mode*: add support for variations and argument values in relevant commands
 
 - [ ] *Docs* add a representation of the architecture of the project
 - [ ] *Docs* multilingual
@@ -93,6 +94,7 @@
 - [x] add a `--version` program argument
 - [x] use python's built-in `DeprecationWarning` rather (print a warning for deprecations)
 - [x] *Docs* make a wiki rather than a markdown file
+- [x] add interactive mode (generate what the user asks through a CLI)
 
 # Bugs
 
