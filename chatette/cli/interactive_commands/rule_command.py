@@ -34,7 +34,7 @@ class RuleCommand(CommandStrategy):
 
         rule_tokens = facade.parser.tokenizer.tokenize(rule_str)
         rule = facade.parser.tokens_to_sub_rules(rule_tokens)
-        definition = AliasDefinition("INTERNAL", [rule])
+        definition = AliasDefinition("INTERNAL", None, [rule])
         try:
             examples = definition.generate_nb_examples(nb_examples)
             self.print_wrapper.write("Generated examples:")

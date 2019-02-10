@@ -71,7 +71,8 @@ class TerminalWriter(object):
                 self.buffered_text +='\n' + text
 
     def error_log(self, text):
-        processed_text = ''.join(['\t' + line for line in text.split('\n')])
+        processed_text = ''.join(['\t' + line + '\n'
+                                  for line in text.split('\n')])
         self.write("[ERROR]"+processed_text)
 
 

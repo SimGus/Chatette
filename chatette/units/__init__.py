@@ -107,6 +107,8 @@ class UnitDefinition(object):
         else:
             self.rules = rules  # list of list of `RulesContent`s => [[RulesContent]]
 
+        if modifiers is None:
+            modifiers = UnitDeclarationModifiersRepr()
         self.modifiers = modifiers
 
         self.set_arg(modifiers.argument_name)
