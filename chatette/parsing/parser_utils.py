@@ -45,6 +45,8 @@ ALT_SLOT_VALUE_FIRST_SYM = '/'
 
 INCLUDE_FILE_SYM = '|'
 
+# TODO add special characters at the beginning of those to prevent people from
+#      using them by chance
 RESERVED_VARIATION_NAMES = ["all-variations-aggregation", "rules",
                             "nb-gen-asked", "arg"]
 
@@ -420,6 +422,9 @@ def check_declaration_validity(tokens_unit_inside):
             or is_special_sym(tokens_unit_inside[argument_name_index]):
             raise SyntaxError("Arguments must be named.")
 
+    # TODO remove the following because you should allow ? and / in declarations?
+    #      or the tokenizer should not consider them special characters in this
+    #      case
     randgen_count = tokens_unit_inside.count(RAND_GEN_SYM)
     if randgen_count > 0:
         raise SyntaxError("Unit declarations cannot take a random generation "+
@@ -518,33 +523,25 @@ def check_choice_validity(tokens_choice_inside):
     Check that the interior of a choice is syntactically legal.
     Deals with word groups as well.
     Raises a `SyntaxError` if the choice is invalid.
-    The constraints checked are:
-    - there is only one modifier of each type
-    - `#` are not there
-    - `&` is at the beginning of the declaration (or nowhere)
-    - choices are separated by '/' (not checked as there can be 0 or 1 choice)
+    As any sub-rules can be inside choices, we cannot check anything except
+    that the last tokens is not a separator (or the two-to-last one if the
+    last one is a random generation modifier).
     """
-    casegen_count = tokens_choice_inside.count(CASE_GEN_SYM)
-    if casegen_count > 1:
-        raise SyntaxError("There can be only one case generation modifier "+
-                          "in a choice.")
-    if casegen_count == 1 and tokens_choice_inside.index(CASE_GEN_SYM) != 0:
-        raise SyntaxError("Case generation modifiers have to be at the start "+
-                          "of a choice.")
-
-    variation_count = tokens_choice_inside.count(VARIATION_SYM)
-    if variation_count > 0:
-        raise SyntaxError("Choices cannot take variation modifiers.")
-
-    argument_count = tokens_choice_inside.count(ARG_SYM)
-    if argument_count > 0:
-        raise SyntaxError("Choices cannot take an argument.")
-
     # TODO: deprecate `/` as choice separators AND percentgen
     # percentgen_count = tokens_choice_inside.count(PERCENT_GEN_SYM)
     # if percentgen_count > 0:
     #     raise SyntaxError("Choices cannot take a percentage for generation "+
     #                       "modifier.")
+    if len(tokens_choice_inside) > 0:
+        if tokens_choice_inside[-1] == CHOICE_SEP:
+            raise SyntaxError("Choice cannot end with a choice separator. " +
+                              "Did you forget to escape the last character?")
+        if (    len(tokens_choice_inside) > 1
+            and tokens_choice_inside[-1] == RAND_GEN_SYM
+            and tokens_choice_inside[-2] == CHOICE_SEP):
+            raise SyntaxError("Choice ends with an empty choice item. " +
+                              "Did you forget to escape the choice separator?")
+
 
 def check_word_group_validity(tokens_word_group_inside):
     """
