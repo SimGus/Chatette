@@ -22,7 +22,7 @@ class TestStripComments(object):
                    "\t ;a comment", ";a comment ; still a comment"]
         for s in strings:
             assert strip_comments(s) == ""
-    
+
     def test_old_comments(self):
         s = "%[intent] ; comment"
         assert strip_comments(s) == "%[intent]"
@@ -40,13 +40,13 @@ class TestStripComments(object):
         assert strip_comments(s) == "\;not a comment"
         s = "\ttest"+r"\; no comment; comment"
         assert strip_comments(s) == "\ttest"+r"\; no comment"
-    
+
     def test_only_new_comments(self):
         strings = ["// comment", "//", "\t//", "//this is a comment",
                    "\t //a comment", "//a comment // still a comment"]
         for s in strings:
             assert strip_comments(s) == ""
-    
+
     def test_new_comments(self):
         s = "%[intent] // comment"
         assert strip_comments(s) == "%[intent]"
@@ -82,7 +82,7 @@ class TestRemoveEscapement(object):
                    "sentence with ~[alias?/90] ans @[slot]!", "{choice/too}"]
         for s in strings:
             assert remove_escapement(s) == s
-    
+
     def test_single_escaped_special_symbols(self):
         assert remove_escapement("\?") == "?"
         assert remove_escapement("\;") == ";"
@@ -100,7 +100,7 @@ class TestRemoveEscapement(object):
         assert remove_escapement("\&") == "&"
         assert remove_escapement("\|") == "|"
         assert remove_escapement("\=") == "="
-        
+
         assert remove_escapement("\$") == "\$"
 
     def test_several_words_escaped(self):
@@ -110,39 +110,175 @@ class TestRemoveEscapement(object):
         assert remove_escapement(s) == "[another [test?] with] escapement\$2"
 
 
+class TestAddEscapementBackForNotComments(object):
+    def test(self):
+        assert add_escapement_back_for_not_comments("") == ""
+        assert add_escapement_back_for_not_comments("test") == "test"
+        assert add_escapement_back_for_not_comments("test // not comment") == \
+               r"test \// not comment"
+
+class TestAddEscapementBackInSubRule(object):
+    def test_empty(self):
+        assert add_escapement_back_in_sub_rule("") == ""
+
+    def test_proper_sub_rules(self):
+        assert add_escapement_back_in_sub_rule("word") == "word"
+        assert add_escapement_back_in_sub_rule("word?") == r"word\?"
+        assert add_escapement_back_in_sub_rule("s [test?;a") == r"s \[test\?\;a"
+
+class TestAddEscapementBackInWord(object):
+    def test_no_escapement(self):
+        assert add_escapement_back_in_word("") == ""
+        assert add_escapement_back_in_word("word") == "word"
+        assert add_escapement_back_in_group("$arg") == "$arg"
+
+    def test_escapement(self):
+        assert add_escapement_back_in_word("word;") == r"word\;"
+        assert add_escapement_back_in_word("tab[]") == r"tab\[\]"
+        assert add_escapement_back_in_word(r"syms{@~%}") == r"syms\{\@\~\%\}"
+
+class TestAddEscapementBackInGroup(object):
+    def test_no_escapement(self):
+        assert add_escapement_back_in_group("group") == "group"
+        assert add_escapement_back_in_group("$arg") == "$arg"
+
+    def test_escapement(self):
+        assert add_escapement_back_in_group(r"syms[]{}~@%&?/$//") == \
+               r"syms\[\]\{\}\~\@\%\&\?\/$\/\/"
+
+class TestAddEscapementBackInUnitRef(object):
+    def test_no_escapement(self):
+        assert add_escapement_back_in_unit_ref("") == ""
+        assert add_escapement_back_in_unit_ref("word") == "word"
+
+    def test_escapement(self):
+        assert add_escapement_back_in_unit_ref(r"syms[]{}~@%") == \
+               r"syms\[\]\{\}\~\@\%"
+        assert add_escapement_back_in_unit_ref(r"&?/#") == r"\&\?\/\#"
+
+class TestAddEscapementBackInChoiceItem(object):
+    def test_no_escapement(self):
+        assert add_escapement_back_in_choice_item("") == ""
+        assert add_escapement_back_in_choice_item(r"word \//") == r"word \/\/"
+
+    def test_escapement(self):
+        assert add_escapement_back_in_choice_item(r"choice\?/~[second#a]/a") == \
+               r"choice\?\/~[second#a]\/a"
+
+class TestAddEscapementBackInUnitDecl(object):
+    def test_no_escapement(self):
+        assert add_escapement_back_in_unit_decl("") == ""
+        assert add_escapement_back_in_unit_decl("word") == "word"
+
+    def test_escapement(self):
+        assert add_escapement_back_in_unit_decl("name$arg") == r"name\$arg"
+        assert add_escapement_back_in_unit_decl(r"~@%[]{}") == r"\~\@\%\[\]\{\}"
+        assert add_escapement_back_in_unit_decl("&#?/") == r"\&\#?/"
+
+
 class TestIsSpecialSym(object):
     def test_empty(self):
         assert not is_special_sym(None)
         assert not is_special_sym("")
-    
+
     def test_long_text(self):
         assert not is_special_sym("text")
         assert not is_special_sym("/Another test/")
-    
+
     def test_not_special_char(self):
         symbols = ['a', ' ', '\t', '!']
         for sym in symbols:
             assert not is_special_sym(sym)
-    
+
     def test_special_char(self):
         symbols = ['~', '@', '%', '[', ']', '#', '?', '/', '&', '$']
         for sym in symbols:
             assert is_special_sym(sym)
 
+class TestIsCommentSym(object):
+    def test_not_comment_sym(self):
+        assert not is_comment_sym("")
+        assert not is_comment_sym("a")
+        assert not is_comment_sym("test;")
+        assert not is_comment_sym("@")
+
+    def test_comment_sym(self):
+        assert is_comment_sym(";")
+        assert is_comment_sym("//")
+
+class TestIsBoundarySym(object):
+    def test_not_boundary_sym(self):
+        assert not is_boundary_sym("")
+        assert not is_boundary_sym("a")
+        assert not is_boundary_sym("?")
+        assert not is_boundary_sym("#")
+
+    def test_boundary_sym(self):
+        boundary_syms = ['~', '@', '%', '[', ']', '{', '}']
+        for sym in boundary_syms:
+            assert is_boundary_sym(sym)
+
+class TestIsArgSym(object):
+    def test(self):
+        assert not is_arg_sym("")
+        assert not is_arg_sym("@")
+        assert is_arg_sym("$")
+
+class TestIsGroupModifierSym(object):
+    def test_not_group_modifier(self):
+        assert not is_group_modifier_sym("")
+        assert not is_group_modifier_sym("#")
+
+    def test_group_modifier(self):
+        group_modifiers_syms = ['&', '?', '/']
+        for sym in group_modifiers_syms:
+            assert is_group_modifier_sym(sym)
+
+class TestIsUnitRefModifierSym(object):
+    def test_not_unit_ref_modifier(self):
+        assert not is_unit_ref_modifier_sym("")
+        assert not is_unit_ref_modifier_sym("a")
+        assert not is_unit_ref_modifier_sym("}")
+
+    def test_unit_ref_modifier(self):
+        unit_ref_modifiers_syms = ['&', '?', '/', '#']
+        for sym in unit_ref_modifiers_syms:
+            assert is_unit_ref_modifier_sym(sym)
+
+class TestIsUnitDeclModifierSym(object):
+    def test_not_unit_decl_modifier(self):
+        assert not is_unit_decl_modifier_sym("")
+        assert not is_unit_decl_modifier_sym("a")
+        assert not is_unit_decl_modifier_sym("?")
+
+    def test_unit_decl_modifier(self):
+        unit_decl_modifier_syms = ['&', '#']
+        for sym in unit_decl_modifier_syms:
+            assert is_unit_decl_modifier_sym(sym)
+
+class TestIsChoiceSpecialSym(object):
+    def test_no_choice_sym(self):
+        assert not is_choice_special_sym("")
+        assert not is_choice_special_sym("a")
+        assert not is_choice_special_sym("&")
+
+    def test_chocie_sep(self):
+        assert is_choice_special_sym("/")
+
 
 class TestIsUnitTypeSym(object):
     def test_empty(self):
         assert not is_unit_type_sym("")
-    
+
     def test_long_text(self):
         assert not is_unit_type_sym("text")
         assert not is_unit_type_sym("~long test")
-    
+
     def test_not_special_char(self):
         symbols = ['a', ' ', '\\', '!', '?']
         for sym in symbols:
             assert not is_unit_type_sym(sym)
-    
+
     def test_special_char(self):
         symbols = ['~', '@', '%']
         for sym in symbols:
@@ -170,7 +306,7 @@ class TestIsStartUnitSym(object):
         assert is_start_unit_sym(slot_sym)
         intent_sym = '%'
         assert is_start_unit_sym(intent_sym)
-    
+
     def test_unit_start_word(self):
         words = ["[unit]", "~[alias]", "@[slot]", "%[intent]"]
         for w in words:
@@ -180,16 +316,16 @@ class TestIsStartUnitSym(object):
 class TestGetUnitTypeFromSym(object):
     def test_empty(self):
         assert get_unit_type_from_sym("") is None
-    
+
     def test_long_text(self):
         assert get_unit_type_from_sym("text") is None
         assert get_unit_type_from_sym("~long test") is None
-    
+
     def test_not_unit_start_sym(self):
         symbols = ['a', ' ', '\t', '?', '#', '[', '}']
         for sym in symbols:
             assert get_unit_type_from_sym(sym) is None
-    
+
     def test_special_sym(self):
         assert get_unit_type_from_sym('~') == UnitType.alias
         assert get_unit_type_from_sym('@') == UnitType.slot
@@ -207,7 +343,7 @@ class TestIsSubRuleWord(object):
                        ["{", "choice", "/", "2", "}"]]
         for tokens in tokens_list:
             assert not is_sub_rule_word(tokens)
-    
+
     def test_words(self):
         tokens_list = [["word"], ["other"], ["\?"]]
         for tokens in tokens_list:
@@ -222,7 +358,7 @@ class TestIsSubRuleWordGroup(object):
                        ["{", "choice", "/", "2", "}"]]
         for tokens in tokens_list:
             assert not is_sub_rule_word_group(tokens)
-    
+
     def test_word_groups(self):
         tokens_list = [["[", "word", "]"], ["[", "word", "group", "]"],
                        ["[", "&", "word", "group", "\?", "?", "rand", "]"]]
@@ -255,7 +391,7 @@ class TestIsSubRuleAliasRef(object):
                        ["{", "choice", "/", "2", "}"]]
         for tokens in tokens_list:
             assert not is_sub_rule_alias_ref(tokens)
-    
+
     def test_aliases(self):
         tokens_list = [["~", "[", "alias", "]"], ["~", "[", "&", "a", "?", "]"],
                        ["~", "[", "alias", "?", "rand", "gen", "]"]]
