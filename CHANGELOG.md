@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Move tokenizer out of parser, move all code that is related to parsing into directory `parsing` and rename file `parsing.py` back to `parser.py`. Parsing might behave differently than it used to.
 
 ### Fixed
+- Entity values being synonyms of themselves if the same value was used in several different slots
 - Number of training and testing examples for intent not correctly parsed in some cases
 - Too strict checks on the syntax of choices
 - Possible infinite loop during generation (with a lot of bad luck)

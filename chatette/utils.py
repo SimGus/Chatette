@@ -81,6 +81,12 @@ def str_to_bool(text):
     raise ValueError("Cannot convert '" + str(text) + "' into a boolean")
 
 
+def remove_duplicates(dict_of_lists):
+    """Removes duplicates from a dictionary containing lists."""
+    return {key: list(set(value)) for (key, value) in dict_of_lists.items()}
+
+
+
 if __name__ == "__main__":
     # pylint: disable=wrong-import-position
     import warnings

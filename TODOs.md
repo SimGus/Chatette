@@ -104,7 +104,6 @@
 - **BUG**: arguments are not given down when an argument is transmitted as the argument of a token
 - **BUG**: wrong generation when putting an alias inside a word group
 - **BUG**: encoding errors under Windows
-- **BUG**: synonyms are synonyms of themselves (look at simple airport example)
 
 ## To confirm
 
@@ -140,6 +139,7 @@
 - **fixed**: when using `save` command, choice are appended `?True`
 - **fixed**: choices get a randgen when there is 1 `?` somewhere in their content
 - **fixed**: several `?` in a choice's content crash the program (because of randgen)
+- **fixed**: synonyms are synonyms of themselves (look at simple airport example)
 
 # Ideas
 
