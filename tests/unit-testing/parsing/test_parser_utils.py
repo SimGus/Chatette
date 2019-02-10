@@ -335,14 +335,14 @@ class TestGetUnitTypeFromSym(object):
 class TestGetDeclarationInterior(object):
     def test_empty(self):
         assert get_declaration_interior([""]) is None
-    
+
     def test_normal_decl(self):
         assert get_declaration_interior(["~", "[", "name", "]"]) == ["name"]
         assert get_declaration_interior(["%", "[", "n", "#", "var", "?", "]"]) == \
                ["n", "#", "var", "?"]
         assert get_declaration_interior(["@", "[", "slot", "?", "n", "/", "5", "]"]) == \
                ["slot", "?", "n", "/", "5"]
-    
+
     def test_invalid_decl(self):
         assert get_declaration_interior(["~", "[", "name"]) is None
         assert get_declaration_interior(["%", "[", "["]) is None
@@ -351,18 +351,111 @@ class TestGetDeclarationInterior(object):
 class TestGetAnnotationInterior(object):
     def test_empty(self):
         assert get_annotation_interior([""]) is None
-    
+
     def test_normal_annotation(self):
         assert get_annotation_interior(["(", "5", ")"]) == ["5"]
         assert get_annotation_interior(["(", "train", ":", "10", ")"]) == \
                ["train", ":", "10"]
         assert get_annotation_interior(["(", "training", ":", "5", ",", "test", ":", "0", ")"]) == \
                ["training", ":", "5", ",", "test", ":", "0"]
-    
+
     def test_incorrect_annotation(self):
         assert get_annotation_interior(["(", "("]) is None
         assert get_annotation_interior(["(", "train"]) is None
         assert get_annotation_interior(["train", ":", ")"]) is None
+
+
+class TestCheckDeclarationValidity(object):
+    def test_valid(self):
+        valid_decl_tokens = [["name"], ["name", "$", "arg", "1"],
+                             ["name", "#", "var"], ["&", "name", "#", "var"]]
+        for tokens in valid_decl_tokens:
+            try:
+                check_declaration_validity(tokens)
+            except SyntaxError:
+                pytest.fail("Unexpected 'SyntaxError' when calling " +
+                            "'check_declaration_validity' with valid input.")
+
+    def test_invalid(self):
+        invalid_decl_tokens = [["&", "&", "name"], ["name", "&"], ["#"],
+                               ["&", "$"], ["&"], ["name", "#", "#"],
+                               ["name", "#"], ["name", "#", "$", "arg"],
+                               ["name", "#", "arg"], ["name", "$", "$"],
+                               ["name", "$"], ["name", "$", "#", "var"],
+                               ["name", "?"], ["name", "/"]]
+        for tokens in invalid_decl_tokens:
+            with pytest.raises(SyntaxError):
+                check_declaration_validity(tokens)
+
+
+class TestCheckReferenceValidity(object):
+    def test_valid(self):
+        valid_ref_tokens = [["name"], ["&", "name"], ["name", "?"],
+                            ["name", "?", "rand"], ["name", "?", "/", "5"],
+                            ["&", "name", "?", "rand", "/", "20"],
+                            ["name", "#", "var"], ["name", "$", "arg"],
+                            ["name", "#", "var", "$", "arg"]]
+        for tokens in valid_ref_tokens:
+            try:
+                check_reference_validity(tokens)
+            except SyntaxError:
+                pytest.fail("Unexpected 'SyntaxError' when calling " +
+                            "'checck_reference_validity' with valid input.")
+
+    def test_invalid(self):
+        invalid_ref_tokens = [["&", "&"], ["name", "&"], ["?"], ["&"],
+                              ["&", "#"], ["name", "#", "var", "#"],
+                              ["name", "#"], ["&", "name", "#", "?"],
+                              ["name", "#", "arg"], ["name", "$", "$"],
+                              ["name", "?", "?"], ["name", "/", "/"],
+                              ["name", "/", "50"], ["name", "/", "80", "?"],
+                              ["name", "?", "/"], ["name", "?", "/", "0%"],
+                              ["name", "?", "/", "200"]]
+        for tokens in invalid_ref_tokens:
+            with pytest.raises(SyntaxError):
+                check_reference_validity(tokens)
+
+
+class TestCheckChoiceValidity(object):
+    def test_valid(self):
+        valid_choice_tokens = [["word"], ["~", "[", "alias", "?", "]"],
+                               ["[", "word", " ", "group", "]", "/", "@", "[",
+                                "&", "slot", "]", " ", "word", "?"]]
+        for tokens in valid_choice_tokens:
+            try:
+                check_choice_validity(tokens)
+            except SyntaxError as e:
+                pytest.fail("Unexpected 'SyntaxError' when calling "+
+                            "'check_choice_validity' with valid input.")
+    
+    def test_invalid(self):
+        invalid_choice_tokens = [["word", "/"],
+                                 ["[", "word", " ", "group", "]", "/", "?"]]
+        for tokens in invalid_choice_tokens:
+            with pytest.raises(SyntaxError):
+                check_choice_validity(tokens)
+
+
+class TestCheckWordGroupValidity(object):
+    def check_valid(self):
+        valid_group_tokens = [["word"], ["word", " ", "group"]]
+        for tokens in valid_group_tokens:
+            try:
+                check_word_group_validity(tokens)
+            except SyntaxError:
+                pytest.fail("Unexpected 'SyntaxError' when calling "+
+                            "'check_word_group_validity' with valid input.")
+    
+    def check_invalid(self):
+        invalid_group_tokens = [["&", "&"], ["name", "&"], ["name", "#", "#"],
+                                ["name", "$", "$"], ["name", "?", "?"],
+                                ["name", "/", "/"], ["name", "/"],
+                                ["name", "/", "?"], ["name", "?", "/"],
+                                ["name", "?", "/", "20%"],
+                                ["name", "?", "/", "200"]]
+        for tokens in invalid_group_tokens:
+            with pytest.raises(SyntaxError):
+                check_word_group_validity(tokens)
 
 
 class TestIsSubRuleWord(object):
