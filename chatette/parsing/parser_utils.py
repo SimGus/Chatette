@@ -787,25 +787,29 @@ def find_nb_examples_asked(annotation_interior):
     declaration as a tuple. Returns `None` if the numbers given are not numbers.
     @pre: there is no syntax error in the annotation.
     """
+    if len(annotation_interior) == 0:
+        return None
     nb_train = None
     nb_test = None
 
-    expecting_train = False
-    expecting_test = False
-    for token in annotation_interior:
-        if token != ANNOTATION_ASSIGNMENT_SYM:
-            if PATTERN_NB_TRAIN_EX_KEY.match(token):
-                expecting_train = True
-            elif PATTERN_NB_TEST_EX_KEY.match(token):
-                expecting_test = True
-            elif expecting_train:
-                nb_train = token
-                expecting_train = False
-            elif expecting_test:
-                nb_test = token
-                expecting_test = False
-            else:
-                nb_train = token
+    if len(annotation_interior) == 1:
+        nb_train = annotation_interior[0]
+    else:
+        expecting_train = False
+        expecting_test = False
+        for token in annotation_interior:
+            if (    token not in (ANNOTATION_ASSIGNMENT_SYM, ANNOTATION_SEP)
+                and not token.isspace()):
+                if PATTERN_NB_TRAIN_EX_KEY.match(token):
+                    expecting_train = True
+                elif PATTERN_NB_TEST_EX_KEY.match(token):
+                    expecting_test = True
+                elif expecting_train:
+                    nb_train = token
+                    expecting_train = False
+                elif expecting_test:
+                    nb_test = token
+                    expecting_test = False
 
     if nb_train is None and nb_test is None:
         return None

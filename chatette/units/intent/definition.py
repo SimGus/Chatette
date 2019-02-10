@@ -109,3 +109,19 @@ class IntentDefinition(UnitDefinition):
         elif self.nb_testing_examples_asked is not None:
             result += "(test:" + str(self.nb_testing_examples_asked) +')'
         return result
+
+    def short_desc_str(self):
+        """
+        Returns a str representing a short description of this unit description.
+        """
+        desc = super(IntentDefinition, self).short_desc_str() + '\n'
+        if self.nb_training_examples_asked is None:
+            desc += "# training examples: all\n"
+        else:    
+            desc += "# training examples: " + \
+                    str(self.nb_training_examples_asked) + '\n'
+        if self.nb_testing_examples_asked is None:
+            desc += "# testing examples: all"
+        else:
+            desc += "# testing examples: " + str(self.nb_testing_examples_asked)
+        return desc
