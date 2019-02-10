@@ -190,7 +190,6 @@ class Parser(object):
 
         self.create_unit(unit_type, unit_name, modifiers, nb_examples_asked)
         self._currently_parsed_declaration = (unit_type, unit_name, modifiers)
-        print("currently parsing", (self._currently_parsed_declaration[1], self._currently_parsed_declaration[2].variation_name))
 
     def create_unit(self, unit_type, unit_name, modifiers,
                     nb_examples_asked=None):

@@ -30,6 +30,7 @@ class ExamplesCommand(CommandStrategy):
         except KeyError:
             self.print_wrapper.write(unit_type.name.capitalize() + " '" +
                                      unit_name + "' is not defined.")
+            return
         if self.nb_examples != -1:
             examples = definition.generate_nb_examples(self.nb_examples)
         else:
