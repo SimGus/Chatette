@@ -143,9 +143,9 @@
 
 # Ideas
 
-- **IDEA**: maybe add more modifiers to choices?
 
 ## Rejected
 
 - **rejected**: use overrides pip package (no, doesn't work in python 2)
 - **rejected**: make arguments several layers deep? no, it is not useful as you can pass arguments down the references
+- **rejected**: maybe add more modifiers to choices? no, rather merge it into word groups
