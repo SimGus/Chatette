@@ -437,7 +437,7 @@ class TestCheckChoiceValidity(object):
 
 
 class TestCheckWordGroupValidity(object):
-    def check_valid(self):
+    def test_valid(self):
         valid_group_tokens = [["word"], ["word", " ", "group"]]
         for tokens in valid_group_tokens:
             try:
@@ -446,7 +446,7 @@ class TestCheckWordGroupValidity(object):
                 pytest.fail("Unexpected 'SyntaxError' when calling "+
                             "'check_word_group_validity' with valid input.")
     
-    def check_invalid(self):
+    def test_invalid(self):
         invalid_group_tokens = [["&", "&"], ["name", "&"], ["name", "#", "#"],
                                 ["name", "$", "$"], ["name", "?", "?"],
                                 ["name", "/", "/"], ["name", "/"],
