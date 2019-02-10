@@ -333,7 +333,7 @@ def get_declaration_interior(tokens):
             nb_closing_brackets_expected -= 1
         end_index += 1
     end_index -= 1
-    if end_index >= length:
+    if end_index == starting_index:
         return None
 
     return tokens[starting_index:end_index]
