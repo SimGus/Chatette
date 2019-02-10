@@ -107,7 +107,6 @@
 
 ## To confirm
 
-- **BUG?**: restaurant example doesn't seem to work anymore
 
 ## Fixed bugs
 
@@ -140,6 +139,7 @@
 - **fixed**: choices get a randgen when there is 1 `?` somewhere in their content
 - **fixed**: several `?` in a choice's content crash the program (because of randgen)
 - **fixed**: synonyms are synonyms of themselves (look at simple airport example)
+- **fixed**: restaurant example doesn't seem to work anymore
 
 # Ideas
 
