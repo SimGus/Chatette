@@ -332,6 +332,21 @@ class TestGetUnitTypeFromSym(object):
         assert get_unit_type_from_sym('%') == UnitType.intent
 
 
+class TestGetDeclarationInterior(object):
+    def test_empty(self):
+        assert get_declaration_interior([""]) is None
+    
+    def test_normal_decl(self):
+        assert get_declaration_interior(["~", "[", "name", "]"]) == ["name"]
+        assert get_declaration_interior(["%", "[", "n", "#", "var", "?", "]"]) == \
+               ["n", "#", "var", "?"]
+        assert get_declaration_interior(["@", "[", "slot", "?", "n", "/", "5", "]"]) == \
+               ["slot", "?", "n", "/", "5"]
+    
+    def test_invalid_decl(self):
+        assert get_declaration_interior(["~", "[", "name"]) is None
+
+
 class TestIsSubRuleWord(object):
     def test_empty(self):
         assert not is_sub_rule_word("")
