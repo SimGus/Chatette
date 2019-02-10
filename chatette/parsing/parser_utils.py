@@ -204,9 +204,11 @@ def add_escapement_back_in_choice_item(text):
         if escaped:
             escaped_text += c
             escaped = False
+            continue
         if c == ESCAPE_SYM:
             escaped_text += c
             escaped = True
+            continue
         if is_choice_special_sym(c):
             escaped_text += ESCAPE_SYM + c
         else:
@@ -220,8 +222,9 @@ def add_escapement_back_in_unit_decl(unit_name):
     """
     escaped_text = ""
     for c in unit_name:
+        print(c)
         if (   c == ESCAPE_SYM or is_boundary_sym(c)
-            or is_unit_decl_modifier_sym or is_arg_sym(c) or is_comment_sym(c)):
+            or is_unit_decl_modifier_sym(c) or is_arg_sym(c) or is_comment_sym(c)):
             escaped_text += ESCAPE_SYM + c
         else:
             escaped_text += c
