@@ -11,7 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - Accept comment lines and empty lines inside unit definitions (not considered as a new rule)
-- Move tokenizer out of parser, move all code that is related to parsing into directory `parsing` and rename file `parsing.py` back to `parser.py`. Parsing might behave differently than it used to.
+- Completely refactor the parser and tokenizer. Parsing might behave differently than it used to.
+- Move all code that is related to parsing into directory `parsing` and rename file `parsing.py` back to `parser.py`
 
 ### Fixed
 - Entity values being synonyms of themselves if the same value was used in several different slots
