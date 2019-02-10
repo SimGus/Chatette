@@ -661,9 +661,9 @@ def find_modifiers_decl(tokens_inside_decl):
             expecting_variation = False
             expecting_argument = True
         elif expecting_variation:
-            modifiers.variation_name = tokens_inside_decl[i]
+            modifiers.variation_name += tokens_inside_decl[i]
         elif expecting_argument:
-            modifiers.argument_name = tokens_inside_decl[i]
+            modifiers.argument_name += tokens_inside_decl[i]
         i += 1
 
     modifiers.variation_name = remove_escapement(modifiers.variation_name)
@@ -755,7 +755,7 @@ def find_modifiers_word_group(tokens_inside_word_group):
             expecting_percentgen = True
             expecting_randgen_name = False
         elif expecting_randgen_name:
-            modifiers.randgen_name = tokens_inside_word_group[i]
+            modifiers.randgen_name += tokens_inside_word_group[i]
         elif expecting_percentgen:
             modifiers.percentage_randgen = int(tokens_inside_word_group[i])
             expecting_percentgen = False
