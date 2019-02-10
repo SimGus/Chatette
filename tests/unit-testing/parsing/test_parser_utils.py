@@ -345,6 +345,24 @@ class TestGetDeclarationInterior(object):
     
     def test_invalid_decl(self):
         assert get_declaration_interior(["~", "[", "name"]) is None
+        assert get_declaration_interior(["%", "[", "["]) is None
+
+
+class TestGetAnnotationInterior(object):
+    def test_empty(self):
+        assert get_annotation_interior([""]) is None
+    
+    def test_normal_annotation(self):
+        assert get_annotation_interior(["(", "5", ")"]) == ["5"]
+        assert get_annotation_interior(["(", "train", ":", "10", ")"]) == \
+               ["train", ":", "10"]
+        assert get_annotation_interior(["(", "training", ":", "5", ",", "test", ":", "0", ")"]) == \
+               ["training", ":", "5", ",", "test", ":", "0"]
+    
+    def test_incorrect_annotation(self):
+        assert get_annotation_interior(["(", "("]) is None
+        assert get_annotation_interior(["(", "train"]) is None
+        assert get_annotation_interior(["train", ":", ")"]) is None
 
 
 class TestIsSubRuleWord(object):
