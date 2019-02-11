@@ -88,7 +88,7 @@ class SlotDefinition(UnitDefinition):
                 raise SyntaxError("Couldn't find variation '" +
                                   str(variation_name) + "' for slot '" +
                                   str(self.name) + "'")
-        
+
         if not relevant_rules:  # No rules
             if variation_name is None:
                 raise SyntaxError("No rules could be found for "+self.type+" '"+
@@ -238,7 +238,7 @@ class SlotDefinition(UnitDefinition):
         # (str, str) -> (str)
         if arg_value is not None and self.modifiers.argument_name is not None:
             text = self.arg_regex.sub(arg_value, text)
-            text = text.replace("\$", "$")
+            text = text.replace(r"\$", "$")
         return text
 
     def _contains_arg(self, text):
@@ -248,7 +248,7 @@ class SlotDefinition(UnitDefinition):
         @pre: `self.arg_regex` is not `None`
         """
         # (str) -> (bool)
-        return (self.arg_regex.search(text) is not None)
+        return self.arg_regex.search(text) is not None
 
 
     def _get_template_decl(self, variation=None):

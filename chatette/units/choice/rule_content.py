@@ -1,5 +1,4 @@
 from __future__ import print_function
-from random import randint
 
 from chatette.units import Example, RuleContent, may_get_leading_space, \
                            randomly_change_case, with_leading_lower, with_leading_upper
@@ -197,7 +196,6 @@ class ChoiceRuleContent(RuleContent):
         if self.variation_name is not None:
             result += '#'+self.variation_name
         if self.randgen:
-            print("randgen for",self.name,"is",self.randgen)
             result += '?'
             if self.percentgen != 50:
                 result += '/'+str(self.percentgen)

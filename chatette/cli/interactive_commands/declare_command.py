@@ -29,15 +29,15 @@ class DeclareCommand(CommandStrategy):
         unit_name = CommandStrategy.remove_quotes(self.command_tokens[2])
 
         if unit_type == UnitType.alias:
-            declaration = AliasDefinition(unit_name)
+            declaration = AliasDefinition(unit_name, None)
             relevant_dict = facade.parser.alias_definitions
         elif unit_type == UnitType.slot:
-            declaration = SlotDefinition(unit_name)
+            declaration = SlotDefinition(unit_name, None)
             relevant_dict = facade.parser.slot_definitions
         else:  # intent
-            declaration = IntentDefinition(unit_name)
+            declaration = IntentDefinition(unit_name, None)
             relevant_dict = facade.parser.intent_definitions
-        
+
         if unit_name in relevant_dict:
             self.print_wrapper.write(unit_type.name.capitalize() + " '" +
                                      unit_name + "' is already defined.")

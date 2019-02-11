@@ -696,7 +696,6 @@ def find_modifiers_reference(tokens_inside_reference):
             expecting_variation = False
             expecting_argument = False
         elif tokens_inside_reference[i] == PERCENT_GEN_SYM:
-            modifiers.percentage_randgen = ""
             expecting_randgen_name = False
             expecting_percentgen = True
             expecting_variation = False
@@ -751,7 +750,6 @@ def find_modifiers_word_group(tokens_inside_word_group):
             expecting_randgen_name = True
             expecting_percentgen = False
         elif tokens_inside_word_group[i] == PERCENT_GEN_SYM:
-            modifiers.percentage_randgen = ""
             expecting_percentgen = True
             expecting_randgen_name = False
         elif expecting_randgen_name:
