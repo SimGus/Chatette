@@ -178,7 +178,7 @@ The *Chatito* version is arguably easier to read, but the *Chatette* version is 
 
 Beware that, as always with machine learning, having too much data may cause your models to perform less well because of overfitting. While this script can be used to generate thousands upon thousands of examples, it isn't advised for machine learning tasks.
 
-Note that *Chatette* is named after *Chatito*, as *-ette* in French could be translated to *-ita* or *-ito* in Spanish.
+Note that *Chatette* is named after *Chatito*, as *-ette* in French could be translated to *-ita* or *-ito* in Spanish. The last *e* in *Chatette* is not pronouced (as is the case in "note").
 
 ## Development
 For developers, you can clone the [repo](https://github.com/SimGus/Chatette) and install the development requirements:
