@@ -7,7 +7,7 @@ class AliasDefinition(UnitDefinition):
     containing all the rules that it can represent.
     """
 
-    def __init__(self, name, modifiers, rules=[]):
+    def __init__(self, name, modifiers, rules=None):
         super(AliasDefinition, self).__init__(name, modifiers, rules=rules)
         self.type = "alias"
     

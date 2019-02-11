@@ -203,19 +203,19 @@ class Parser(object):
         new_unit = None
         relevant_dict = None
         if unit_type == pu.UnitType.alias:
-            new_unit = AliasDefinition(unit_name, modifiers, [])
+            new_unit = AliasDefinition(unit_name, modifiers)
             # new_unit = AliasDefinition(unit_name, [], modifiers.argument_name,
             #                            modifiers.casegen)
             relevant_dict = self.alias_definitions
             self.stats["#aliases"] += 1
         elif unit_type == pu.UnitType.slot:
-            new_unit = SlotDefinition(unit_name, modifiers, [])
+            new_unit = SlotDefinition(unit_name, modifiers)
             # new_unit = SlotDefinition(unit_name, [], modifiers.argument_name,
             #                           modifiers.casegen)
             relevant_dict = self.slot_definitions
             self.stats["#slots"] += 1
         elif unit_type == pu.UnitType.intent:
-            new_unit = IntentDefinition(unit_name, modifiers, [])
+            new_unit = IntentDefinition(unit_name, modifiers)
             # new_unit = IntentDefinition(unit_name, [], modifiers.argument_name,
             #                             modifiers.casegen)
             relevant_dict = self.intent_definitions
