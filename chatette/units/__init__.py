@@ -26,11 +26,13 @@ class Example(object):
     Represents an utterance (i.e. an example of sentence)
     that will later on be written in the output file(s).
     """
-    def __init__(self, text="", entities=None):# -> None:
+    def __init__(self, text=None, entities=None):# -> None:
         super(Example, self).__init__()
 
         if entities is None:
             entities = []
+        if text is None:
+            text = ""
 
         self.text = text
         self.entities = entities
