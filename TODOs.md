@@ -108,7 +108,6 @@
 
 ## To confirm
 
-
 ## Fixed bugs
 
 - **fixed**: no case changing when asked with uppercase feeding
