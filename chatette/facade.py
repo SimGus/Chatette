@@ -5,6 +5,7 @@ writing of the output file(s).
 """
 
 import os
+import shutil
 from random import seed as random_seed
 
 from chatette.utils import print_DBG
@@ -91,6 +92,9 @@ class Facade(object):
 
         self.generator = Generator(self.parser)
         synonyms = self.generator.get_entities_synonyms()
+
+        if os.path.exists(self.output_dir_path):
+            shutil.rmtree(self.output_dir_path)
 
         train_examples = list(self.generator.generate_train())
         if train_examples:

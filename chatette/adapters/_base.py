@@ -30,9 +30,8 @@ class Adapter(with_metaclass(ABCMeta, object)):
     def write(self, output_directory, examples, synonyms):
         self._single_file_output = (len(examples) <= self._batch_size)
 
-        if os.path.exists(output_directory):
-            shutil.rmtree(output_directory)
-        os.makedirs(output_directory)
+        if not os.path.exists(output_directory):
+            os.makedirs(output_directory)
 
         for batch in self.__generate_batch(examples, synonyms, self._batch_size):
             output_file_path = self.__get_file_name(batch, output_directory)
