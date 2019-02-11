@@ -15,6 +15,7 @@
 - [ ] reverse regex
 - [ ] add probabilities of generation for rules in defintions (cf. https://github.com/rodrigopivi/Chatito/issues/48)
 - [ ] add support Chatito's augmentations (cf. https://github.com/rodrigopivi/Chatito/issues/48)
+- [ ] add an annotation for generating typos
 - [ ] add a flag to enable/disable the slot = slot synonym behavior (cf. https://github.com/rodrigopivi/Chatito/issues/50)
 - [ ] add a way to make some generation mandatory in the training set, test set or both (cf. https://github.com/rodrigopivi/Chatito/issues/51)
 - [ ] add custom annotations as *Chatito* does
@@ -48,7 +49,6 @@
 - [ ] *Docs* add a representation of the architecture of the project
 - [ ] *Docs* multilingual
 - [ ] *Docs* specify which version of *Rasa NLU* *chatette* can work with
-- [ ] *Docs* explain '/' syntax for alternative slot value
 - [ ] *Docs* explain that redefining a unit silently appends the rules to the already declared unit (with the same modifiers as the first time)
 
 ## Done
@@ -97,6 +97,7 @@
 - [x] use python's built-in `DeprecationWarning` rather (print a warning for deprecations)
 - [x] *Docs* make a wiki rather than a markdown file
 - [x] add interactive mode (generate what the user asks through a CLI)
+- [x] *Docs* explain '/' syntax for alternative slot value
 
 # Bugs
 
