@@ -105,7 +105,7 @@ class ChoiceRuleContent(RuleContent):
         self.check_casegen()
 
         # Manage randgen
-        if self.randgen is not None and randint(0, 99) >= self.percentgen:
+        if self.randgen:
             return Example()
 
         if len(self.choices) <= 0:
@@ -130,7 +130,7 @@ class ChoiceRuleContent(RuleContent):
         self.check_casegen()
 
         generated_examples = []
-        if self.randgen is not None:
+        if self.randgen:
             generated_examples.append(Example())
 
         for choice in self.choices:

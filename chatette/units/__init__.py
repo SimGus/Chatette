@@ -444,6 +444,8 @@ class RuleContent(object):
         self.leading_space = leading_space
 
         self.casegen = casegen
+        if randgen is None:
+            randgen = False
         self.randgen = randgen
         if percentage_gen is not None:
             self.percentgen = int(percentage_gen)
