@@ -38,6 +38,9 @@ class ChoiceRuleContent(RuleContent):
             raise SyntaxError("Choices cannot have an percentage for random " +
                               "generation, as was the case for '" + name + "'.")
 
+        if randgen is None:
+            randgen = False
+
         super(ChoiceRuleContent, self).__init__(
             name,
             leading_space=leading_space,
