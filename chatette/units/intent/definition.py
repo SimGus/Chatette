@@ -22,6 +22,18 @@ class IntentDefinition(UnitDefinition):
         self.nb_training_examples_asked = nb_training_examples_asked
         self.nb_testing_examples_asked = nb_testing_examples_asked
 
+
+    def generate_random(self, variation_name=None, arg_value=None):
+        example = \
+            super(IntentDefinition, self).generate_random(variation_name, arg_value)
+        tmp = IntentExample.from_example(self.name, example)
+        return tmp
+    
+    def generate_all(self, variation_name=None, arg_value=None):
+        examples = \
+            super(IntentDefinition, self).generate_all(variation_name, arg_value)
+        return [IntentExample.from_example(self.name, ex) for ex in examples]
+
     def generate(self, max_nb_examples, training_examples=None):# -> List[Example]:
         """
         Generates all the examples that were asked (i.e. as much examples
@@ -75,7 +87,7 @@ class IntentDefinition(UnitDefinition):
                 while nb_iterations < 50:  # 50 is completely arbitrary
                     current_example = self.generate_random()
                     current_example.text = current_example.text.strip()  # Strip for safety
-                    if (    current_example not in generated_examples  # NOTE: this doesn't seem to work?
+                    if (    current_example not in generated_examples
                         and (training_examples is None
                              or current_example not in training_examples)):
                         generated_examples.append(

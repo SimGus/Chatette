@@ -6,6 +6,9 @@ class IntentExample(Example):
     def __init__(self, name, text=None, entities=None):# -> None:
         super(IntentExample, self).__init__(text, entities)
         self.name = name
+    @classmethod
+    def from_example(cls, name, ex):
+        return cls(name, ex.text, ex.entities)
 
     # def __str__(self):
     #     return str(self.__dict__)

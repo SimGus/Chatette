@@ -101,7 +101,6 @@
 
 # Bugs
 
-- **BUG**: possible to have several times the same example generated (doesn't seem to hash examples consistently => comparison are inconsistent in lists)
 - **BUG**: arguments are not given down when an argument is transmitted as the argument of a token
 - **BUG**: wrong generation when putting an alias inside a word group
 - **BUG**: encoding errors under Windows
@@ -140,6 +139,7 @@
 - **fixed**: several `?` in a choice's content crash the program (because of randgen)
 - **fixed**: synonyms are synonyms of themselves (look at simple airport example)
 - **fixed**: restaurant example doesn't seem to work anymore
+- **fixed**: possible to have several times the same example generated
 
 # Ideas
 
