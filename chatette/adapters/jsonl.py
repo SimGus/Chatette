@@ -26,6 +26,6 @@ class JsonListAdapter(Adapter):
         super(JsonListAdapter, self).write(output_directory, examples, synonyms)
 
         synonyms_file_path = os.path.join(output_directory, "synonyms.json")
-        with io.open(synonyms_file_path, 'w', encoding="utf-8") as output_file:
+        with io.open(synonyms_file_path, 'w') as output_file:
             output_file.write(json.dumps(cast_to_unicode(synonyms), ensure_ascii=False,
                                          sort_keys=True, indent=2))

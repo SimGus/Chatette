@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add program option `-I` or `--interactive-commands-file` to feed the script a file of commands that will be directly executed
 
 ### Changed
+- Output file is written in default encoding on the platform *Chatette* is being used, to avoid encoding issues
 - Output folder and all its contents are now deleted before being created again to write the output file(s) to prevent old outputs from staying there
 - Accept comment lines and empty lines inside unit definitions (not considered as a new rule)
 - Completely refactor the parser and tokenizer. Parsing might behave differently than it used to.

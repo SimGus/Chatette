@@ -35,7 +35,7 @@ class Adapter(with_metaclass(ABCMeta, object)):
 
         for batch in self.__generate_batch(examples, synonyms, self._batch_size):
             output_file_path = self.__get_file_name(batch, output_directory)
-            with io.open(output_file_path, 'w', encoding="utf-8") as output_file:
+            with io.open(output_file_path, 'w') as output_file:
                 self._write_batch(output_file, batch)
 
     @abstract_method

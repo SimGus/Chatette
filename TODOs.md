@@ -103,7 +103,6 @@
 
 - **BUG**: arguments are not given down when an argument is transmitted as the argument of a token
 - **BUG**: wrong generation when putting an alias inside a word group
-- **BUG**: encoding errors under Windows
 
 ## To confirm
 
@@ -140,6 +139,7 @@
 - **fixed**: synonyms are synonyms of themselves (look at simple airport example)
 - **fixed**: restaurant example doesn't seem to work anymore
 - **fixed**: possible to have several times the same example generated
+- **fixed**: encoding errors under Windows
 
 # Ideas
 
