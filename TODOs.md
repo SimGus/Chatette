@@ -25,7 +25,6 @@
 
 - [ ] add a command line argument to specifiy the max number of examples to generate
 - [ ] add bulk generation
-- [ ] wipe the output directory before writing new files
 
 - [ ] use more list/dict comprehensions (faster than using `append`)
 - [ ] design patterns
@@ -98,6 +97,7 @@
 - [x] *Docs* make a wiki rather than a markdown file
 - [x] add interactive mode (generate what the user asks through a CLI)
 - [x] *Docs* explain '/' syntax for alternative slot value
+- [x] wipe the output directory before writing new files
 
 # Bugs
 
