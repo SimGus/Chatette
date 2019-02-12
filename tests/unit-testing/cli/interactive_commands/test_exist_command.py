@@ -4,10 +4,10 @@ Tests the functionalities present in module
 `chatette.cli.interactive_commands.exist_command`.
 """
 
-from chatette.parsing.parser import Parser
-from chatette.facade import Facade
 from chatette.cli.interactive_commands.command_strategy import CommandStrategy
 from chatette.cli.interactive_commands.exist_command import ExistCommand
+
+from test_command_strategy import get_facade
 
 
 def test_obj():
@@ -19,16 +19,6 @@ def test_obj():
     assert isinstance(cmd, CommandStrategy)
     assert cmd.command_tokens == ["exist", "~", "/a/"]
 
-
-FACADE = None
-def get_facade():
-    global FACADE
-    if FACADE is None:
-        FACADE = \
-            Facade("tests/unit-testing/cli/interactive_commands/toilets.chatette",
-                   "tests/unit-testing/cli/interactive_commands/", None, False,
-                   None)
-    return FACADE
 
 def test_execute(capsys):
     cmd = ExistCommand('exist alias "sorry"')

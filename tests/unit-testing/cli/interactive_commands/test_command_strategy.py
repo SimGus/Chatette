@@ -7,12 +7,24 @@ in module `chatette.cli.interactive_commands.command_strategy`.
 import re
 import pytest
 
+from chatette.facade import Facade
 from chatette.cli.interactive_commands.command_strategy import CommandStrategy
 from chatette.cli.terminal_writer import RedirectionType
 from chatette.parsing.parser_utils import UnitType
 
 
-class TestSTokenize(object):
+FACADE = None
+def get_facade():
+    global FACADE
+    if FACADE is None:
+        FACADE = \
+            Facade("tests/unit-testing/cli/interactive_commands/toilets.chatette",
+                   "tests/unit-testing/cli/interactive_commands/", None, False,
+                   None)
+    return FACADE
+
+
+class TestTokenize(object):
     def test_empty(self):
         assert CommandStrategy.tokenize("") == []
 
