@@ -84,7 +84,7 @@ class TestRemoveEscapement(object):
             assert remove_escapement(s) == s
 
     def test_single_escaped_special_symbols(self):
-        assert remove_escapement("\?") == "?"
+        assert remove_escapement(r"\?") == "?"
         assert remove_escapement("\;") == ";"
         assert remove_escapement("\/") == "/"
         assert remove_escapement("\//") == "//"
@@ -471,7 +471,7 @@ class TestIsSubRuleWord(object):
             assert not is_sub_rule_word(tokens)
 
     def test_words(self):
-        tokens_list = [["word"], ["other"], ["\?"]]
+        tokens_list = [["word"], ["other"], [r"\?"]]
         for tokens in tokens_list:
             assert is_sub_rule_word(tokens)
 
@@ -487,7 +487,7 @@ class TestIsSubRuleWordGroup(object):
 
     def test_word_groups(self):
         tokens_list = [["[", "word", "]"], ["[", "word", "group", "]"],
-                       ["[", "&", "word", "group", "\?", "?", "rand", "]"]]
+                       ["[", "&", "word", "group", r"\?", "?", "rand", "]"]]
         for tokens in tokens_list:
             assert is_sub_rule_word_group(tokens)
 
