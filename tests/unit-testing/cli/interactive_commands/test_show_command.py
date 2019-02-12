@@ -28,9 +28,10 @@ def test_execute(capsys):
     captured = capsys.readouterr()
     assert "alias: 'sorry'\nmodifiers:\n\tNone\nVariations: 0" in captured.out
 
-    # cmd = ShowCommand('show ~ /o/g')
-    # assert cmd.command_tokens ==  ["show", "~", "/o/g"]
-    # cmd.execute(facade)
-    # captured = capsys.readouterr()
-    # assert "alias: 'can you'\nmodifiers:\n\tNone\nVariations: 0" in captured.out
-    # assert "alias: 'sorry'\nmodifiers:\n\tNone\nVariations: 0" in captured.out
+    cmd = ShowCommand('show ~ /o/g')
+    assert cmd.command_tokens ==  ["show", "~", "/o/g"]
+    cmd.execute(facade)
+    captured = capsys.readouterr()
+    assert "alias: 'can you'\nmodifiers:\n\tNone\nVariations: 0" in captured.out
+    assert "alias: 'sorry'\nmodifiers:\n\tNone\nVariations: 0" in captured.out
+    assert "Rules:" in captured.out
