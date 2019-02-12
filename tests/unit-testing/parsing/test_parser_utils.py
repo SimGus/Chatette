@@ -37,7 +37,7 @@ class TestStripComments(object):
         s = r"test \; not a comment"
         assert strip_comments(s) == s
         s = r"\;"+"not a comment\t;comment"
-        assert strip_comments(s) == "\;not a comment"
+        assert strip_comments(s) == r"\;not a comment"
         s = "\ttest"+r"\; no comment; comment"
         assert strip_comments(s) == "\ttest"+r"\; no comment"
 
@@ -61,7 +61,7 @@ class TestStripComments(object):
         s = r"test \// not a comment"
         assert strip_comments(s) == s
         s = r"\/\/"+"not a comment\t//comment"
-        assert strip_comments(s) == "\/\/not a comment"
+        assert strip_comments(s) == r"\/\/not a comment"
         s = "\ttest"+r"\// no comment// comment"
         assert strip_comments(s) == "\ttest"+r"\// no comment"
 
@@ -85,29 +85,28 @@ class TestRemoveEscapement(object):
 
     def test_single_escaped_special_symbols(self):
         assert remove_escapement(r"\?") == "?"
-        assert remove_escapement("\;") == ";"
-        assert remove_escapement("\/") == "/"
-        assert remove_escapement("\//") == "//"
-        assert remove_escapement("\/\/") == "//"
-        assert remove_escapement("\[") == "["
-        assert remove_escapement("\]") == "]"
-        assert remove_escapement("\{") == "{"
-        assert remove_escapement("\}") == "}"
-        assert remove_escapement("\~") == "~"
-        assert remove_escapement("\@") == "@"
-        assert remove_escapement("\%") == "%"
-        assert remove_escapement("\#") == "#"
-        assert remove_escapement("\&") == "&"
-        assert remove_escapement("\|") == "|"
-        assert remove_escapement("\=") == "="
-
-        assert remove_escapement("\$") == "\$"
+        assert remove_escapement(r"\;") == ";"
+        assert remove_escapement(r"\/") == "/"
+        assert remove_escapement(r"\//") == "//"
+        assert remove_escapement(r"\/\/") == "//"
+        assert remove_escapement(r"\[") == "["
+        assert remove_escapement(r"\]") == "]"
+        assert remove_escapement(r"\{") == "{"
+        assert remove_escapement(r"\}") == "}"
+        assert remove_escapement(r"\~") == "~"
+        assert remove_escapement(r"\@") == "@"
+        assert remove_escapement(r"\%") == "%"
+        assert remove_escapement(r"\#") == "#"
+        assert remove_escapement(r"\&") == "&"
+        assert remove_escapement(r"\|") == "|"
+        assert remove_escapement(r"\=") == "="
+        assert remove_escapement(r"\$") == "\$"
 
     def test_several_words_escaped(self):
         s = r"test\? with several \? escapements\|"
         assert remove_escapement(s) == "test? with several ? escapements|"
         s = r"\[another [test\?] with] escapement\$2"
-        assert remove_escapement(s) == "[another [test?] with] escapement\$2"
+        assert remove_escapement(s) == r"[another [test?] with] escapement\$2"
 
 
 class TestAddEscapementBackForNotComments(object):
@@ -427,7 +426,7 @@ class TestCheckChoiceValidity(object):
             except SyntaxError as e:
                 pytest.fail("Unexpected 'SyntaxError' when calling "+
                             "'check_choice_validity' with valid input.")
-    
+
     def test_invalid(self):
         invalid_choice_tokens = [["word", "/"],
                                  ["[", "word", " ", "group", "]", "/", "?"]]
@@ -445,7 +444,7 @@ class TestCheckWordGroupValidity(object):
             except SyntaxError:
                 pytest.fail("Unexpected 'SyntaxError' when calling "+
                             "'check_word_group_validity' with valid input.")
-    
+
     def test_invalid(self):
         invalid_group_tokens = [["&", "&"], ["name", "&"], ["name", "#", "#"],
                                 ["name", "$", "$"], ["name", "?", "?"],
