@@ -24,7 +24,6 @@ def test_execute(capsys):
     cmd = ExistCommand('exist alias "sorry"')
     assert cmd.command_tokens == ["exist", "alias", '"sorry"']
     facade = get_facade()
-    facade.run_parsing()
     cmd.execute(facade)
     captured = capsys.readouterr()
     assert "alias: 'sorry'\nmodifiers:\n\tNone\nVariations: 0" in captured.out
@@ -33,5 +32,5 @@ def test_execute(capsys):
     assert cmd.command_tokens ==  ["exist", "~", "/o/g"]
     cmd.execute(facade)
     captured = capsys.readouterr()
-    assert "alias: 'can you'\nmodifiers:\n\tNone\nVariations: 0\n\n" + \
-           "alias: 'sorry'\nmodifiers:\n\tNone\nVariations: 0" in captured.out
+    assert "alias: 'can you'\nmodifiers:\n\tNone\nVariations: 0" in captured.out
+    assert "alias: 'sorry'\nmodifiers:\n\tNone\nVariations: 0" in captured.out

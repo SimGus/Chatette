@@ -21,6 +21,7 @@ def get_facade():
             Facade("tests/unit-testing/cli/interactive_commands/toilets.chatette",
                    "tests/unit-testing/cli/interactive_commands/", None, False,
                    None)
+        FACADE.run_parsing()
     return FACADE
 
 
