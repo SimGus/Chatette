@@ -34,3 +34,9 @@ def test_execute(capsys):
     captured = capsys.readouterr()
     assert "alias: 'can you'\nmodifiers:\n\tNone\nVariations: 0" in captured.out
     assert "alias: 'sorry'\nmodifiers:\n\tNone\nVariations: 0" in captured.out
+
+    cmd = ExistCommand('exist slot "INEXISTANT"')
+    assert cmd.command_tokens == ["exist", "slot", '"INEXISTANT"']
+    cmd.execute(facade)
+    captured = capsys.readouterr()
+    assert "Slot 'INEXISTANT' is not defined." in captured.out

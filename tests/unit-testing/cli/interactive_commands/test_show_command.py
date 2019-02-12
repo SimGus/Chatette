@@ -35,3 +35,18 @@ def test_execute(capsys):
     assert "alias: 'can you'\nmodifiers:\n\tNone\nVariations: 0" in captured.out
     assert "alias: 'sorry'\nmodifiers:\n\tNone\nVariations: 0" in captured.out
     assert "Rules:" in captured.out
+
+    cmd = ShowCommand('show slot "INEXISTANT"')
+    assert cmd.command_tokens == ["show", "slot", '"INEXISTANT"']
+    cmd.execute(facade)
+    captured = capsys.readouterr()
+    assert "Slot 'INEXISTANT' is not defined." in captured.out
+
+    cmd = ShowCommand('show ~ "lots of rules"')
+    assert cmd.command_tokens == ["show", "~", '"lots of rules"']
+    cmd.execute(facade)
+    captured = capsys.readouterr()
+    assert "alias: 'lots of rules'\nmodifiers:\n\tNone\nVariations: 0" in captured.out
+    assert "rule 0" in captured.out
+    assert "rule 11" in captured.out
+    assert "rule 12" not in captured.out
