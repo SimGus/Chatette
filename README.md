@@ -30,6 +30,10 @@ pip install chatette
 ```sh
 pip install -r requirements/common.txt
 ```
+You can then install the project (as an editable package) using pip, by executing the following command from the directory `Chatette/chatette/`:
+```sh
+pip install -e .
+```
 You can then run the module by using the commands below in the cloned directory.
 
 # How to use *Chatette*?
