@@ -20,6 +20,15 @@ def test_obj():
     assert cmd.command_tokens == ["show", "~", "/a/"]
 
 
+def test_err(capsys):
+    cmd = ShowCommand("nothing")
+    assert cmd.command_tokens == ["nothing"]
+    cmd.execute(get_facade())
+    captured = capsys.readouterr()
+    assert "[ERROR]\tMissing some arguments\n\tUsage: " + \
+           'show <unit-type> "<unit-name>"' in captured.out
+
+
 def test_execute(capsys):
     cmd = ShowCommand('show alias "sorry"')
     assert cmd.command_tokens == ["show", "alias", '"sorry"']

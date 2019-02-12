@@ -20,6 +20,15 @@ def test_obj():
     assert cmd.command_tokens == ["exist", "~", "/a/"]
 
 
+def test_err(capsys):
+    cmd = ExistCommand("nothing")
+    assert cmd.command_tokens == ["nothing"]
+    cmd.execute(get_facade())
+    captured = capsys.readouterr()
+    assert "[ERROR]\tMissing some arguments\n\tUsage: " + \
+           'exist <unit-type> "<unit-name>"' in captured.out
+
+
 def test_execute(capsys):
     cmd = ExistCommand('exist alias "sorry"')
     assert cmd.command_tokens == ["exist", "alias", '"sorry"']
