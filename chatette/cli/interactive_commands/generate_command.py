@@ -10,6 +10,10 @@ from chatette.adapters.factory import create_adapter
 
 
 class GenerateCommand(CommandStrategy):
+    usage_str = 'generate <adapter> <unit-type> "<unit-name>"'
+    def __init__(self, command_str, quiet=False):
+        super(GenerateCommand, self).__init__(command_str, quiet)
+        self.nb_examples = None
 
     def execute(self, facade):
         """
@@ -28,12 +32,21 @@ class GenerateCommand(CommandStrategy):
             return
         if len(self.command_tokens) < 4:
             self.print_wrapper.error_log("Missing some arguments\nUsage: " +
-                                         'generate <adapter> <unit-type> '+
-                                         '"<unit-name>"')
+                                         self.usage_str)
             return
 
         adapter_str = self.command_tokens[1]
         adapter = create_adapter(adapter_str)
+
+        if len(self.command_tokens) == 5:
+            try:
+                self.nb_examples = int(self.command_tokens[-1])
+            except ValueError:
+                    self.print_wrapper.error_log("The number of examples to be " +
+                                                "generated is invalid: it must " +
+                                                "be an integer (no other " +
+                                                "characters allowed).")
+                    return
 
         unit_type = CommandStrategy.get_unit_type_from_str(self.command_tokens[2])
         unit_regex = self.get_regex_name(self.command_tokens[3])
@@ -49,10 +62,11 @@ class GenerateCommand(CommandStrategy):
                 count += 1
             if count == 0:
                 self.print_wrapper.write("No " + unit_type.name + " matched.")
+        self.finish_execution(facade)
 
     def _generate_unit(self, facade, adapter, unit_type, unit_name):
         definition = facade.parser.get_definition(unit_name, unit_type)
-        examples = definition.generate_all()
+        examples = definition.generate_nb_examples(self.nb_examples)
 
         self.print_wrapper.write("Generated examples for " + unit_type.name +
                                  " '" + unit_name + "':'")
@@ -62,3 +76,11 @@ class GenerateCommand(CommandStrategy):
                 ex.name = "INTERACTIVE"
             self.print_wrapper.write(adapter.prepare_example(ex))
         self.print_wrapper.write("")
+    
+    def finish_execution(self, facade):
+        self.nb_examples = None
+
+
+    # Override abstract methods
+    def execute_on_unit(self, facade, unit_type, unit_name):
+        raise NotImplementedError()
