@@ -24,7 +24,7 @@ class Tokenizer(object):
         If other files are still open, raise an exception.
         """
         if len(self.opened_files) > 0:
-            raise ValueError("Tried to change master file during parsing of "+
+            raise ValueError("Tried to change master file during parsing of " +
                              "other files")
         self.master_file_paths.append(master_filename)
         self.master_file_dir = os.path.dirname(master_filename)

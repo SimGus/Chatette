@@ -14,3 +14,10 @@ class StatsCommand(CommandStrategy):
         self.print_wrapper.write("Statistics:")
         stats = facade.get_stats_as_str()
         self.print_wrapper.write(stats)
+
+
+    # Override abstract methods
+    def execute_on_unit(self, facade, unit_type, unit_name):
+        raise NotImplementedError()
+    def finish_execution(self, facade):
+        raise NotImplementedError()

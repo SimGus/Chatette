@@ -36,3 +36,10 @@ class RenameCommand(CommandStrategy):
             except KeyError:
                 self.print_wrapper.error_log("Couldn't find a unit named '" +
                                              str(old_name) + "'.")
+
+
+    # Override abstract methods
+    def execute_on_unit(self, facade, unit_type, unit_name):
+        raise NotImplementedError()
+    def finish_execution(self, facade):
+        raise NotImplementedError()

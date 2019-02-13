@@ -19,7 +19,7 @@ class SaveCommand(CommandStrategy):
             self.print_wrapper.error_log("Missing some arguments\nUsage: " +
                                          self.usage_str)
             return
-        
+
         template_filepath = self.command_tokens[1]
         parser = facade.parser
         with io.open(template_filepath, 'w+') as f:
@@ -35,3 +35,10 @@ class SaveCommand(CommandStrategy):
                 slot = parser.slot_definitions[slot_name]
                 print(slot.get_template_description(), file=f)
         self.print_wrapper.write("Template file successfully written.")
+
+
+    # Override abstract methods
+    def execute_on_unit(self, facade, unit_type, unit_name):
+        raise NotImplementedError()
+    def finish_execution(self, facade):
+        raise NotImplementedError()

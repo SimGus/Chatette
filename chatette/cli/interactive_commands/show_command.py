@@ -27,4 +27,3 @@ class ShowCommand(CommandStrategy):
         except KeyError:
             self.print_wrapper.write(unit_type.name.capitalize() + " '" +
                                      unit_name + "' is not defined.")
-

@@ -20,3 +20,10 @@ class ParseCommand(CommandStrategy):
             return
         filepath = self.command_tokens[1]
         facade.parse_file(filepath)
+
+
+    # Override abstract methods
+    def execute_on_unit(self, facade, unit_type, unit_name):
+        raise NotImplementedError()
+    def finish_execution(self, facade):
+        raise NotImplementedError()

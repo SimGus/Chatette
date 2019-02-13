@@ -61,3 +61,9 @@ class SetModifierCommand(CommandStrategy):
         self.print_wrapper.write("Modifier for " + unit_type.name + " '" +
                                  unit_name + "' successfully changed.")
 
+
+    # Override abstract methods
+    def execute_on_unit(self, facade, unit_type, unit_name):
+        raise NotImplementedError()
+    def finish_execution(self, facade):
+        raise NotImplementedError()

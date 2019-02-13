@@ -4,6 +4,8 @@ Tests the functionalities contained in module
 `chatette.cli.interactive_commands.show_command`.
 """
 
+import pytest
+
 from chatette.cli.interactive_commands.command_strategy import CommandStrategy
 from chatette.cli.interactive_commands.show_command import ShowCommand
 

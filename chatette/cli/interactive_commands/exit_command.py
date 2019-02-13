@@ -14,3 +14,10 @@ class ExitCommand(CommandStrategy):
 
     def should_exit(self):
         return True
+
+
+    # Override abstract methods
+    def execute_on_unit(self, facade, unit_type, unit_name):
+        raise NotImplementedError()
+    def finish_execution(self, facade):
+        raise NotImplementedError()

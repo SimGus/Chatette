@@ -37,3 +37,10 @@ class ExecuteCommand(CommandStrategy):
                         and REDIRECTION_SYM not in cmd):
                         commands[i] += text_to_append
         return commands
+
+
+    # Override abstract methods
+    def execute_on_unit(self, facade, unit_type, unit_name):
+        raise NotImplementedError()
+    def finish_execution(self, facade):
+        raise NotImplementedError()

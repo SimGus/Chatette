@@ -42,3 +42,10 @@ class AddRuleCommand(CommandStrategy):
 
         self.print_wrapper.write("Rule successfully added to " +
                                  unit_type.name + " '" + unit_name + "'.")
+
+
+    # Override abstract methods
+    def execute_on_unit(self, facade, unit_type, unit_name):
+        raise NotImplementedError()
+    def finish_execution(self, facade):
+        raise NotImplementedError()

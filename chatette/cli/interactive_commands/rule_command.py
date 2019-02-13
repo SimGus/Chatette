@@ -42,3 +42,10 @@ class RuleCommand(CommandStrategy):
                 self.print_wrapper.write(ex.text.replace(ENTITY_MARKER, ""))
         except KeyError as e:
             self.print_wrapper.error_log("Upon generation: " + str(e))
+
+
+    # Override abstract methods
+    def execute_on_unit(self, facade, unit_type, unit_name):
+        raise NotImplementedError()
+    def finish_execution(self, facade):
+        raise NotImplementedError()

@@ -4,6 +4,8 @@ Tests the functionalities in module
 `chatette.cli.interactive_commands.exit_command`.
 """
 
+import pytest
+
 from chatette.cli.interactive_commands.exit_command import *
 
 
@@ -25,3 +27,11 @@ def test_execute(capsys):
 def test_should_exit():
     cmd = ExitCommand("")
     assert cmd.should_exit()
+
+
+def test_abstract_methods():
+    cmd = ExitCommand('exit')
+    with pytest.raises(NotImplementedError):
+        cmd.execute_on_unit(None, None, None)
+    with pytest.raises(NotImplementedError):
+        cmd.finish_execution(None)

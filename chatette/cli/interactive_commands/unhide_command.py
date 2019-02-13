@@ -49,3 +49,8 @@ class UnhideCommand(CommandStrategy):
             self.print_wrapper.write(unit_type.name.capitalize() + " '" +
                                      unit_name + "' is already defined " +
                                      "the parser.")
+
+
+    # Override abstract methods
+    def finish_execution(self, facade):
+        raise NotImplementedError()

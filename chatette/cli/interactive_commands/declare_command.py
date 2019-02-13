@@ -45,3 +45,10 @@ class DeclareCommand(CommandStrategy):
         relevant_dict[unit_name] = declaration
         self.print_wrapper.write(unit_type.name.capitalize() + " '" +
                                  unit_name + "' was successfully declared.")
+
+
+    # Override abstract methods
+    def execute_on_unit(self, facade, unit_type, unit_name):
+        raise NotImplementedError()
+    def finish_execution(self, facade):
+        raise NotImplementedError()
