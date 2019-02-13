@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add program option `-I` or `--interactive-commands-file` to feed the script a file of commands that will be directly executed
 
 ### Changed
+- `jsonl` adapter doesn't create a `synonyms.json` file anymore if it has no data to write inside it
 - Output file is written using the default encoding of the platform *Chatette* is being used on, to avoid encoding issues
 - Output folder and all its contents are now deleted before being created again to write the output file(s), in order to prevent old outputs from being mixed up with new outputs
 - Accept comment lines and empty lines inside unit definitions (not considered as a new rule or as a syntax error as it was the case before)

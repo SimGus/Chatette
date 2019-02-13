@@ -25,7 +25,19 @@ class JsonListAdapter(Adapter):
     def write(self, output_directory, examples, synonyms):
         super(JsonListAdapter, self).write(output_directory, examples, synonyms)
 
-        synonyms_file_path = os.path.join(output_directory, "synonyms.json")
-        with io.open(synonyms_file_path, 'w') as output_file:
-            output_file.write(json.dumps(cast_to_unicode(synonyms), ensure_ascii=False,
-                                         sort_keys=True, indent=2))
+        processed_synonyms = self.__synonym_format(synonyms)
+        if processed_synonyms is not None:
+            synonyms_file_path = os.path.join(output_directory, "synonyms.json")
+            with io.open(synonyms_file_path, 'w') as output_file:
+                output_file.write(json.dumps(cast_to_unicode(processed_synonyms),
+                                             ensure_ascii=False,
+                                             sort_keys=True, indent=2))
+
+
+    @classmethod
+    def __synonym_format(cls, synonyms):
+        result = {key: values for (key, values)in synonyms.items()
+                              if len(values) > 1 or values[0] != key}
+        if not result:
+            return None
+        return result
