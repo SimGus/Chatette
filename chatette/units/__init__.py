@@ -369,15 +369,14 @@ class UnitDefinition(object):
             result += rules_str
         else:
             result = ""
-        rules_str = ""
         for variation_name in self.variations:
-            current = self._get_template_decl(variation_name) + '\n'
-            rules_str += '\n'.join(
+            current_decl = self._get_template_decl(variation_name) + '\n'
+            rules_str = '\n'.join(
                             ['\t' + e
-                             for e in self._get_template_rules(variation_name)]
-                           ) + '\n'
+                            for e in self._get_template_rules(variation_name)]
+                        ) + '\n'
             if not rules_str.isspace():
-                result += current + rules_str
+                result += current_decl + rules_str
         return result
     def _get_template_decl(self, variation=None):
         """
