@@ -15,7 +15,7 @@ class HideCommand(CommandStrategy):
         super(HideCommand, self).__init__(command_str, quiet)
         self._units_to_delete = []
     
-    def execute_on_unit(self, facade, unit_type, unit_name):
+    def execute_on_unit(self, facade, unit_type, unit_name, variation_name=None):
         try:
             unit = facade.parser.get_definition(unit_name, unit_type)
             self.stored_units[unit_type.name][unit_name] = unit

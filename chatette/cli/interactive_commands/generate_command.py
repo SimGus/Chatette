@@ -51,8 +51,16 @@ class GenerateCommand(CommandStrategy):
         unit_type = CommandStrategy.get_unit_type_from_str(self.command_tokens[2])
         unit_regex = self.get_regex_name(self.command_tokens[3])
         if unit_regex is None:
-            unit_name = CommandStrategy.remove_quotes(self.command_tokens[3])
-            self._generate_unit(facade, adapter, unit_type, unit_name)
+            try:
+                [unit_name, variation_name] = \
+                    CommandStrategy.split_exact_unit_name(self.command_tokens[3])
+            except SyntaxError:
+                self.print_wrapper.error_log("Unit identifier couldn't be " + \
+                                             "interpreted. Did you mean to " + \
+                                             "escape some hashtags '#'?")
+                return
+            self._generate_unit(facade, adapter, unit_type, unit_name,
+                                variation_name)
         else:
             count = 0
             for unit_name in self.next_matching_unit_name(facade.parser,
@@ -64,9 +72,11 @@ class GenerateCommand(CommandStrategy):
                 self.print_wrapper.write("No " + unit_type.name + " matched.")
         self.finish_execution(facade)
 
-    def _generate_unit(self, facade, adapter, unit_type, unit_name):
+    def _generate_unit(self, facade, adapter, unit_type, unit_name,
+                       variation_name=None):
         definition = facade.parser.get_definition(unit_name, unit_type)
-        examples = definition.generate_nb_examples(self.nb_examples)
+        examples = definition.generate_nb_examples(self.nb_examples,
+                                                   variation_name)
 
         self.print_wrapper.write("Generated examples for " + unit_type.name +
                                  " '" + unit_name + "':'")

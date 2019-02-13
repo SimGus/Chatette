@@ -24,10 +24,21 @@ class SetModifierCommand(CommandStrategy):
         unit_regex = self.get_regex_name(self.command_tokens[2])
 
         modifier_name = self.command_tokens[3]
-        modifier_value = CommandStrategy.remove_quotes(self.command_tokens[4])
+        modifier_value = CommandStrategy.split_exact_unit_name(self.command_tokens[4])
 
         if unit_regex is None:
-            unit_name = CommandStrategy.remove_quotes(self.command_tokens[2])
+            try:
+                [unit_name, variation_name] = \
+                    CommandStrategy.split_exact_unit_name(self.command_tokens[2])
+            except SyntaxError:
+                self.print_wrapper.error_log("Unit identifier couldn't be " + \
+                                             "interpreted. Did you mean to " + \
+                                             "escape some hashtags '#'?")
+                return
+            if variation_name is not None:
+                self.print_wrapper.error_log("Cannot set a modifier for the " + \
+                                             "variation of a unit.")
+                return
             self._set_modifier(facade.parser, unit_type, unit_name,
                                modifier_name, modifier_value)
         else:
@@ -63,7 +74,7 @@ class SetModifierCommand(CommandStrategy):
 
 
     # Override abstract methods
-    def execute_on_unit(self, facade, unit_type, unit_name):
+    def execute_on_unit(self, facade, unit_type, unit_name, variation_name=None):
         raise NotImplementedError()
     def finish_execution(self, facade):
         raise NotImplementedError()

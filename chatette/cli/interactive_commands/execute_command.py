@@ -24,7 +24,7 @@ class ExecuteCommand(CommandStrategy):
                                          self.usage_str)
             return
 
-        with io.open(self.remove_quotes(self.command_tokens[1]), 'r') \
+        with io.open(self.split_exact_unit_name(self.command_tokens[1]), 'r') \
              as command_file:
             commands = [line.rstrip() for line in command_file.readlines()
                                       if not line.lstrip().startswith("//")]

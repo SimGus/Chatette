@@ -23,7 +23,14 @@ class UnhideCommand(CommandStrategy):
         unit_type = CommandStrategy.get_unit_type_from_str(self.command_tokens[1])
         unit_regex = self.get_regex_name(self.command_tokens[2])
         if unit_regex is None:
-            unit_name = CommandStrategy.remove_quotes(self.command_tokens[2])
+            try:
+                [unit_name, variation_name] = \
+                    CommandStrategy.split_exact_unit_name(self.command_tokens[2])
+            except SyntaxError:
+                self.print_wrapper.error_log("Unit identifier couldn't be " + \
+                                             "interpreted. Did you mean to " + \
+                                             "escape some hashtags '#'?")
+                return
             self.execute_on_unit(facade, unit_type, unit_name)
         else:
             unit_names = [unit_name
@@ -35,7 +42,7 @@ class UnhideCommand(CommandStrategy):
             for unit_name in unit_names:
                 self.execute_on_unit(facade, unit_type, unit_name)
 
-    def execute_on_unit(self, facade, unit_type, unit_name):
+    def execute_on_unit(self, facade, unit_type, unit_name, variation_name=None):
         try:
             unit = HideCommand.stored_units[unit_type.name][unit_name]
             facade.parser.add_definition(unit_type, unit_name, unit)

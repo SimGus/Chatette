@@ -133,7 +133,20 @@ class TestRemoveQuotes(object):
     def test(self):
         assert CommandStrategy.remove_quotes('"quoted"') == "quoted"
         assert CommandStrategy.remove_quotes('"the quotes"') == "the quotes"
-        assert CommandStrategy.remove_quotes('"escaped\""') == 'escaped"'
+        assert CommandStrategy.remove_quotes(r'"escaped\""') == 'escaped"'
+
+class TestSplitExactUnitName(object):
+    def test(self):
+        assert CommandStrategy.split_exact_unit_name('"quoted"') == \
+               ["quoted", None]
+        assert CommandStrategy.split_exact_unit_name('"the quotes"') == \
+               ["the quotes", None]
+        assert CommandStrategy.split_exact_unit_name(r'"escaped\""') == \
+               ['escaped"', None]
+        assert CommandStrategy.split_exact_unit_name('"test#var"') == \
+               ["test", "var"]
+        assert CommandStrategy.split_exact_unit_name(r'"unit\#hashtag#var"') == \
+               ["unit#hashtag", "var"]
 
 
 class TestGetRegexName(object):

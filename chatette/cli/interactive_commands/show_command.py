@@ -12,12 +12,24 @@ class ShowCommand(CommandStrategy):
     usage_str = 'show <unit-type> "<unit-name>"'
     max_nb_rules_to_display = 12
 
-    def execute_on_unit(self, facade, unit_type, unit_name):
+    def execute_on_unit(self, facade, unit_type, unit_name, variation_name=None):
         try:
             unit = facade.parser.get_definition(unit_name, unit_type)
             self.print_wrapper.write(unit.short_desc_str())
-            self.print_wrapper.write("Rules:")
-            rules = unit.rules
+
+            if variation_name is None:
+                rules = unit.rules
+                self.print_wrapper.write("Rules:")
+            else:
+                if variation_name not in unit.variations:
+                    self.print_wrapper.error_log("Variation '" + variation_name + \
+                                                 "' is not defined in " + \
+                                                 unit.type + " " + unit_name + '.')
+                    return
+                rules = unit.variations[variation_name]
+                self.print_wrapper.write("Rules for variation '" + \
+                                         variation_name + ":")
+            
             for (i, rule) in enumerate(rules):
                 if i >= self.max_nb_rules_to_display:
                     break
@@ -27,3 +39,6 @@ class ShowCommand(CommandStrategy):
         except KeyError:
             self.print_wrapper.write(unit_type.name.capitalize() + " '" +
                                      unit_name + "' is not defined.")
+
+def finish_execution(self, facade):
+        raise NotImplementedError()

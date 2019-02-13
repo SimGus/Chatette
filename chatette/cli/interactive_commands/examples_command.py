@@ -13,7 +13,7 @@ class ExamplesCommand(CommandStrategy):
         super(ExamplesCommand, self).__init__(command_str, quiet)
         self.nb_examples = None
 
-    def execute_on_unit(self, facade, unit_type, unit_name):
+    def execute_on_unit(self, facade, unit_type, unit_name, variation_name=None):
         if self.nb_examples is None:  # Caching the parsed number
             self.nb_examples = -1  # All examples should be generated
             if len(self.command_tokens) > 3:
@@ -32,9 +32,10 @@ class ExamplesCommand(CommandStrategy):
                                      unit_name + "' is not defined.")
             return
         if self.nb_examples != -1:
-            examples = definition.generate_nb_examples(self.nb_examples)
+            examples = definition.generate_nb_examples(self.nb_examples,
+                                                       variation_name)
         else:
-            examples = definition.generate_nb_examples(None)
+            examples = definition.generate_nb_examples(None, variation_name)
         self.print_wrapper.write("Examples for " + unit_type.name + " '" +
                                  unit_name + "':")
         for ex in examples:

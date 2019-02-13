@@ -9,7 +9,8 @@ import re
 
 from chatette.utils import rchop
 from chatette.parsing.parser_utils import UnitType, \
-                                          ALIAS_SYM, SLOT_SYM, INTENT_SYM
+                                          ALIAS_SYM, SLOT_SYM, INTENT_SYM, \
+                                          VARIATION_SYM, ESCAPE_SYM
 from chatette.cli.terminal_writer import TerminalWriter, RedirectionType
 
 
@@ -128,13 +129,47 @@ class CommandStrategy(object):
             return UnitType.intent
         return None
 
+
     @staticmethod
     def remove_quotes(text):
         """
-        Remove the double quotes at the beginning and end of `text` and
-        remove the escapement of other quotes.
+        Removes the double quotes at the beginning and end of `text` and
+        returns it. Double quotes that shouldn't be considered are escaped.
         """
-        return text[1:-1].replace(r'\"', '"')
+        return text[1:-1].replace(ESCAPE_SYM + '"', '"')
+
+    @staticmethod
+    def split_exact_unit_name(text):
+        """
+        Removes the double quotes at the beginning and end of `text` and
+        splits `text` into a unit name and a variation identifier.
+        Those two parts are separated in `text` by a hashtag `#` (unescaped).
+        Returns a list with both those str inside it or the unit name and
+        `None` for the variation identifier if it wasn't found.
+        If `text` is not valid (several hashtags),
+        raises a `SyntaxError`.
+        """
+        no_quote_text = text[1:-1].replace(ESCAPE_SYM + '"', '"')
+        splitted = no_quote_text.split(VARIATION_SYM)
+        processed_splitted = []
+        current_word = ""
+        for word in splitted:
+            if word.endswith(ESCAPE_SYM):
+                if current_word == "":
+                    current_word = word[:-1]
+                else:
+                    current_word += VARIATION_SYM + word[:-1]
+            elif current_word == "":
+                processed_splitted.append(word)
+            else:
+                processed_splitted.append(current_word + VARIATION_SYM + word)
+                current_word = ""
+        if len(processed_splitted) > 2:
+            raise SyntaxError("Too many hashtags in unit identifier.")
+        if len(processed_splitted) == 1:
+            return [processed_splitted[0], None]
+        return processed_splitted
+
 
     def get_regex_name(self, name):
         """
@@ -246,8 +281,15 @@ class CommandStrategy(object):
         unit_type = CommandStrategy.get_unit_type_from_str(self.command_tokens[1])
         unit_regex = self.get_regex_name(self.command_tokens[2])
         if unit_regex is None:
-            unit_name = CommandStrategy.remove_quotes(self.command_tokens[2])
-            self.execute_on_unit(facade, unit_type, unit_name)
+            try:
+                [unit_name, variation_name] = \
+                    CommandStrategy.split_exact_unit_name(self.command_tokens[2])
+            except SyntaxError:
+                self.print_wrapper.error_log("Unit identifier couldn't be " + \
+                                             "interpreted. Did you mean to " + \
+                                             "escape some hashtags '#'?")
+                return
+            self.execute_on_unit(facade, unit_type, unit_name, variation_name)
         else:
             count = 0
             for unit_name in self.next_matching_unit_name(facade.parser,
@@ -259,7 +301,7 @@ class CommandStrategy(object):
                 self.print_wrapper.write("No " + unit_type.name + " matched.")
         self.finish_execution(facade)
 
-    def execute_on_unit(self, facade, unit_type, unit_name):
+    def execute_on_unit(self, facade, unit_type, unit_name, variation_name=None):
         """
         Executes the command on a specific unit.
         This method HAS to be overriden by subclasses if they don't override

@@ -23,7 +23,7 @@ class ParseCommand(CommandStrategy):
 
 
     # Override abstract methods
-    def execute_on_unit(self, facade, unit_type, unit_name):
+    def execute_on_unit(self, facade, unit_type, unit_name, variation_name=None):
         raise NotImplementedError()
     def finish_execution(self, facade):
         raise NotImplementedError()

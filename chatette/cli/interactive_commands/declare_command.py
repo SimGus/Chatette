@@ -26,7 +26,20 @@ class DeclareCommand(CommandStrategy):
             return
 
         unit_type = CommandStrategy.get_unit_type_from_str(self.command_tokens[1])
-        unit_name = CommandStrategy.remove_quotes(self.command_tokens[2])
+        try:
+            [unit_name, variation_name] = \
+                CommandStrategy.split_exact_unit_name(self.command_tokens[2])
+        except SyntaxError:
+            self.print_wrapper.error_log("Unit identifier couldn't be " + \
+                                         "interpreted. Did you mean to " + \
+                                         "escape some hashtags '#'?")
+            return
+        if variation_name is not None and variation_name != "":
+            self.print_wrapper.error_log("Variation name detected, while " + \
+                                         "units cannot be declared with a " + \
+                                         "variation. Did you mean to escape " + \
+                                         "some hashtags '#'?")
+            return
 
         if unit_type == UnitType.alias:
             declaration = AliasDefinition(unit_name, None)
