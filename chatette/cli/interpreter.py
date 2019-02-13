@@ -85,6 +85,8 @@ class CommandLineInterpreter(object):
         Interprets the command `command_str` and executes it.
         Returns `True` if the interactive mode should be exited.
         """
+        if command_str == "" or command_str.isspace():
+            return False
         command = CommandLineInterpreter.get_command(command_str, quiet)
         if command is None:
             return False
