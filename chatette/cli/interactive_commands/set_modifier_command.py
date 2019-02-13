@@ -47,7 +47,7 @@ class SetModifierCommand(CommandStrategy):
         if modifier_name in ("casegen", CASE_GEN_SYM):
             try:
                 value = str_to_bool(value)
-                unit.casegen = value
+                unit.modifiers.casegen = value
             except ValueError:
                 self.print_wrapper.write("Invalid value for case generation " +
                                          "modifier (True or False).")
