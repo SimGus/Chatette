@@ -66,9 +66,9 @@ class TerminalWriter(object):
             return
         else:
             if self.buffered_text is None:
-                self.buffered_text = text
+                self.buffered_text = str(text)
             else:
-                self.buffered_text +='\n' + text
+                self.buffered_text +='\n' + str(text)
 
     def error_log(self, text):
         processed_text = ''.join(['\t' + line + '\n'

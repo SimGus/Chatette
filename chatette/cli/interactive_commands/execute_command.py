@@ -24,7 +24,8 @@ class ExecuteCommand(CommandStrategy):
                                          self.usage_str)
             return
 
-        with io.open(self.command_tokens[1], 'r') as command_file:
+        with io.open(self.remove_quotes(self.command_tokens[1]), 'r') \
+             as command_file:
             commands = [line.rstrip() for line in command_file.readlines()
                                       if not line.lstrip().startswith("//")]
         redirection_tuple = self.print_wrapper.get_redirection()
