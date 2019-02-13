@@ -65,7 +65,7 @@ class Parser(object):
 
     def rename_unit(self, unit_type, old_name, new_name):
         """
-        Renames the unit declaration of type `unit_type` from 
+        Renames the unit declaration of type `unit_type` from
         `old_name` to `new_name` (possibly replacing the unit with that name).
         Raises a `KeyError` if `old_name` is not a declared unit.
         @post: this can lead to inconsistent rules.
@@ -79,7 +79,7 @@ class Parser(object):
         else:
             raise ValueError("Tried to rename a definition with wrong type "+
                              "(expected alias, slot or intent)")
-        
+
         if old_name in relevant_dict:
             relevant_dict[new_name] = relevant_dict[old_name]
             del relevant_dict[old_name]
@@ -105,12 +105,17 @@ class Parser(object):
         if unit_name not in relevant_dict:
             raise KeyError("Couldn't find a definition for " + unit_type.name +
                            " '" + unit_name + "'.")
-        
-        nb_rules = relevant_dict[unit_name].get_nb_rules()
-        del relevant_dict[unit_name]
-        self.stats[stat_key] -= 1
-        self.stats["#declarations"] -= 1
-        self.stats["#rules"] -= nb_rules
+
+        nb_rules = relevant_dict[unit_name].get_nb_rules(variation_name)
+        if variation_name is None:
+            del relevant_dict[unit_name]
+            self.stats[stat_key] -= 1
+            self.stats["#declarations"] -= 1
+            self.stats["#rules"] -= nb_rules
+        else:
+            relevant_dict[unit_name].delete_variation(variation_name)
+            self.stats["#rules"] -= nb_rules
+
 
     def add_definition(self, unit_type, unit_name, definition):
         """Adds an already built definition to the list of declared units."""
@@ -131,7 +136,7 @@ class Parser(object):
             raise ValueError(unit_type.name.capitalize()+" '"+unit_name+"' " +
                              "is already defined. Tried to add a definition " +
                              "for it again.")
-        
+
         relevant_dict[unit_name] = definition
         self.stats[stat_key] += 1
         self.stats["#declarations"] += 1
