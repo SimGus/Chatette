@@ -23,8 +23,9 @@
 
 - [ ] add regex to rasa JSON file
 
-- [ ] add a command line argument to specifiy the max number of examples to generate
+- [ ] add a command line option to specifiy the max number of examples to generate
 - [ ] add bulk generation
+- [ ] add program options to change the names of the output files
 
 - [ ] use more list/dict comprehensions (faster than using `append`)
 - [ ] design patterns
@@ -49,6 +50,7 @@
 - [ ] *Docs* multilingual
 - [ ] *Docs* specify which version of *Rasa NLU* *chatette* can work with
 - [ ] *Docs* explain that redefining a unit silently appends the rules to the already declared unit (with the same modifiers as the first time)
+- [ ] *Docs* document the differences between *Chatito* and *Chatette*
 
 ## Done
 
