@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Output file is written using the default encoding of the platform *Chatette* is being used on, to avoid encoding issues
 - Output folder and all its contents are now deleted before being created again to write the output file(s), in order to prevent old outputs from being mixed up with new outputs
 - Accept comment lines and empty lines inside unit definitions (not considered as a new rule or as a syntax error as it was the case before)
-- Completely refactor the parser and tokenizer. Parsing might behave differently than it used to.
+- Completely refactor the parser and tokenizer: when instantiating the parser, give it the path of the file rather than the file itself. Parsing might behave differently than it used to.
 - Move all code that is related to parsing into directory `parsing` and rename file `parsing.py` back to `parser.py`
 
 ### Fixed
