@@ -61,3 +61,12 @@ def test_execute(capsys):
     assert "rule 0" in captured.out
     assert "rule 11" in captured.out
     assert "rule 12" not in captured.out
+
+
+def test_abstract_methods():
+    cmd = ShowCommand('show ~ "test"')
+    try:
+        cmd.finish_execution(None)
+    except NotImplementedError:
+        pytest.fail("Method 'finish_execution' shouldn't have raised a " + \
+                    "'NotImplementedError'.")
