@@ -5,6 +5,8 @@ and transforms the information they contain into dictionaries
 of unit definitions.
 """
 
+from six import string_types
+
 from chatette.utils import print_DBG
 import chatette.parsing.parser_utils as pu
 from chatette.parsing.tokenizer import Tokenizer
@@ -26,6 +28,10 @@ class Parser(object):
     """
 
     def __init__(self, master_filename):
+        if not isinstance(master_filename, string_types):
+            raise ValueError("Since v1.4.0, the parser takes as an argument " + \
+                             "the path of the master file directly, rather " + \
+                             "than the file itself as before.")
         self.tokenizer = Tokenizer(master_filename)
 
         self._expecting_rule = False
