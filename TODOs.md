@@ -6,8 +6,11 @@
 - [ ] add a way to specify a rule on several consecutive lines
 - [ ] add a program argument to use old parser
 
-- [ ] add an adapter to output raw lists of questions (rather than a JSON file)
-- [ ] add an adapter for *Snips*, *DialogFlow* and *IBM Watson*
+- [ ] add an adapter to output raw lists of questions (rather than a JSON file) (without entities?)
+- [ ] add an adapter for *Snips*
+- [ ] add an adapter for *Google DialogFlow*
+- [ ] add an adapter for *IBM Watson*
+- [ ] add an adapter for *Microsoft LUIS* as described [here](https://github.com/rodrigopivi/Chatito/issues/61)
 - [ ] add default aliases and slots
 
 - [ ] add opposite `randgen` names
