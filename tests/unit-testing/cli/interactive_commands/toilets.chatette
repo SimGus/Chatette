@@ -32,4 +32,10 @@
     rule 11
     rule 12
     rule 13
+
+~[var#one]
+    one
+~[var#two with space]
+    two
+    2
     

@@ -62,6 +62,31 @@ def test_execute(capsys):
     assert "rule 11" in captured.out
     assert "rule 12" not in captured.out
 
+def test_variation(capsys):
+    cmd = ShowCommand('show alias "var#one"')
+    assert cmd.command_tokens == ["show", "alias", '"var#one"']
+    facade = get_facade()
+    cmd.execute(facade)
+    captured = capsys.readouterr()
+    assert "alias: 'var'\nmodifiers:\n\tNone\nVariations: 2\n" + \
+           "Rules for variation 'one:\n\tone" in captured.out
+
+    cmd = ShowCommand('show alias "var#two with space"')
+    assert cmd.command_tokens == ["show", "alias", '"var#two with space"']
+    facade = get_facade()
+    cmd.execute(facade)
+    captured = capsys.readouterr()
+    assert "alias: 'var'\nmodifiers:\n\tNone\nVariations: 2\n" + \
+           "Rules for variation 'two with space:\n\ttwo\n\t2" in captured.out
+    
+    cmd = ShowCommand('show alias "var#no var"')
+    assert cmd.command_tokens == ["show", "alias", '"var#no var"']
+    facade = get_facade()
+    cmd.execute(facade)
+    captured = capsys.readouterr()
+    assert "alias: 'var'\nmodifiers:\n\tNone\nVariations: 2\n" + \
+           "[ERROR]\tVariation 'no var' is not defined in alias var." in captured.out
+
 
 def test_abstract_methods():
     cmd = ShowCommand('show ~ "test"')

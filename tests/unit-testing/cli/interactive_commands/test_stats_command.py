@@ -28,8 +28,8 @@ def test_execute(capsys):
     facade = get_facade()
     cmd.execute(facade)
     captured = capsys.readouterr()
-    assert "Statistics:\n\t1 files parsed\n\t7 declarations: " + \
-           "1 intents, 2 slots and 4 aliases\n\t22 rules" in captured.out
+    assert "Statistics:\n\t1 files parsed\n\t9 declarations: " + \
+           "1 intents, 2 slots and 6 aliases\n\t25 rules" in captured.out
 
 
 def test_abstract_methods():
