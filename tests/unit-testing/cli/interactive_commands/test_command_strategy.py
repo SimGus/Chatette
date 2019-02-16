@@ -24,6 +24,14 @@ def get_facade():
         FACADE.run_parsing()
     return FACADE
 
+def new_facade():
+    facade = \
+        Facade("tests/unit-testing/cli/interactive_commands/toilets.chatette",
+               "tests/unit-testing/cli/interactive_commands/", None, False,
+               None)
+    facade.run_parsing()
+    return facade
+
 
 class TestTokenize(object):
     def test_empty(self):
