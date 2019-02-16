@@ -31,7 +31,7 @@ class UnhideCommand(CommandStrategy):
                                              "interpreted. Did you mean to " + \
                                              "escape some hashtags '#'?")
                 return
-            self.execute_on_unit(facade, unit_type, unit_name)
+            self.execute_on_unit(facade, unit_type, unit_name, variation_name)
         else:
             unit_names = [unit_name
                           for unit_name in HideCommand.stored_units[unit_type.name]
@@ -43,19 +43,47 @@ class UnhideCommand(CommandStrategy):
                 self.execute_on_unit(facade, unit_type, unit_name)
 
     def execute_on_unit(self, facade, unit_type, unit_name, variation_name=None):
-        try:
-            unit = HideCommand.stored_units[unit_type.name][unit_name]
-            facade.parser.add_definition(unit_type, unit_name, unit)
-            del HideCommand.stored_units[unit_type.name][unit_name]
-            self.print_wrapper.write(unit_type.name.capitalize() + " '" +
-                                     unit_name + "' was successfully restored.")
-        except KeyError:
-            self.print_wrapper.write(unit_type.name.capitalize() + " '" +
-                                     unit_name + "' was not previously hidden.")
-        except ValueError:
-            self.print_wrapper.write(unit_type.name.capitalize() + " '" +
-                                     unit_name + "' is already defined " +
-                                     "the parser.")
+        if variation_name is None:
+            try:
+                unit = HideCommand.stored_units[unit_type.name][unit_name]
+                facade.parser.add_definition(unit_type, unit_name, unit)
+                del HideCommand.stored_units[unit_type.name][unit_name]
+                self.print_wrapper.write(unit_type.name.capitalize() + " '" +
+                                        unit_name + "' was successfully restored.")
+            except KeyError:
+                self.print_wrapper.error_log(unit_type.name.capitalize() + " '" +
+                                             unit_name + "' was not " + 
+                                             "previously hidden.")
+            except ValueError:
+                self.print_wrapper.error_log(unit_type.name.capitalize() + " '" +
+                                             unit_name + "' is already defined " +
+                                             "the parser.")
+        else:
+            unit = None
+            try:
+                unit = facade.parser.get_definition(unit_name, unit_type)
+            except KeyError:
+                self.print_wrapper.error_log(unit_type.name.capitalize() + " '" + \
+                                             unit_name + "' is not defined.")
+                return
+            try:
+                rules = \
+                    HideCommand.stored_variations[unit_type.name][unit_name][variation_name]
+                if variation_name in unit.variations:
+                    self.print_wrapper.error_log("Variation '" + variation_name + \
+                                                 " is already defined for " + \
+                                                 unit_type.name + " '" + \
+                                                 unit_name + "'.")
+                    return
+                unit.add_rules(rules, variation_name)
+                self.print_wrapper.write("Variation '" + variation_name + \
+                                         "' of " + unit_type.name + " '" + \
+                                         unit_name + "' was successfully restored.")
+            except KeyError:
+                self.print_wrapper.error_log("Variation '" + variation_name + \
+                                             "' of " + unit_type.name + " '" + \
+                                             unit_name + "' was not " + \
+                                             "previously hidden.")
 
 
     # Override abstract methods
