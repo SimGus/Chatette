@@ -37,14 +37,14 @@ def test_execute(capsys):
     facade = get_facade()
     cmd.execute(facade)
     captured = capsys.readouterr()
-    assert "alias: 'sorry'\nmodifiers:\n\tNone\nVariations: 0" in captured.out
+    assert "alias: 'sorry'\nmodifiers:\n\tNone\n0 variations" in captured.out
 
     cmd = ShowCommand('show ~ /o/g')
     assert cmd.command_tokens ==  ["show", "~", "/o/g"]
     cmd.execute(facade)
     captured = capsys.readouterr()
-    assert "alias: 'can you'\nmodifiers:\n\tNone\nVariations: 0" in captured.out
-    assert "alias: 'sorry'\nmodifiers:\n\tNone\nVariations: 0" in captured.out
+    assert "alias: 'can you'\nmodifiers:\n\tNone\n0 variations" in captured.out
+    assert "alias: 'sorry'\nmodifiers:\n\tNone\n0 variations" in captured.out
     assert "Rules:" in captured.out
 
     cmd = ShowCommand('show slot "INEXISTANT"')
@@ -57,7 +57,7 @@ def test_execute(capsys):
     assert cmd.command_tokens == ["show", "~", '"lots of rules"']
     cmd.execute(facade)
     captured = capsys.readouterr()
-    assert "alias: 'lots of rules'\nmodifiers:\n\tNone\nVariations: 0" in captured.out
+    assert "alias: 'lots of rules'\nmodifiers:\n\tNone\n0 variations" in captured.out
     assert "rule 0" in captured.out
     assert "rule 11" in captured.out
     assert "rule 12" not in captured.out
@@ -68,24 +68,28 @@ def test_variation(capsys):
     facade = get_facade()
     cmd.execute(facade)
     captured = capsys.readouterr()
-    assert "alias: 'var'\nmodifiers:\n\tNone\nVariations: 2\n" + \
-           "Rules for variation 'one:\n\tone" in captured.out
+    assert "alias: 'var'\nmodifiers:\n\tNone\n2 variations:\n" in captured.out
+    assert "\t- one\n" in captured.out
+    assert "\t- two with space\n" in captured.out
+    assert "Rules for variation 'one':\n\tone" in captured.out
 
     cmd = ShowCommand('show alias "var#two with space"')
     assert cmd.command_tokens == ["show", "alias", '"var#two with space"']
     facade = get_facade()
     cmd.execute(facade)
     captured = capsys.readouterr()
-    assert "alias: 'var'\nmodifiers:\n\tNone\nVariations: 2\n" + \
-           "Rules for variation 'two with space:\n\ttwo\n\t2" in captured.out
+    assert "alias: 'var'\nmodifiers:\n\tNone\n2 variations:\n" in captured.out
+    assert "\t- two with space\n" in captured.out
+    assert "\t- one\n" in captured.out
+    assert "Rules for variation 'two with space':\n\ttwo\n\t2" in captured.out
     
     cmd = ShowCommand('show alias "var#no var"')
     assert cmd.command_tokens == ["show", "alias", '"var#no var"']
     facade = get_facade()
     cmd.execute(facade)
     captured = capsys.readouterr()
-    assert "alias: 'var'\nmodifiers:\n\tNone\nVariations: 2\n" + \
-           "[ERROR]\tVariation 'no var' is not defined in alias var." in captured.out
+    assert "alias: 'var'\nmodifiers:\n\tNone\n2 variations:\n" in captured.out
+    assert "[ERROR]\tVariation 'no var' is not defined in alias var." in captured.out
 
 
 def test_abstract_methods():

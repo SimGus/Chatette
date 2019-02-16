@@ -28,7 +28,7 @@ class ShowCommand(CommandStrategy):
                     return
                 rules = unit.variations[variation_name]
                 self.print_wrapper.write("Rules for variation '" + \
-                                         variation_name + ":")
+                                         variation_name + "':")
             
             for (i, rule) in enumerate(rules):
                 if i >= self.max_nb_rules_to_display:

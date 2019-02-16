@@ -363,7 +363,14 @@ class UnitDefinition(object):
             desc += "\t- argument: "+str(self.argument_identifier)+'\n'
         if desc.endswith("modifiers:\n"):
             desc += "\tNone\n"
-        desc += "Variations: "+str(len(self.variations))
+        desc += str(len(self.variations)) + " variations"
+        if len(self.variations) > 0:
+            desc += ':'
+        for (i,variation_name) in enumerate(self.variations):
+            desc += "\n\t- " + variation_name
+            if i >= 12:
+                desc += "\n\t- ..."
+                break
         return desc
 
     def get_template_description(self):

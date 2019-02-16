@@ -37,14 +37,14 @@ def test_execute(capsys):
     facade = get_facade()
     cmd.execute(facade)
     captured = capsys.readouterr()
-    assert "alias: 'sorry'\nmodifiers:\n\tNone\nVariations: 0" in captured.out
+    assert "alias: 'sorry'\nmodifiers:\n\tNone\n0 variations" in captured.out
 
     cmd = ExistCommand('exist ~ /o/g')
     assert cmd.command_tokens ==  ["exist", "~", "/o/g"]
     cmd.execute(facade)
     captured = capsys.readouterr()
-    assert "alias: 'can you'\nmodifiers:\n\tNone\nVariations: 0" in captured.out
-    assert "alias: 'sorry'\nmodifiers:\n\tNone\nVariations: 0" in captured.out
+    assert "alias: 'can you'\nmodifiers:\n\tNone\n0 variations" in captured.out
+    assert "alias: 'sorry'\nmodifiers:\n\tNone\n0 variations" in captured.out
 
     cmd = ExistCommand('exist slot "INEXISTANT"')
     assert cmd.command_tokens == ["exist", "slot", '"INEXISTANT"']
