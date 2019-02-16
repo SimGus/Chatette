@@ -51,3 +51,32 @@ def test_execute(capsys):
     cmd.execute(facade)
     captured = capsys.readouterr()
     assert "Slot 'INEXISTANT' is not defined." in captured.out
+
+def test_variations(capsys):
+    cmd = ExistCommand('exist alias "var#one"')
+    assert cmd.command_tokens == ["exist", "alias", '"var#one"']
+    facade = get_facade()
+    cmd.execute(facade)
+    captured = capsys.readouterr()
+    assert "alias: 'var'\nmodifiers:\n\tNone\n2 variations:\n" in captured.out
+    assert "\t- one\n" in captured.out
+    assert "\t- two with space\n" in captured.out
+    assert "Variation 'one' is defined for this alias." in captured.out
+
+    cmd = ExistCommand('exist ~ "var#two with space"')
+    assert cmd.command_tokens == ["exist", "~", '"var#two with space"']
+    facade = get_facade()
+    cmd.execute(facade)
+    captured = capsys.readouterr()
+    assert "alias: 'var'\nmodifiers:\n\tNone\n2 variations:\n" in captured.out
+    assert "\t- two with space\n" in captured.out
+    assert "\t- one\n" in captured.out
+    assert "Variation 'two with space' is defined for this alias." in captured.out
+    
+    cmd = ExistCommand('exist alias "var#no var"')
+    assert cmd.command_tokens == ["exist", "alias", '"var#no var"']
+    facade = get_facade()
+    cmd.execute(facade)
+    captured = capsys.readouterr()
+    assert "alias: 'var'\nmodifiers:\n\tNone\n2 variations:\n" in captured.out
+    assert "Variation 'no var' is not defined for this alias." in captured.out

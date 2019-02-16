@@ -18,11 +18,11 @@ class ExistCommand(CommandStrategy):
                 if variation_name in unit.variations:
                     self.print_wrapper.write("Variation '" + variation_name + \
                                              "' is defined for this " + \
-                                             unit.type)
+                                             unit.type + ".")
                 else:
                     self.print_wrapper.write("Variation '" + variation_name + \
                                              "' is not defined for this " + \
-                                             unit.type)
+                                             unit.type + ".")
         except KeyError:
             self.print_wrapper.write(unit_type.name.capitalize() + " '" +
                                      unit_name + "' is not defined.")
