@@ -45,7 +45,7 @@
 - [ ] refactor units to remove duplicated code: make modifiers act after the string has been generated
 - [ ] add more unit tests
 
-- [ ] *Interactive mode*: add support for variations and argument values in relevant commands
+- [ ] *Interactive mode*: add support for argument values in relevant commands
 - [ ] *Interactive mode*: show list of variation names in command `show`
 
 - [ ] *Docs* clearly state the objective (scope) of the program
@@ -104,6 +104,7 @@
 - [x] add interactive mode (generate what the user asks through a CLI)
 - [x] *Docs* explain '/' syntax for alternative slot value
 - [x] wipe the output directory before writing new files
+- [x] *Interactive mode*: add support for variations in relevant commands
 
 # Bugs
 
