@@ -46,6 +46,7 @@
 - [ ] add more unit tests
 
 - [ ] *Interactive mode*: add support for variations and argument values in relevant commands
+- [ ] *Interactive mode*: show list of variation names in command `show`
 
 - [ ] *Docs* clearly state the objective (scope) of the program
 - [ ] *Docs* add a "contributors" part
