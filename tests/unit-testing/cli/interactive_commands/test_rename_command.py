@@ -42,6 +42,16 @@ def test_err(capsys):
     captured = capsys.readouterr()
     assert "[ERROR]\tCouldn't find a unit named 'a'." in captured.out
 
+    cmd = RenameCommand('rename alias "can you" ""')
+    cmd.execute(facade)
+    captured = capsys.readouterr()
+    assert "[ERROR]\tAn empty name is not a valid alias name." in captured.out
+
+    cmd = RenameCommand('rename alias "can you" "tell me"')
+    cmd.execute(facade)
+    captured = capsys.readouterr()
+    assert "[ERROR]\tAlias 'tell me' is already in use." in captured.out
+
 
 def test_execute():
     cmd = RenameCommand('rename alias "can you" "could you"')
