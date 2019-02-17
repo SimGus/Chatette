@@ -4,7 +4,7 @@
 - [ ] accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax
 - [ ] add some kind of optional version number within template files
 - [ ] add a way to specify a rule on several consecutive lines
-- [ ] add a program argument to use old parser
+- [ ] add a program option to use old parser
 
 - [ ] add an adapter to output raw lists of questions (rather than a JSON file) (without entities?)
 - [ ] add an adapter for *Snips*
@@ -31,7 +31,6 @@
 - [ ] add bulk generation
 - [ ] add program options to change the names of the output files
 
-- [ ] use more list/dict comprehensions (faster than using `append`)
 - [ ] design patterns
 - [ ] improve logging (remove `print`s and use a logging library)
 <!-- - [ ] rewrite docstrings formatted as explained in *PEP257* -->
@@ -106,6 +105,7 @@
 - [x] *Interactive mode*: add support for variations in relevant commands
 - [x] *Interactive mode*: show list of variation names in command `show`
 - [x] check for circular includes
+- [x] use more list/dict comprehensions (faster than using `append`)
 
 # Bugs
 
