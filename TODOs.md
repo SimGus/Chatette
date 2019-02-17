@@ -5,8 +5,11 @@
 - [ ] add some kind of optional version number within template files
 - [ ] add a way to specify a rule on several consecutive lines
 
-- [ ] add an adapter to output raw lists of questions (rather than a JSON file)
+- [ ] add an adapter to output raw lists of questions (rather than a JSON file) (without entities?)
 - [ ] add an adapter for *Snips*
+- [ ] add an adapter for *Google DialogFlow*
+- [ ] add an adapter for *IBM Watson*
+- [ ] add an adapter for *Microsoft LUIS* as described [here](https://github.com/rodrigopivi/Chatito/issues/61)
 - [ ] add default aliases and slots
 
 - [ ] add opposite `randgen` names
@@ -14,22 +17,22 @@
 - [ ] reverse regex
 - [ ] add probabilities of generation for rules in defintions (cf. https://github.com/rodrigopivi/Chatito/issues/48)
 - [ ] add support Chatito's augmentations (cf. https://github.com/rodrigopivi/Chatito/issues/48)
+- [ ] add an annotation for generating typos
 - [ ] add a flag to enable/disable the slot = slot synonym behavior (cf. https://github.com/rodrigopivi/Chatito/issues/50)
 - [ ] add a way to make some generation mandatory in the training set, test set or both (cf. https://github.com/rodrigopivi/Chatito/issues/51)
 - [ ] add custom annotations as *Chatito* does
+- [ ] add support for any sub-rule's modifier for choices
+- [ ] make double quotes an ignored character in annotations
 
 - [ ] add regex to rasa JSON file
 
-- [ ] add a command line argument to specifiy the max number of examples to generate
+- [ ] add a command line option to specifiy the max number of examples to generate
 - [ ] add bulk generation
-- [ ] add interactive mode (generate what the user asks through a CLI)
-- [ ] wipe the output directory before writing new files
+- [ ] add program options to change the names of the output files
 
-- [ ] use more list/dict comprehensions (faster than using `append`)
 - [ ] design patterns
 - [ ] improve logging (remove `print`s and use a logging library)
 <!-- - [ ] rewrite docstrings formatted as explained in *PEP257* -->
-- [ ] check for circular includes
 - [ ] detect and warn about circular references
 - [ ] warn if there are slots within slots
 - [ ] warn if the limit of examples generated was reached
@@ -40,9 +43,15 @@
 - [ ] refactor units to remove duplicated code: make modifiers act after the string has been generated
 - [ ] add more unit tests
 
+- [ ] *Interactive mode*: add support for argument values in relevant commands
+
+- [ ] *Docs* clearly state the objective (scope) of the program
+- [ ] *Docs* add a "contributors" part
 - [ ] *Docs* add a representation of the architecture of the project
 - [ ] *Docs* multilingual
 - [ ] *Docs* specify which version of *Rasa NLU* *chatette* can work with
+- [ ] *Docs* explain that redefining a unit silently appends the rules to the already declared unit (with the same modifiers as the first time)
+- [ ] *Docs* document the differences between *Chatito* and *Chatette*
 
 ## Done
 
@@ -89,17 +98,19 @@
 - [x] add a `--version` program argument
 - [x] use python's built-in `DeprecationWarning` rather (print a warning for deprecations)
 - [x] *Docs* make a wiki rather than a markdown file
+- [x] add interactive mode (generate what the user asks through a CLI)
+- [x] *Docs* explain '/' syntax for alternative slot value
+- [x] wipe the output directory before writing new files
+- [x] *Interactive mode*: add support for variations in relevant commands
+- [x] *Interactive mode*: show list of variation names in command `show`
+- [x] check for circular includes
+- [x] use more list/dict comprehensions (faster than using `append`)
 
 # Bugs
 
 - **BUG**: arguments are not given down when an argument is transmitted as the argument of a token
-- **BUG**: wrong generation when putting an alias inside a word group
-- **BUG**: encoding errors under Windows
-- **BUG**: synonyms are synonyms of themselves (look at simple airport example)
 
 ## To confirm
-
-- **BUG?**: restaurant example doesn't seem to work anymore
 
 ## Fixed bugs
 
@@ -126,12 +137,21 @@
 - **fixed**: if a slot generated a certain string and this string could already be found somewhere before in the example, the first string was wrongly selected as the entity with the Rasa adapter
 - **fixed**: indentation error raised for lines with only spaces
 - **fixed**: when an empty alias definition is used, nothing is generated
+- **fixed**: when using `save` command, variations print several times the same rule
+- **fixed**: when using `save` command, `\$` are saved instead of `$`
+- **fixed**: when using `save` command, choice are appended `?True`
+- **fixed**: choices get a randgen when there is 1 `?` somewhere in their content
+- **fixed**: several `?` in a choice's content crash the program (because of randgen)
+- **fixed**: synonyms are synonyms of themselves (look at simple airport example)
+- **fixed**: restaurant example doesn't seem to work anymore
+- **fixed**: possible to have several times the same example generated
+- **fixed**: encoding errors under Windows
 
 # Ideas
 
-- **IDEA**: maybe add more modifiers to choices?
 
 ## Rejected
 
 - **rejected**: use overrides pip package (no, doesn't work in python 2)
 - **rejected**: make arguments several layers deep? no, it is not useful as you can pass arguments down the references
+- **rejected**: maybe add more modifiers to choices? no, rather merge it into word groups

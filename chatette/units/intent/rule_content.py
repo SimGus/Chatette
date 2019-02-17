@@ -1,6 +1,7 @@
 from random import randint
 
-from chatette.parser_utils import Unit
+from chatette.parsing.parser_utils import UnitType, \
+                                          add_escapement_back_in_unit_ref
 from chatette.units import Example, RuleContent, may_get_leading_space, \
                            may_change_leading_case, randomly_change_case, \
                            with_leading_lower, with_leading_upper
@@ -28,8 +29,9 @@ class IntentRuleContent(RuleContent):
                                                 parser=parser)
         self.casegen_checked = False
 
+
     def can_have_casegen(self):
-        return self.parser.get_definition(self.name, Unit.intent) \
+        return self.parser.get_definition(self.name, UnitType.intent) \
             .can_have_casegen()
 
     def check_casegen(self):
@@ -38,6 +40,16 @@ class IntentRuleContent(RuleContent):
             if not self.can_have_casegen():
                 self.casegen = False
             self.casegen_checked = True
+
+    def get_max_nb_generated_examples(self):
+        nb_possible_ex = self.parser.get_definition(self.name, UnitType.intent) \
+            .get_max_nb_generated_examples(self.variation_name)
+        if self.casegen:
+            nb_possible_ex *= 2
+        if self.randgen is not None:
+            nb_possible_ex += 1
+        return nb_possible_ex
+
 
     def generate_random(self, generated_randgens=None):
         if generated_randgens is None:
@@ -61,7 +73,7 @@ class IntentRuleContent(RuleContent):
                 # Generate this randgen
                 generated_randgens[self.randgen] = True
 
-        generated_example = self.parser.get_definition(self.name, Unit.intent) \
+        generated_example = self.parser.get_definition(self.name, UnitType.intent) \
             .generate_random(self.variation_name, self.arg_value)
 
         if self.casegen:
@@ -78,7 +90,7 @@ class IntentRuleContent(RuleContent):
         if self.randgen is not None:
             generated_examples.append(Example())
 
-        intents = self.parser.get_definition(self.name, Unit.intent) \
+        intents = self.parser.get_definition(self.name, UnitType.intent) \
             .generate_all(self.variation_name, self.arg_value)
 
         generated_examples.extend(intents)
@@ -99,11 +111,24 @@ class IntentRuleContent(RuleContent):
 
         return generated_examples
 
-    def get_max_nb_generated_examples(self):
-        nb_possible_ex = self.parser.get_definition(self.name, Unit.intent) \
-            .get_max_nb_generated_examples(self.variation_name)
+
+    def as_string(self):
+        """
+        Returns the representation of the rule
+        as it would be written in a template file.
+        """
+        result = add_escapement_back_in_unit_ref(self.name)
         if self.casegen:
-            nb_possible_ex *= 2
+            result = '&'+result
+        if self.variation_name is not None:
+            result += '#'+self.variation_name
         if self.randgen is not None:
-            nb_possible_ex += 1
-        return nb_possible_ex
+            result += '?'+str(self.randgen)
+            if self.percentgen != 50:
+                result += '/'+str(self.percentgen)
+        if self.arg_value is not None:
+            result += '$'+self.arg_value
+        result = "%[" + result + ']'
+        if self.leading_space:
+            result = ' '+result
+        return result

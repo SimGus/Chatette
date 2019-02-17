@@ -3,7 +3,7 @@
 
 # TODO shouldn't generate twice the same statement
 
-from chatette.utils import print_DBG
+from chatette.utils import print_DBG, remove_duplicates
 
 
 class Generator(object):
@@ -61,7 +61,8 @@ class Generator(object):
                     synonyms[slot_value] = current_synonyms_dict[slot_value]
                 else:
                     synonyms[slot_value].extend(current_synonyms_dict[slot_value])
-        return synonyms
+                    # TODO this can add duplicates if several slots have the same values => remove duplicates
+        return remove_duplicates(synonyms)
 
 
 if __name__ == "__main__":

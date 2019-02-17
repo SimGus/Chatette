@@ -10,9 +10,13 @@ from chatette.units import Example, may_change_leading_case, \
 
 class TestExample(object):
     def test_repr(self):
-        assert str(Example()) == "<'' []>"
-        assert str(Example("test")) == "<'test' []>"
-        assert str(Example("test", [1])) == "<'test' [1]>"
+        assert Example().__repr__() == "<'' []>"
+        assert Example("test").__repr__() == "<'test' []>"
+        assert Example("test", [1]).__repr__() == "<'test' [1]>"
+    def test_as_str(self):
+        assert str(Example()) == "\n\tEntities: []"
+        assert str(Example("test")) == "test\n\tEntities: []"
+        assert str(Example("test", [1])) == "test\n\tEntities: [1]"
 
 
 class TestMayChangeLeadingCase(object):

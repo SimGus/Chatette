@@ -1,11 +1,9 @@
 import io
 import os
+import shutil
 from abc import ABCMeta, abstractmethod as abstract_method
-# from typing import List, TextIO
 
 from future.utils import with_metaclass
-
-# from chatette.units.intent import IntentExample
 
 
 class Batch(object):
@@ -30,7 +28,6 @@ class Adapter(with_metaclass(ABCMeta, object)):
         self._single_file_output = None  # Set up just before writing
 
     def write(self, output_directory, examples, synonyms):
-    # def write(self, output_directory, examples: List[IntentExample], synonyms): -> None:
         self._single_file_output = (len(examples) <= self._batch_size)
 
         if not os.path.exists(output_directory):
@@ -38,23 +35,12 @@ class Adapter(with_metaclass(ABCMeta, object)):
 
         for batch in self.__generate_batch(examples, synonyms, self._batch_size):
             output_file_path = self.__get_file_name(batch, output_directory)
-            with io.open(output_file_path, 'w', encoding="utf-8") as output_file:
+            with io.open(output_file_path, 'w') as output_file:
                 self._write_batch(output_file, batch)
 
     @abstract_method
     def _get_file_extension(self):
         raise NotImplementedError()
-
-    @abstract_method
-    def _write_batch(self, output_file_handle, batch):
-    # def _write_batch(self, output_file_handle: TextIO, batch: Batch):# -> None:
-        raise NotImplementedError()
-
-    @classmethod
-    def __generate_batch(cls, examples, synonyms, n=1):
-        length = len(examples)
-        for index, ndx in enumerate(range(0, length, n)):
-            yield Batch(index, examples[ndx:min(ndx + n, length)], synonyms)
 
     def __get_file_name(self, batch, output_directory):
         # pylint: disable=bad-continuation
@@ -63,3 +49,20 @@ class Adapter(with_metaclass(ABCMeta, object)):
                                                   self._get_file_extension())
         return os.path.join(output_directory, "output." + str(batch.index) +
                                               "." + self._get_file_extension())
+
+
+    @abstract_method
+    def _write_batch(self, output_file_handle, batch):
+        raise NotImplementedError()
+
+    @classmethod
+    def __generate_batch(cls, examples, synonyms, n=1):
+        length = len(examples)
+        for index, ndx in enumerate(range(0, length, n)):
+            yield Batch(index, examples[ndx:min(ndx + n, length)], synonyms)
+
+    
+    @abstract_method
+    def prepare_example(self, example):
+        """Transforms an example into a str writable to an output file."""
+        raise NotImplementedError()

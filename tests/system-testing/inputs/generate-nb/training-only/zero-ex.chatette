@@ -1,0 +1,11 @@
+%[intent](0)
+    test
+    other test
+
+%[other intent]('train':'0')
+    [test?] test?
+    [yet?] another test
+
+%[last intent](training : 0)
+    {test/another}
+    a third [\??]

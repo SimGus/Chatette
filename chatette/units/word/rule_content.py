@@ -1,4 +1,5 @@
 from chatette.units import Example, RuleContent, may_change_leading_case
+from chatette.parsing.parser_utils import add_escapement_back_in_word
 
 
 class WordRuleContent(RuleContent):
@@ -33,8 +34,13 @@ class WordRuleContent(RuleContent):
                                               percentage_gen=None, parser=None)
         self.word = name
 
+
     def can_have_casegen(self):
         return may_change_leading_case(self.word)
+
+    def get_max_nb_generated_examples(self):
+        return 1
+
 
     def generate_random(self, arg_value=None):
         if self.leading_space:
@@ -48,5 +54,12 @@ class WordRuleContent(RuleContent):
 
         return [Example(self.word)]
 
-    def get_max_nb_generated_examples(self):
-        return 1
+
+    def as_string(self):
+        """
+        Returns the representation of the rule
+        as it would be written in a template file.
+        """
+        if self.leading_space:
+            return ' ' + add_escapement_back_in_word(self.name)
+        return add_escapement_back_in_word(self.name)

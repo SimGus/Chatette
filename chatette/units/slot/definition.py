@@ -12,9 +12,8 @@ class SlotDefinition(UnitDefinition):
     containing all the rules that it could generate.
     """
 
-    def __init__(self, name, rules=[], arg=None, casegen=False):
-        super(SlotDefinition, self).__init__(name, rules=rules, arg=arg,
-                                             casegen=casegen)
+    def __init__(self, name, modifiers, rules=None):
+        super(SlotDefinition, self).__init__(name, modifiers, rules=rules)
         self.type = "slot"
         self.arg_values_encountered = []
 
@@ -52,7 +51,7 @@ class SlotDefinition(UnitDefinition):
             generated_example.text += generated_token.text
             generated_example.entities.extend(generated_token.entities)
 
-        if self.casegen and self.can_have_casegen():
+        if self.modifiers.casegen and self.can_have_casegen():
             generated_example.text = randomly_change_case(generated_example.text)
 
         # Replace `arg` inside the generated sentence
@@ -89,7 +88,7 @@ class SlotDefinition(UnitDefinition):
                 raise SyntaxError("Couldn't find variation '" +
                                   str(variation_name) + "' for slot '" +
                                   str(self.name) + "'")
-        
+
         if not relevant_rules:  # No rules
             if variation_name is None:
                 raise SyntaxError("No rules could be found for "+self.type+" '"+
@@ -118,7 +117,7 @@ class SlotDefinition(UnitDefinition):
                     examples_from_current_rule = tmp_buffer
 
             # Replace `arg` inside generated sentences
-            if arg_value is not None and self.argument_identifier is not None:
+            if arg_value is not None and self.modifiers.argument_name is not None:
                 for ex in examples_from_current_rule:
                     ex.text = self._replace_arg(ex.text, arg_value)
                     for entity in ex.entities:
@@ -128,7 +127,7 @@ class SlotDefinition(UnitDefinition):
                                                             arg_value)
 
             # Apply casegen
-            if self.casegen and self.can_have_casegen():
+            if self.modifiers.casegen and self.can_have_casegen():
                 tmp_examples = []
                 for ex in examples_from_current_rule:
                     (lower_ex, upper_ex) = (deepcopy(ex), deepcopy(ex))
@@ -204,7 +203,7 @@ class SlotDefinition(UnitDefinition):
             else:
                 synonyms[slot_value].extend(current_examples)
 
-        if self.argument_identifier is not None:
+        if self.modifiers.argument_name is not None:
             (unprocessed_synonyms, synonyms) = (synonyms, dict())
             # Manage arguments
             for slot_value in unprocessed_synonyms:
@@ -237,9 +236,9 @@ class SlotDefinition(UnitDefinition):
     def _replace_arg(self, text, arg_value):
         """If needed, replaces the arguments by their value in `text`."""
         # (str, str) -> (str)
-        if arg_value is not None and self.argument_identifier is not None:
+        if arg_value is not None and self.modifiers.argument_name is not None:
             text = self.arg_regex.sub(arg_value, text)
-            text = text.replace("\$", "$")
+            text = text.replace(r"\$", "$")
         return text
 
     def _contains_arg(self, text):
@@ -249,6 +248,24 @@ class SlotDefinition(UnitDefinition):
         @pre: `self.arg_regex` is not `None`
         """
         # (str) -> (bool)
-        return (self.arg_regex.search(text) is not None)
+        return self.arg_regex.search(text) is not None
+
+
+    def _get_template_decl(self, variation=None):
+        return '@' + super(SlotDefinition, self)._get_template_decl(variation)
+    def _get_template_rules(self, variation=None):
+        rules = self.rules
+        if variation is not None:
+            rules = self.variations[variation]
+        rule_templates = []
+        for rule in rules:
+            alt_slot_val = None
+            if isinstance(rule[0], DummySlotValRuleContent):
+                alt_slot_val = rule[0].name
+            rule_templates.append(''.join([sub_rule.as_string()
+                                           for sub_rule in rule]))
+            if alt_slot_val is not None:
+                rule_templates[-1] += " = " + alt_slot_val
+        return rule_templates
 
     # Everything else is in the superclass

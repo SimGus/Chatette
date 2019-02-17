@@ -1,0 +1,30 @@
+// This file contains the templates that were used to
+// make the gif image that is present on the readme file
+// of the repository.
+
+%[&hello](train:3)
+    hello!
+    hi
+    hey ~[guys?]
+
+%[query mood](train:2)
+    how are you ~[guys?]?
+    are you ~[guys?] alright?
+%[query identity](train:2)
+    who are you ~[guys?]?
+    what is your name?
+
+%[&ask identity](train:2)
+    are you @[name]?
+    
+~[guys]
+    all
+    guys
+~[UNUSED]
+    nothing
+
+@[name]
+    John
+    Matt
+    Ringo
+

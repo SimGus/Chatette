@@ -1,0 +1,41 @@
+// This template defines different ways to ask for the location of toilets
+%[&ask_toilet](3)
+    ~[sorry?] ~[tell me] where the {@[toilet#singular] is/@[toilet#plural] are} [please?]?
+
+~[sorry]
+    sorry
+    excuse me
+
+~[tell me]
+    ~[can you?] {tell/show} me
+~[can you]
+    {can/could/would} you
+
+@[toilet#singular]
+    toilet
+    loo
+@[toilet#plural]
+    toilets
+    
+~[lots of rules]
+    rule 0
+    rule 1
+    rule 2
+    rule 3
+    rule 4
+    rule 5
+    rule 6
+    rule 7
+    rule 8
+    rule 9
+    rule 10
+    rule 11
+    rule 12
+    rule 13
+
+~[var#one]
+    one
+~[var#two with space]
+    two
+    2
+    
