@@ -23,6 +23,7 @@
 - [ ] add a way to make some generation mandatory in the training set, test set or both (cf. https://github.com/rodrigopivi/Chatito/issues/51)
 - [ ] add custom annotations as *Chatito* does
 - [ ] add support for any sub-rule's modifier for choices
+- [ ] make double quotes an ignored character in annotations
 
 - [ ] add regex to rasa JSON file
 
