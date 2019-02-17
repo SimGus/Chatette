@@ -201,12 +201,6 @@ Run pytest:
 
 ```tox -e pytest```
 
-You can also install the module as editable using `pip`:
-```sh
-pip install -e <path-to-cloned-repo>
-```
-You can then run *Chatette* as if you installed it from PyPI.
-
 ## Credits
 ### Author and maintainer
 - [SimGus](https://github.com/SimGus)
