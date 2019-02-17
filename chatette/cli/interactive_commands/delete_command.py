@@ -14,15 +14,15 @@ class DeleteCommand(CommandStrategy):
         self._units_to_delete = []
 
     def execute_on_unit(self, facade, unit_type, unit_name, variation_name=None):
-        try:
-            self._units_to_delete.append((unit_type, unit_name, variation_name))
-            self.print_wrapper.write(unit_type.name.capitalize() + " '" +
-                                    unit_name + "' was successfully deleted.")
-        except KeyError:
-            self.print_wrapper.write(unit_type.name.capitalize() + " '" +
-                                    unit_name + "' was not defined.")
+        self._units_to_delete.append((unit_type, unit_name, variation_name))
+        self.print_wrapper.write(unit_type.name.capitalize() + " '" +
+                                unit_name + "' was successfully deleted.")
 
     def finish_execution(self, facade):
         for (unit_type, unit_name, variation_name) in self._units_to_delete:
-            facade.parser.delete(unit_type, unit_name, variation_name)
+            try:
+                facade.parser.delete(unit_type, unit_name, variation_name)
+            except KeyError:
+                self.print_wrapper.write(unit_type.name.capitalize() + " '" +
+                                        unit_name + "' was not defined.")
         self._units_to_delete = []
