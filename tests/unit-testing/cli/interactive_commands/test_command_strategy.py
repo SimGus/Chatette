@@ -214,7 +214,7 @@ class TestExecute(object):
     # NOTE: for coverage
     def test(self):
         with pytest.raises(NotImplementedError):
-            CommandStrategy("this is a command").execute(None)
+            CommandStrategy("NOTHING alias a, b, c").execute(None)
 
 
 class TestExecuteOnUnit(object):
