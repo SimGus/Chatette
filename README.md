@@ -50,7 +50,7 @@ The *DSL* used is a superset of the excellent project [*Chatito*](https://github
 An interactive mode is available as well (mostly for testing purposes):
 
 <p align="center">
-    <img src="https://raw.githubusercontent.com/SimGus/Chatette/master/public/images/interactive-mode-short.gif" alt="Interactive mode">
+    <img src="https://github.com/SimGus/Chatette/blob/master/public/images/interactive-mode-short.gif" alt="Interactive mode">
 </p>
 <!--TODO change the url to master branch once it is out-->
 
