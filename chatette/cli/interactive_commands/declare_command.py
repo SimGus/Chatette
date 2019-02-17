@@ -22,7 +22,7 @@ class DeclareCommand(CommandStrategy):
         """
         if len(self.command_tokens) < 3:
             self.print_wrapper.error_log("Missing some arguments\nUsage: " +
-                                         'rule "<rule>" [<number-of-examples]')
+                                         self.usage_str)
             return
 
         unit_type = CommandStrategy.get_unit_type_from_str(self.command_tokens[1])
