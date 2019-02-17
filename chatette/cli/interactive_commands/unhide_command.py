@@ -15,7 +15,7 @@ class UnhideCommand(CommandStrategy):
         Implements the command `unhide` which restores a unit definition that
         was hidden from the parser of `facade`.
         """
-        if len(self.command_tokens) > 3:
+        if len(self.command_tokens) < 3:
             self.print_wrapper.error_log("Missing some arguments\nUsage: " +
                                          'unhide <unit-type> "<unit-name>"')
             return
@@ -62,7 +62,7 @@ class UnhideCommand(CommandStrategy):
             except ValueError:
                 self.print_wrapper.error_log(unit_type.name.capitalize() + " '" +
                                              unit_name + "' is already defined " +
-                                             "the parser.")
+                                             "in the parser.")
         else:
             unit = None
             try:

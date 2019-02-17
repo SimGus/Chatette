@@ -27,6 +27,12 @@ def test_err(capsys):
     captured = capsys.readouterr()
     assert "Alias 'inexistant' was not defined." in captured.out
 
+    cmd = UnhideCommand("unhide")
+    cmd.execute(facade)
+    captured = capsys.readouterr()
+    assert "[ERROR]\tMissing some arguments\n\tUsage: " + \
+           'unhide <unit-type> "<unit-name>"' in captured.out
+
     cmd = UnhideCommand('unhide alias "inexistant"')
     cmd.execute(facade)
     captured = capsys.readouterr()
@@ -72,6 +78,27 @@ def test_execute(capsys):
     captured = capsys.readouterr()
     assert "Alias 'tell me' was successfully restored."
 
+    cmd = HideCommand("hide ~ /./")
+    cmd.execute(facade)
+    _ = capsys.readouterr()
+    cmd = UnhideCommand("unhide ~ /./")
+    cmd.execute(facade)
+    captured = capsys.readouterr()
+    assert "Alias 'tell me' was successfully restored." in captured.out
+    assert "Alias 'can you' was successfully restored." in captured.out
+
+    # Hide a unit and try to restore it twice
+    cmd = HideCommand('hide ~ "can you"')
+    facade = new_facade()
+    cmd.execute(facade)
+
+    cmd = UnhideCommand('unhide alias "can you"')
+    other_facade = new_facade()
+    cmd.execute(other_facade)
+
+    captured = capsys.readouterr()
+    assert "Alias 'can you' is already defined in the parser." in captured.out
+
 
 def test_variations(capsys):
     cmd = HideCommand('hide alias "var#one"')
@@ -104,6 +131,11 @@ def test_variations(capsys):
     captured = capsys.readouterr()
     assert "Couldn't find variation 'nothing' in alias 'var'." in captured.out
 
+    cmd = UnhideCommand('unhide ~ "nothing#var"')
+    cmd.execute(facade)
+    captured = capsys.readouterr()
+    assert "Alias 'nothing' is not defined." in captured.out
+
     # Hide a variation and try to restore it twice
     cmd = HideCommand('hide ~ "var#one"')
     facade = new_facade()
@@ -121,3 +153,9 @@ def test_variations(capsys):
     captured = capsys.readouterr()
     assert "[ERROR]\tVariation 'one' is " + \
            "already defined for alias 'var'." in captured.out
+
+
+def test_abstract_methods():
+    cmd = UnhideCommand('unhide ~ "var"')
+    with pytest.raises(NotImplementedError):
+        cmd.finish_execution(None)
