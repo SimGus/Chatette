@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Check for circular includes: an exception will be raised with relevant information about which file was starting to get parsed twice rather than the old "too many recursion" error
 - Interactive mode, executable using `-i` or `--interactive` program argument, with commands that give information or change the state of the parser after it read template files
 - Add program option `-I` or `--interactive-commands-file` to feed the script a file of commands that will be directly executed
 

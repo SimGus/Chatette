@@ -13,8 +13,9 @@ class Tokenizer(object):
     def __init__(self, master_filename):
         self.master_file_paths = [master_filename]
         self.master_file_dir = os.path.dirname(master_filename)
+        
         self.current_file = LineCountFileWrapper(master_filename)
-        self.opened_files = []
+        self._opened_files = []
 
         self._last_read_line = None
 
@@ -23,7 +24,7 @@ class Tokenizer(object):
         Change the master file and open it.
         If other files are still open, raise an exception.
         """
-        if len(self.opened_files) > 0:
+        if len(self._opened_files) > 0:
             raise ValueError("Tried to change master file during parsing of " +
                              "other files")
         self.master_file_paths.append(master_filename)
@@ -35,13 +36,20 @@ class Tokenizer(object):
         Stores the current file for future use and opens `filename`.
         `filename` is given relatively to the master file.
         """
-        if self.current_file is not None:
-            self.opened_files.append(self.current_file)
         filepath = os.path.join(self.master_file_dir, filename)
+        opened_filepaths = [f.name for f in self._opened_files]
+        if filepath in opened_filepaths:
+            raise ValueError("Tried to parse file '" + filepath + "' several " + \
+                             "times (last time when parsing '" + \
+                             self.current_file.name + \
+                             "'). There seems to be circular includes in " + \
+                             "template files.")
+        if self.current_file is not None:
+            self._opened_files.append(self.current_file)
         self.current_file = LineCountFileWrapper(filepath)
 
     def close_files(self):
-        for f in self.opened_files:
+        for f in self._opened_files:
             if not f.closed:
                 f.close()
         if self.current_file is not None and not self.current_file.closed:
@@ -50,8 +58,8 @@ class Tokenizer(object):
     def close_current_file(self):
         if self.current_file is not None:
             self.current_file.close()
-        if len(self.opened_files) > 0:
-            self.current_file = self.opened_files.pop()
+        if len(self._opened_files) > 0:
+            self.current_file = self._opened_files.pop()
         else:
             self.current_file = None
 

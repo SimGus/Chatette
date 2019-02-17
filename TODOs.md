@@ -34,7 +34,6 @@
 - [ ] design patterns
 - [ ] improve logging (remove `print`s and use a logging library)
 <!-- - [ ] rewrite docstrings formatted as explained in *PEP257* -->
-- [ ] check for circular includes
 - [ ] detect and warn about circular references
 - [ ] warn if there are slots within slots
 - [ ] warn if the limit of examples generated was reached
@@ -105,6 +104,7 @@
 - [x] wipe the output directory before writing new files
 - [x] *Interactive mode*: add support for variations in relevant commands
 - [x] *Interactive mode*: show list of variation names in command `show`
+- [x] check for circular includes
 
 # Bugs
 
