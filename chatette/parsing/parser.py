@@ -87,6 +87,9 @@ class Parser(object):
                              "(expected alias, slot or intent)")
 
         if old_name in relevant_dict:
+            if new_name in relevant_dict:
+                raise ValueError("Tried to rename a definition to a name that " +
+                                 "was already in use ('" + new_name + "').")
             relevant_dict[new_name] = relevant_dict[old_name]
             del relevant_dict[old_name]
             relevant_dict[new_name].name = new_name

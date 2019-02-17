@@ -41,6 +41,10 @@ class RenameCommand(CommandStrategy):
             except KeyError:
                 self.print_wrapper.error_log("Couldn't find a unit named '" +
                                              str(old_name) + "'.")
+            except ValueError:
+                self.print_wrapper.error_log(unit_type.name.capitalize() + \
+                                             " '" + new_name + "' is already " + \
+                                             "in use.")
 
 
     # Override abstract methods
