@@ -28,6 +28,11 @@ class RenameCommand(CommandStrategy):
         else:
             old_name = CommandStrategy.remove_quotes(self.command_tokens[2])
             new_name = CommandStrategy.remove_quotes(self.command_tokens[3])
+            if new_name == "":
+                self.print_wrapper.error_log("An empty name is not a valid " + \
+                                             unit_type.name + " name.")
+                return
+
             try:
                 facade.parser.rename_unit(unit_type, old_name, new_name)
                 self.print_wrapper.write(unit_type.name.capitalize() + " '" +
