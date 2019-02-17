@@ -15,7 +15,7 @@ class RenameCommand(CommandStrategy):
         into something else. Displays an error if the unit wasn't found.
         """
         if len(self.command_tokens) < 4:
-            self.print_wrapper.error_log("Missing some arguments -- usage:\n" +
+            self.print_wrapper.error_log("Missing some arguments\nUsage: " +
                                          'rename <unit-type> "<old-name>" ' +
                                          '"<new-name>"')
             return
