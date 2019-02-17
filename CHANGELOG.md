@@ -26,7 +26,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Number of training and testing examples for intent not correctly parsed in some cases
 - Too strict checks on the syntax of choices
 - Possible infinite loop during generation (with a lot of bad luck)
-<!--- Sometimes, duplicate examples when asking for less than half of all possible examples-->
 - (Invisible) warnings because of invalid control sequences in the code and the tests
 
 ## [1.3.2] - 2019-01-21
