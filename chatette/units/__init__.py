@@ -43,7 +43,7 @@ class Example(object):
         return self.text + '\n\tEntities: ' + str(self.entities)
 
     def __hash__(self):
-        return hash(self.text+str(self.entities))  # NOTE: those hashes seem inconsistent when testing whether an example was already generated (intent/definition.py:80)
+        return hash(self.text+str(self.entities))
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
@@ -121,7 +121,7 @@ class UnitDefinition(object):
         modifiers = UnitDeclarationModifiersRepr(case_generation=casegen,
                                                  argument_name=arg)
         return cls(name, modifiers, rules)
-    
+
     def set_arg(self, argument_identifier):
         self.argument_identifier = argument_identifier
         if argument_identifier is not None:
@@ -286,10 +286,10 @@ class UnitDefinition(object):
         if not relevant_rules:  # No rules
             if variation_name is None:
                 raise SyntaxError("No rules could be found for "+self.type+" '"+
-                                self.name+"'")
+                                  self.name+"'")
             else:
                 raise SyntaxError("No rules could be found for "+self.type+" '"+
-                                self.name+"' (variation: '"+variation_name+"'")
+                                  self.name+"' (variation: '"+variation_name+"'")
 
         for rule in relevant_rules:
             examples_from_current_rule = []
@@ -351,7 +351,7 @@ class UnitDefinition(object):
                 for content in rule:
                     content.print_DBG(3)
         print("")
-    
+
     def short_desc_str(self):
         """
         Returns a str representing a short description of this unit description.
@@ -389,7 +389,7 @@ class UnitDefinition(object):
             current_decl = self._get_template_decl(variation_name) + '\n'
             rules_str = '\n'.join(
                             ['\t' + e
-                            for e in self._get_template_rules(variation_name)]
+                             for e in self._get_template_rules(variation_name)]
                         ) + '\n'
             if not rules_str.isspace():
                 result += current_decl + rules_str
@@ -408,7 +408,7 @@ class UnitDefinition(object):
         if variation is not None:
             if variation not in self.variations:
                 raise ValueError("Tried to get template for a unit declaration " +
-                                "with an invalid variation name")
+                                 "with an invalid variation name")
             result += '#' + variation
         if self.argument_identifier is not None:
             result += '$' + self.argument_identifier

@@ -67,11 +67,11 @@ class Facade(object):
         """
         self.run_parsing()
         self.run_generation()
-    
+
     def run_parsing(self):
         """Executes the parsing alone."""
         self.parser.parse()
-    
+
     def parse_file(self, filepath):
         """
         Parses the new template file at `filepath` with the current parser.
@@ -105,7 +105,7 @@ class Facade(object):
             adapter.write(os.path.join(self.output_dir_path, "test"),
                           test_examples, synonyms)
         print_DBG("Generation over")
-    
+
 
     def get_stats_as_str(self):
         if self.parser is None:

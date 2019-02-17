@@ -46,11 +46,11 @@ class GenerateCommand(CommandStrategy):
             try:
                 self.nb_examples = int(self.command_tokens[-1])
             except ValueError:
-                    self.print_wrapper.error_log("The number of examples to be " +
-                                                "generated is invalid: it must " +
-                                                "be an integer (no other " +
-                                                "characters allowed).")
-                    return
+                self.print_wrapper.error_log("The number of examples to be " +
+                                             "generated is invalid: it must " +
+                                             "be an integer (no other " +
+                                             "characters allowed).")
+                return
 
         unit_type = CommandStrategy.get_unit_type_from_str(self.command_tokens[2])
         if unit_type is None:
@@ -101,5 +101,5 @@ class GenerateCommand(CommandStrategy):
 
 
     # Override abstract methods
-    def execute_on_unit(self, facade, unit_type, unit_name):
+    def execute_on_unit(self, facade, unit_type, unit_name, variation_name=None):
         raise NotImplementedError()
