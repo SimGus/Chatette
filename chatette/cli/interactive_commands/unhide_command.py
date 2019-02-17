@@ -21,6 +21,11 @@ class UnhideCommand(CommandStrategy):
             return
 
         unit_type = CommandStrategy.get_unit_type_from_str(self.command_tokens[1])
+        if unit_type is None:
+            self.print_wrapper.error_log("Unknown unit type: '" +
+                                         str(self.command_tokens[1]) + "'.")
+            return
+
         unit_regex = self.get_regex_name(self.command_tokens[2])
         if unit_regex is None:
             try:
@@ -52,7 +57,7 @@ class UnhideCommand(CommandStrategy):
                                         unit_name + "' was successfully restored.")
             except KeyError:
                 self.print_wrapper.error_log(unit_type.name.capitalize() + " '" +
-                                             unit_name + "' was not " + 
+                                             unit_name + "' was not " +
                                              "previously hidden.")
             except ValueError:
                 self.print_wrapper.error_log(unit_type.name.capitalize() + " '" +

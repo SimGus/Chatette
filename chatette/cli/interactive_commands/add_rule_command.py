@@ -18,6 +18,11 @@ class AddRuleCommand(CommandStrategy):
             return
 
         unit_type = CommandStrategy.get_unit_type_from_str(self.command_tokens[1])
+        if unit_type is None:
+            self.print_wrapper.error_log("Unknown unit type: '" +
+                                         str(self.command_tokens[1]) + "'.")
+            return
+
         unit_regex = self.get_regex_name(self.command_tokens[2])
         rule_str = CommandStrategy.remove_quotes(self.command_tokens[3])
         if unit_regex is None:

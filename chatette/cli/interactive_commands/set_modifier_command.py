@@ -21,6 +21,11 @@ class SetModifierCommand(CommandStrategy):
             return
 
         unit_type = CommandStrategy.get_unit_type_from_str(self.command_tokens[1])
+        if unit_type is None:
+            self.print_wrapper.error_log("Unknown unit type: '" +
+                                         str(self.command_tokens[1]) + "'.")
+            return
+
         unit_regex = self.get_regex_name(self.command_tokens[2])
 
         modifier_name = self.command_tokens[3]

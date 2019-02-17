@@ -36,7 +36,11 @@ class GenerateCommand(CommandStrategy):
             return
 
         adapter_str = self.command_tokens[1]
-        adapter = create_adapter(adapter_str)
+        try:
+            adapter = create_adapter(adapter_str)
+        except ValueError:
+            self.print_wrapper.error_log("Unknown adapter '" + adapter_str + \
+                                         "'.")
 
         if len(self.command_tokens) == 5:
             try:
@@ -49,6 +53,11 @@ class GenerateCommand(CommandStrategy):
                     return
 
         unit_type = CommandStrategy.get_unit_type_from_str(self.command_tokens[2])
+        if unit_type is None:
+            self.print_wrapper.error_log("Unknown unit type: '" +
+                                         str(self.command_tokens[2]) + "'.")
+            return
+
         unit_regex = self.get_regex_name(self.command_tokens[3])
         if unit_regex is None:
             try:
@@ -86,7 +95,7 @@ class GenerateCommand(CommandStrategy):
                 ex.name = "INTERACTIVE"
             self.print_wrapper.write(adapter.prepare_example(ex))
         self.print_wrapper.write("")
-    
+
     def finish_execution(self, facade):
         self.nb_examples = None
 
