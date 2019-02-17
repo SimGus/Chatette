@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Check for circular includes: an exception will be raised with relevant information about which file was starting to get parsed twice rather than the old "too many recursion" error
-- Interactive mode, executable using `-i` or `--interactive` program argument, with commands that give information or change the state of the parser after it read template files
+- Interactive mode, executable using `-i` or `--interactive` program option, with commands that give information or change the state of the parser after it read template files
 - Add program option `-I` or `--interactive-commands-file` to feed the script a file of commands that will be directly executed
 
 ### Changed
@@ -39,7 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.3.1] - 2019-01-10
 ### Added
-- Program argument `-v` or `--version` to display the version number of the module (a `__version__` attribute of the module itself is also now available)
+- Program option `-v` or `--version` to display the version number of the module (a `__version__` attribute of the module itself is also now available)
 
 ### Fixed
 - Missing requirements when installing the package from [PyPI](https://pypi.org/project/chatette)
@@ -50,7 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Code of conduct and instructions for contributing
 - Unit tests for some parts of the projects (automatically run by Travis CI)
-- New adapter that outputs `.jsonl` files (choosing which adapter to use is done with the program argument `-a` or `--adapter`)
+- New adapter that outputs `.jsonl` files (choosing which adapter to use is done with the program option `-a` or `--adapter`)
 
 ### Changed
 - The number of examples to generate for training and testing does not need to be surrounded with single quotes anymore (but still can): `'training':'5'` is accepted as well as `test: 3`
@@ -67,7 +67,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.2.3] - 2018-11-22
 ### Added
-- Program argument (`-l` or `--local`) to make the working directory be the directory containing the template file
+- Command line option (`-l` or `--local`) to make the working directory be the directory containing the template file
 
 ### Changed
 - Working directory to be the directory from which the command is executed
@@ -79,7 +79,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.2.2] - 2018-11-04
 ### Added
-- Program argument (`-s` or `--seed`) that is used as the seed of the random number generator
+- Program option (`-s` or `--seed`) that is used as the seed of the random number generator
 
 ### Fixed
 - Restaurant example which still had tests within it
