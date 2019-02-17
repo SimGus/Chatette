@@ -76,7 +76,7 @@ class UnhideCommand(CommandStrategy):
                     HideCommand.stored_variations[unit_type.name][unit_name][variation_name]
                 if variation_name in unit.variations:
                     self.print_wrapper.error_log("Variation '" + variation_name + \
-                                                 " is already defined for " + \
+                                                 "' is already defined for " + \
                                                  unit_type.name + " '" + \
                                                  unit_name + "'.")
                     return
