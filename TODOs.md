@@ -109,6 +109,7 @@
 # Bugs
 
 - **BUG**: arguments are not given down when an argument is transmitted as the argument of a token
+- **BUG**: random generation modifiers' names are not taken into account when generating all examples
 
 ## To confirm
 
