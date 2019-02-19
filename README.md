@@ -186,19 +186,17 @@ Note that *Chatette* is named after *Chatito*, as *-ette* in French could be tra
 
 ## Development
 For developers, you can clone the [repo](https://github.com/SimGus/Chatette) and install the development requirements:
-
 ```pip install -r requirements/develop.txt```
+Then, install the module as editable:
+```pip install -e <path-to-chatette-module>```
 
 Run pylint:
-
 ```tox -e pylint```
 
 Run pycodestyle:
-
 ```tox -e pycodestyle```
 
 Run pytest:
-
 ```tox -e pytest```
 
 ## Credits
