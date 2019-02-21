@@ -24,8 +24,8 @@ class Facade(object):
     Implements the design patterns facade and singleton.
     """
     instance = None
-    def __init__(self, master_file_path, output_dir_path, adapter_str, local,
-                 seed):
+    def __init__(self, master_file_path, output_dir_path, adapter_str="rasa",
+                 local=False, seed=None):
         if local:
             self.output_dir_path = os.path.dirname(master_file_path)
         else:
