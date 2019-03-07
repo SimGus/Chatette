@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Make `adapter_str`, `local` and `seed` arguments of the contructor of the facade optional arguments
 
+### Fixed
+- Template files were included with respect to the initial master file rather than the file that was currently being read
+
 ## [1.4.0] - 2019-02-17
 ### Added
 - Check for circular includes: an exception will be raised with relevant information about which file was starting to get parsed twice rather than the old "too many recursion" error

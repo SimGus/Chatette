@@ -36,7 +36,7 @@ class Tokenizer(object):
         Stores the current file for future use and opens `filename`.
         `filename` is given relatively to the master file.
         """
-        filepath = os.path.join(self.master_file_dir, filename)
+        filepath = os.path.join(os.path.dirname(self.current_file.name), filename)  # TODO this fix might be improved thanks to master_file_paths
         opened_filepaths = [f.name for f in self._opened_files]
         if filepath in opened_filepaths:
             raise ValueError("Tried to parse file '" + filepath + "' several " + \
