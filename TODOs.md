@@ -23,6 +23,7 @@
 - [ ] add custom annotations as *Chatito* does
 - [ ] add support for any sub-rule's modifier for choices
 - [ ] make double quotes an ignored character in annotations
+- [ ] accept anything inside an arg, especially unit references
 
 - [ ] add regex to rasa JSON file
 
