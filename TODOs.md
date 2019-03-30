@@ -24,12 +24,14 @@
 - [ ] add support for any sub-rule's modifier for choices
 - [ ] make double quotes an ignored character in annotations
 - [ ] accept anything inside an arg, especially unit references
+- [ ] add percentages of all possible examples for training and test (rather than simple numbers)
 
 - [ ] add regex to rasa JSON file
 
 - [ ] add a command line option to specifiy the max number of examples to generate
 - [ ] add bulk generation
 - [ ] add program options to change the names of the output files
+- [ ] add a command line option to run in case insensitive
 
 - [ ] design patterns
 - [ ] improve logging (remove `print`s and use a logging library)
