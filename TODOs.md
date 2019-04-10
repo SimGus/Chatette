@@ -5,6 +5,7 @@
 - [ ] add some kind of optional version number within template files
 - [ ] add a way to specify a rule on several consecutive lines
 - [ ] add a way to give several different names to units
+- [ ] add a way to force a rule at least once in the training/testing set
 
 - [ ] add an adapter to output raw lists of questions (rather than a JSON file) (without entities?)
 - [ ] add an adapter for *Snips*
