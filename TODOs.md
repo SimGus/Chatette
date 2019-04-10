@@ -55,6 +55,7 @@
 - [ ] *Docs* specify which version of *Rasa NLU* *chatette* can work with
 - [ ] *Docs* explain that redefining a unit silently appends the rules to the already declared unit (with the same modifiers as the first time)
 - [ ] *Docs* document the differences between *Chatito* and *Chatette*
+- [ ] *Docs* make docs available from `help()` function
 
 ## Done
 
