@@ -42,6 +42,7 @@
 - [ ] warn if a unit reference is used within its own declaration
 - [ ] warn if an argument has no value
 - [ ] check that intent definitions don't overlap
+- [ ] use multithreading or multiprocessing to optimize the execution time (+ program option to set that on/off)
 
 - [ ] complete refactor of the code: the code is almost unmaintainable
 - [ ] refactor units to remove duplicated code: make modifiers act after the string has been generated
@@ -57,6 +58,8 @@
 - [ ] *Docs* explain that redefining a unit silently appends the rules to the already declared unit (with the same modifiers as the first time)
 - [ ] *Docs* document the differences between *Chatito* and *Chatette*
 - [ ] *Docs* make docs available from `help()` function
+
+- [ ] add sections in TODO list to make it more readable
 
 ## Done
 
