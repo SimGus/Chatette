@@ -8,6 +8,7 @@
 - [ ] add a way to force a rule at least once in the training/testing set
 
 - [ ] add an adapter to output raw lists of questions (rather than a JSON file) (without entities?)
+- [ ] add an adapter for *Rasa markdown*
 - [ ] add an adapter for *Snips*
 - [ ] add an adapter for *Google DialogFlow*
 - [ ] add an adapter for *IBM Watson*
