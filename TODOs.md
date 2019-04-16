@@ -61,6 +61,7 @@
 - [ ] *Docs* make docs available from `help()` function
 
 - [ ] add sections in TODO list to make it more readable
+- [ ] make an installer to use the script directly from the command line (at least in *nix systems)
 
 ## Done
 
