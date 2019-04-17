@@ -35,6 +35,7 @@
 - [ ] add program options to change the names of the output files
 
 - [ ] design patterns
+- [ ] make the division between processing and lookup more important in parser
 - [ ] improve logging (remove `print`s and use a logging library)
 <!-- - [ ] rewrite docstrings formatted as explained in *PEP257* -->
 - [ ] detect and warn about circular references
