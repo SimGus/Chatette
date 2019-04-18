@@ -50,7 +50,8 @@
 - [ ] refactor units to remove duplicated code: make modifiers act after the string has been generated
 - [ ] add more unit tests
 
-- [ ] *Interactive mode*: add support for argument values in relevant commands
+- [ ] *Interactive mode* add support for argument values in relevant commands
+- [ ] *Interactive mode* use `tabulate` to make tables and make command output more readable
 
 - [ ] *Docs* clearly state the objective (scope) of the program
 - [ ] *Docs* add a "contributors" part
