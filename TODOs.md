@@ -123,6 +123,7 @@
 - **BUG**: arguments are not given down when an argument is transmitted as the argument of a token
 - **BUG**: random generation modifiers' names are not taken into account when generating all examples
 - **BUG**: a leading space is generated even though a unit has a random gen modifier and the unit wasn't generated
+- **BUG**: it seems that `generate_all` of choice is called before the generation starts
 
 ## To confirm
 
