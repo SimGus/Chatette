@@ -81,7 +81,7 @@ class ChoiceRuleContent(RuleContent):
 
         if self.casegen:
             nb_possible_ex *= 2
-        if self.randgen is not None:
+        if self.randgen:
             nb_possible_ex += 1
         return nb_possible_ex
 

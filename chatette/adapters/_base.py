@@ -26,6 +26,11 @@ class Adapter(with_metaclass(ABCMeta, object)):
         super(Adapter, self).__init__()
         self._batch_size = batch_size
         self._single_file_output = None  # Set up just before writing
+#        if base_filepath is not None:
+#            with open(base_filepath, 'r') as base_file:
+#                self.base_file_contents = ''.join(base_file.readlines())
+#        else:
+#            self.base_file_contents = None
 
     def write(self, output_directory, examples, synonyms):
         self._single_file_output = (len(examples) <= self._batch_size)
@@ -66,3 +71,14 @@ class Adapter(with_metaclass(ABCMeta, object)):
     def prepare_example(self, example):
         """Transforms an example into a str writable to an output file."""
         raise NotImplementedError()
+
+#    @abstract_method
+#    def _get_base_to_extend(self):
+#        """
+#        Returns a representation of the base to extend when writing a file.
+#        This base is taken from a file given through command line options.
+#        The type of object returned and what to do with it depends on the
+#        concrete implementation of the adapter.
+#        Some adapters shouldn't accept an extendable base.
+#        """
+#        raise NotImplementedError()

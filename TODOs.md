@@ -4,8 +4,11 @@
 - [ ] accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax
 - [ ] add some kind of optional version number within template files
 - [ ] add a way to specify a rule on several consecutive lines
+- [ ] add a way to give several different names to units
+- [ ] add a way to force a rule at least once in the training/testing set
 
 - [ ] add an adapter to output raw lists of questions (rather than a JSON file) (without entities?)
+- [ ] add an adapter for *Rasa markdown*
 - [ ] add an adapter for *Snips*
 - [ ] add an adapter for *Google DialogFlow*
 - [ ] add an adapter for *IBM Watson*
@@ -34,6 +37,7 @@
 - [ ] add a command line option to run in case insensitive
 
 - [ ] design patterns
+- [ ] make the division between processing and lookup more important in parser
 - [ ] improve logging (remove `print`s and use a logging library)
 <!-- - [ ] rewrite docstrings formatted as explained in *PEP257* -->
 - [ ] detect and warn about circular references
@@ -43,12 +47,14 @@
 - [ ] warn if an argument has no value
 - [ ] check that intent definitions don't overlap
 - [ ] cache the possible number of generatable examples for each unit
+- [ ] use multithreading or multiprocessing to optimize the execution time (+ program option to set that on/off)
 
 - [ ] complete refactor of the code: the code is almost unmaintainable
 - [ ] refactor units to remove duplicated code: make modifiers act after the string has been generated
 - [ ] add more unit tests
 
-- [ ] *Interactive mode*: add support for argument values in relevant commands
+- [ ] *Interactive mode* add support for argument values in relevant commands
+- [ ] *Interactive mode* use `tabulate` to make tables and make command output more readable
 
 - [ ] *Docs* clearly state the objective (scope) of the program
 - [ ] *Docs* add a "contributors" part
@@ -57,6 +63,10 @@
 - [ ] *Docs* specify which version of *Rasa NLU* *chatette* can work with
 - [ ] *Docs* explain that redefining a unit silently appends the rules to the already declared unit (with the same modifiers as the first time)
 - [ ] *Docs* document the differences between *Chatito* and *Chatette*
+- [ ] *Docs* make docs available from `help()` function
+
+- [ ] add sections in TODO list to make it more readable
+- [ ] make an installer to use the script directly from the command line (at least in *nix systems)
 
 ## Done
 
@@ -116,6 +126,7 @@
 - **BUG**: arguments are not given down when an argument is transmitted as the argument of a token
 - **BUG**: random generation modifiers' names are not taken into account when generating all examples
 - **BUG**: a leading space is generated even though a unit has a random gen modifier and the unit wasn't generated
+- **BUG**: it seems that `generate_all` of choice is called before the generation starts
 
 ## To confirm
 

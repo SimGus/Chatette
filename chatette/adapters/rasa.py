@@ -15,8 +15,8 @@ class RasaAdapter(Adapter):
 
     def prepare_example(self, example):
         def entity_to_rasa(entity):
-            entity["text"] = entity["text"].strip()
             first_index = self.__find_entity(example.text, entity["text"])
+            entity["text"] = entity["text"].rstrip()
             # NOTE: This always finds something
             # Remove the entity marker of this entity
             # (works unless entities are not recorded in order)
@@ -70,7 +70,7 @@ class RasaAdapter(Adapter):
         Finds the entity `entity_str` in `text`
         ignoring the case of the first non-space.
         """
-        index = text.find(ENTITY_MARKER+entity_str)
+        index = text.find((ENTITY_MARKER+entity_str).rstrip())
         if index == -1:
             return text.lower().find(entity_str.lower())
         return index
