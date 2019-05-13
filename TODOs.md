@@ -9,17 +9,17 @@
 
 - [ ] add an adapter to output raw lists of questions (rather than a JSON file) (without entities?)
 - [ ] add an adapter for *Rasa markdown*
-- [ ] add an adapter for *Snips*
+- [ ] add an adapter for *Snips* (cf. Chatito)
 - [ ] add an adapter for *Google DialogFlow*
 - [ ] add an adapter for *IBM Watson*
-- [ ] add an adapter for *Microsoft LUIS* as described [here](https://github.com/rodrigopivi/Chatito/issues/61)
+- [ ] add an adapter for *Microsoft LUIS* as described [here](https://github.com/rodrigopivi/Chatito/issues/61) (cf. Chatito)
 - [ ] add default aliases and slots
 
 - [ ] add opposite `randgen` names
 - [ ] support several arguments in one rule
 - [ ] reverse regex
-- [ ] add probabilities of generation for rules in defintions (cf. https://github.com/rodrigopivi/Chatito/issues/48)
-- [ ] add support Chatito's augmentations (cf. https://github.com/rodrigopivi/Chatito/issues/48)
+- [ ] add probabilities of generation for rules in defintions (cf. https://github.com/rodrigopivi/Chatito/issues/48 and new implementation) 
+- [ ] add support for Chatito's augmentations (cf. https://github.com/rodrigopivi/Chatito/issues/48)
 - [ ] add an annotation for generating typos
 - [ ] add a flag to enable/disable the slot = slot synonym behavior (cf. https://github.com/rodrigopivi/Chatito/issues/50)
 - [ ] add a way to make some generation mandatory in the training set, test set or both (cf. https://github.com/rodrigopivi/Chatito/issues/51)
@@ -129,6 +129,7 @@
 - **BUG**: it seems that `generate_all` of choice is called before the generation starts
 
 ## To confirm
+- Some intents don't generate any string even though they should
 
 ## Fixed bugs
 
