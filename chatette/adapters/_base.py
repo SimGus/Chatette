@@ -21,8 +21,7 @@ class Adapter(with_metaclass(ABCMeta, object)):
     Using the list of generated examples, creates and writes
     the output file(s).
     """
-
-    def __init__(self, batch_size=10000, base_filepath=None):
+    def __init__(self, base_filepath=None, batch_size=10000):
         super(Adapter, self).__init__()
         self._batch_size = batch_size
         self._base_filepath = base_filepath
@@ -39,15 +38,14 @@ class Adapter(with_metaclass(ABCMeta, object)):
             os.makedirs(output_directory)
 
         for batch in self.__generate_batch(examples, synonyms, self._batch_size):
-            output_file_path = self.__get_file_name(
-                batch, output_directory, single_file_output)
+            output_file_path = \
+                self.__get_file_name(batch, output_directory, single_file_output)
             with io.open(output_file_path, 'w') as output_file:
                 self._write_batch(output_file, batch)
 
     @abstract_method
     def _get_file_extension(self):
         raise NotImplementedError()
-
     def __get_file_name(self, batch, output_directory, single_file):
         # pylint: disable=bad-continuation
         if single_file:
@@ -59,6 +57,10 @@ class Adapter(with_metaclass(ABCMeta, object)):
 
     @abstract_method
     def _write_batch(self, output_file_handle, batch):
+        """
+        Writes a batch of examples to file `output_file_handle`.
+        This file will not be accessed after being written.
+        """
         raise NotImplementedError()
 
     @classmethod
@@ -73,7 +75,6 @@ class Adapter(with_metaclass(ABCMeta, object)):
         """Transforms an example into a str writable to an output file."""
         raise NotImplementedError()
 
-    # @abstract_method
     def _get_base_to_extend(self):
         """
         Returns a representation of the base to extend when writing a file.
@@ -82,4 +83,4 @@ class Adapter(with_metaclass(ABCMeta, object)):
         concrete implementation of the adapter.
         Some adapters shouldn't accept an extendable base.
         """
-        raise NotImplementedError()
+        raise ValueError(self.__class__.__name__ + " does not support base files.")

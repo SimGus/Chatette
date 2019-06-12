@@ -12,8 +12,6 @@ from chatette.utils import print_DBG
 from chatette.parsing.parser import Parser
 from chatette.generator import Generator
 import chatette.adapters.factory as adapter_factory
-# from chatette.adapters.rasa import RasaAdapter
-# from chatette.adapters.jsonl import JsonListAdapter
 
 
 class Facade(object):
@@ -25,7 +23,7 @@ class Facade(object):
     """
     instance = None
     def __init__(self, master_file_path, output_dir_path, adapter_str="rasa",
-                 local=False, seed=None):
+                 base_filepath=None, local=False, seed=None):
         if local:
             self.output_dir_path = os.path.dirname(master_file_path)
         else:
@@ -40,13 +38,15 @@ class Facade(object):
         if seed is not None:
             random_seed(seed)
 
-        self.adapter = adapter_factory.create_adapter(adapter_str)
+        self.adapter = adapter_factory.create_adapter(adapter_str,
+                                                      base_filepath)
 
         self.parser = Parser(master_file_path)
         self.generator = None
     @classmethod
     def from_args(cls, args):
-        return cls(args.input, args.output, args.adapter, args.local, args.seed)
+        return cls(args.input, args.output, args.adapter, args.base_filepath,
+                   args.local, args.seed)
 
     @staticmethod
     def get_or_create(master_file_path, output_dir_path, adapter_str=None,

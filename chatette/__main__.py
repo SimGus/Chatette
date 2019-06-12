@@ -37,8 +37,12 @@ def main():
 
     argument_parser.add_argument("-a", "--adapter", dest="adapter", required=False,
                                  type=str, default="rasa",
-                                 help="Write adapter. Possible values: "+
+                                 help="Write adapter. Possible values: " +
                                       "['rasa', 'jsonl']")
+    argument_parser.add_argument("--base-file", dest="base_filepath", required=False,
+                                type=str, default=None,
+                                help="Path to base file to extend with examples " +
+                                     "and synonyms. Only with Rasa adapter.")
 
     argument_parser.add_argument("-s", "--seed", dest="seed", required=False,
                                  type=str, default=None,
