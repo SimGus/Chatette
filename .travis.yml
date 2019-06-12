@@ -15,12 +15,3 @@ after_script:
 - cd ~
 after_success:
 - codecov
-deploy:
-  provider: pypi
-  user: SimGus
-  password:
-    secure: AfmDoj3iJVufz1qqHpFHs7MYlIdavS6ui4AhCe4yXSAIAKGKjqIMoZoPpNEOfnKlcQEDf7O+RW0fQ0KpT+sKNFnJpEKos6tTcoSTpmsaeTydL/cWP50TFpxUhsty8/8e3y2F2hwjvfroQqY1QwYy6vXmru8sioujX00bAecCRkA0T7npmk8mfdq5WBk9rRQPpjS3gG2RDeIyxIQG7rXyVXeZ/1i80ySn7V22IJpA6vhJNUkWVo2uNgkKoufiQG+DwoRzy8mv7iljn9rjH8WCqOJthMPDHyg21wIZGeWNpN10G0LUJUBK8GmwT9T+6RLhLrEm0OSphN0/h+bqHU8l/iKiEg0lyK/ssUSOhCypBr1RwO0CnUf2gwzxVn7moniNo7Y2UDQEwkppMycB3m5kjQFpyzN4x3+1i1eIoDJRYpv2kQ9nkqhyHJlHmwhDsbZt0tnXQ4f1vcfeQ51z+DGiQHBJht8LB1a0lVNDaQi1fNjmUMfj6DJAZKHe+7SEvWyxrLm4ODK3+MsHKpjeJif2byzib6ViLv7HnHW6iPFitClCW3uqYkBeWNS8N3r7gmmFgY4y1Pl5o19u/CkzQrkZnyYjTZqJ0d5NUP2kbu610tGyMpfSKypedrC4UFdft7kokIbPnnyxPNqLL40JgE+bo/n+cgD8D6dUw5rLb4p1j3U=
-  on:
-    tags: true
-  distributions: sdist bdist_wheel
-  skip_existing: true
