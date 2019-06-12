@@ -1,4 +1,5 @@
 # Syntax specifications
+*NOTE: This file descrbes the syntax of Chatette for versions <1.3.1. Specifications for versions >=1.3.1, please see `https://github.com/SimGus/Chatette/wiki`.*
 
 ## 1. Overview
 
