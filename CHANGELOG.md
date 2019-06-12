@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Base file containing predefined JSON data, that can be extended with generated data, when using the Rasa adapter
 
+### Removed
+- Drop tests for Python 3.3 because pytest dropped support for it => **Python 3.3 is *not* supported anymore**
+
 ## [1.4.2] - 2019-04-24
 ### Fixed
 - Entity marker not being removed from the generated text when the slot starts and ends with whitespaces
