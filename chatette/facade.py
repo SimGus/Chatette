@@ -7,8 +7,9 @@ writing of the output file(s).
 import os
 import shutil
 from random import seed as random_seed
+from six.moves import input
 
-from chatette.utils import print_DBG
+from chatette.utils import print_DBG, print_warn
 from chatette.parsing.parser import Parser
 from chatette.generator import Generator
 import chatette.adapters.factory as adapter_factory
@@ -23,7 +24,8 @@ class Facade(object):
     """
     instance = None
     def __init__(self, master_file_path, output_dir_path, adapter_str="rasa",
-                 base_filepath=None, local=False, seed=None):
+                 base_filepath=None, local=False, seed=None,
+                 force_overwriting=False):
         if local:
             self.output_dir_path = os.path.dirname(master_file_path)
         else:
@@ -33,6 +35,8 @@ class Facade(object):
         else:
             self.output_dir_path = os.path.join(self.output_dir_path,
                                                 output_dir_path)
+        
+        self.force_overwriting = force_overwriting
 
         # Initialize the random number generator
         if seed is not None:
@@ -46,7 +50,7 @@ class Facade(object):
     @classmethod
     def from_args(cls, args):
         return cls(args.input, args.output, args.adapter, args.base_filepath,
-                   args.local, args.seed)
+                   args.local, args.seed, args.force)
 
     @staticmethod
     def get_or_create(master_file_path, output_dir_path, adapter_str=None,
@@ -94,7 +98,11 @@ class Facade(object):
         synonyms = self.generator.get_entities_synonyms()
 
         if os.path.exists(self.output_dir_path):
-            shutil.rmtree(self.output_dir_path)
+            if self.force_overwriting or self._ask_confirmation():
+                shutil.rmtree(self.output_dir_path)
+            else:
+                print_DBG("Aborting generation. Exiting without any change.")
+                return
 
         train_examples = list(self.generator.generate_train())
         if train_examples:
@@ -105,6 +113,13 @@ class Facade(object):
             adapter.write(os.path.join(self.output_dir_path, "test"),
                           test_examples, synonyms)
         print_DBG("Generation over")
+
+    def _ask_confirmation(self):
+        print_warn("Folder '" + self.output_dir_path + "' already exists.")
+        answer = input("Overwrite the whole folder? [y/n] ").lower()
+        if answer == "" or answer.startswith('y'):
+            return True
+        return False
 
 
     def get_stats_as_str(self):

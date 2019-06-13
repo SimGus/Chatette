@@ -58,6 +58,11 @@ def main():
                                  required=False, default=None, type=str,
                                  help="Path to a file containing interactive " +
                                       "mode commands that will be directly run")
+    
+    argument_parser.add_argument("-f", "--force", dest="force", required=False,
+                                 action="store_true", default=False,
+                                 help="Don't ask for confirmation before " +
+                                      "overwriting files and folders")
 
     if len(sys.argv[1:]) == 0:
         argument_parser.print_help()

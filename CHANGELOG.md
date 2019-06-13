@@ -6,10 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Program option `-f` or `--force` to overwrite the output folder without asking the user for confirmation
 - Base file containing predefined JSON data, that can be extended with generated data, when using the Rasa adapter
 
 ### Removed
 - Drop tests for Python 3.3 because pytest dropped support for it => **Python 3.3 is *not* supported anymore**
+
+### Changed
+- Ask for user confirmation before overwriting the output folder. Use program option `-f` or `--force` to have the same behavior as before (no confirmation).
 
 ## [1.4.2] - 2019-04-24
 ### Fixed
