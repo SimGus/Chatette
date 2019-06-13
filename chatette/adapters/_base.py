@@ -4,6 +4,7 @@ import shutil
 from abc import ABCMeta, abstractmethod as abstract_method
 
 from future.utils import with_metaclass
+from six.moves import range
 
 
 class Batch(object):

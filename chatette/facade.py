@@ -7,7 +7,7 @@ writing of the output file(s).
 import os
 import shutil
 from random import seed as random_seed
-from six.moves import input
+from six.moves import input, getcwd
 
 from chatette.utils import print_DBG, print_warn
 from chatette.parsing.parser import Parser
@@ -29,7 +29,7 @@ class Facade(object):
         if local:
             self.output_dir_path = os.path.dirname(master_file_path)
         else:
-            self.output_dir_path = os.getcwd()
+            self.output_dir_path = getcwd()
         if output_dir_path is None:
             self.output_dir_path = os.path.join(self.output_dir_path, "output")
         else:

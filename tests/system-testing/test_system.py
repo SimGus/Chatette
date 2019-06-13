@@ -5,6 +5,7 @@ Tests the whole system as a black box.
 
 import os
 import io, shutil
+from six.moves import getcwd
 
 import pytest
 
@@ -24,7 +25,7 @@ class ChatetteFacade(object):
         self.rasa_adapter = RasaAdapter()
         self.jsonl_adapter = JsonListAdapter
 
-        self.cwd = os.getcwd()
+        self.cwd = getcwd()
         self.output_dirpath = \
             os.path.join(self.cwd, "tests/system-testing/output")
 
