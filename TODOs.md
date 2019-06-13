@@ -130,13 +130,12 @@
 
 - **BUG**: arguments are not given down when an argument is transmitted as the argument of a token
 - **BUG**: random generation modifiers' names are not taken into account when generating all examples
-- **BUG**: a leading space is generated even though a unit has a random gen modifier and the unit wasn't generated
 - **BUG**: it seems that `generate_all` of choice is called before the generation starts
 - **BUG**: `{my [own?]/a} ~[religion]` can generate a double space
-- **BUG**: space at the end of lines in json outputs
 
 ## To confirm
 - Some intents don't generate any string even though they should
+- **BUG**: a leading space is generated even though a unit has a random gen modifier and the unit wasn't generated
 
 ## Fixed bugs
 
@@ -173,6 +172,7 @@
 - **fixed**: possible to have several times the same example generated
 - **fixed**: encoding errors under Windows
 - **fixed**: the interactive console seems to crash at `input()`?
+- **fixed**: space at the end of lines in json outputs (fixed in newest versions of `json`: https://bugs.python.org/issue16333)
 
 # Ideas
 
