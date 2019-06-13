@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Only require `rasa_nlu_data` as a top-level field in base file (not `common_examples` and `entity_synonyms` anymore)
 
 ### Fixed
+- Prevent some compatibility issues when using different versions of Python
 - Double space generated in choices in some very precise cases
 
 ## [1.5.0] - 2019-06-13
