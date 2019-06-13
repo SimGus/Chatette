@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Drop tests for Python 3.3 because pytest dropped support for it => **Python 3.3 is *not* supported anymore**
 
 ### Changed
+- Max number of examples to generate (20'000 => 1'000'000)
 - Ask for user confirmation before overwriting the output folder. Use program option `-f` or `--force` to have the same behavior as before (no confirmation).
 
 ## [1.4.2] - 2019-04-24

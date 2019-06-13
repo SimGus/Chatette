@@ -13,7 +13,7 @@ class Generator(object):
     If there were inconsistencies in the input file, they are likely to be
     detected here.
     """
-    DEFAULT_MAX_NB_INTENT_EXAMPLES = 20000  # TODO: this might not be relevant anymore
+    DEFAULT_MAX_NB_INTENT_EXAMPLES = 1000000  # TODO: this might not be relevant anymore
 
     def __init__(self, parser):
         self.parser = parser
