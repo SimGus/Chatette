@@ -112,10 +112,3 @@ class RasaAdapter(Adapter):
                 raise SyntaxError(
                     "Expected 'rasa_nlu_data' as a root of base file '" + \
                     self._base_filepath + "'")
-            elif "common_examples" not in self._base_file_contents["rasa_nlu_data"] or \
-                 "entity_synonyms" not in self._base_file_contents["rasa_nlu_data"]:
-                    self._base_file_contents = None
-                    raise SyntaxError(
-                        "Expected at least 'entity_synonyms' and " + \
-                        "'common_examples' inside 'rasa_nlu_data' " + \
-                        "in base file '" + self._base_filepath + "'")
