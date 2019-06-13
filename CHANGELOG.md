@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Only require `rasa_nlu_data` as a top-level field in base file (not `common_examples` and `entity_synonyms` anymore)
 
+### Fixed
+- Double space generated in choices in some very precise cases
+
 ## [1.5.0] - 2019-06-13
 ### Added
 - Program option `-f` or `--force` to overwrite the output folder without asking the user for confirmation

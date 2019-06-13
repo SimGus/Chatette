@@ -263,7 +263,7 @@ class Parser(object):
                 current_leading_space = False
                 current_choice_sub_rules = []
                 for choice_sub_rule_tokens in pu.next_sub_rule_tokens(choice_tokens):
-                    if choice_sub_rule_tokens == ' ':
+                    if choice_sub_rule_tokens == [' ']:
                         current_leading_space = True
                         continue
                     choice_sub_rule = \
