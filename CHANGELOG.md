@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Max number of examples per intent to generate (20'000 => 1'000'000)
 - Ask for user confirmation before overwriting the output folder. Use program option `-f` or `--force` to have the same behavior as before (no confirmation).
 
+### Fixed
+- Command interpreter not working with Python 2.7
+
 ## [1.4.2] - 2019-04-24
 ### Fixed
 - Entity marker not being removed from the generated text when the slot starts and ends with whitespaces

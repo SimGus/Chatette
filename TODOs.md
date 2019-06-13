@@ -133,7 +133,6 @@
 - **BUG**: a leading space is generated even though a unit has a random gen modifier and the unit wasn't generated
 - **BUG**: it seems that `generate_all` of choice is called before the generation starts
 - **BUG**: `{my [own?]/a} ~[religion]` can generate a double space
-- **BUG**: the interactive console seems to crash at `input()`?
 - **BUG**: space at the end of lines in json outputs
 
 ## To confirm
@@ -173,6 +172,7 @@
 - **fixed**: restaurant example doesn't seem to work anymore
 - **fixed**: possible to have several times the same example generated
 - **fixed**: encoding errors under Windows
+- **fixed**: the interactive console seems to crash at `input()`?
 
 # Ideas
 
