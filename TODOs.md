@@ -49,6 +49,11 @@
 - [ ] cache the possible number of generatable examples for each unit
 - [ ] use multithreading or multiprocessing to optimize the execution time (+ program option to set that on/off)
 
+- [ ] replace `getcwd` by `six.moves.getcwd` to be sure to have python 2 and 3 compliant code
+- [ ] replace `print` by `six.print_`?
+- [ ] replace `range` by `six.moves.range`
+- [ ] replace `zip` by `six.moves.zip`
+
 - [ ] complete refactor of the code: the code is almost unmaintainable
 - [ ] refactor units to remove duplicated code: make modifiers act after the string has been generated
 - [ ] add more unit tests
