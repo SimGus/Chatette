@@ -130,7 +130,6 @@
 
 - **BUG**: arguments are not given down when an argument is transmitted as the argument of a token
 - **BUG**: random generation modifiers' names are not taken into account when generating all examples
-- **BUG**: it seems that `generate_all` of choice is called before the generation starts
 
 ## To confirm
 - Some intents don't generate any string even though they should
