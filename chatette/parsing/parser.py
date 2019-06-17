@@ -34,7 +34,7 @@ class Parser(object):
                              "than the file itself as before.")
         self.tokenizer = Tokenizer(master_filename)
 
-        self._expecting_rule = False
+        self._declaration_line_allowed = True
         self._currently_parsed_declaration = None  # 3-tuple
         self._expected_indentation = None  # str
 
@@ -78,26 +78,26 @@ class Parser(object):
         """
         print_DBG("Parsing master file: "+self.tokenizer.get_file_information()[0])
         for token_line in self.tokenizer.next_tokenized_line():
-            if not token_line[0].isspace():
-                if token_line[0] == pu.INCLUDE_FILE_SYM:
+            if not pu.is_rule_line(token_line):
+                if pu.is_include_line(token_line):
                     self.tokenizer.open_file(token_line[1])
                     print_DBG("Parsing file: "+self.tokenizer.get_file_information()[0])
                     self.stats["#files"] += 1
                 else:
                     self._parse_declaration_initiator(token_line)
-                    self._expecting_rule = True
+                    self._declaration_line_allowed = False
                     self.stats["#declarations"] += 1
                 self._expected_indentation = None
             else:
                 self._parse_rule(token_line)
-                self._expecting_rule = False  # Not expecting but still allowed
+                self._declaration_line_allowed = True
                 self.stats["#rules"] += 1
         self.tokenizer.close_files()
         print_DBG("Parsing finished!")
 
     def _parse_declaration_initiator(self, token_line):
         """Parses a line (as tokens) that contains a declaration initiator."""
-        if self._expecting_rule:
+        if not self._declaration_line_allowed:
             self.tokenizer.syntax_error("Expected a generation rule, got a "+
                                         "unit declaration instead.")
 

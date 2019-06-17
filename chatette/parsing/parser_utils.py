@@ -954,3 +954,10 @@ def is_sub_rule_intent_ref(sub_rule_tokens):
     @pre: considers `sub_rule_tokens` to be a valid sub-rule.
     """
     return sub_rule_tokens[0] == INTENT_SYM
+
+def is_rule_line(line):
+    """Returns `True` iff the line `line` is a rule-level line."""
+    return line[0].isspace()
+def is_include_line(line):
+    """Returns `True` iff the line `line` is a file inclusion line."""
+    return line[0] == INCLUDE_FILE_SYM
