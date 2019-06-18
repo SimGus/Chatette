@@ -12,6 +12,7 @@ import chatette.parsing.parser_utils as pu
 from chatette.parsing.tokenizer import Tokenizer
 from chatette.parsing.statistics import Stats
 
+from chatette.units.ast import AST
 from chatette.units.word.rule_content import WordRuleContent
 from chatette.units.word.group_rule_content import GroupWordRuleContent
 from chatette.units.choice import ChoiceRuleContent
@@ -38,35 +39,12 @@ class Parser(object):
         self._currently_parsed_declaration = None  # 3-tuple
         self._expected_indentation = None  # str
 
-        self.alias_definitions = dict()
-        self.slot_definitions = dict()
-        self.intent_definitions = dict()
+        self.ast = AST(master_filename)
 
-        self.stats = Stats(master_filename)
 
     def open_new_master_file(self, master_filepath):
         self.tokenizer.redefine_master_file(master_filepath)
-        self.stats.new_file(master_filepath)
-
-
-    def get_definition(self, definition_name, unit_type):
-        """Returns the definition for unit with name `definition_name`."""
-        if unit_type == pu.UnitType.alias:
-            relevant_dict = self.alias_definitions
-        elif unit_type == pu.UnitType.slot:
-            relevant_dict = self.slot_definitions
-        elif unit_type == pu.UnitType.intent:
-            relevant_dict = self.intent_definitions
-        else:
-            raise ValueError("Tried to get a definition with wrong type "+
-                             "(expected alias, slot or intent)")
-
-        if definition_name not in relevant_dict:
-            raise KeyError("Couldn't find a definition for "+unit_type.name+
-                           " '"+definition_name+"' (did you mean to use "+
-                           "the word group '["+definition_name+"]'?)")
-
-        return relevant_dict[definition_name]
+        self.ast.stats.new_file(master_filepath)
 
 
     def parse(self):
@@ -80,7 +58,7 @@ class Parser(object):
         for token_line in self.tokenizer.next_tokenized_line():
             if not pu.is_rule_line(token_line):
                 if pu.is_include_line(token_line):
-                    if self.stats.new_file(token_line[1]):
+                    if self.ast.stats.new_file(token_line[1]):
                         self.tokenizer.open_file(token_line[1])
                         print_DBG("Parsing file: " + \
                                   self.tokenizer.get_current_file_name())
@@ -93,15 +71,17 @@ class Parser(object):
                 else:
                     self._parse_declaration_initiator(token_line)
                     self._declaration_line_allowed = False
-                    self.stats.increment_declarations()
+                    self.ast.stats.increment_declarations()
                 self._expected_indentation = None
             else:
                 self._parse_rule(token_line)
                 self._declaration_line_allowed = True
-                self.stats.increment_rules()
+                self.ast.stats.increment_rules()
 
         self.tokenizer.close_files()
         print_DBG("Parsing finished!")
+
+        return self.ast
 
     def _parse_declaration_initiator(self, token_line):
         """Parses a line (as tokens) that contains a declaration initiator."""
@@ -135,34 +115,29 @@ class Parser(object):
                     nb_examples_asked=None):
         """
         Creates a unit of type `unit_type` with name `unit_name` and modifiers
-        `modifiers` inside the relevant dictionary (`alias_definitions`,
-        `slot_definitions` or `intent_definitions`).
+        `modifiers` inside the AST.
         `modifiers` is a `UnitDeclarationModifiersRepr` and `nb_examples_asked`
         is a tuple (training, test).
         """
-        new_unit = None
-        relevant_dict = None
+        # NOTE: this if-else statement is also done in the function it calls
         if unit_type == pu.UnitType.alias:
             new_unit = AliasDefinition(unit_name, modifiers)
-            relevant_dict = self.alias_definitions
-            self.stats.increment_aliases()
+            self.ast.stats.increment_aliases()
         elif unit_type == pu.UnitType.slot:
             new_unit = SlotDefinition(unit_name, modifiers)
-            relevant_dict = self.slot_definitions
-            self.stats.increment_slots()
+            self.ast.stats.increment_slots()
         elif unit_type == pu.UnitType.intent:
             new_unit = IntentDefinition(unit_name, modifiers)
-            relevant_dict = self.intent_definitions
-            self.stats.increment_intents()
+            self.ast.stats.increment_intents()
 
         if unit_type == pu.UnitType.intent and nb_examples_asked is not None:
             (train_nb, test_nb) = nb_examples_asked
             new_unit.set_nb_examples_asked(train_nb, test_nb)
-
-        if unit_name not in relevant_dict:
-            relevant_dict[unit_name] = new_unit
-        elif modifiers.variation_name is None:
-            pass  # Rules will be added to the already defined unit
+        
+        try:
+            self.ast.add_unit(unit_type, unit_name, new_unit)
+        except ValueError as e:
+            print_warn(str(e))
 
 
     def _parse_rule(self, tokens):
@@ -176,20 +151,13 @@ class Parser(object):
                                         "a unit declaration.")
 
         self._check_indentation(tokens[0])
-
         sub_rules = self.tokens_to_sub_rules(tokens[1:])
 
-        relevant_dict = None
-        if self._currently_parsed_declaration[0] == pu.UnitType.alias:
-            relevant_dict = self.alias_definitions
-        elif self._currently_parsed_declaration[0] == pu.UnitType.slot:
-            relevant_dict = self.slot_definitions
-        else:  # intent
-            relevant_dict = self.intent_definitions
-
+        unit_type = self._currently_parsed_declaration[0]
         name = self._currently_parsed_declaration[1]
         variation_name = self._currently_parsed_declaration[2].variation_name
-        relevant_dict[name].add_rule(sub_rules, variation_name)
+
+        self.ast.add_rule_to_unit(unit_type, name, variation_name, sub_rules)
 
     def _check_indentation(self, indentation):
         """
@@ -336,96 +304,3 @@ class Parser(object):
             self.tokenizer.syntax_error(str(e))
 
 
-    def rename_unit(self, unit_type, old_name, new_name):
-        """
-        Renames the unit declaration of type `unit_type` from
-        `old_name` to `new_name` (possibly replacing the unit with that name).
-        Raises a `KeyError` if `old_name` is not a declared unit.
-        @post: this can lead to inconsistent rules.
-        """
-        if unit_type == pu.UnitType.alias:
-            relevant_dict = self.alias_definitions
-        elif unit_type == pu.UnitType.slot:
-            relevant_dict = self.slot_definitions
-        elif unit_type == pu.UnitType:
-            relevant_dict = self.intent_definitions
-        else:
-            raise ValueError("Tried to rename a definition with wrong type "+
-                             "(expected alias, slot or intent)")
-
-        if old_name in relevant_dict:
-            if new_name in relevant_dict:
-                raise ValueError("Tried to rename a definition to a name that " +
-                                 "was already in use ('" + new_name + "').")
-            relevant_dict[new_name] = relevant_dict[old_name]
-            del relevant_dict[old_name]
-            relevant_dict[new_name].name = new_name
-        else:
-            raise KeyError("No unit named '"+old_name+"' was found")
-
-    def delete(self, unit_type, unit_name, variation_name=None):
-        """Deletes a unit definition."""
-        if unit_type == pu.UnitType.alias:
-            relevant_dict = self.alias_definitions
-            relevant_stat_decrement_function = self.stats.decrement_aliases
-        elif unit_type == pu.UnitType.slot:
-            relevant_dict = self.slot_definitions
-            relevant_stat_decrement_function = self.stats.decrement_slots
-        elif unit_type == pu.UnitType.intent:
-            relevant_dict = self.intent_definitions
-            relevant_stat_decrement_function = self.stats.decrement_intents
-        else:
-            raise ValueError("Tried to delete a definition with wrong type "+
-                             "(expected alias, slot or intent)")
-
-        if unit_name not in relevant_dict:
-            raise KeyError("Couldn't find a definition for " + unit_type.name +
-                           " '" + unit_name + "'.")
-
-        nb_rules = relevant_dict[unit_name].get_nb_rules(variation_name)
-        if variation_name is None:
-            del relevant_dict[unit_name]
-            relevant_stat_decrement_function()
-            self.stats.decrement_declarations()
-        else:
-            relevant_dict[unit_name].delete_variation(variation_name)
-        self.stats.remove_rules(nb_rules)
-
-
-    def add_definition(self, unit_type, unit_name, definition):
-        """Adds an already built definition to the list of declared units."""
-        if unit_type == pu.UnitType.alias:
-            relevant_dict = self.alias_definitions
-            relevant_stat_increment_function = self.stats.increment_aliases
-        elif unit_type == pu.UnitType.slot:
-            relevant_dict = self.slot_definitions
-            relevant_stat_increment_function = self.stats.increment_slots
-        elif unit_type == pu.UnitType.intent:
-            relevant_dict = self.intent_definitions
-            relevant_stat_increment_function = self.stats.increment_intents
-        else:
-            raise ValueError("Tried to delete a definition with wrong type "+
-                             "(expected alias, slot or intent)")
-
-        if unit_name in relevant_dict:
-            raise ValueError(unit_type.name.capitalize()+" '"+unit_name+"' " +
-                             "is already defined. Tried to add a definition " +
-                             "for it again.")
-
-        relevant_dict[unit_name] = definition
-        relevant_stat_increment_function()
-        self.stats.increment_declarations()
-        self.stats.add_rules(definition.get_nb_rules())
-
-
-    def print_DBG(self):
-        print("Aliases:")
-        for alias_name in self.alias_definitions:
-            self.alias_definitions[alias_name].print_DBG()
-        print("Slots:")
-        for slot_name in self.slot_definitions:
-            self.slot_definitions[slot_name].print_DBG()
-        print("Intents:")
-        for intent_name in self.intent_definitions:
-            self.intent_definitions[intent_name].print_DBG()
-        print()

@@ -51,7 +51,7 @@ class UnhideCommand(CommandStrategy):
         if variation_name is None:
             try:
                 unit = HideCommand.stored_units[unit_type.name][unit_name]
-                facade.parser.add_definition(unit_type, unit_name, unit)
+                facade.parser.ast.add_definition(unit_type, unit_name, unit)
                 del HideCommand.stored_units[unit_type.name][unit_name]
                 self.print_wrapper.write(unit_type.name.capitalize() + " '" +
                                         unit_name + "' was successfully restored.")
@@ -66,7 +66,7 @@ class UnhideCommand(CommandStrategy):
         else:
             unit = None
             try:
-                unit = facade.parser.get_definition(unit_name, unit_type)
+                unit = facade.parser.ast.get_definition(unit_name, unit_type)
             except KeyError:
                 self.print_wrapper.error_log(unit_type.name.capitalize() + " '" + \
                                              unit_name + "' is not defined.")

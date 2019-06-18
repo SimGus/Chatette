@@ -12,7 +12,7 @@ class ExistCommand(CommandStrategy):
 
     def execute_on_unit(self, facade, unit_type, unit_name, variation_name=None):
         try:
-            unit = facade.parser.get_definition(unit_name, unit_type)
+            unit = facade.parser.ast.get_definition(unit_name, unit_type)
             self.print_wrapper.write(unit.short_desc_str())
             if variation_name is not None:
                 if variation_name in unit.variations:

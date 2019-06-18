@@ -83,7 +83,7 @@ class GenerateCommand(CommandStrategy):
 
     def _generate_unit(self, facade, adapter, unit_type, unit_name,
                        variation_name=None):
-        definition = facade.parser.get_definition(unit_name, unit_type)
+        definition = facade.parser.ast.get_definition(unit_name, unit_type)
         examples = definition.generate_nb_examples(self.nb_examples,
                                                    variation_name)
 

@@ -34,7 +34,7 @@ class RenameCommand(CommandStrategy):
                 return
 
             try:
-                facade.parser.rename_unit(unit_type, old_name, new_name)
+                facade.parser.ast.rename_unit(unit_type, old_name, new_name)
                 self.print_wrapper.write(unit_type.name.capitalize() + " '" +
                                          old_name + "' was successfully " +
                                          "renamed to '" + new_name + "'.")

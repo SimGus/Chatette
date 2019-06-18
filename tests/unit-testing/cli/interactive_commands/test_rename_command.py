@@ -59,9 +59,9 @@ def test_execute():
     facade = new_facade()
     cmd.execute(facade)
     with pytest.raises(KeyError):
-        facade.parser.get_definition("can you", UnitType.alias)
+        facade.parser.ast.get_definition("can you", UnitType.alias)
     try:
-        facade.parser.get_definition("could you", UnitType.alias)
+        facade.parser.ast.get_definition("could you", UnitType.alias)
     except KeyError:
         pytest.fail("Unexpected KeyError exception. Renaming didn't properly work.")
 
@@ -70,9 +70,9 @@ def test_execute():
     facade = new_facade()
     cmd.execute(facade)
     with pytest.raises(KeyError):
-        facade.parser.get_definition("tell me", UnitType.alias)
+        facade.parser.ast.get_definition("tell me", UnitType.alias)
     try:
-        facade.parser.get_definition("a", UnitType.alias)
+        facade.parser.ast.get_definition("a", UnitType.alias)
     except KeyError:
         pytest.fail("Unexpected KeyError exception. Renaming didn't properly work.")
 

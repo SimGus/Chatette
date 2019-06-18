@@ -60,9 +60,9 @@ PATTERN_NB_TEST_EX_KEY = re.compile(r"'?test(ing)?'?")
 
 class UnitType(Enum):
     """Enumeration of all possible types of unit declarations."""
-    alias = 1
-    slot = 2
-    intent = 3
+    alias = "alias"
+    slot = "slot"
+    intent = "intent"
 
 
 class SubRuleType(Enum):  # TODO move this into unit defintions

@@ -26,7 +26,7 @@ class ExamplesCommand(CommandStrategy):
                                                 "characters allowed).")
                     return
         try:
-            definition = facade.parser.get_definition(unit_name, unit_type)
+            definition = facade.parser.ast.get_definition(unit_name, unit_type)
         except KeyError:
             self.print_wrapper.write(unit_type.name.capitalize() + " '" +
                                      unit_name + "' is not defined.")

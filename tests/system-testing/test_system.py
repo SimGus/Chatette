@@ -41,9 +41,9 @@ class ChatetteFacade(object):
 
     def run(self, template_filepath):
         parser = Parser(template_filepath)
-        parser.parse()
+        definitions = parser.parse()
 
-        self.generator = Generator(parser)
+        self.generator = Generator(definitions)
         self.train_examples = list(self.generator.generate_train())
         self.test_examples = list(self.generator.generate_test())
 

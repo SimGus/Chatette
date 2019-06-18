@@ -32,7 +32,7 @@ class AliasRuleContent(RuleContent):
 
 
     def get_max_nb_generated_examples(self):
-        nb_possible_ex = self.parser.get_definition(self.name, UnitType.alias) \
+        nb_possible_ex = self.parser.ast.get_definition(self.name, UnitType.alias) \
             .get_max_nb_generated_examples(self.variation_name)
         if self.casegen:
             nb_possible_ex *= 2
@@ -41,8 +41,8 @@ class AliasRuleContent(RuleContent):
         return nb_possible_ex
 
     def can_have_casegen(self):
-        return self.parser.get_definition(self.name, UnitType.alias) \
-            .can_have_casegen()
+        return self.parser.ast \
+            .get_definition(self.name, UnitType.alias).can_have_casegen()
 
     def check_casegen(self):
         """Checks that casegen is applicable (at generation time)."""
@@ -74,7 +74,8 @@ class AliasRuleContent(RuleContent):
                 # Generate this randgen
                 generated_randgens[self.randgen] = True
 
-        generated_example = self.parser.get_definition(self.name, UnitType.alias) \
+        generated_example = self.parser.ast \
+            .get_definition(self.name, UnitType.alias) \
             .generate_random(self.variation_name, self.arg_value)
 
         if self.casegen:
@@ -93,7 +94,7 @@ class AliasRuleContent(RuleContent):
         if self.randgen is not None:
             generated_examples.append(Example())
 
-        aliases = self.parser \
+        aliases = self.parser.ast \
                       .get_definition(self.name, UnitType.alias) \
                       .generate_all(self.variation_name, self.arg_value)
 

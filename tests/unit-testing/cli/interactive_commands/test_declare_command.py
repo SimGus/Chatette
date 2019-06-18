@@ -62,7 +62,7 @@ def test_execute(capsys):
     facade = new_facade()
     cmd.execute(facade)
     try:
-        unit = facade.parser.get_definition("machin", UnitType.alias)
+        unit = facade.parser.ast.get_definition("machin", UnitType.alias)
         assert len(unit.variations) == 0
         assert len(unit.rules) == 0
     except (KeyError, ValueError):
@@ -75,7 +75,7 @@ def test_execute(capsys):
     facade = new_facade()
     cmd.execute(facade)
     try:
-        unit = facade.parser.get_definition("machin", UnitType.slot)
+        unit = facade.parser.ast.get_definition("machin", UnitType.slot)
         assert len(unit.variations) == 0
         assert len(unit.rules) == 0
     except (KeyError, ValueError):
@@ -88,7 +88,7 @@ def test_execute(capsys):
     facade = new_facade()
     cmd.execute(facade)
     try:
-        unit = facade.parser.get_definition("machin", UnitType.intent)
+        unit = facade.parser.ast.get_definition("machin", UnitType.intent)
         assert len(unit.variations) == 0
         assert len(unit.rules) == 0
     except (KeyError, ValueError):

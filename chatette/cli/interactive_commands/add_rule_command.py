@@ -51,7 +51,7 @@ class AddRuleCommand(CommandStrategy):
         rule_tokens = parser.tokenizer.tokenize(rule_str)
         rule = parser.tokens_to_sub_rules(rule_tokens)
 
-        unit = parser.get_definition(unit_name, unit_type)
+        unit = parser.ast.get_definition(unit_name, unit_type)
         unit.add_rule(rule, variation_name)
 
         self.print_wrapper.write("Rule successfully added to " +

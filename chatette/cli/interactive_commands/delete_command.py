@@ -21,7 +21,7 @@ class DeleteCommand(CommandStrategy):
     def finish_execution(self, facade):
         for (unit_type, unit_name, variation_name) in self._units_to_delete:
             try:
-                facade.parser.delete(unit_type, unit_name, variation_name)
+                facade.parser.ast.delete(unit_type, unit_name, variation_name)
             except KeyError:
                 self.print_wrapper.write(unit_type.name.capitalize() + " '" +
                                         unit_name + "' was not defined.")

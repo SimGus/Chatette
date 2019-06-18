@@ -46,6 +46,7 @@ class Facade(object):
                                                       base_filepath)
 
         self.parser = Parser(master_file_path)
+        self.ast_definitions = None
         self.generator = None
     @classmethod
     def from_args(cls, args):
@@ -74,14 +75,14 @@ class Facade(object):
 
     def run_parsing(self):
         """Executes the parsing alone."""
-        self.parser.parse()
+        self.ast_definitions = self.parser.parse()
 
     def parse_file(self, filepath):
         """
         Parses the new template file at `filepath` with the current parser.
         """
         self.parser.open_new_master_file(filepath)
-        self.parser.parse()
+        self.ast_definitions = self.parser.parse()
 
     def run_generation(self, adapter_str=None):
         """"
@@ -94,7 +95,7 @@ class Facade(object):
         else:
             adapter = adapter_factory.create_adapter(adapter_str)
 
-        self.generator = Generator(self.parser)
+        self.generator = Generator(self.ast_definitions)
         synonyms = self.generator.get_entities_synonyms()
 
         if os.path.exists(self.output_dir_path):
@@ -123,9 +124,9 @@ class Facade(object):
 
 
     def get_stats_as_str(self):
-        if self.parser is None:
+        if self.ast_definitions is None:
             return "\tNo file parsed."
-        stats = self.parser.stats
+        stats = self.ast_definitions.stats
         result = '\t' + str(stats.get_nb_files()) + " files parsed\n" + \
                  '\t' + str(stats.get_nb_declarations()) + " declarations: " + \
                  str(stats.get_nb_intents()) + " intents, " + \
