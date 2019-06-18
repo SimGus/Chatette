@@ -7,9 +7,10 @@ of unit definitions.
 
 from six import string_types
 
-from chatette.utils import print_DBG
+from chatette.utils import print_DBG, print_warn
 import chatette.parsing.parser_utils as pu
 from chatette.parsing.tokenizer import Tokenizer
+from chatette.parsing.statistics import Stats
 
 from chatette.units.word.rule_content import WordRuleContent
 from chatette.units.word.group_rule_content import GroupWordRuleContent
@@ -22,7 +23,6 @@ from chatette.units.intent import IntentDefinition, IntentRuleContent
 
 class Parser(object):
     """
-    **This class is a refactor of the current parser**
     This class will parse the input file(s)
     and create an internal representation of its contents.
     """
@@ -42,12 +42,11 @@ class Parser(object):
         self.slot_definitions = dict()
         self.intent_definitions = dict()
 
-        self.stats = {"#files": 1, "#declarations": 0, "#rules": 0,
-                      "#intents": 0, "#aliases": 0, "#slots": 0}
+        self.stats = Stats(master_filename)
 
     def open_new_master_file(self, master_filepath):
         self.tokenizer.redefine_master_file(master_filepath)
-        self.stats["#files"] += 1
+        self.stats.new_file(master_filepath)
 
 
     def get_definition(self, definition_name, unit_type):
@@ -76,22 +75,31 @@ class Parser(object):
         transforms the information parsed into a dictionary of
         declaration names -> rules.
         """
-        print_DBG("Parsing master file: "+self.tokenizer.get_file_information()[0])
+        print_DBG("Parsing master file: " + self.tokenizer.get_current_file_name())
+
         for token_line in self.tokenizer.next_tokenized_line():
             if not pu.is_rule_line(token_line):
                 if pu.is_include_line(token_line):
-                    self.tokenizer.open_file(token_line[1])
-                    print_DBG("Parsing file: "+self.tokenizer.get_file_information()[0])
-                    self.stats["#files"] += 1
+                    if self.stats.new_file(token_line[1]):
+                        self.tokenizer.open_file(token_line[1])
+                        print_DBG("Parsing file: " + \
+                                  self.tokenizer.get_current_file_name())
+                    else:
+                        print_warn("Tried to parse file '" + token_line[1] + \
+                                   "' a second time while parsing '" + \
+                                   self.tokenizer.get_current_file_name() + \
+                                   "'. There might be circular " + \
+                                   "includes in the input files.")
                 else:
                     self._parse_declaration_initiator(token_line)
                     self._declaration_line_allowed = False
-                    self.stats["#declarations"] += 1
+                    self.stats.increment_declarations()
                 self._expected_indentation = None
             else:
                 self._parse_rule(token_line)
                 self._declaration_line_allowed = True
-                self.stats["#rules"] += 1
+                self.stats.increment_rules()
+
         self.tokenizer.close_files()
         print_DBG("Parsing finished!")
 
@@ -136,22 +144,16 @@ class Parser(object):
         relevant_dict = None
         if unit_type == pu.UnitType.alias:
             new_unit = AliasDefinition(unit_name, modifiers)
-            # new_unit = AliasDefinition(unit_name, [], modifiers.argument_name,
-            #                            modifiers.casegen)
             relevant_dict = self.alias_definitions
-            self.stats["#aliases"] += 1
+            self.stats.increment_aliases()
         elif unit_type == pu.UnitType.slot:
             new_unit = SlotDefinition(unit_name, modifiers)
-            # new_unit = SlotDefinition(unit_name, [], modifiers.argument_name,
-            #                           modifiers.casegen)
             relevant_dict = self.slot_definitions
-            self.stats["#slots"] += 1
+            self.stats.increment_slots()
         elif unit_type == pu.UnitType.intent:
             new_unit = IntentDefinition(unit_name, modifiers)
-            # new_unit = IntentDefinition(unit_name, [], modifiers.argument_name,
-            #                             modifiers.casegen)
             relevant_dict = self.intent_definitions
-            self.stats["#intents"] += 1
+            self.stats.increment_intents()
 
         if unit_type == pu.UnitType.intent and nb_examples_asked is not None:
             (train_nb, test_nb) = nb_examples_asked
@@ -365,13 +367,13 @@ class Parser(object):
         """Deletes a unit definition."""
         if unit_type == pu.UnitType.alias:
             relevant_dict = self.alias_definitions
-            stat_key = "#aliases"
+            relevant_stat_decrement_function = self.stats.decrement_aliases
         elif unit_type == pu.UnitType.slot:
             relevant_dict = self.slot_definitions
-            stat_key = "#slots"
+            relevant_stat_decrement_function = self.stats.decrement_slots
         elif unit_type == pu.UnitType.intent:
             relevant_dict = self.intent_definitions
-            stat_key = "#intents"
+            relevant_stat_decrement_function = self.stats.decrement_intents
         else:
             raise ValueError("Tried to delete a definition with wrong type "+
                              "(expected alias, slot or intent)")
@@ -383,25 +385,24 @@ class Parser(object):
         nb_rules = relevant_dict[unit_name].get_nb_rules(variation_name)
         if variation_name is None:
             del relevant_dict[unit_name]
-            self.stats[stat_key] -= 1
-            self.stats["#declarations"] -= 1
-            self.stats["#rules"] -= nb_rules
+            relevant_stat_decrement_function()
+            self.stats.decrement_declarations()
         else:
             relevant_dict[unit_name].delete_variation(variation_name)
-            self.stats["#rules"] -= nb_rules
+        self.stats.remove_rules(nb_rules)
 
 
     def add_definition(self, unit_type, unit_name, definition):
         """Adds an already built definition to the list of declared units."""
         if unit_type == pu.UnitType.alias:
             relevant_dict = self.alias_definitions
-            stat_key = "#aliases"
+            relevant_stat_increment_function = self.stats.increment_aliases
         elif unit_type == pu.UnitType.slot:
             relevant_dict = self.slot_definitions
-            stat_key = "#slots"
+            relevant_stat_increment_function = self.stats.increment_slots
         elif unit_type == pu.UnitType.intent:
             relevant_dict = self.intent_definitions
-            stat_key = "#intents"
+            relevant_stat_increment_function = self.stats.increment_intents
         else:
             raise ValueError("Tried to delete a definition with wrong type "+
                              "(expected alias, slot or intent)")
@@ -412,9 +413,9 @@ class Parser(object):
                              "for it again.")
 
         relevant_dict[unit_name] = definition
-        self.stats[stat_key] += 1
-        self.stats["#declarations"] += 1
-        self.stats["#rules"] += definition.get_nb_rules()
+        relevant_stat_increment_function()
+        self.stats.increment_declarations()
+        self.stats.add_rules(definition.get_nb_rules())
 
 
     def print_DBG(self):

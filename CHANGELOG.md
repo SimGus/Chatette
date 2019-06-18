@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Changed
+- Manage parsing statistics by creating a class intended for that
+- Improve readability of parser
 - Only require `rasa_nlu_data` as a top-level field in base file (not `common_examples` and `entity_synonyms` anymore)
 
 ### Fixed

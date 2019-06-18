@@ -56,9 +56,9 @@ class Facade(object):
     def get_or_create(master_file_path, output_dir_path, adapter_str=None,
                       local=False, seed=None):
         if Facade.instance is None:
-            instance = Facade(master_file_path, output_dir_path, adapter_str,
-                              local, seed)
-        return instance
+            Facade.instance = Facade(master_file_path, output_dir_path,
+                                     adapter_str, local, seed)
+        return Facade.instance
     @staticmethod
     def get_or_create_from_args(args):
         if Facade.instance is None:
@@ -126,10 +126,10 @@ class Facade(object):
         if self.parser is None:
             return "\tNo file parsed."
         stats = self.parser.stats
-        result = '\t' + str(stats["#files"]) + " files parsed\n" + \
-                 '\t' + str(stats["#declarations"]) + " declarations: " + \
-                 str(stats["#intents"]) + " intents, " + \
-                 str(stats["#slots"]) + " slots and " + \
-                 str(stats["#aliases"]) + " aliases\n" + \
-                 '\t' + str(stats["#rules"]) + " rules"
+        result = '\t' + str(stats.get_nb_files()) + " files parsed\n" + \
+                 '\t' + str(stats.get_nb_declarations()) + " declarations: " + \
+                 str(stats.get_nb_intents()) + " intents, " + \
+                 str(stats.get_nb_slots()) + " slots and " + \
+                 str(stats.get_nb_aliases()) + " aliases\n" + \
+                 '\t' + str(stats.get_nb_rules()) + " rules"
         return result
