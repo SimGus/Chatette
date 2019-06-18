@@ -136,8 +136,8 @@ class Parser(object):
         
         try:
             self.ast.add_unit(unit_type, unit_name, new_unit)
-        except ValueError as e:
-            print_warn(str(e))
+        except ValueError as e:  # NOTE: can be a new variation
+            pass
 
 
     def _parse_rule(self, tokens):
