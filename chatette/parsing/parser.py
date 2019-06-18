@@ -147,7 +147,7 @@ class Parser(object):
         add the rule to the declaration currently being parsed.
         """
         if self._currently_parsed_declaration is None:
-            self.tokenizer.syntax_error("Got a rule outside of "+
+            self.tokenizer.syntax_error("Found a rule outside of "+
                                         "a unit declaration.")
 
         self._check_indentation(tokens[0])

@@ -36,18 +36,18 @@ class AST(object):
             raise ValueError("Tried to get a definition with wrong type "+
                              "(expected alias, slot or intent)")
 
-    
+
     def get_definition(self, definition_name, unit_type):
         """Returns the definition for unit with name `definition_name`."""
         relevant_dict = self._get_relevant_dict(unit_type)
-        
+
         if definition_name not in relevant_dict:
             raise KeyError("Couldn't find a definition for " + unit_type.name +
                            " '" + definition_name + "' (did you mean to use " +
                            "the word group '[" + definition_name + "]'?)")
-                           
+
         return relevant_dict[definition_name]
-    
+
 
     def add_unit(self, unit_type, unit_name, unit):
         """
@@ -59,7 +59,7 @@ class AST(object):
         if unit_name in relevant_dict:
             raise ValueError(unit_type.name.capitalize() + " '" + unit_name + \
                              "' was already declared.")
-        
+
         relevant_dict[unit_name] = unit
 
     def add_rule_to_unit(self, unit_type, unit_name, variation_name, rule):
@@ -72,10 +72,10 @@ class AST(object):
         if unit_name not in relevant_dict:
             raise ValueError("Tried to add a rule to the undeclared " + \
                              unit_type.name + ".")
-        
+
         relevant_dict[unit_name].add_rule(rule, variation_name)
 
-    
+
     def rename_unit(self, unit_type, old_name, new_name):
         """
         Renames the unit declaration of type `unit_type` from

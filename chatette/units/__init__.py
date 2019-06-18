@@ -6,11 +6,12 @@ their generation.
 """
 
 from __future__ import print_function
-from six.moves import range
 import re
 import sys
 import random
 from copy import deepcopy
+# pylint: disable=redefined-builtin
+from six.moves import range
 
 from chatette.utils import choose
 from chatette.modifiers.representation import UnitDeclarationModifiersRepr
@@ -367,7 +368,7 @@ class UnitDefinition(object):
         desc += str(len(self.variations)) + " variations"
         if len(self.variations) > 0:
             desc += ':'
-        for (i,variation_name) in enumerate(self.variations):
+        for (i, variation_name) in enumerate(self.variations):
             desc += "\n\t- " + variation_name
             if i >= 12:
                 desc += "\n\t- ..."
