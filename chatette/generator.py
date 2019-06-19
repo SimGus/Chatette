@@ -13,20 +13,20 @@ class Generator(object):
     If there were inconsistencies in the input file, they are likely to be
     detected here.
     """
-    DEFAULT_MAX_NB_INTENT_EXAMPLES = 20000  # TODO: this might not be relevant anymore
+    DEFAULT_MAX_NB_EXAMPLES_PER_INTENT = 1000000  # TODO: this might not be relevant anymore
 
-    def __init__(self, parser):
-        self.parser = parser
+    def __init__(self, definitions_ast):
+        self.ast = definitions_ast
         self.max_nb_single_intent_examples = \
-            Generator.DEFAULT_MAX_NB_INTENT_EXAMPLES
+            Generator.DEFAULT_MAX_NB_EXAMPLES_PER_INTENT
 
     def set_max_nb_single_intent_examples(self, new_max):
         self.max_nb_single_intent_examples = new_max
 
     def generate_train(self):
         print_DBG("Generating training examples...")
-        for intent_name in self.parser.intent_definitions:
-            intent = self.parser.intent_definitions[intent_name]
+        for intent_name in self.ast.intent_definitions:
+            intent = self.ast.intent_definitions[intent_name]
             examples = intent.generate(self.max_nb_single_intent_examples)
             for example in examples:
                 yield example
@@ -34,15 +34,15 @@ class Generator(object):
     def generate_test(self, training_examples=None):
         should_generate_test_set = False
 
-        for intent_name in self.parser.intent_definitions:
-            if self.parser.intent_definitions[intent_name].nb_testing_examples_asked is not None:
+        for intent_name in self.ast.intent_definitions:
+            if self.ast.intent_definitions[intent_name].nb_testing_examples_asked is not None:
                 should_generate_test_set = True
                 break
 
         if should_generate_test_set:
             print_DBG("Generating testing examples...")
-            for intent_name in self.parser.intent_definitions:
-                intent = self.parser.intent_definitions[intent_name]
+            for intent_name in self.ast.intent_definitions:
+                intent = self.ast.intent_definitions[intent_name]
                 examples = intent.generate(self.max_nb_single_intent_examples, training_examples)
                 for example in examples:
                     yield example
@@ -53,9 +53,9 @@ class Generator(object):
         based on the slot value they are assigned.
         """
         synonyms = dict()
-        for slot_definition in self.parser.slot_definitions:
+        for slot_definition in self.ast.slot_definitions:
             current_synonyms_dict = \
-                self.parser.slot_definitions[slot_definition].get_synonyms_dict()
+                self.ast.slot_definitions[slot_definition].get_synonyms_dict()
             for slot_value in current_synonyms_dict:
                 if slot_value not in synonyms:
                     synonyms[slot_value] = current_synonyms_dict[slot_value]

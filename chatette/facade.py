@@ -7,13 +7,12 @@ writing of the output file(s).
 import os
 import shutil
 from random import seed as random_seed
+from six.moves import input, getcwd
 
-from chatette.utils import print_DBG
+from chatette.utils import print_DBG, print_warn
 from chatette.parsing.parser import Parser
 from chatette.generator import Generator
 import chatette.adapters.factory as adapter_factory
-# from chatette.adapters.rasa import RasaAdapter
-# from chatette.adapters.jsonl import JsonListAdapter
 
 
 class Facade(object):
@@ -25,36 +24,42 @@ class Facade(object):
     """
     instance = None
     def __init__(self, master_file_path, output_dir_path, adapter_str="rasa",
-                 local=False, seed=None):
+                 base_filepath=None, local=False, seed=None,
+                 force_overwriting=False):
         if local:
             self.output_dir_path = os.path.dirname(master_file_path)
         else:
-            self.output_dir_path = os.getcwd()
+            self.output_dir_path = getcwd()
         if output_dir_path is None:
             self.output_dir_path = os.path.join(self.output_dir_path, "output")
         else:
             self.output_dir_path = os.path.join(self.output_dir_path,
                                                 output_dir_path)
+        
+        self.force_overwriting = force_overwriting
 
         # Initialize the random number generator
         if seed is not None:
             random_seed(seed)
 
-        self.adapter = adapter_factory.create_adapter(adapter_str)
+        self.adapter = adapter_factory.create_adapter(adapter_str,
+                                                      base_filepath)
 
         self.parser = Parser(master_file_path)
+        self.ast_definitions = None
         self.generator = None
     @classmethod
     def from_args(cls, args):
-        return cls(args.input, args.output, args.adapter, args.local, args.seed)
+        return cls(args.input, args.output, args.adapter, args.base_filepath,
+                   args.local, args.seed, args.force)
 
     @staticmethod
     def get_or_create(master_file_path, output_dir_path, adapter_str=None,
                       local=False, seed=None):
         if Facade.instance is None:
-            instance = Facade(master_file_path, output_dir_path, adapter_str,
-                              local, seed)
-        return instance
+            Facade.instance = Facade(master_file_path, output_dir_path,
+                                     adapter_str, local, seed)
+        return Facade.instance
     @staticmethod
     def get_or_create_from_args(args):
         if Facade.instance is None:
@@ -70,14 +75,14 @@ class Facade(object):
 
     def run_parsing(self):
         """Executes the parsing alone."""
-        self.parser.parse()
+        self.ast_definitions = self.parser.parse()
 
     def parse_file(self, filepath):
         """
         Parses the new template file at `filepath` with the current parser.
         """
         self.parser.open_new_master_file(filepath)
-        self.parser.parse()
+        self.ast_definitions = self.parser.parse()
 
     def run_generation(self, adapter_str=None):
         """"
@@ -90,11 +95,15 @@ class Facade(object):
         else:
             adapter = adapter_factory.create_adapter(adapter_str)
 
-        self.generator = Generator(self.parser)
+        self.generator = Generator(self.ast_definitions)
         synonyms = self.generator.get_entities_synonyms()
 
         if os.path.exists(self.output_dir_path):
-            shutil.rmtree(self.output_dir_path)
+            if self.force_overwriting or self._ask_confirmation():
+                shutil.rmtree(self.output_dir_path)
+            else:
+                print_DBG("Aborting generation. Exiting without any change.")
+                return
 
         train_examples = list(self.generator.generate_train())
         if train_examples:
@@ -106,15 +115,22 @@ class Facade(object):
                           test_examples, synonyms)
         print_DBG("Generation over")
 
+    def _ask_confirmation(self):
+        print_warn("Folder '" + self.output_dir_path + "' already exists.")
+        answer = input("Overwrite the whole folder? [y/n] ").lower()
+        if answer == "" or answer.startswith('y'):
+            return True
+        return False
+
 
     def get_stats_as_str(self):
-        if self.parser is None:
+        if self.ast_definitions is None:
             return "\tNo file parsed."
-        stats = self.parser.stats
-        result = '\t' + str(stats["#files"]) + " files parsed\n" + \
-                 '\t' + str(stats["#declarations"]) + " declarations: " + \
-                 str(stats["#intents"]) + " intents, " + \
-                 str(stats["#slots"]) + " slots and " + \
-                 str(stats["#aliases"]) + " aliases\n" + \
-                 '\t' + str(stats["#rules"]) + " rules"
+        stats = self.ast_definitions.stats
+        result = '\t' + str(stats.get_nb_files()) + " files parsed\n" + \
+                 '\t' + str(stats.get_nb_declarations()) + " declarations: " + \
+                 str(stats.get_nb_intents()) + " intents, " + \
+                 str(stats.get_nb_slots()) + " slots and " + \
+                 str(stats.get_nb_aliases()) + " aliases\n" + \
+                 '\t' + str(stats.get_nb_rules()) + " rules"
         return result

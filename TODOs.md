@@ -9,17 +9,17 @@
 
 - [ ] add an adapter to output raw lists of questions (rather than a JSON file) (without entities?)
 - [ ] add an adapter for *Rasa markdown*
-- [ ] add an adapter for *Snips*
+- [ ] add an adapter for *Snips* (cf. Chatito)
 - [ ] add an adapter for *Google DialogFlow*
 - [ ] add an adapter for *IBM Watson*
-- [ ] add an adapter for *Microsoft LUIS* as described [here](https://github.com/rodrigopivi/Chatito/issues/61)
+- [ ] add an adapter for *Microsoft LUIS* as described [here](https://github.com/rodrigopivi/Chatito/issues/61) (cf. Chatito)
 - [ ] add default aliases and slots
 
 - [ ] add opposite `randgen` names
 - [ ] support several arguments in one rule
 - [ ] reverse regex
-- [ ] add probabilities of generation for rules in defintions (cf. https://github.com/rodrigopivi/Chatito/issues/48)
-- [ ] add support Chatito's augmentations (cf. https://github.com/rodrigopivi/Chatito/issues/48)
+- [ ] add probabilities of generation for rules in defintions (cf. https://github.com/rodrigopivi/Chatito/issues/48 and new implementation) 
+- [ ] add support for Chatito's augmentations (cf. https://github.com/rodrigopivi/Chatito/issues/48)
 - [ ] add an annotation for generating typos
 - [ ] add a flag to enable/disable the slot = slot synonym behavior (cf. https://github.com/rodrigopivi/Chatito/issues/50)
 - [ ] add a way to make some generation mandatory in the training set, test set or both (cf. https://github.com/rodrigopivi/Chatito/issues/51)
@@ -48,6 +48,8 @@
 - [ ] check that intent definitions don't overlap
 - [ ] cache the possible number of generatable examples for each unit
 - [ ] use multithreading or multiprocessing to optimize the execution time (+ program option to set that on/off)
+
+- [ ] replace `print` by `six.print_`?
 
 - [ ] complete refactor of the code: the code is almost unmaintainable
 - [ ] refactor units to remove duplicated code: make modifiers act after the string has been generated
@@ -120,15 +122,17 @@
 - [x] *Interactive mode*: show list of variation names in command `show`
 - [x] check for circular includes
 - [x] use more list/dict comprehensions (faster than using `append`)
+- [x] replace `getcwd` by `six.moves.getcwd` to be sure to have python 2 and 3 compliant code
+- [x] replace `range` by `six.moves.range`
 
 # Bugs
 
 - **BUG**: arguments are not given down when an argument is transmitted as the argument of a token
 - **BUG**: random generation modifiers' names are not taken into account when generating all examples
-- **BUG**: a leading space is generated even though a unit has a random gen modifier and the unit wasn't generated
-- **BUG**: it seems that `generate_all` of choice is called before the generation starts
 
 ## To confirm
+- Some intents don't generate any string even though they should
+- **BUG**: a leading space is generated even though a unit has a random gen modifier and the unit wasn't generated
 
 ## Fixed bugs
 
@@ -164,6 +168,9 @@
 - **fixed**: restaurant example doesn't seem to work anymore
 - **fixed**: possible to have several times the same example generated
 - **fixed**: encoding errors under Windows
+- **fixed**: the interactive console seems to crash at `input()`?
+- **fixed**: space at the end of lines in json outputs (fixed in newest versions of `json`: https://bugs.python.org/issue16333)
+- **fixed**: `{my [own?]/a} ~[religion]` can generate a double space
 
 # Ideas
 

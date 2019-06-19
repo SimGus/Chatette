@@ -5,6 +5,7 @@ Contains the interpreter that runs in a terminal in interactive mode.
 
 from __future__ import print_function
 import io
+from six.moves import input
 
 from chatette import __version__
 from chatette.utils import print_DBG
@@ -116,7 +117,10 @@ class CommandLineInterpreter(object):
     @staticmethod
     def get_command(command_str, quiet):
         """Factory method: creates the right command from the provided str."""
-        operation_name = command_str.split(maxsplit=1)[0].lower()
+        try:  # For Python 3.x
+            operation_name = command_str.split(maxsplit=1)[0].lower()
+        except TypeError:  # For Python 2.7
+            operation_name = command_str.split(None, 1)[0].lower()
         if operation_name == "exit":
             return exit_command.ExitCommand(command_str, quiet)
         if operation_name == "stats":

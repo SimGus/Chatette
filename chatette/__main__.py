@@ -37,8 +37,12 @@ def main():
 
     argument_parser.add_argument("-a", "--adapter", dest="adapter", required=False,
                                  type=str, default="rasa",
-                                 help="Write adapter. Possible values: "+
+                                 help="Write adapter. Possible values: " +
                                       "['rasa', 'jsonl']")
+    argument_parser.add_argument("--base-file", dest="base_filepath", required=False,
+                                type=str, default=None,
+                                help="Path to base file to extend with examples " +
+                                     "and synonyms. Only with Rasa adapter.")
 
     argument_parser.add_argument("-s", "--seed", dest="seed", required=False,
                                  type=str, default=None,
@@ -54,6 +58,11 @@ def main():
                                  required=False, default=None, type=str,
                                  help="Path to a file containing interactive " +
                                       "mode commands that will be directly run")
+    
+    argument_parser.add_argument("-f", "--force", dest="force", required=False,
+                                 action="store_true", default=False,
+                                 help="Don't ask for confirmation before " +
+                                      "overwriting files and folders")
 
     if len(sys.argv[1:]) == 0:
         argument_parser.print_help()

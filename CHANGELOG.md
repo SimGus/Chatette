@@ -5,6 +5,30 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- Refactor part of the parser to separate the parsing process from the definitions (AST)
+- Manage parsing statistics by creating a class intended for that
+- Improve readability of parser
+- Only require `rasa_nlu_data` as a top-level field in base file (not `common_examples` and `entity_synonyms` anymore)
+
+### Fixed
+- Prevent some compatibility issues when using different versions of Python
+- Double space generated in choices in some very precise cases
+
+## [1.5.0] - 2019-06-13
+### Added
+- Program option `-f` or `--force` to overwrite the output folder without asking the user for confirmation
+- Base file containing predefined JSON data, that can be extended with generated data, when using the Rasa adapter
+
+### Removed
+- Drop tests for Python 3.3 because pytest dropped support for it => **Python 3.3 is *not* supported anymore**
+
+### Changed
+- Max number of examples per intent to generate (20'000 => 1'000'000)
+- Ask for user confirmation before overwriting the output folder. Use program option `-f` or `--force` to have the same behavior as before (no confirmation).
+
+### Fixed
+- Command interpreter not working with Python 2.7
 
 ## [1.4.2] - 2019-04-24
 ### Fixed
@@ -250,7 +274,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for slot value names
 - Generator able to generate an output file in *Rasa NLU* format (without support for synonyms or regex features)
 
-[Unreleased]: https://github.com/SimGus/Chatette/compare/v1.4.2...HEAD
+[Unreleased]: https://github.com/SimGus/Chatette/compare/v1.5.0...HEAD
+[1.5.0]: https://github.com/SimGus/Chatette/compare/v1.4.2...v1.5.0
 [1.4.2]: https://github.com/SimGus/Chatette/compare/v1.4.1...v1.4.2
 [1.4.1]: https://github.com/SimGus/Chatette/compare/v1.4.0...v1.4.1
 [1.4.0]: https://github.com/SimGus/Chatette/compare/v1.3.2...v1.4.0

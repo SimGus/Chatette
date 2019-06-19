@@ -19,7 +19,7 @@ class HideCommand(CommandStrategy):
     
     def execute_on_unit(self, facade, unit_type, unit_name, variation_name=None):
         try:
-            unit = facade.parser.get_definition(unit_name, unit_type)
+            unit = facade.parser.ast.get_definition(unit_name, unit_type)
             if variation_name is None:
                 self.stored_units[unit_type.name][unit_name] = unit
                 self._units_to_delete.append((unit_type, unit_name))
@@ -49,9 +49,9 @@ class HideCommand(CommandStrategy):
     
     def finish_execution(self, facade):
         for (unit_type, unit_name) in self._units_to_delete:
-            facade.parser.delete(unit_type, unit_name)
+            facade.parser.ast.delete(unit_type, unit_name)
         self._units_to_delete = []
 
         for (unit_type, unit_name, variation_name) in self._var_to_delete:
-            facade.parser.delete(unit_type, unit_name, variation_name)
+            facade.parser.ast.delete(unit_type, unit_name, variation_name)
         self._var_to_delete = []

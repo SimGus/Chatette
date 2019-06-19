@@ -31,7 +31,7 @@ class IntentRuleContent(RuleContent):
 
 
     def can_have_casegen(self):
-        return self.parser.get_definition(self.name, UnitType.intent) \
+        return self.parser.ast.get_definition(self.name, UnitType.intent) \
             .can_have_casegen()
 
     def check_casegen(self):
@@ -42,7 +42,8 @@ class IntentRuleContent(RuleContent):
             self.casegen_checked = True
 
     def get_max_nb_generated_examples(self):
-        nb_possible_ex = self.parser.get_definition(self.name, UnitType.intent) \
+        nb_possible_ex = self.parser.ast \
+            .get_definition(self.name, UnitType.intent) \
             .get_max_nb_generated_examples(self.variation_name)
         if self.casegen:
             nb_possible_ex *= 2
@@ -73,7 +74,8 @@ class IntentRuleContent(RuleContent):
                 # Generate this randgen
                 generated_randgens[self.randgen] = True
 
-        generated_example = self.parser.get_definition(self.name, UnitType.intent) \
+        generated_example = self.parser.ast \
+            .get_definition(self.name, UnitType.intent) \
             .generate_random(self.variation_name, self.arg_value)
 
         if self.casegen:
@@ -90,7 +92,8 @@ class IntentRuleContent(RuleContent):
         if self.randgen is not None:
             generated_examples.append(Example())
 
-        intents = self.parser.get_definition(self.name, UnitType.intent) \
+        intents = self.parser.ast \
+            .get_definition(self.name, UnitType.intent) \
             .generate_all(self.variation_name, self.arg_value)
 
         generated_examples.extend(intents)

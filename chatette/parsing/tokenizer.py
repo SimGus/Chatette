@@ -40,10 +40,8 @@ class Tokenizer(object):
         opened_filepaths = [f.name for f in self._opened_files]
         if filepath in opened_filepaths:
             raise ValueError("Tried to parse file '" + filepath + "' several " + \
-                             "times (last time when parsing '" + \
-                             self.current_file.name + \
-                             "'). There seems to be circular includes in " + \
-                             "template files.")
+                             "times (a second time when parsing '" + \
+                             self.current_file.name + "').")
         if self.current_file is not None:
             self._opened_files.append(self.current_file)
         self.current_file = LineCountFileWrapper(filepath)
@@ -63,8 +61,10 @@ class Tokenizer(object):
         else:
             self.current_file = None
 
-    def get_file_information(self):
+    def get_current_file_information(self):
         return (self.current_file.name, self.current_file.line_nb)
+    def get_current_file_name(self):
+        return self.current_file.name
 
 
     def fail(self, exception):

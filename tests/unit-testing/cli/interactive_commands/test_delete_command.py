@@ -28,12 +28,12 @@ def test_execute(capsys):
     cmd = DeleteCommand('delete alias "tell me"')
     facade = new_facade()
     try:
-        facade.parser.get_definition("tell me", UnitType.alias)
+        facade.parser.ast.get_definition("tell me", UnitType.alias)
     except KeyError:
         pytest.fail("Unexpected KeyError. Alias 'tell me' doesn't exist " + \
                     "in the parser.")
     cmd.execute(facade)
     with pytest.raises(KeyError):
-        facade.parser.get_definition("tell me", UnitType.alias)
+        facade.parser.ast.get_definition("tell me", UnitType.alias)
     captured = capsys.readouterr()
     assert "Alias 'tell me' was successfully deleted." in captured.out

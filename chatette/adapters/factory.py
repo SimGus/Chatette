@@ -7,7 +7,7 @@ from chatette.adapters.jsonl import JsonListAdapter
 from chatette.adapters.rasa import RasaAdapter
 
 
-def create_adapter(adapter_name):
+def create_adapter(adapter_name, base_filepath=None):
     """
     Instantiate an adapter and returns it given the name of the adapter as a str.
     Names are:
@@ -18,7 +18,7 @@ def create_adapter(adapter_name):
         return None
     adapter_name = adapter_name.lower()
     if adapter_name == 'rasa':
-        return RasaAdapter()
+        return RasaAdapter(base_filepath)
     elif adapter_name == 'jsonl':
-        return JsonListAdapter()
+        return JsonListAdapter(base_filepath)
     raise ValueError("Unknown adapter was selected.")

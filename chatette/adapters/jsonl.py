@@ -8,7 +8,6 @@ from ._base import Adapter
 
 
 class JsonListAdapter(Adapter):
-
     def _get_file_extension(self):
         return "jsonl"
 

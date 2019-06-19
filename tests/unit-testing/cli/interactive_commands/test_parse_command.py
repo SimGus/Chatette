@@ -41,8 +41,8 @@ def test_execute(capsys):
     cmd.execute(new_facade())
     captured = capsys.readouterr()
     assert "[DBG] Parsing master file: " + \
-           "tests/unit-testing/cli/interactive_commands/toilets.chatette\n" + \
-           "[DBG] Parsing finished!" in captured.out
+           "tests/unit-testing/cli/interactive_commands/toilets.chatette" + \
+           "\n" in captured.out
 
 
 def test_abstract_methods():

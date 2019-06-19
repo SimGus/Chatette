@@ -21,18 +21,18 @@ class SaveCommand(CommandStrategy):
             return
 
         template_filepath = self.command_tokens[1]
-        parser = facade.parser
+        definitions = facade.parser.ast
         with io.open(template_filepath, 'w+') as f:
-            for intent_name in parser.intent_definitions:
-                intent = parser.intent_definitions[intent_name]
+            for intent_name in definitions.intent_definitions:
+                intent = definitions.intent_definitions[intent_name]
                 print(intent.get_template_description(), file=f)
             print(file=f)
-            for alias_name in parser.alias_definitions:
-                alias = parser.alias_definitions[alias_name]
+            for alias_name in definitions.alias_definitions:
+                alias = definitions.alias_definitions[alias_name]
                 print(alias.get_template_description(), file=f)
             print(file=f)
-            for slot_name in parser.slot_definitions:
-                slot = parser.slot_definitions[slot_name]
+            for slot_name in definitions.slot_definitions:
+                slot = definitions.slot_definitions[slot_name]
                 print(slot.get_template_description(), file=f)
         self.print_wrapper.write("Template file successfully written.")
 

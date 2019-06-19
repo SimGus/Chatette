@@ -1,5 +1,6 @@
 import random
-#from typing import List
+# pylint: disable=redefined-builtin
+from six.moves import range
 
 from chatette.units import UnitDefinition#, Example
 from .example import IntentExample

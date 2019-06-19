@@ -199,15 +199,7 @@ class CommandStrategy(object):
         Yields the next unit name of type `unit_type`
         whose name matches `regex`.
         """
-        if unit_type == UnitType.alias:
-            relevant_dict = parser.alias_definitions
-        elif unit_type == UnitType.slot:
-            relevant_dict = parser.slot_definitions
-        elif unit_type == UnitType.intent:
-            relevant_dict = parser.intent_definitions
-        else:
-            raise ValueError("Unexpected unit type when matching regex: " +
-                             str(unit_type))
+        relevant_dict = parser.ast._get_relevant_dict(unit_type)
         if self._is_regex_global:
             for unit_name in relevant_dict:
                 if regex.search(unit_name):
@@ -224,15 +216,7 @@ class CommandStrategy(object):
               returns the same data cannot be used in that case (dict changes
               size during iteration).
         """
-        if unit_type == UnitType.alias:
-            relevant_dict = parser.alias_definitions
-        elif unit_type == UnitType.slot:
-            relevant_dict = parser.slot_definitions
-        elif unit_type == UnitType.intent:
-            relevant_dict = parser.intent_definitions
-        else:
-            raise ValueError("Unexpected unit type when matching regex: " +
-                             str(unit_type))
+        relevant_dict = parser.ast._get_relevant_dict(unit_type)
         if self._is_regex_global:
             return [name for name in relevant_dict if regex.search(name)]
         return [name for name in relevant_dict if regex.match(name)]

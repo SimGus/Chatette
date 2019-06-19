@@ -46,15 +46,13 @@ class DeclareCommand(CommandStrategy):
                                          "some hashtags '#'?")
             return
 
+        relevant_dict = facade.parser.ast._get_relevant_dict(unit_type)
         if unit_type == UnitType.alias:
             declaration = AliasDefinition(unit_name, None)
-            relevant_dict = facade.parser.alias_definitions
         elif unit_type == UnitType.slot:
             declaration = SlotDefinition(unit_name, None)
-            relevant_dict = facade.parser.slot_definitions
         else:  # intent
             declaration = IntentDefinition(unit_name, None)
-            relevant_dict = facade.parser.intent_definitions
 
         if unit_name in relevant_dict:
             self.print_wrapper.write(unit_type.name.capitalize() + " '" +

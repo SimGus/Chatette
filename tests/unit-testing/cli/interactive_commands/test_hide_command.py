@@ -59,20 +59,20 @@ def test_execute(capsys):
     cmd = HideCommand('hide alias "tell me"')
     facade = new_facade()
     try:
-        facade.parser.get_definition("tell me", UnitType.alias)
+        facade.parser.ast.get_definition("tell me", UnitType.alias)
     except KeyError:
         pytest.fail("Unexpected KeyError. Alias 'tell me' doesn't exist " + \
                     "in the parser.")
     cmd.execute(facade)
     with pytest.raises(KeyError):
-        facade.parser.get_definition("tell me", UnitType.alias)
+        facade.parser.ast.get_definition("tell me", UnitType.alias)
     captured = capsys.readouterr()
     assert "Alias 'tell me' was successfully hidden." in captured.out
 
     cmd = UnhideCommand('unhided alias "tell me"')
     cmd.execute(facade)
     try:
-        facade.parser.get_definition("tell me", UnitType.alias)
+        facade.parser.ast.get_definition("tell me", UnitType.alias)
     except KeyError:
         pytest.fail("Unexpected KeyError. Alias 'tell me' wasn't restored.")
     captured = capsys.readouterr()
@@ -105,7 +105,7 @@ def test_variations(capsys):
     facade = new_facade()
     cmd.execute(facade)
     try:
-        unit = facade.parser.get_definition("var", UnitType.alias)
+        unit = facade.parser.ast.get_definition("var", UnitType.alias)
         assert "one" not in unit.variations
     except KeyError:
         pytest.fail("Unexpected KeyError. Alias 'var' doesn't exist " + \
@@ -120,7 +120,7 @@ def test_variations(capsys):
     cmd = UnhideCommand('unhide ~ "var#one"')
     cmd.execute(facade)
     try:
-        unit = facade.parser.get_definition("var", UnitType.alias)
+        unit = facade.parser.ast.get_definition("var", UnitType.alias)
         assert "one" in unit.variations
     except KeyError:
         pytest.fail("Unexpected KeyError. Alias 'var' doesn't exist " + \

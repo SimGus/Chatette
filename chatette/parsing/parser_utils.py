@@ -60,9 +60,9 @@ PATTERN_NB_TEST_EX_KEY = re.compile(r"'?test(ing)?'?")
 
 class UnitType(Enum):
     """Enumeration of all possible types of unit declarations."""
-    alias = 1
-    slot = 2
-    intent = 3
+    alias = "alias"
+    slot = "slot"
+    intent = "intent"
 
 
 class SubRuleType(Enum):  # TODO move this into unit defintions
@@ -954,3 +954,10 @@ def is_sub_rule_intent_ref(sub_rule_tokens):
     @pre: considers `sub_rule_tokens` to be a valid sub-rule.
     """
     return sub_rule_tokens[0] == INTENT_SYM
+
+def is_rule_line(line):
+    """Returns `True` iff the line `line` is a rule-level line."""
+    return line[0].isspace()
+def is_include_line(line):
+    """Returns `True` iff the line `line` is a file inclusion line."""
+    return line[0] == INCLUDE_FILE_SYM

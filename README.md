@@ -56,7 +56,7 @@ An interactive mode is available as well (mostly for testing purposes):
 
 ## Installation
 To run *Chatette*, you will need to have [Python](https://www.python.org/) installed.
-*Chatette* works with both Python 2.7 and 3.x (>= 3.3).
+*Chatette* works with both Python 2.7 and 3.x (>= 3.4).
 
 *Chatette* is available on [PyPI](https://pypi.org/project/chatette), and can thus be installed using `pip`:
 ```sh

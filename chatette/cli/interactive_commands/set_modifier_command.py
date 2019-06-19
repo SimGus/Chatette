@@ -58,7 +58,7 @@ class SetModifierCommand(CommandStrategy):
                 self.print_wrapper.write("No " + unit_type.name + " matched.")
 
     def _set_modifier(self, parser, unit_type, unit_name, modifier_name, value):
-        unit = parser.get_definition(unit_name, unit_type)
+        unit = parser.ast.get_definition(unit_name, unit_type)
         modifier_name = modifier_name.lower()
         if modifier_name in ("casegen", CASE_GEN_SYM):
             try:
