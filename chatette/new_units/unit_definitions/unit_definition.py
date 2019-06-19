@@ -12,6 +12,7 @@ from abc import abstractmethod
 
 from chatette.new_units.generating_item import GeneratingItem
 
+
 class UnitDefinition(GeneratingItem):
     """
     Represents the definition of a unit (alias, slot or intent) that have been
