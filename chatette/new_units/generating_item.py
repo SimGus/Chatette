@@ -23,6 +23,7 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
         self._labelling_name = name
         self.name = self._compute_full_name()
         self._total_nb_possibilities = None
+
         self.modifiers = None
     @abstractmethod
     def _compute_full_name(self):
