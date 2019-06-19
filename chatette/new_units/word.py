@@ -22,8 +22,13 @@ class Word(GeneratingItem):
     def _compute_full_name(self):
         self.name = "word '" + self.word + "'"
     
-    def _compute_nb_possibilities(self):
+    def _compute_max_nb_possibilities(self):
+        self._total_nb_possibilities_approximated = False
         return 1
     
-    def generate_nb_possibilities(self, nb_examples):
+    def generate_random(self):
         return Example(self.word)
+    def generate_nb_possibilities(self, nb_examples):
+        return [Example(self.word)]
+    def generate_all(self):
+        return [Example(self.word)]
