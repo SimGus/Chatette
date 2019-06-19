@@ -18,7 +18,8 @@
 - [ ] add opposite `randgen` names
 - [ ] support several arguments in one rule
 - [ ] reverse regex
-- [ ] add probabilities of generation for rules in defintions (cf. https://github.com/rodrigopivi/Chatito/issues/48 and new implementation) 
+- [ ] add probabilities weighting of generation for rules in defintions (cf. https://github.com/rodrigopivi/Chatito/issues/48 and new implementation)
+- [ ] add a flag to make the generators take into account the variability of each rule (cf. https://github.com/rodrigopivi/Chatito/issues/72)
 - [ ] add support for Chatito's augmentations (cf. https://github.com/rodrigopivi/Chatito/issues/48)
 - [ ] add an annotation for generating typos
 - [ ] add a flag to enable/disable the slot = slot synonym behavior (cf. https://github.com/rodrigopivi/Chatito/issues/50)
@@ -66,6 +67,7 @@
 - [ ] *Docs* explain that redefining a unit silently appends the rules to the already declared unit (with the same modifiers as the first time)
 - [ ] *Docs* document the differences between *Chatito* and *Chatette*
 - [ ] *Docs* make docs available from `help()` function
+- [ ] *Docs* explain that each rule has the same probability of being chosen, whatever the number of things it can generate
 
 - [ ] add sections in TODO list to make it more readable
 - [ ] make an installer to use the script directly from the command line (at least in *nix systems)
