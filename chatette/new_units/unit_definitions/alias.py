@@ -21,11 +21,3 @@ class AliasDefinition(UnitDefinition):
     def _compute_full_name(self):
         return "alias '" + self._labelling_name + "'"
     
-    def _compute_max_nb_possibilities(self):
-        max_nb_possibilities = 0
-        for rule in self.rules:
-            max_nb_possibilities += rule.get_max_nb_possibilities()
-        self._total_nb_possibilities_approximated = True
-        return max_nb_possibilities
-    
-

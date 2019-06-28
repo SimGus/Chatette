@@ -23,7 +23,6 @@ class AST(object):
 
         self.stats = Stats(master_filename)
 
-
     def _get_relevant_dict(self, unit_type):
         """Returns the dict that stores units of type `unit_type`."""
         if unit_type == pu.UnitType.alias:
@@ -37,6 +36,12 @@ class AST(object):
                              "(expected alias, slot or intent)")
 
 
+    def exists(self, definition_name, unit_type):
+        """
+        Returns `True` iff a unit of type `unit_type`
+        with name `definition_name`.
+        """
+        return definition_name in self._get_relevant_dict(unit_type)
     def get_definition(self, definition_name, unit_type):
         """Returns the definition for unit with name `definition_name`."""
         relevant_dict = self._get_relevant_dict(unit_type)

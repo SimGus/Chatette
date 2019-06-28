@@ -28,10 +28,17 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
         self._total_nb_possibilities_approximated = None  
         # `False` iff the total number of possibilities is exact
         # (got after generation rather than computed)
+        # TODO find a way to remove that to avoid having incorrect data
+        #      in references (notably)
 
         self.modifiers = modifiers
     @abstractmethod
     def _compute_full_name(self):
+        """
+        Computes and returns the full name of the current item,
+        that can be then displayed to the user.
+        This name can be found in `self.name` after `__init__` was executed.
+        """
         return NotImplementedError()
 
     def get_max_nb_possibilities(self):

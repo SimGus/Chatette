@@ -26,6 +26,15 @@ class UnitDefinition(GeneratingItem):
         super(UnitDefinition, self).__init__(name)
         self._rules = []
         self.variations = dict()
+
+
+    def _compute_max_nb_possibilities(self):
+        max_nb_possibilities = 0
+        for rule in self.rules:
+            max_nb_possibilities += rule.get_max_nb_possibilities()
+        self._total_nb_possibilities_approximated = True
+        return max_nb_possibilities
+
     
     def add_rule(self, rule, variation=None):
         """
@@ -49,7 +58,7 @@ class UnitDefinition(GeneratingItem):
         if not self.modifiers.should_generate():
             return Example()
 
-        generated_example = choose(self._rules.generate_random())
+        generated_example = choose(self._rules).generate_random()
 
         return self.modifiers.apply_post_modifiers(generated_example)
 
