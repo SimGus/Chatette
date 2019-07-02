@@ -10,8 +10,10 @@ that are able to generate examples.
 
 from abc import ABCMeta, abstractmethod
 from future.utils import with_metaclass
-from random import uniform, choice
+from random import uniform, choice, sample
 from copy import deepcopy
+
+from chatette.refactor_units import add_example_no_dup
 
 
 class GeneratingItem(with_metaclass(ABCMeta, object)):
@@ -58,7 +60,7 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
         Can use the cached examples in some cases (better performance).
         """
         # use cache with probability `len(cached)/nb_possibilities`
-        if uniform(0, 1) <= len(self._cached_examples)/self.get_max_nb_possibilities():
+        if uniform(0, 1) <= float(len(self._cached_examples))/float(self.get_max_nb_possibilities()):
             return choice(self._cached_examples)
         return self._generate_random_strategy()
     @abstractmethod
@@ -97,12 +99,45 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
         Returns a list containing `nb_possibilities` examples,
         chosen at random in the set of all possible examples.
         Can use the cached examples in some cases (better performances).
+        @pre: `nb_possibilites` >= 2 (otherwise call `generate_random`)
         """
-        raise NotImplementedError()
+        max_nb_possibilities = self.get_max_nb_possibilities()
+        if nb_possibilities > max_nb_possibilities:
+            nb_possibilities = max_nb_possibilities
+
+        if len(self._cached_examples) == max_nb_possibilities:
+            return sample(self._cached_examples, max_nb_possibilities)
+        if nb_possibilities < float(max_nb_possibilities) / 5.0:  # QUESTION: is 5 a good idea?
+            return self._generate_n_strategy(nb_possibilities)
+
     @abstractmethod
     def _generate_n_strategy(self, n):
         """
         Strategy to generate `n` examples without using the cache.
         Returns the list of generated examples.
+        @pre: `n` <= self.get_max_nb_possibilities()
         """
-        raise NotImplementedError()
+        generated_examples = []
+        loop_count = 0
+        while len(generated_examples) < n:
+            current_ex = self.generate_random()
+            add_example_no_dup(generated_examples, current_ex)
+            loop_count += 1
+            if loop_count > 10*n:  # QUESTION is that a good idea?
+                break
+        return generated_examples
+
+    # @abstractmethod
+    # def short_description(self):
+    #     raise NotImplementedError()
+    # @abstractmethod
+    # def get_template_description(self):
+    #     """
+    #     Returns a string that should be equal to the definition of the unit
+    #     in the template files (i.e. a template string on one or several lines).
+    #     """
+    #     raise NotImplementedError()
+
+    # @abstractmethod
+    # def print_DBG(self):
+    #     raise NotImplementedError()
