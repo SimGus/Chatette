@@ -14,9 +14,15 @@ from chatette.refactor_units.generating_item import GeneratingItem
 
 class UnitDefinition(GeneratingItem):
     """Abstract class base for all unit definitions."""
-    def __init__(self, name=None):
+    def __init__(self, name):
         super(UnitDefinition, self).__init__(name)
         self._rules = []
+
+    def _compute_nb_possibilities(self):
+        acc = 0
+        for rule in self._rules:
+            acc += rule.get_max_nb_possibilities()
+        return acc
     
     def add_rule(self, rule):
         """Adds the rule `rule` to the list of rules."""

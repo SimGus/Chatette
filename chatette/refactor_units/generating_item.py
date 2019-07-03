@@ -23,7 +23,7 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
     Each possibility of string that this item can generate is called
     a possibility or an example.
     """
-    def __init__(self, name=None):
+    def __init__(self, name):
         self._name = name
         self.full_name = self._compute_full_name()
 

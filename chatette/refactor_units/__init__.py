@@ -31,7 +31,7 @@ class Example(object):
         return self.text + '\n\tEntities: ' + str(self.entities)
 
     def __hash__(self):
-        return hash(self.text+str(self.entities))
+        return hash(self.text+str(self.entities.__hash__()))
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
@@ -43,7 +43,46 @@ class Example(object):
         A duplicate is an example with the same text.
         """
         return this.text == other.text
+    
+    def prepend(self, text_to_prepend):
+        """
+        Prepends `text_to_prepend` to the example
+        and manages the pointer of the entities.
+        """
+        length = len(text_to_prepend)
+        if length == 0:
+            return
+        self.text = text_to_prepend + self.text
+        for entity in self.entities:
+            entity._start_index += length
 
+class Entity(object):
+    """
+    Represents an entity as it will be contained in examples
+    (instances of `Example`).
+    """
+    def __init__(self, name, length, start_index=0, value=None):
+        self.name = name  # name of the entity (not the associated text)
+        self.value = value
+        self._len = length
+        self._start_index = start_index
+    
+    def __repr__(self):
+        representation = "entity '" + self.name + "'"
+        if self.value is not None:
+            representation += ":'" + self.value + "'"
+        return representation
+    def __str__(self):
+        return self.name + "@" + str(self._index) + "\t=>\t" + str(self.value)
+    
+    def __hash__(self):
+        return hash(self.name +"@" + str(self._index) + ":" + str(self.value))
+    
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__
+    def __ne__(self, other):
+        return not self.__eq__(other)
+    
 
 def add_example_no_dup(example_list, new_example):
     """
