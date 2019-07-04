@@ -778,7 +778,18 @@ def find_modifiers_choice(tokens_inside_choice):
 
     return modifiers
 
-
+def get_nb_examples_asked(intent_decl_line):
+    """
+    Returns the training and testing number of examples asked for an intent
+    declaration initiator `intent_decl_line`, represented as tuples.
+    Returns `None` if the numbers given are not numbers or no numbers are given.
+    @pre: there is no syntax error in the annotation.
+    """
+    nb_examples_asked = None
+    annotation_interior = pu.get_annotation_interior(token_line)
+    if annotation_interior is not None and len(annotation_interior) > 0:
+        nb_examples_asked = pu.find_nb_examples_asked(annotation_interior)
+    return nb_examples_asked
 def find_nb_examples_asked(annotation_interior):
     """
     Returns the training and testing number of examples asked for an intent

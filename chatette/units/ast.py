@@ -16,12 +16,18 @@ from chatette.parsing.statistics import Stats
 
 
 class AST(object):
+    instance = None
     def __init__(self, master_filename):
         self.alias_definitions = dict()
         self.slot_definitions = dict()
         self.intent_definitions = dict()
 
         self.stats = Stats(master_filename)
+    @staticmethod
+    def get_or_create(master_filename):
+        if AST.instance is None:
+            AST.instance = AST(master_filename)
+        return AST.instance
 
     def _get_relevant_dict(self, unit_type):
         """Returns the dict that stores units of type `unit_type`."""
