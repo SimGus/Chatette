@@ -1,5 +1,5 @@
 """
-Module `chatette.parsing.new_parser`
+Module `chatette.parsing.parser`
 Contains the (new) parser that reads and parses template files
 and transforms the information they contain into dictionaries
 of unit definitions.
@@ -129,10 +129,9 @@ class Parser(object):
         elif unit_type == pu.UnitType.intent:
             new_unit = IntentDefinition(unit_name, modifiers)
             self.ast.stats.increment_intents()
-
-        if unit_type == pu.UnitType.intent and nb_examples_asked is not None:
-            (train_nb, test_nb) = nb_examples_asked
-            new_unit.set_nb_examples_asked(train_nb, test_nb)
+            if nb_examples_asked is not None:
+                (train_nb, test_nb) = nb_examples_asked
+                new_unit.set_nb_examples_asked(train_nb, test_nb)
         
         try:
             self.ast.add_unit(unit_type, unit_name, new_unit)
@@ -302,5 +301,3 @@ class Parser(object):
                 pu.check_reference_validity(interior_tokens)
         except SyntaxError as e:
             self.tokenizer.syntax_error(str(e))
-
-
