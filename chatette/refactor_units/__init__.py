@@ -55,6 +55,18 @@ class Example(object):
         self.text = text_to_prepend + self.text
         for entity in self.entities:
             entity._start_index += length
+    def append(self, example_to_append):
+        """
+        Appends the text of `example_to_append` to the example text
+        and manages its pointers to entities if needed.
+        @post: don't use `example_to_append` any longer
+        """
+        starting_index = len(self.text)
+        self.text += example_to_append.text
+        for entity in example_to_append.entities:
+            entity._start_index += starting_index
+            self.entities.append(entity)
+
 
 class Entity(object):
     """
