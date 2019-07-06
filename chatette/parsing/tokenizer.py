@@ -9,6 +9,31 @@ import chatette.parsing.parser_utils as pu
 from chatette.parsing.line_count_file_wrapper import LineCountFileWrapper
 
 
+# Supported tokens:
+# - '|' => file inclusion
+# - filename for file inclusion
+# - indentation spaces
+# - ' '
+# - '%['
+# - '~['
+# - '@['
+# - '['
+# - ']'
+# - '?rand'
+# - '&'
+# - '#var"
+# - '$arg'
+# - '/100'
+# - identifier
+# - '('
+# - ')'
+# - ':'
+# - annotations key and value
+# - '{'
+# - '/'
+# - '}'
+# - '|'
+
 class Tokenizer(object):
     def __init__(self, master_filename):
         self.master_file_paths = [master_filename]  # TODO use this
