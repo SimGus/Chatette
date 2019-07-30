@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Module `chatette.refactor_parsing`
 Contains the lexer used by the parser and the definition of the tokens it uses.
@@ -9,7 +10,7 @@ from chatette.refactor_parsing.input_file_manager import InputFileManager
 
 
 # Supported tokens
-class TerminalTypes(enum):
+class TerminalTypes(Enum):
     """Enum of terminals types that will be used by the lexer."""
     # File inclusion
     file_include_sym = 0

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Module `chatette.refactor_parsing.parser`
 Contains the definition of the parser
@@ -13,13 +14,16 @@ from chatette.refactor_parsing.lexer import Lexer
 
 
 class Parser(object):
-    def __init__(self, master_filename):
-        if not isinstance(master_filename, string_types):
+    def __init__(self, master_file_path):
+        if not isinstance(master_file_path, string_types):
             raise ValueError(
                 "Since v1.4.0, the parser takes as an argument " + \
                 "the path of the master file directly, rather " + \
                 "than the file itself as before.")
-        self.input_file_manager = InputFileManager.get_or_create(master_filename)
+        self._master_filepath = master_file_path
+
+        self.input_file_manager = \
+            InputFileManager.get_or_create(master_file_path)
         self.lexer = Lexer()
     
 
@@ -28,7 +32,7 @@ class Parser(object):
         Parses the template file(s) and translates them into an AST.
         """
         while True:
-            line = self.input_file_manager.next_line()
+            line = self.input_file_manager.read_line()
             if line is None:
                 break
             print("LINE:", str(line))
