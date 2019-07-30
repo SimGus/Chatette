@@ -5,8 +5,8 @@ Contains the lexer used by the parser and the definition of the tokens it uses.
 
 from enum import Enum
 
-import chatette.parsing.parser_utils as pu
-from chatette.parsing.line_count_file_wrapper impoprt LineCountFileWrapper
+from chatette.refactor_parsing.input_file_manager import InputFileManager
+
 
 # Supported tokens
 class TerminalTypes(enum):
@@ -57,104 +57,27 @@ class TerminalTypes(enum):
 
 class Lexer(object):
     """
-    This class is intended to manage the opening and reading of the template
-    files and to transform the read stream of characters into
-    a stream of tokens and additional information (terminal type).
+    This class is intended to transform each string it is provided
+    into a "lexed" one, that is a list of dicts containing a label
+    (the type of the terminal) and the token as a str.
     """
     def __init__(self):
-        self._current_file = None
-        self._opened_files = []
+        self._file_manager = InputFileManager.get_or_create()
 
-        self._last_read_line = None  # str
-    
-    def open_file(self, filepath):
-        opened_filepaths = [f.name for f in self._opened_files]
-        if filepath in opened_filepaths:
-            raise ValueError(
-                "Tried to read file '" + filepath + "' several times."
-            )
-        self._current_file = LineCountFileWrapper(filepath)
-        self._opened_files.append(filepath)
-    
-    def close_files(self):
-        for f in self._opened_files:
-            if not f.closed:
-                f.close()
-        if not self._current_file is not None and not self._current_file.closed:
-            self._current_file.close()
-    def _close_current_file(self):
+    def lex(self, text):
         """
-        Closes current file and
-        sets current file to the file previously being read (if any).
+        Returns a "lexed" version of the str `text`, that is
+        a list of dicts representing each token in `text`.
+        Those dicts contain a `TerminalType` representing
+        the token's terminal type and a str with the token,
+        and this in the following format:
+        `{"token-type": TerminalType, "token": str}`.
         """
-        if self._current_file is not None:
-            self._current_file.close()
-        if len(self._opened_files) > 0:
-            self._current_file = self._opened_files.pop()
-        else:
-            self._current_file = None
-    
+        if len(text) == 0:
+            return []
+        current_index = 0
+        lexed_text = []
 
-    def get_current_file_information(self):
-        return (self._current_file.name, self._current_file.line_nb)
-    def get_current_filename(self):
-        return self._current_file.name
-    
+        # TODO
 
-    def syntax_error(self, message, line=None, line_index=0, word_to_find=None):
-        """Closes all files and raises a `SyntaxError`."""
-        if lin is None:
-            line = self._last_read_line
-        if word_to_find is not None and line is not None:
-            line_index = line.find(word_to_find)
-        
-        self.close_files()
-        raise SyntaxError(
-            message,
-            (self._current_file.name, self._current_file.line_nb,
-             line_index, line)
-        )
-
-
-    def _read_line(self)
-        """
-        Reads a line of `self._current_file` and
-        returns it the trailing new line (`\n`).
-        If the file was entirely read, closes it and
-        continues to read the file that was previously being read (if any).
-        Returns `None` if there is no file left to read.
-        """
-        line = self._current_file.readline()
-        while line == '':  # EOF
-            self._close_current_file()
-            if self._current_file is None:  # No more files to read
-                return None
-            line = self._current_file.readline()
-        line = line.rstrip()
-        self._last_read_line = line
-        return line
-    
-    def next_tokenized_line(self):
-        """
-        Yields the next relevant line of the current file as a list of dict
-        containing tokens and token types
-        (`{"token-type": TerminalType, "token": str}`).
-        An irrelevant line is an empty or comment line.
-        """
-        while True:
-            line_str = pu.strip_comments(self._read_line())
-            if line_str is None:
-                break
-            if line_str == "":
-                continue
-            yield self._tokenize(line_str)
-
-    def _tokenize(self, text):
-        """
-        Returns a tokenized version of the string `text`,
-        i.e. a list of dict containing tokens and token types
-        (`{"token-type": TerminalType, "token": str}`).
-        """
-        tokens = []
-    
-    
+        return lexed_text
