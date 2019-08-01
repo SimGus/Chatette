@@ -7,10 +7,11 @@ and to produce an Abstract Syntax Tree that represents the information from
 those files.
 """
 
+from __future__ import print_function
 from six import string_types
 
 from chatette.refactor_parsing.input_file_manager import InputFileManager
-from chatette.refactor_parsing.lexer import Lexer
+from chatette.refactor_parsing.lexing.lexer import Lexer
 
 
 class Parser(object):
@@ -37,4 +38,4 @@ class Parser(object):
                 break
             print("LINE:", str(line))
             lexed_line = self.lexer.lex(line)
-            print(lexed_line)
+            print("TOKENS:", lexed_line)
