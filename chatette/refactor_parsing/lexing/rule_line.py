@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# coding: utf-8
 """
 Module `chatette.refactor_parsing.lexing.rule_line`
 Contains the class representing a lexing rule that applies to a full line.
@@ -13,40 +13,25 @@ class RuleLine(LexingRule):
     def __init__(self, text):
         super(RuleLine, self).__init__(text, 0)
     
-    def matches(self):
+    def _apply_strategy(self):
         if len(self._text.rstrip()) == 0:
-            self._labelled_tokens = []
-            self._matched = True
+            self._tokens = []
             return True
         
-        comment_rule = RuleComment(self._text, 0)
-        if comment_rule.matches():
-            self._labelled_tokens = comment_rule.get_labelled_tokens()
-            self._index = comment_rule.get_next_index()
-            self._matched = True
-        else:
-            include_file_rule = RuleFileInclusion(self._text, 0)
-            if include_file_rule.matches():
-                self._labelled_tokens = include_file_rule.get_labelled_tokens()
-                self._index = include_file_rule.get_next_index()
-                self._matched = True
-            else:
-                unit_decl_line_rule = RuleUnitDeclLine(self._text, 0)
-                if unit_decl_line_rule.matches():
-                    self._labelled_tokens = \
-                        unit_decl_line_rule.get_labelled_tokens()
-                    self._index = unit_decl_line_rule.get_next_index()
-                    self._matched = True
+        if self._match_one_of(
+            [RuleComment, RuleFileInclusion, RuleUnitDeclLine, RuleLineRule]
+        ):
+            if self._next_index < len(self._text):
+                comment_rule = RuleComment(
+                    self._text, self._next_index
+                )
+                if comment_rule.matches():
+                    self._tokens.extend(comment_rule.get_lexical_tokens())
+                    self._next_index = comment_rule.get_next_index_to_match()
+                    # Comments end the ine BY DESIGN
                 else:
-                    rule_line_rule = RuleLineRule(self._text, 0)
-                    if rule_line_rule.matches():
-                        self._labelled_tokens = \
-                            rule_line_rule.get_labelled_tokens()
-                        self._index = rule_line_rule.get_next_index()
-                        self._matched = True
-        
-        if self._index < len(self._text):
-            self._matched = False
-            return False
-        return True
-        
+                    self.error_msg = "Invalid token. Expected a comment or " + \
+                        "the end of the line there."
+            return True
+        return False
+    

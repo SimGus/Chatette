@@ -25,7 +25,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
         self._text = text
 
         self._start_index = start_index
-        self._next_index_to_match = start_index
+        self._next_index = start_index
         self._tokens = []
         
         self._matched = None
@@ -34,7 +34,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
     def matches(self):
         """
         Applies the rule to `self._text`
-        and returns `True` if the rule could be applied correctly.
+        and returns `True` if the rule could be applied successfully.
         @post: `self.get_lexical_tokens()` will return valid tokens
                iff this method returned `True`.
         """
@@ -46,6 +46,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
         """
         Strategy to apply the rule to the text `self._text`.
         Implements the design pattern "Strategy method".
+        Returns `True` iff the rule could be applied successfully.
         """
         raise NotImplementedError()
     
@@ -59,7 +60,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
         Returns `True` iff one of the rules could apply.
         @pre: `rule_classes` contains at least one element.
         @post:
-            - if a rule matched, `self._tokens` and `self._next_index_to_match`
+            - if a rule matched, `self._tokens` and `self._next_index`
               are updated.
             - if no rule matched, `self._matched` and `self.error_msg` are
               updated.
@@ -80,7 +81,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
             rule = rule_class(self._text, index):
             if rule.matches():
                 self._tokens.extend(rule.get_lexical_tokens())
-                self._next_index_to_match += rule.get_next_index_to_match()
+                self._next_index += rule.get_next_index_to_match()
                 return True
             else:
                 match_size = rule.get_next_index_to_match() - index
@@ -108,7 +109,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
         @pre: `rule_classes` contains at least one element.
         @post:
             - if at least one rule matched, `self._tokens` and
-              `self._next_index_to_match` are updated.
+              `self._next_index` are updated.
             - if no rule matched and at least 1 must be matched,
               `self._matched` and `self.error_msg` are updated.
             - if no rule matched and 0 rules were allowed to be matched,
@@ -143,8 +144,8 @@ class LexingRule(with_metaclass(ABCMeta, object)):
                 if rule.matches():
                     matched_some_rule = True
                     self._tokens.extend(self.get_lexical_tokens())
-                    self._next_index_to_match = self.get_next_index_to_match()
-                    index = self._next_index_to_match
+                    self._next_index = self.get_next_index_to_match()
+                    index = self._next_index
                     remaining_rules.remove(remaining_rules[i])
                 else:
                     i += 1
@@ -200,7 +201,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
                 "Rule '" + self.__class__.__name__ + \
                 "' did not match the provided text: '" + self._text + "'."
             )
-        return self._next_index_to_match
+        return self._next_index
     
 
     def print_error(self):
@@ -225,4 +226,4 @@ class LexingRule(with_metaclass(ABCMeta, object)):
                 "'."
             )
         InputFileManager.get_or_create() \
-            .syntax_error(self.error_msg, self._next_index_to_match)
+            .syntax_error(self.error_msg, self._next_index)
