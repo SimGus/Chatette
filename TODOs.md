@@ -49,6 +49,7 @@
 - [ ] cache the possible number of generatable examples for each unit
 - [ ] use multithreading or multiprocessing to optimize the execution time (+ program option to set that on/off)
 - [ ] cache the examples when they are all generated and they are not too numerous
+- [ ] print the seed when starting the program, even if no seed was provided
 
 - [ ] replace `print` by `six.print_`?
 
