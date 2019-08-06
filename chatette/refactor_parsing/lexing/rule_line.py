@@ -21,7 +21,7 @@ class RuleLine(LexingRule):
             return True
         
         if self._match_one_of(
-            [RuleComment, RuleFileInclusion, RuleUnitDeclLine, RuleLineRule]
+            [RuleComment, RuleFileInclusion, RuleUnitDecl, RuleLineRule]
         ):
             if self._next_index < len(self._text):
                 comment_rule = RuleComment(
