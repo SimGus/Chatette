@@ -6,6 +6,8 @@ Contains the class representing a lexing rule that applies to a full line.
 
 from chatette.refactor_parsing.lexing.lexing_rule import LexingRule
 from chatette.refactor_parsing.lexing.rule_comment import RuleComment
+from chatette.refactor_parsing.lexing.rule_file_inclusion import \
+    RuleFileInclusion
 
 
 class RuleLine(LexingRule):
