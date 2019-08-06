@@ -8,6 +8,7 @@ from chatette.refactor_parsing.lexing.lexing_rule import LexingRule
 from chatette.refactor_parsing.lexing.rule_comment import RuleComment
 from chatette.refactor_parsing.lexing.rule_file_inclusion import \
     RuleFileInclusion
+from chatette.refactor_parsing.lexing.rule_unit_decl import RuleUnitDecl
 
 
 class RuleLine(LexingRule):
