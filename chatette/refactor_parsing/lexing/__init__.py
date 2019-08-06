@@ -58,7 +58,7 @@ class TerminalType(Enum):
     percentgen = 38
 
 
-class LabelledToken(object):
+class LexicalToken(object):
     """Represents a terminal token with a given `TerminalType`."""
     def __init__(self, terminal_type, token_text):
         self.type = terminal_type
@@ -70,5 +70,5 @@ class LabelledToken(object):
         return self.__repr__()
     def __repr__(self):
         return \
-            "LabelledToken(type: " + self.type.name + \
+            "LexicalToken(type: " + self.type.name + \
             ", tokens: \"" + self.token + "\")"

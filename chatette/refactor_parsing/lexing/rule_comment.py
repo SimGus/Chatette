@@ -5,7 +5,7 @@ Contains the class representing the lexing rule that applies to comments.
 """
 
 from chatette.refactor_parsing.lexing.lexing_rule import LexingRule
-from chatette.refactor_parsing.lexing import LabelledToken, TerminalType
+from chatette.refactor_parsing.lexing import LexicalToken, TerminalType
 
 
 class RuleComment(LexingRule):
@@ -18,13 +18,13 @@ class RuleComment(LexingRule):
             index += 1
         if index > self._index:
             labelled_tokens.append(
-                LabelledToken(TerminalType.whitespace, text[self._index:index])
+                LexicalToken(TerminalType.whitespace, text[self._index:index])
             )
 
         if text.startswith('//', index):
             self._matched = True
             labelled_tokens.append(
-                LabelledToken(TerminalType.comment, text[index:])
+                LexicalToken(TerminalType.comment, text[index:])
             )
             self._labelled_tokens = labelled_tokens
             self._next_index = len(text)
