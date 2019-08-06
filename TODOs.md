@@ -67,6 +67,7 @@
 - [ ] *Docs* explain that redefining a unit silently appends the rules to the already declared unit (with the same modifiers as the first time)
 - [ ] *Docs* document the differences between *Chatito* and *Chatette*
 - [ ] *Docs* make docs available from `help()` function
+- [ ] *Docs* add a lexicon page in the wiki
 
 - [ ] add sections in TODO list to make it more readable
 - [ ] make an installer to use the script directly from the command line (at least in *nix systems)
