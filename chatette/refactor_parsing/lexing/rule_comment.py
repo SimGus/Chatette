@@ -19,6 +19,8 @@ class RuleComment(LexingRule):
         if self._next_index > self._start_index:
             matched_text = text[self._start_index:self._next_index]
             tokens.append(LexicalToken(TerminalType.whitespace, matched_text))
+        if self._next_index >= len(text):
+            return True
         
         if (   text.startswith(COMMENT_SYM, self._next_index)
             or text.startswith(OLD_COMMENT_SYM, self._next_index)
