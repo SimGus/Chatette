@@ -40,6 +40,10 @@ class LexingRule(with_metaclass(ABCMeta, object)):
         """
         if self._matched is None:
             self._matched = self._apply_strategy()
+            if self._matched:  # TODO TMP DEBUG
+                print("Matched: " + self.__class__.__name__)
+            else:
+                print("Not matched: " + self.__class__.__name__)
         return self._matched
     @abstractmethod
     def _apply_strategy(self):
@@ -47,6 +51,8 @@ class LexingRule(with_metaclass(ABCMeta, object)):
         Strategy to apply the rule to the text `self._text`.
         Implements the design pattern "Strategy method".
         Returns `True` iff the rule could be applied successfully.
+        If the rule doesn't match, `self.error_msg` should be updated
+        accordingly.
         """
         raise NotImplementedError()
     
@@ -80,7 +86,6 @@ class LexingRule(with_metaclass(ABCMeta, object)):
         for rule_class in rule_classes:
             rule = rule_class(self._text, index)
             if rule.matches():
-                print("Matched: " + rule.__class__.__name__)
                 self._tokens.extend(rule.get_lexical_tokens())
                 self._next_index += rule.get_next_index_to_match()
                 return True

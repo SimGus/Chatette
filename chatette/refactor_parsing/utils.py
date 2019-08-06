@@ -4,7 +4,11 @@ Module `chatette.refactor_parsing.utils`
 Contains utility functions that are used by various parsing components.
 """
 
+# Symbols definitions
 ESCAPEMENT_SYM = '\\'
+
+COMMENT_SYM = '//'
+OLD_COMMENT_SYM = ';'
 
 
 def find_unescaped(text, str_to_find, start_index=0, end_index=None):
