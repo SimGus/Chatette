@@ -78,8 +78,9 @@ class LexingRule(with_metaclass(ABCMeta, object)):
         best_failed_rule = None
         longest_match_size = None
         for rule_class in rule_classes:
-            rule = rule_class(self._text, index):
+            rule = rule_class(self._text, index)
             if rule.matches():
+                print("Matched: " + rule.__class__.__name__)
                 self._tokens.extend(rule.get_lexical_tokens())
                 self._next_index += rule.get_next_index_to_match()
                 return True
