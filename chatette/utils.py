@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
+# coding: utf-8
 """
 Module `chatette.utils`
 Contains utility functions used everywhere in the project.
@@ -85,6 +84,18 @@ def remove_duplicates(dict_of_lists):
     """Removes duplicates from a dictionary containing lists."""
     return {key: list(set(value)) for (key, value) in dict_of_lists.items()}
 
+def min_if_exist(n1, n2):
+    """
+    Returns the minimum between two numbers, or the only defined number
+    (in case the other is `None`) or `None` if none of the numbers are defined.
+    """
+    if n1 is None and n2 is None:
+        return None
+    elif n1 is None:
+        return n2
+    elif n2 is None:
+        return n1
+    return min(n1, n2)
 
 
 if __name__ == "__main__":

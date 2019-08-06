@@ -10,6 +10,8 @@ ESCAPEMENT_SYM = '\\'
 COMMENT_SYM = '//'
 OLD_COMMENT_SYM = ';'
 
+FILE_INCLUSION_SYM = '|'
+
 
 def find_unescaped(text, str_to_find, start_index=0, end_index=None):
     """

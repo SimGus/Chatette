@@ -1,0 +1,48 @@
+# coding: utf-8
+"""
+Module `chatette.refactor_parsing.lexing.rule_file_inclusion`
+Contains the definition of the class that represents the lexing rule
+that has to do with a line that includes a file.
+"""
+
+from chatette.refactor_parsing.lexing.lexing_rule import LexingRule
+from chatette.refactor_parsing.lexing import LexicalToken, TerminalType
+from chatette.refactor_parsing.utils import \
+    FILE_INCLUSION_SYM, COMMENT_SYM, OLD_COMMENT_SYM, find_unescaped
+from chatette.utils import min_if_exist
+
+
+class RuleFileInclusion(LexingRule):
+    def _apply_strategy(self):
+        if self._text.startswith(FILE_INCLUSION_SYM, self._next_index):
+            self._tokens.append(
+                LexicalToken(
+                    TerminalType.file_inclusion_marker, FILE_INCLUSION_SYM
+                )
+            )
+            self._next_index += 1
+        else:
+            self.error_msg = \
+                "Invalid token. Expected a file to be included there " + \
+                "(starting with '" + FILE_INCLUSION_SYM + "')."
+            return False
+
+        if self._text[self._next_index].isspace():
+            self.error_msg = \
+                "Invalid token. Expected a file path here, got a whitespace."
+            return False
+        
+        comment_start = \
+            find_unescaped(self._text, COMMENT_SYM, self._next_index)
+        old_comment_start = \
+            find_unescaped(self._text, OLD_COMMENT_SYM, self._next_index)
+        comment_start = min_if_exist(comment_start, old_comment_start)
+        if comment_start is not None:
+            file_path = self._text[self._next_index:comment_start].rstrip()
+        else:
+            file_path = self._text[self._next_index:].rstrip()
+        self._tokens.append(
+            LexicalToken(TerminalType.file_path, file_path)
+        )
+        self._next_index += len(file_path)
+        return True
