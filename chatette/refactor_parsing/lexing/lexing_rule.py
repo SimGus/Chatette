@@ -39,7 +39,13 @@ class LexingRule(with_metaclass(ABCMeta, object)):
                iff this method returned `True`.
         """
         if self._matched is None:
-            self._matched = self._apply_strategy()
+            if self._next_index >= len(self._text):
+                self._matched = False
+                self.error_msg = \
+                    "Matching of rule '" + self.__class__.__name__ + "' " + \
+                    "failed. Didn't expect an end of line there."
+            else:
+                self._matched = self._apply_strategy()
             if self._matched:  # TODO TMP DEBUG
                 print("Matched: " + self.__class__.__name__)
             else:
