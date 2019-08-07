@@ -117,21 +117,24 @@ def extract_word_or_identifier(text, start_index=0):
             continue
         if text[i] == ESCAPEMENT_SYM:
             escaped = True
-        elif is_special_char(text[i]) or text.startswith(COMMENT_SYM, i):
+        elif (
+            is_special_identifier_char(text[i]) \
+            or text.startswith(COMMENT_SYM, i)
+        ):
             break
         i += 1
     if i == start_index:
         return ""
     return text[start_index:i]
 
-def is_special_char(c):
+def is_special_identifier_char(c):
     """
-    Returns `True` iff character `c` should be escaped
+    Returns `True` iff character `c` should be escaped in an identifier
     (i.e. it is a special character).
     """
     return c in (
         ESCAPEMENT_SYM, OLD_COMMENT_SYM, FILE_INCLUSION_SYM, UNIT_START_SYM,
-        UNIT_END_SYM, ALIAS_SYM, SLOT_SYM, INTENT_SYM, SLOT_VAL_SYM,
+        UNIT_END_SYM, ALIAS_SYM, SLOT_SYM, INTENT_SYM,
         CHOICE_START, CHOICE_END, CHOICE_SEP, OLD_CHOICE_START, OLD_CHOICE_END,
         OLD_CHOICE_SEP, CASE_GEN_SYM, RAND_GEN_SYM, ARG_SYM
     )
