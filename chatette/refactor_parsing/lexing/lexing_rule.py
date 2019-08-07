@@ -23,6 +23,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
     - produce the sequence of lexical toekns if it matches
     - formulate the error and communicate it to the user if asked
     """
+    _empty_match_allowed = False
     def __init__(self, text, start_index):
         self._text = text
 
@@ -32,6 +33,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
         
         self._matched = None
         self.error_msg = None
+
     
     def matches(self):
         """
@@ -42,13 +44,17 @@ class LexingRule(with_metaclass(ABCMeta, object)):
         """
         if self._matched is None:
             if self._next_index >= len(self._text):
-                self._matched = False
-                self.error_msg = \
-                    "Matching of rule '" + self.__class__.__name__ + "' " + \
-                    "failed. Didn't expect an end of line there."
+                if self.__class__._empty_match_allowed:
+                    self._matched = True
+                else:
+                    self._matched = False
+                    self.error_msg = \
+                        "Matching of rule '" + self.__class__.__name__ + "' " + \
+                        "failed. Didn't expect an end of line there."
             else:
                 self._matched = self._apply_strategy()
-            if self._matched:  # TODO TMP DEBUG
+            # TODO TMP DEBUG
+            if self._matched:
                 print("Matched: " + self.__class__.__name__)
             else:
                 print("Not matched: " + self.__class__.__name__)

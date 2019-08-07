@@ -15,13 +15,17 @@ from chatette.refactor_parsing.lexing.rule_unit_rule import RuleUnitRule
 
 class RuleLine(LexingRule):
     """Represents the lexing rule for a full line of a template file."""
+    _empty_match_allowed = True
     def __init__(self, text):
         super(RuleLine, self).__init__(text, 0)
     
     def _apply_strategy(self):
         if len(self._text.rstrip()) == 0:
+            print("empty")
             self._tokens = []
             return True
+        else:
+            print("not empty: ", self._text.rstrip(), len(self._text.rstrip()))
         
         if self._match_one_of(
             [RuleComment, RuleFileInclusion, RuleUnitDeclLine, RuleUnitRule]
