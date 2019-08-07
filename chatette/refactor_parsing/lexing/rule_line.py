@@ -8,7 +8,9 @@ from chatette.refactor_parsing.lexing.lexing_rule import LexingRule
 from chatette.refactor_parsing.lexing.rule_comment import RuleComment
 from chatette.refactor_parsing.lexing.rule_file_inclusion import \
     RuleFileInclusion
-from chatette.refactor_parsing.lexing.rule_unit_decl import RuleUnitDecl
+from chatette.refactor_parsing.lexing.rule_unit_decl_line import \
+    RuleUnitDeclLine
+from chatette.refactor_parsing.lexing.rule_unit_rule import RuleUnitRule
 
 
 class RuleLine(LexingRule):
@@ -22,7 +24,7 @@ class RuleLine(LexingRule):
             return True
         
         if self._match_one_of(
-            [RuleComment, RuleFileInclusion, RuleUnitDecl, RuleLineRule]
+            [RuleComment, RuleFileInclusion, RuleUnitDeclLine, RuleUnitRule]
         ):
             if self._next_index < len(self._text):
                 comment_rule = RuleComment(
