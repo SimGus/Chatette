@@ -214,8 +214,8 @@ class LexingRule(with_metaclass(ABCMeta, object)):
             self.matches()
         if not self._matched:
             raise ValueError(
-                "Rule '" + self.__class__.__name__ + \
-                "' did not match the provided text."
+                "Asked for the lexical tokens of a rule that did not " + \
+                "match: '" + self.__class__.__name__ + "'."
             )
         return self._tokens
     def get_next_index_to_match(self):
@@ -228,11 +228,6 @@ class LexingRule(with_metaclass(ABCMeta, object)):
         """
         if self._matched is None:
             self.matches()
-        if not self._matched:
-            raise ValueError(
-                "Rule '" + self.__class__.__name__ + \
-                "' did not match the provided text: '" + self._text + "'."
-            )
         return self._next_index
     
 

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
 Module `chatette.facade`
 Contains a facade to the system, allowing to run the parsing, generation and
@@ -10,7 +11,8 @@ from random import seed as random_seed
 from six.moves import input, getcwd
 
 from chatette.utils import print_DBG, print_warn
-from chatette.parsing.parser import Parser
+# from chatette.parsing.parser import Parser
+from chatette.refactor_parsing.parser import Parser
 from chatette.generator import Generator
 import chatette.adapters.factory as adapter_factory
 
