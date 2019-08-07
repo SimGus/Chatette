@@ -23,8 +23,16 @@ SLOT_SYM = '@'
 INTENT_SYM = '%'
 # Unit rules
 SLOT_VAL_SYM = '='
+CHOICE_START = '['
+CHOICE_END = ']'
+CHOICE_SEP = '|'
+OLD_CHOICE_START = '{'
+OLD_CHOICE_END = '}'
+OLD_CHOICE_SEP = '/'
 # Modifiers
 CASE_GEN_SYM = '&'
+RAND_GEN_SYM = '?'
+ARG_SYM = '$'
 
 
 def find_unescaped(text, str_to_find, start_index=0, end_index=None):
@@ -83,3 +91,47 @@ def find_next_comment(text, start_index=0, end_index=None):
         text, OLD_COMMENT_SYM, start_index, end_index
     )
     return min_if_exist(comment_index, old_comment_index)
+
+
+def extract_word_or_identifier(text, start_index=0):
+    """
+    Returns the part of `text` that starts at `start_index` and
+    correponds to an identifier, key, value, argument name, randgen name,...
+    Returns an empty string if no identifier was found.
+    Returns `None` if `start_index` points to the end of the string.
+    @raises: `ValueError` if `start_index` points to further than the end of
+             `text`.
+    """
+    length = len(text)
+    if start_index == length:
+        return None
+    elif start_index > length:
+        raise ValueError("Tried to extract an identifier from outside a string.")
+    
+    i = start_index
+    escaped = False
+    while i < length:
+        if escaped:
+            escaped = False
+            i += 1
+            continue
+        if text[i] == ESCAPEMENT_SYM:
+            escaped = True
+        elif is_special_char(text[i]) or text.startswith(COMMENT_SYM, i):
+            break
+        i += 1
+    if i == start_index:
+        return ""
+    return text[start_index:i]
+
+def is_special_char(c):
+    """
+    Returns `True` iff character `c` should be escaped
+    (i.e. it is a special character).
+    """
+    return c in (
+        ESCAPEMENT_SYM, OLD_COMMENT_SYM, FILE_INCLUSION_SYM, UNIT_START_SYM,
+        UNIT_END_SYM, ALIAS_SYM, SLOT_SYM, INTENT_SYM, SLOT_VAL_SYM,
+        CHOICE_START, CHOICE_END, CHOICE_SEP, OLD_CHOICE_START, OLD_CHOICE_END,
+        OLD_CHOICE_SEP, CASE_GEN_SYM, RAND_GEN_SYM, ARG_SYM
+    )
