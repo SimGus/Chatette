@@ -1,0 +1,34 @@
+# coding: utf-8
+"""
+Module `chatette.refactor_parsing.lexing.rule_unit_rule`
+Contains the definition of the class that represents the lexing rule
+to tokenize a rule that is part of a unit definition.
+"""
+
+from chatette.refactor_parsing.lexing.lexing_rule import LexingRule
+from chatette.refactor_parsing.lexing import LexicalToken, TerminalType
+from chatette.refactor_parsing.utils import find_next_comment, SLOT_VAL_SYM
+
+
+class RuleUnitRule(LexingRule):
+    def _apply_strategy(self):
+        if not self._try_to_match_rule(RuleWhitespace):
+            self.error_msg = \
+                "Invalid token. Expected indentation within unit definitions."
+            return False
+        
+        content_rule = RuleContentRule(self._text, self._next_index)
+        if content_rule.matches():
+            self._tokens.extend(content_rule.get_lexical_tokens())
+            self._next_index = content_rule.get_next_index()
+        
+        if slot_value_to_extract:  # TODO find how to get this info
+            if not self._try_to_match_rule(RuleSlotVal):
+                self.error_msg = None
+        
+        if self._next_index < len(self._text):
+            self._try_to_match_rule(RuleComment)
+        
+        if self._next_index < len(self.text):
+            return False
+        return True

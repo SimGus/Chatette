@@ -33,7 +33,7 @@ class RuleLine(LexingRule):
                 if comment_rule.matches():
                     self._tokens.extend(comment_rule.get_lexical_tokens())
                     self._next_index = comment_rule.get_next_index_to_match()
-                    # Comments end the ine BY DESIGN
+                    # Comments end the line BY DESIGN
                 else:
                     self.error_msg = "Invalid token. Expected a comment or " + \
                         "the end of the line there."
