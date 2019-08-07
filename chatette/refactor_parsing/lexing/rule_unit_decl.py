@@ -2,7 +2,7 @@
 """
 Module `chatette.refactor_parsing.lexing.rule_unit_decl`
 Contains the definition of the class that represents the lexing rule
-to tokenize a line that declares a unit.
+to tokenize a declaration of a unit (from '[' to ']').
 """
 
 from chatette.refactor_parsing.lexing.lexing_rule import LexingRule
@@ -40,19 +40,14 @@ class RuleUnitDecl(LexingRule):
                 "Invalid token. Expected the end of the unit declaration " + \
                 "there (using symbol '" + UNIT_END_SYM + "')."
             return False
-        else:
-            # TODO maybe making a function for this would be useful
-            if self._tokens[1].type == TerminalType.alias_decl_start:
-                unit_end_type = TerminalType.alias_decl_end
-            elif self._tokens[1].type == TerminalType.slot_decl_start:
-                unit_end_type = TerminalType.slot_decl_end
-            elif self._tokens[1].type == TerminalType.intent_decl_start:
-                unit_end_type = TerminalType.intent_decl_end
-            self._tokens.append(unit_end_type, UNIT_END_SYM)
-            self._next_index += 1
-        
-        annotation_rule = RuleAnnotation(self._text, self._next_index)
-        if annotation_rule.matches():
-            self._tokens.append(annotation_rule.get_lexical_tokens())
-            self._next_index = annotation_rule.get_next_index_to_match()
+        # TODO maybe making a function for this would be useful
+        if self._tokens[1].type == TerminalType.alias_decl_start:
+            unit_end_type = TerminalType.alias_decl_end
+        elif self._tokens[1].type == TerminalType.slot_decl_start:
+            unit_end_type = TerminalType.slot_decl_end
+        elif self._tokens[1].type == TerminalType.intent_decl_start:
+            unit_end_type = TerminalType.intent_decl_end
+        self._tokens.append(unit_end_type, UNIT_END_SYM)
+        self._next_index += 1
         return True
+        
