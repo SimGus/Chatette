@@ -4,7 +4,9 @@ Module `chatette.refactor_parsing.utils`
 Contains utility functions that are used by various parsing components.
 """
 
+from enum import Enum
 from chatette.utils import min_if_exist
+
 
 ######## Symbols definitions ########
 ESCAPEMENT_SYM = '\\'
@@ -16,6 +18,9 @@ FILE_INCLUSION_SYM = '|'
 # Unit declarations/references
 UNIT_START_SYM = '['
 UNIT_END_SYM = ']'
+ALIAS_SYM = '~'
+SLOT_SYM = '@'
+INTENT_SYM = '%'
 # Unit rules
 SLOT_VAL_SYM = '='
 # Modifiers
