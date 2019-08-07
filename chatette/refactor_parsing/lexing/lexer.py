@@ -30,7 +30,7 @@ class Lexer(object):
         if not rule.matches():
             rule.print_error()
         else:
-            return rule.get_labelled_tokens()
+            return rule.get_lexical_tokens()
 
 
     # def lex(self, text):
