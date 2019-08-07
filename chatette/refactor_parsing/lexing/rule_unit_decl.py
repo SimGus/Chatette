@@ -12,25 +12,15 @@ from chatette.refactor_parsing.utils import CASE_GEN_SYM, UNIT_END_SYM
 
 class RuleUnitDecl(LexingRule):
     def _apply_strategy(self):
-        unit_start_rule = RuleUnitStart(self._text, self._next_index)
-        if not unit_start_rule.matches():
-            self.error_msg = unit_start_rule.error_msg
+        if not self._try_to_match_rule(RuleUnitStart):
             return False
-        else:
-            self._tokens.extend(unit_start_rule.get_lexical_tokens())
-            self._next_index = unit_start_rule.get_next_index_to_match()
         
         if self._text.startswith(CASE_GEN_SYM, self._next_index):
             self._tokens.append(TerminalType.casegen_marker, CASE_GEN_SYM)
             self._next_index += 1
         
-        identifier_rule = RuleIdentifier(self._text, self._next_index)
-        if not identifier_rule.matches():
-            self.error_msg = identifier_rule.error_msg
+        if not self._try_to_match_rule(RuleIdentifier):
             return False
-        else:
-            self._tokens.extend(identifier_rule.get_lexical_tokens())
-            self._next_index = identifier_rule.get_next_index_to_match()
         
         if not self._match_any_order([None, RuleArgDecl, RuleVariation]):
             return False
