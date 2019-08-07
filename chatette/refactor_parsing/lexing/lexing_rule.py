@@ -168,7 +168,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
         no_match_allowed = False
         matched_some_rule = False
         
-        remaining_rules = rule_classes.copy()
+        remaining_rules = list(rule_classes)
         i = 0
         best_failed_rule = None
         longest_match_size = None
