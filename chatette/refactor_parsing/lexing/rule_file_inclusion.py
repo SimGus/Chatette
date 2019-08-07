@@ -8,7 +8,7 @@ that has to do with a line that includes a file.
 from chatette.refactor_parsing.lexing.lexing_rule import LexingRule
 from chatette.refactor_parsing.lexing import LexicalToken, TerminalType
 from chatette.refactor_parsing.utils import \
-    FILE_INCLUSION_SYM, COMMENT_SYM, OLD_COMMENT_SYM, find_unescaped
+    FILE_INCLUSION_SYM, COMMENT_SYM, OLD_COMMENT_SYM, find_next_comment
 from chatette.utils import min_if_exist
 
 
@@ -32,11 +32,7 @@ class RuleFileInclusion(LexingRule):
                 "Invalid token. Expected a file path here, got a whitespace."
             return False
         
-        comment_start = \
-            find_unescaped(self._text, COMMENT_SYM, self._next_index)
-        old_comment_start = \
-            find_unescaped(self._text, OLD_COMMENT_SYM, self._next_index)
-        comment_start = min_if_exist(comment_start, old_comment_start)
+        comment_start = find_next_comment(self._text, self._next_index)
         if comment_start is not None:
             file_path = self._text[self._next_index:comment_start].rstrip()
         else:

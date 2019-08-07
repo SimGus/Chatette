@@ -4,6 +4,8 @@ Module `chatette.refactor_parsing.utils`
 Contains utility functions that are used by various parsing components.
 """
 
+from chatette.utils import min_if_exist
+
 ######## Symbols definitions ########
 ESCAPEMENT_SYM = '\\'
 # Comments
@@ -14,6 +16,8 @@ FILE_INCLUSION_SYM = '|'
 # Unit declarations/references
 UNIT_START_SYM = '['
 UNIT_END_SYM = ']'
+# Unit rules
+SLOT_VAL_SYM = '='
 # Modifiers
 CASE_GEN_SYM = '&'
 
@@ -56,3 +60,21 @@ def find_unescaped(text, str_to_find, start_index=0, end_index=None):
     if to_find_index == len(str_to_find):
         return current_index-len(str_to_find)
     return None
+
+
+def find_next_comment(text, start_index=0, end_index=None):
+    """
+    Finds the next comment in `text` starting from `start_index`
+    until `end_index` (or the end of the text if it wasn't provided).
+    Detects both new-style comments ('//') and old-style comments (';').
+    @returns: the index of the beginning of the comment, or `None` if
+              if no comment was found.
+    """
+    if end_index is None:
+        end_index = len(text)
+        
+    comment_index = find_unescaped(text, COMMENT_SYM, start_index, end_index)
+    old_comment_index = find_unescaped(
+        text, OLD_COMMENT_SYM, start_index, end_index
+    )
+    return min_if_exist(comment_index, old_comment_index)
