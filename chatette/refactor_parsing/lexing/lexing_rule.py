@@ -176,7 +176,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
             if i >= len(remaining_rules):
                 break
             if remaining_rules[i] is None:
-                no_match_allowed = False
+                no_match_allowed = True
                 remaining_rules.remove(None)
                 i = 0
             else:

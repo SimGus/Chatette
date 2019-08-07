@@ -33,6 +33,7 @@ OLD_CHOICE_SEP = '/'
 CASE_GEN_SYM = '&'
 RAND_GEN_SYM = '?'
 ARG_SYM = '$'
+VARIATION_SYM = '#'
 
 
 def find_unescaped(text, str_to_find, start_index=0, end_index=None):
@@ -136,5 +137,5 @@ def is_special_identifier_char(c):
         ESCAPEMENT_SYM, OLD_COMMENT_SYM, FILE_INCLUSION_SYM, UNIT_START_SYM,
         UNIT_END_SYM, ALIAS_SYM, SLOT_SYM, INTENT_SYM,
         CHOICE_START, CHOICE_END, CHOICE_SEP, OLD_CHOICE_START, OLD_CHOICE_END,
-        OLD_CHOICE_SEP, CASE_GEN_SYM, RAND_GEN_SYM, ARG_SYM
+        OLD_CHOICE_SEP, CASE_GEN_SYM, RAND_GEN_SYM, ARG_SYM, VARIATION_SYM
     )

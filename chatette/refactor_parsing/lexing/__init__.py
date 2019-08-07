@@ -56,6 +56,8 @@ class TerminalType(Enum):
     randgen_name = 36
     percentgen_marker = 37
     percentgen = 38
+    variation_marker = 39
+    variation_name = 40
 
 
 class LexicalToken(object):
