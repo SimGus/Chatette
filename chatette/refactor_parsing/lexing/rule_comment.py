@@ -15,8 +15,10 @@ class RuleComment(LexingRule):
     def _apply_strategy(self):
         text = self._text
 
-        if not self._try_to_match_rule(RuleWhitespaces):
-            self.error_msg = None
+        whitespaces_rule = RuleWhitespaces(self._text, self._next_index)
+        if whitespaces_rule.matches():
+            self._next_index = whitespaces_rule.get_next_index_to_match()
+            # ignore the tokens it found since this whitespace is not meaningful
         if self._next_index >= len(text):
             return True
         
