@@ -69,6 +69,7 @@
 - [ ] *Docs* document the differences between *Chatito* and *Chatette*
 - [ ] *Docs* make docs available from `help()` function
 - [ ] *Docs* add a lexicon page in the wiki
+- [ ] *Docs* add a "quickstart" section for the people who already know *Chatito*
 
 - [ ] add sections in TODO list to make it more readable
 - [ ] make an installer to use the script directly from the command line (at least in *nix systems)
