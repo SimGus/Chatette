@@ -1,6 +1,6 @@
 # coding: utf-8
 """
-Module `chatette.refactor_parsin.lexing.lexing_rule`
+Module `chatette.refactor_parsing.lexing.lexing_rule`
 Contains the class that represents a lexing rule, which is
 in charge of checking if the rule it represents matces the input,
 transforms it to lexical tokens (simply called tokens in the code) and
@@ -10,6 +10,8 @@ stateful.
 
 from abc import ABCMeta, abstractmethod
 from future.utils import with_metaclass
+
+from chatette.refactor_parsing.input_file_manager import InputFileManager
 
 
 class LexingRule(with_metaclass(ABCMeta, object)):

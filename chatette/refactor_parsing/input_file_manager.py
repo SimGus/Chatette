@@ -103,7 +103,7 @@ class InputFileManager(object):
         if word_to_find is not None and line is not None:
             char_index = line.find(word_to_find)
         
-        self.close_files()
+        self.close_all_files()
         raise SyntaxError(
             message,
             (self._current_file.name, self._current_file.line_nb,
