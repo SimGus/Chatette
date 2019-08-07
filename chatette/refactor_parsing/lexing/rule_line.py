@@ -21,11 +21,8 @@ class RuleLine(LexingRule):
     
     def _apply_strategy(self):
         if len(self._text.rstrip()) == 0:
-            print("empty")
             self._tokens = []
             return True
-        else:
-            print("not empty: ", self._text.rstrip(), len(self._text.rstrip()))
         
         if self._match_one_of(
             [RuleComment, RuleFileInclusion, RuleUnitDeclLine, RuleUnitRule]

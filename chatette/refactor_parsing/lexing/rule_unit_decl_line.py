@@ -1,6 +1,6 @@
 # coding: utf-8
 """
-Module `chatette.refactor_parsing.lexing.rule_unit_decl`
+Module `chatette.refactor_parsing.lexing.rule_unit_decl_line`
 Contains the definition of the class that represents the lexing rule
 to tokenize a line that declares a unit.
 """
@@ -8,6 +8,8 @@ to tokenize a line that declares a unit.
 from chatette.refactor_parsing.lexing.lexing_rule import LexingRule
 from chatette.refactor_parsing.lexing import LexicalToken, TerminalType
 from chatette.refactor_parsing.utils import CASE_GEN_SYM, UNIT_END_SYM
+
+from chatette.refactor_parsing.lexing.rule_unit_decl import RuleUnitDecl
 
 
 class RuleUnitDeclLine(LexingRule):
