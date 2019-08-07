@@ -93,7 +93,7 @@ def find_next_comment(text, start_index=0, end_index=None):
     return min_if_exist(comment_index, old_comment_index)
 
 
-def extract_word_or_identifier(text, start_index=0):
+def extract_identifier(text, start_index=0):
     """
     Returns the part of `text` that starts at `start_index` and
     correponds to an identifier, key, value, argument name, randgen name,...
@@ -125,7 +125,7 @@ def extract_word_or_identifier(text, start_index=0):
         i += 1
     if i == start_index:
         return ""
-    return text[start_index:i]
+    return text[start_index:i].rstrip()
 
 def is_special_identifier_char(c):
     """
