@@ -8,7 +8,7 @@ from chatette.refactor_parsing.lexing.lexing_rule import LexingRule
 from chatette.refactor_parsing.lexing import LexicalToken, TerminalType
 from chatette.refactor_parsing.utils import COMMENT_SYM, OLD_COMMENT_SYM
 
-from chatette.refactor_parsing.lexing.rule_whitespace import RuleWhitespaces
+from chatette.refactor_parsing.lexing.rule_whitespaces import RuleWhitespaces
 
 
 class RuleComment(LexingRule):
