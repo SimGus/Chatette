@@ -8,8 +8,7 @@ to tokenize an annotation (binded to an intent definition).
 from chatette.refactor_parsing.lexing.lexing_rule import LexingRule
 from chatette.refactor_parsing.lexing import LexicalToken, TerminalType
 from chatette.refactor_parsing.utils import \
-    ANNOTATION_START, ANNOTATION_END, ANNOTATION_SEP, KEY_VAL_CONNECTOR, \
-    extract_annotation_key_value, remove_enclosers
+    ANNOTATION_START, ANNOTATION_END, ANNOTATION_SEP, KEY_VAL_CONNECTOR
 
 from chatette.refactor_parsing.lexing.rule_whitespaces import RuleWhitespaces
 from chatette.refactor_parsing.lexing.rule_key_value import RuleKeyValue
