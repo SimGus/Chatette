@@ -10,6 +10,8 @@ from chatette.refactor_parsing.lexing import LexicalToken, TerminalType
 from chatette.refactor_parsing.utils import find_next_comment, SLOT_VAL_SYM
 
 from chatette.refactor_parsing.lexing.rule_whitespaces import RuleWhitespaces
+from chatette.refactor_parsing.lexing.rule_content_rule import RuleContentRule
+
 
 class RuleUnitRule(LexingRule):
     def _apply_strategy(self):
@@ -18,10 +20,15 @@ class RuleUnitRule(LexingRule):
                 "Invalid token. Expected indentation within unit definitions."
             return False
         
-        content_rule = RuleContentRule(self._text, self._next_index)
-        if content_rule.matches():
-            self._tokens.extend(content_rule.get_lexical_tokens())
-            self._next_index = content_rule.get_next_index()
+        while True:
+            if self._next_index == len(self._text):
+                return True
+            content_rule = RuleContentRule(self._text, self._next_index)
+            if content_rule.matches():
+                self._tokens.extend(content_rule.get_lexical_tokens())
+                self._next_index = content_rule.get_next_index()
+            else:
+                break
         
         if slot_value_to_extract:  # TODO find how to get this info
             if not self._try_to_match_rule(RuleSlotVal):
