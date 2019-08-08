@@ -10,6 +10,7 @@ from chatette.refactor_parsing.lexing import LexicalToken, TerminalType
 from chatette.refactor_parsing.utils import CASE_GEN_SYM, UNIT_END_SYM
 
 from chatette.refactor_parsing.lexing.rule_unit_decl import RuleUnitDecl
+from chatette.refactor_parsing.lexing.rule_annotation import RuleAnnotation
 
 
 class RuleUnitDeclLine(LexingRule):

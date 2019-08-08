@@ -9,10 +9,11 @@ from chatette.refactor_parsing.lexing.lexing_rule import LexingRule
 from chatette.refactor_parsing.lexing import LexicalToken, TerminalType
 from chatette.refactor_parsing.utils import find_next_comment, SLOT_VAL_SYM
 
+from chatette.refactor_parsing.lexing.rule_whitespaces import RuleWhitespaces
 
 class RuleUnitRule(LexingRule):
     def _apply_strategy(self):
-        if not self._try_to_match_rule(RuleWhitespace):
+        if not self._try_to_match_rule(RuleWhitespaces):
             self.error_msg = \
                 "Invalid token. Expected indentation within unit definitions."
             return False

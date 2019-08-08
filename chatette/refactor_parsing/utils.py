@@ -21,6 +21,12 @@ UNIT_END_SYM = ']'
 ALIAS_SYM = '~'
 SLOT_SYM = '@'
 INTENT_SYM = '%'
+# Annotations
+ANNOTATION_START = '('
+ANNOTATION_END = ')'
+ANNOTATION_SEP = ','
+KEY_VAL_CONNECTOR = ':'
+KEY_VAL_ENCLOSERS = ["'", '"']
 # Unit rules
 SLOT_VAL_SYM = '='
 CHOICE_START = '['
@@ -128,6 +134,30 @@ def extract_identifier(text, start_index=0):
         return ""
     return text[start_index:i].rstrip()
 
+def extract_annotation_key_value(text, start_index):
+    """
+    Extracts the key/value that starts at `start_index` in `text`.
+    Returns the key/value, or an empty text if none was found.
+    If `start_index` points to the end of the text, returns `None`.
+    If there is just one encloser, returns it with the key/value.
+    """
+    if start_index == len(text):
+        return None
+    if text[start_index] in KEY_VAL_ENCLOSERS:
+        encloser = text[start_index]
+        end_index = find_unescaped(text, encloser, start_index+1)
+        if end_index is not None:
+            return text[start_index+1:end_index]
+        else:
+            return text[start_index:]
+    else:
+        end_annotation = find_unescaped(text, ANNOTATION_END, start_index)
+        if end_annotation is not None:
+            return text[start_index:end_annotation]
+        else:
+            return text[start_index:]
+        
+
 def is_special_identifier_char(c):
     """
     Returns `True` iff character `c` should be escaped in an identifier
@@ -139,3 +169,20 @@ def is_special_identifier_char(c):
         CHOICE_START, CHOICE_END, CHOICE_SEP, OLD_CHOICE_START, OLD_CHOICE_END,
         OLD_CHOICE_SEP, CASE_GEN_SYM, RAND_GEN_SYM, ARG_SYM, VARIATION_SYM
     )
+
+
+def remove_enclosers(text):
+    """
+    Returns the contents of `text` where the enclosers have been removed.
+    If no enclosers were found, returns `text`.
+    Returns `None` if there is just one encloser or the enclosers don't match
+    each other.
+    """
+    if len(text) == 0:
+        return text
+    if text[0] in KEY_VAL_ENCLOSERS:
+        encloser = text[0]
+        if text.endswith(encloser):
+            return text[1:-1]
+        return None
+    return text
