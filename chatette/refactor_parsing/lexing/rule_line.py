@@ -20,10 +20,6 @@ class RuleLine(LexingRule):
         super(RuleLine, self).__init__(text, 0)
     
     def _apply_strategy(self):
-        if len(self._text.rstrip()) == 0:
-            self._tokens = []
-            return True
-        
         if self._match_one_of(
             [RuleComment, RuleFileInclusion, RuleUnitDeclLine, RuleUnitRule]
         ):
