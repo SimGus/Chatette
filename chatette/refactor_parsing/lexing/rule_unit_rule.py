@@ -10,7 +10,7 @@ from chatette.refactor_parsing.lexing import LexicalToken, TerminalType
 from chatette.refactor_parsing.utils import find_next_comment, SLOT_VAL_SYM
 
 from chatette.refactor_parsing.lexing.rule_whitespaces import RuleWhitespaces
-from chatette.refactor_parsing.lexing.rule_content_rule import RuleContentRule
+from chatette.refactor_parsing.lexing.rule_content_rule_and_choice import RuleContentRule
 
 
 class RuleUnitRule(LexingRule):
