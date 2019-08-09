@@ -12,15 +12,24 @@ from chatette.refactor_parsing.utils import \
 
 
 class RuleUnitStart(LexingRule):
-    def _apply_strategy(self):
+    def _apply_strategy(self, extracting_decl=True):
         if self._text.startswith(ALIAS_SYM, self._next_index):
-            terminal_type = TerminalType.alias_decl_start
+            if extracting_decl:
+                terminal_type = TerminalType.alias_decl_start
+            else:
+                terminal_type = TerminalType.alias_ref_start
             text_start = ALIAS_SYM
         elif self._text.startswith(SLOT_SYM, self._next_index):
-            terminal_type = TerminalType.slot_decl_start
+            if extracting_decl:
+                terminal_type = TerminalType.slot_decl_start
+            else:
+                terminal_type = TerminalType.slot_ref_start
             text_start = SLOT_SYM
         elif self._text.startswith(INTENT_SYM, self._next_index):
-            terminal_type = TerminalType.intent_decl_start
+            if extracting_decl:
+                terminal_type = TerminalType.intent_decl_start
+            else:
+                terminal_type = TerminalType.intent_ref_start
             text_start = INTENT_SYM
         else:
             self.error_msg = \
