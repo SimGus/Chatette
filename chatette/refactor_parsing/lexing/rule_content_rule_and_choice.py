@@ -32,6 +32,7 @@ class RuleContentRule(LexingRule):
         ):
             if not self._try_to_match_rule(RuleWhitespaces):
                 self.error_msg = None
+            return True
         else:
             return False
 

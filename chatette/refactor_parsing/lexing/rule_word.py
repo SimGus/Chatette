@@ -44,12 +44,18 @@ class RuleWord(LexingRule):
         inside_choice = kwargs.get("inside_choice", False)
 
         # TODO this might be better using regexes
-        # Find first whitespace
+        if self._text[self._start_index].isspace():
+            self.error_msg = \
+                "Invalid token. Expected a word instead of a whitespace there."
+            return False
+
+        # Find whitespace after the word
         end_word_index = self._start_index
         while True:
             if end_word_index == len(self._text):
                 break
             if self._text[end_word_index].isspace():
+                end_word_index -= 1
                 break
             end_word_index += 1
         
@@ -87,5 +93,6 @@ class RuleWord(LexingRule):
 
         word = self._text[self._start_index:end_word_index + 1]
         self._next_index = end_word_index + 1
+        print("word is " + word + " then '" + self._text[end_word_index+1:] + "'")
         self._tokens.append(LexicalToken(TerminalType.word, word))
         return True

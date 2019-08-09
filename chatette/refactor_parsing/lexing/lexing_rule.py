@@ -43,6 +43,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
         @post: `self.get_lexical_tokens()` will return valid tokens
                iff this method returned `True`.
         """
+        print("Trying to match: " + self.__class__.__name__ + " on '" + self._text[self._start_index:] + "'")
         if self._matched is None:
             if self._next_index >= len(self._text):
                 if self.__class__._empty_match_allowed:
@@ -56,7 +57,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
                 self._matched = self._apply_strategy(**kwargs)
             # TODO TMP DEBUG
             if self._matched:
-                print("Matched: " + self.__class__.__name__)
+                print("Matched: " + self.__class__.__name__ + " => " + str(self._tokens))
             else:
                 print("Not matched: " + self.__class__.__name__)
         return self._matched
@@ -125,10 +126,11 @@ class LexingRule(with_metaclass(ABCMeta, object)):
             rule = rule_class(self._text, index)
             if rule.matches(**kwargs):
                 self._tokens.extend(rule.get_lexical_tokens())
-                self._next_index += rule.get_next_index_to_match()
+                self._next_index = rule.get_next_index_to_match()
                 return True
             else:
                 match_size = rule.get_next_index_to_match() - index
+                print("match size for " + rule.__class__.__name__ + " is: " + str(match_size))
                 if best_failed_rule is None or match_size > longest_match_size:
                     best_failed_rule = rule
                     longest_match_size = match_size
