@@ -11,7 +11,11 @@ from chatette.refactor_parsing.utils import \
     extract_identifier, \
     CASE_GEN_SYM, UNIT_END_SYM
 
+from chatette.refactor_parsing.lexing.rule_unit_start import RuleUnitStart
 from chatette.refactor_parsing.lexing.rule_variation import RuleVariation
+from chatette.refactor_parsing.lexing.rule_rand_gen import RuleRandGen
+from chatette.refactor_parsing.lexing.rule_arg_assignment import \
+    RuleArgAssignment
 
 
 class RuleUnitRef(LexingRule):
