@@ -51,6 +51,12 @@ class RuleChoice(LexingRule):
             LexicalToken(TerminalType.choice_start, OLD_CHOICE_START)
         )
 
+        if self._text.startswith(CASE_GEN_SYM, self._next_index):
+            self._next_index += 1
+            self._tokens.append(
+                LexicalToken(TerminalType.casegen_marker, CASE_GEN_SYM)
+            )
+
         if not self._try_to_match_rule(RuleWhitespaces):
             self.error_msg = None
 
