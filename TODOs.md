@@ -28,6 +28,7 @@
 - [ ] make double quotes an ignored character in annotations
 - [ ] accept anything inside an arg, especially unit references
 - [ ] add percentages of all possible examples for training and test (rather than simple numbers)
+- [ ] add "auto-aliases" feature (cf. *Chatito* v2.3.4)
 
 - [ ] add regex to rasa JSON file
 
