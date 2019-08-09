@@ -78,6 +78,10 @@ class RuleWord(LexingRule):
                         find_unescaped(choice_sep_char, self._start_index)
                     )
 
+        if end_word_index == self._start_index:
+            self.error_msg = "Invalid token. Expected a word to start here."
+            return False
+
         word = self._text[self._start_index:end_word_index + 1]
         self._next_index = end_word_index + 1
         self._tokens.append(LexicalToken(TerminalType.word, word))
