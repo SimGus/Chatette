@@ -17,6 +17,8 @@ from chatette.refactor_parsing.utils import find_next_comment, \
 
 from chatette.refactor_parsing.lexing.rule_word import RuleWord
 from chatette.refactor_parsing.lexing.rule_unit_ref import RuleUnitRef
+from chatette.refactor_parsing.lexing.rule_arg_assignment import \
+    RuleArgAssignment
 from chatette.refactor_parsing.lexing.rule_whitespaces import RuleWhitespaces
 
 
