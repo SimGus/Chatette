@@ -20,6 +20,7 @@ from chatette.refactor_parsing.lexing.rule_unit_ref import RuleUnitRef
 from chatette.refactor_parsing.lexing.rule_arg_assignment import \
     RuleArgAssignment
 from chatette.refactor_parsing.lexing.rule_whitespaces import RuleWhitespaces
+from chatette.refactor_parsing.lexing.rule_rand_gen import RuleRandGen
 
 
 class RuleContentRule(LexingRule):
