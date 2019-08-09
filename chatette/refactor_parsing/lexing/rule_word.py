@@ -56,7 +56,7 @@ class RuleWord(LexingRule):
         end_word_index = \
             min_if_exist(
                 end_word_index,
-                find_next_comment(self, _text, self._start_index)
+                find_next_comment(self._text, self._start_index)
             )
 
         if end_word_index == self._start_index:
@@ -68,7 +68,7 @@ class RuleWord(LexingRule):
             end_word_index = \
                 min_if_exist(
                     end_word_index,
-                    find_unescaped(current_char, self._start_index)
+                    find_unescaped(self._text, current_char, self._start_index)
                 )
         
         if end_word_index > self._start_index + 1 and inside_choice:
@@ -76,7 +76,9 @@ class RuleWord(LexingRule):
                 end_word_index = \
                     min_if_exist(
                         end_word_index,
-                        find_unescaped(choice_sep_char, self._start_index)
+                        find_unescaped(
+                            self._text, choice_sep_char, self._start_index
+                        )
                     )
 
         if end_word_index == self._start_index:
