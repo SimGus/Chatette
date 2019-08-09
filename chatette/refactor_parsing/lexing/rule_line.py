@@ -21,7 +21,9 @@ class RuleLine(LexingRule):
     
     def _apply_strategy(self, **kwargs):
         if self._match_one_of(
-            [RuleComment, RuleFileInclusion, RuleUnitDeclLine, RuleUnitRule]
+            [RuleComment, RuleFileInclusion, RuleUnitDeclLine, RuleUnitRule],
+            self._next_index,
+            **kwargs
         ):
             if self._next_index < len(self._text):
                 comment_rule = RuleComment(

@@ -19,15 +19,18 @@ class Lexer(object):
         self._file_manager = InputFileManager.get_or_create()
 
 
-    def lex(self, text):
+    def lex(self, text, parsing_slot_def=False):
         """
         Returns a "lexed" version of the str `text`, that is
         a list of `LexedItem`s representing each token in `text`.
         Those `LexedItem`s contain a `TerminalType` representing
         the token's terminal type and a str with the token.
+        `parsing_slot_def` should be `True` when `text` corresponds to
+        the contents of a slot definition (its value for the slot declaration
+        line is not important).
         """
         rule = RuleLine(text)
-        if not rule.matches():
+        if not rule.matches(parsing_slot_def=parsing_slot_def):
             rule.print_error()
         else:
             return rule.get_lexical_tokens()

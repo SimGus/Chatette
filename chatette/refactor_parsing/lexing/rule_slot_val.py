@@ -12,7 +12,14 @@ from chatette.refactor_parsing.utils import find_next_comment, SLOT_VAL_SYM
 
 class RuleSlotVal(LexingRule):
     def _apply_strategy(self, **kwargs):
-        if slot_value_to_extract:  # TODO find how to get this info
+        """
+        `kwargs` can contain a boolean with key `parsing_slot_def` that is
+        `True` if the current text is part of a slot definition.
+        If this boolean is not in `kwargs`, defaults to `False`.
+        """
+        parsing_slot_def = kwargs.get("parsing_slot_def", False)
+
+        if parsing_slot_def:
             slot_value_tokens = []
             while self._text[index].isspace():
                 self._next_index += 1

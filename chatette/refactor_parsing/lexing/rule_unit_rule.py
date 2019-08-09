@@ -15,6 +15,13 @@ from chatette.refactor_parsing.lexing.rule_content_rule_and_choice import RuleCo
 
 class RuleUnitRule(LexingRule):
     def _apply_strategy(self, **kwargs):
+        """
+        `kwargs` can contain a boolean with key `parsing_slot_def` that is
+        `True` if the current text is part of a slot definition.
+        If this boolean is not in `kwargs`, defaults to `False`.
+        """
+        parsing_slot_def = kwargs.get("parsing_slot_def", False)
+
         if not self._try_to_match_rule(RuleWhitespaces):
             self.error_msg = \
                 "Invalid token. Expected indentation within unit definitions."
@@ -30,7 +37,7 @@ class RuleUnitRule(LexingRule):
             else:
                 break
         
-        if slot_value_to_extract:  # TODO find how to get this info
+        if parsing_slot_def:
             if not self._try_to_match_rule(RuleSlotVal):
                 self.error_msg = None
         
