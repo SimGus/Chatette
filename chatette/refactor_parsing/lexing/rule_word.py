@@ -15,6 +15,7 @@ from chatette.refactor_parsing.utils import \
     SLOT_VAL_SYM, \
     CHOICE_START, CHOICE_END, CHOICE_SEP, \
     OLD_CHOICE_START, OLD_CHOICE_END, OLD_CHOICE_SEP, \
+    RAND_GEN_SYM, \
     find_unescaped, find_next_comment
 from chatette.utils import min_if_exist
 
