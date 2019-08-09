@@ -8,9 +8,14 @@ to tokenize a word (inside a rule).
 from chatette.refactor_parsing.lexing.lexing_rule import LexingRule
 from chatette.refactor_parsing.lexing import LexicalToken, TerminalType
 from chatette.refactor_parsing.utils import \
-    ESCAPEMENT_SYM, FILE_INCLUSION_SYM, UNIT_START_SYM, UNIT_END_SYM, \
-    ALIAS_SYM, SLOT_SYM, INTENT_SYM, SLOT_VAL_SYM, CHOICE_START, CHOICE_END, \
-    OLD_CHOICE_START, OLD_CHOICE_END, find_unescaped, find_next_comment
+    ESCAPEMENT_SYM, \
+    FILE_INCLUSION_SYM, \
+    UNIT_START_SYM, UNIT_END_SYM, \
+    ALIAS_SYM, SLOT_SYM, INTENT_SYM, \
+    SLOT_VAL_SYM, \
+    CHOICE_START, CHOICE_END, CHOICE_SEP, \
+    OLD_CHOICE_START, OLD_CHOICE_END, OLD_CHOICE_SEP, \
+    find_unescaped, find_next_comment
 from chatette.utils import min_if_exist
 
 
@@ -20,10 +25,23 @@ class RuleWord(LexingRule):
         UNIT_START_SYM, UNIT_END_SYM,
         ALIAS_SYM, SLOT_SYM, INTENT_SYM,
         SLOT_VAL_SYM,
-        CHOICE_START, CHOICE_END, OLD_CHOICE_START, OLD_CHOICE_END
+        # CHOICE_START, CHOICE_END, 
+        OLD_CHOICE_START, OLD_CHOICE_END
+    ]
+    _should_be_escaped_in_choices_chars = [
+        # CHOICE_SEP,
+        OLD_CHOICE_SEP,
+        RAND_GEN_SYM
     ]
 
     def _apply_strategy(self, **kwargs):
+        """
+        `kwargs` can contain a boolean with key `inside_choice` that is
+        `True` when the current word is inside a choice and `False` otherwise.
+        If this boolean is not in `kwargs`, defaults to `False`.
+        """
+        inside_choice = kwargs.get("inside_choice", False)
+
         # TODO this might be better using regexes
         # Find first whitespace
         end_word_index = self._start_index
@@ -51,6 +69,14 @@ class RuleWord(LexingRule):
                     end_word_index,
                     find_unescaped(current_char, self._start_index)
                 )
+        
+        if end_word_index > self._start_index + 1 and inside_choice:
+            for choice_sep_char in RuleWord._should_be_escaped_in_choices_chars:
+                end_word_index = \
+                    min_if_exist(
+                        end_word_index,
+                        find_unescaped(choice_sep_char, self._start_index)
+                    )
 
         word = self._text[self._start_index:end_word_index + 1]
         self._next_index = end_word_index + 1
