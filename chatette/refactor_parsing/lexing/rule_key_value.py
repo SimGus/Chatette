@@ -13,12 +13,12 @@ from chatette.utils import min_if_exist
 
 
 class RuleKeyValue(LexingRule):
-    def _apply_strategy(self, extract_key=True):
+    def _apply_strategy(self, extracting_key=True):
         """
-        `extract_key` is a boolean that is `True` if this rule should extract 
+        `extracting_key` is a boolean that is `True` if this rule should extract 
         a key and `False` if this rule should extract a value.
         """
-        if extract_key:
+        if extracting_key:
             terminal_type = TerminalType.key
         else:
             terminal_type = TerminalType.value

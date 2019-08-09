@@ -71,7 +71,7 @@ class RuleAnnotation(LexingRule):
                 # Ignoring the tokens because whitespaces here are not meaningful
 
             first_val_rule = RuleKeyValue(self._text, self._next_index)
-            if not first_val_rule.matches(extract_key=False):
+            if not first_val_rule.matches(extracting_key=False):
                 self.error_msg = first_val_rule.error_msg
                 return False
             
@@ -90,7 +90,7 @@ class RuleAnnotation(LexingRule):
                     # Ignoring the tokens because whitespaces here are not meaningful
 
                 key_rule = RuleKeyValue(self._text, self._next_index)
-                if not key_rule.matches(extract_key=True):
+                if not key_rule.matches(extracting_key=True):
                     self.error_msg = key_rule.error_msg
                     return False
                 self._next_index = key_rule.get_next_index_to_match()
@@ -120,7 +120,7 @@ class RuleAnnotation(LexingRule):
                     # Ignoring the tokens because whitespaces here are not meaningful
 
                 value_rule = RuleKeyValue(self._text, self._next_index)
-                if not value_rule.matches(extract_key=True):
+                if not value_rule.matches(extracting_key=True):
                     self.error_msg = value_rule.error_msg
                     return False
                 self._next_index = value_rule.get_next_index_to_match()
