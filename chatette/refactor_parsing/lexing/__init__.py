@@ -41,23 +41,27 @@ class TerminalType(Enum):
     choice_start = 22
     choice_end = 23
     choice_sep = 24
-    unit_ref_start = 25
-    unit_ref_end = 26
-    slot_val_marker = 27  # '='
-    slot_val = 28
+    alias_ref_start = 25
+    alias_ref_end = 26
+    slot_ref_start = 27
+    slot_ref_end = 28
+    intent_ref_start = 29
+    intent_ref_end = 30
+    slot_val_marker = 31  # '='
+    slot_val = 32
     # Modifiers
-    casegen_marker = 29
-    arg_marker = 30
-    arg_name = 31
-    arg_value = 32
-    arg_start = 33  # '('
-    arg_end = 34  # ')'
-    randgen_marker = 35
-    randgen_name = 36
-    percentgen_marker = 37
-    percentgen = 38
-    variation_marker = 39
-    variation_name = 40
+    casegen_marker = 33
+    arg_marker = 34
+    arg_name = 35
+    arg_value = 36
+    arg_start = 37  # '('
+    arg_end = 38  # ')'
+    randgen_marker = 39
+    randgen_name = 40
+    percentgen_marker = 41
+    percentgen = 42
+    variation_marker = 43
+    variation_name = 44
 
 
 class LexicalToken(object):
