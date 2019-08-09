@@ -9,7 +9,9 @@ from chatette.refactor_parsing.lexing.lexing_rule import LexingRule
 from chatette.refactor_parsing.lexing import LexicalToken, TerminalType
 from chatette.refactor_parsing.utils import find_next_comment, SLOT_VAL_SYM
 
+from chatette.refactor_parsing.lexing.rule_word import RuleWord
 from chatette.refactor_parsing.lexing.rule_whitespaces import RuleWhitespaces
+
 
 class RuleContentRule(LexingRule):
     def _apply_strategy(self):
