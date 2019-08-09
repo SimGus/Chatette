@@ -12,7 +12,15 @@ from chatette.refactor_parsing.utils import \
 
 
 class RuleUnitStart(LexingRule):
-    def _apply_strategy(self, extracting_decl=True):
+    def _apply_strategy(self, **kwargs):
+        """
+        `kwargs` can contain a value with key `extracting_decl`.
+        This is a boolean that should be `True` iff the rule should consider
+        it is parsing a unit declaration and `False` if it is parsing
+        a unit reference.
+        If `kwargs` doesn't contain `extracting_decl`, defaults to `True`.
+        """
+        extracting_decl = kwargs.get("extracting_decl", True)
         if self._text.startswith(ALIAS_SYM, self._next_index):
             if extracting_decl:
                 terminal_type = TerminalType.alias_decl_start

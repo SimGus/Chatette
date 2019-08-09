@@ -35,10 +35,11 @@ class LexingRule(with_metaclass(ABCMeta, object)):
         self.error_msg = None
 
     
-    def matches(self):
+    def matches(self, **kwargs):
         """
         Applies the rule to `self._text`
         and returns `True` if the rule could be applied successfully.
+        `kwargs` will be passed to the subsequent call to `self._apply_strategy`.
         @post: `self.get_lexical_tokens()` will return valid tokens
                iff this method returned `True`.
         """
@@ -52,7 +53,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
                         "Matching of rule '" + self.__class__.__name__ + "' " + \
                         "failed. Didn't expect an end of line there."
             else:
-                self._matched = self._apply_strategy()
+                self._matched = self._apply_strategy(**kwargs)
             # TODO TMP DEBUG
             if self._matched:
                 print("Matched: " + self.__class__.__name__)
