@@ -10,7 +10,7 @@ from chatette.refactor_parsing.lexing import LexicalToken, TerminalType
 
 
 class RuleWhitespaces(LexingRule):
-    def _apply_strategy(self):
+    def _apply_strategy(self, **kwargs):
         text = self._text
 
         while self._next_index < len(text) and text[self._next_index].isspace():

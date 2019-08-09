@@ -12,7 +12,7 @@ from chatette.refactor_parsing.lexing.rule_whitespaces import RuleWhitespaces
 
 
 class RuleComment(LexingRule):
-    def _apply_strategy(self):
+    def _apply_strategy(self, **kwargs):
         text = self._text
 
         whitespaces_rule = RuleWhitespaces(self._text, self._next_index)

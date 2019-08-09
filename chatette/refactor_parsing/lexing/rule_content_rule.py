@@ -15,9 +15,11 @@ from chatette.refactor_parsing.lexing.rule_whitespaces import RuleWhitespaces
 
 
 class RuleContentRule(LexingRule):
-    def _apply_strategy(self):
+    def _apply_strategy(self, **kwargs):
         if self._match_one_of(
-            [RuleWord, RuleChoice, RuleUnitRef, RuleArgAssignment]
+            [RuleWord, RuleChoice, RuleUnitRef, RuleArgAssignment],
+            self._next_index,
+            **kwargs
         ):
             if not self._try_to_match_rule(RuleWhitespaces):
                 self.error_msg = None

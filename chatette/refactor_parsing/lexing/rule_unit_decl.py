@@ -16,7 +16,7 @@ from chatette.refactor_parsing.lexing.rule_variation import RuleVariation
 
 
 class RuleUnitDecl(LexingRule):
-    def _apply_strategy(self):
+    def _apply_strategy(self, **kwargs):
         if not self._try_to_match_rule(RuleUnitStart):
             return False
         

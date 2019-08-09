@@ -11,7 +11,7 @@ from chatette.refactor_parsing.utils import find_next_comment, SLOT_VAL_SYM
 
 
 class RuleSlotVal(LexingRule):
-    def _apply_strategy(self):
+    def _apply_strategy(self, **kwargs):
         if slot_value_to_extract:  # TODO find how to get this info
             slot_value_tokens = []
             while self._text[index].isspace():

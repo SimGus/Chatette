@@ -15,7 +15,7 @@ from chatette.refactor_parsing.lexing.rule_key_value import RuleKeyValue
 
 
 class RuleAnnotation(LexingRule):
-    def _apply_strategy(self):
+    def _apply_strategy(self, **kwargs):
         if self._text.startswith(ANNOTATION_START, self._next_index):
             self._next_index += 1
             self._tokens.append(

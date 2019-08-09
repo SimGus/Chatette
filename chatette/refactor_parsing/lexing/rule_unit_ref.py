@@ -15,7 +15,7 @@ from chatette.refactor_parsing.lexing.rule_variation import RuleVariation
 
 
 class RuleUnitRef(LexingRule):
-    def _apply_strategy(self):
+    def _apply_strategy(self, **kwargs):
         unit_start_rule = RuleUnitStart(self._text, self._next_index)
         if not unit_start_rule.matches(extracting_decl=False):
             self.error_msg = unit_start_rule.error_msg

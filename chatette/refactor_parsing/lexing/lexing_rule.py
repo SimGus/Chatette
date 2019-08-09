@@ -61,13 +61,15 @@ class LexingRule(with_metaclass(ABCMeta, object)):
                 print("Not matched: " + self.__class__.__name__)
         return self._matched
     @abstractmethod
-    def _apply_strategy(self):
+    def _apply_strategy(self, **kwargs):
         """
         Strategy to apply the rule to the text `self._text`.
         Implements the design pattern "Strategy method".
         Returns `True` iff the rule could be applied successfully.
         If the rule doesn't match, `self.error_msg` should be updated
         accordingly.
+        `kwargs` can be used to pass arguments that are specific to
+        the current strategy.
         """
         raise NotImplementedError()
     
@@ -92,13 +94,14 @@ class LexingRule(with_metaclass(ABCMeta, object)):
             self.error_msg = rule.error_msg
             return False
 
-    def _match_one_of(self, rule_classes, index=None):
+    def _match_one_of(self, rule_classes, index=None, **kwargs):
         """
         Finds which of the rules in `rule_classes` matches the text starting at
         index `index`.
         Try rules in order of appearance in `rule_classes`.
         `rule_classes` is a list of class of rules.
         Returns `True` iff one of the rules could apply.
+        `kwargs` will be passed down to the subsequent `_matches`
         @pre: `rule_classes` contains at least one element.
         @post:
             - if a rule matched, `self._tokens` and `self._next_index`
@@ -120,7 +123,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
         longest_match_size = None
         for rule_class in rule_classes:
             rule = rule_class(self._text, index)
-            if rule.matches():
+            if rule.matches(**kwargs):
                 self._tokens.extend(rule.get_lexical_tokens())
                 self._next_index += rule.get_next_index_to_match()
                 return True

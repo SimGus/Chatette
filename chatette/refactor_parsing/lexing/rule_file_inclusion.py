@@ -13,7 +13,7 @@ from chatette.utils import min_if_exist
 
 
 class RuleFileInclusion(LexingRule):
-    def _apply_strategy(self):
+    def _apply_strategy(self, **kwargs):
         if self._text.startswith(FILE_INCLUSION_SYM, self._next_index):
             self._tokens.append(
                 LexicalToken(

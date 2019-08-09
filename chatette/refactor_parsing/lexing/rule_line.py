@@ -19,7 +19,7 @@ class RuleLine(LexingRule):
     def __init__(self, text):
         super(RuleLine, self).__init__(text, 0)
     
-    def _apply_strategy(self):
+    def _apply_strategy(self, **kwargs):
         if self._match_one_of(
             [RuleComment, RuleFileInclusion, RuleUnitDeclLine, RuleUnitRule]
         ):

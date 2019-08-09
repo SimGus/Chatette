@@ -38,6 +38,7 @@ OLD_CHOICE_SEP = '/'
 # Modifiers
 CASE_GEN_SYM = '&'
 RAND_GEN_SYM = '?'
+RAND_GEN_PERCENT_SYM = '/'
 ARG_SYM = '$'
 VARIATION_SYM = '#'
 

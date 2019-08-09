@@ -14,7 +14,7 @@ from chatette.refactor_parsing.lexing.rule_content_rule import RuleContentRule
 
 
 class RuleUnitRule(LexingRule):
-    def _apply_strategy(self):
+    def _apply_strategy(self, **kwargs):
         if not self._try_to_match_rule(RuleWhitespaces):
             self.error_msg = \
                 "Invalid token. Expected indentation within unit definitions."

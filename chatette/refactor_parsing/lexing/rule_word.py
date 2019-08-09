@@ -23,7 +23,7 @@ class RuleWord(LexingRule):
         CHOICE_START, CHOICE_END, OLD_CHOICE_START, OLD_CHOICE_END
     ]
 
-    def _apply_strategy(self):
+    def _apply_strategy(self, **kwargs):
         # TODO this might be better using regexes
         # Find first whitespace
         end_word_index = self._start_index

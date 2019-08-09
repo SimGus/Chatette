@@ -11,7 +11,7 @@ from chatette.refactor_parsing.utils import ARG_SYM, extract_identifier
 
 
 class RuleArgDecl(LexingRule):
-    def _apply_strategy(self):
+    def _apply_strategy(self, **kwargs):
         if not self._text.startswith(ARG_SYM, self._next_index):
             self.error_msg = \
                 "Invalid token. Expected an argument declaration there " + \

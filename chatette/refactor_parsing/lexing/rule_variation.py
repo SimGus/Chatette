@@ -11,7 +11,7 @@ from chatette.refactor_parsing.utils import VARIATION_SYM, extract_identifier
 
 
 class RuleVariation(LexingRule):
-    def _apply_strategy(self):
+    def _apply_strategy(self, **kwargs):
         if self._text.startswith(VARIATION_SYM, self._next_index):
             self._next_index += 1
             self._tokens.append(
