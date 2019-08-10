@@ -50,49 +50,47 @@ class RuleWord(LexingRule):
             return False
 
         # Find whitespace after the word
-        end_word_index = self._start_index
+        next_word_index = self._start_index + 1  # NOTE exclusive
         while True:
-            if end_word_index == len(self._text):
+            if next_word_index == len(self._text):
                 break
-            if self._text[end_word_index].isspace():
-                end_word_index -= 1
+            if self._text[next_word_index].isspace():
                 break
-            end_word_index += 1
+            next_word_index += 1
         
-        end_word_index = \
+        next_word_index = \
             min_if_exist(
-                end_word_index,
+                next_word_index,
                 find_next_comment(self._text, self._start_index)
             )
 
-        if end_word_index == self._start_index:
+        if next_word_index == self._start_index:
             self.error_msg = "Invalid token. Expected a word to start here."
             return False
         for current_char in RuleWord._should_be_escaped_chars:
-            if end_word_index == self._start_index + 1:
+            if next_word_index == self._start_index:
                 break
-            end_word_index = \
+            next_word_index = \
                 min_if_exist(
-                    end_word_index,
+                    next_word_index,
                     find_unescaped(self._text, current_char, self._start_index)
                 )
         
-        if end_word_index > self._start_index + 1 and inside_choice:
+        if inside_choice and next_word_index > self._start_index:
             for choice_sep_char in RuleWord._should_be_escaped_in_choices_chars:
-                end_word_index = \
+                next_word_index = \
                     min_if_exist(
-                        end_word_index,
+                        next_word_index,
                         find_unescaped(
                             self._text, choice_sep_char, self._start_index
                         )
                     )
 
-        if end_word_index == self._start_index:
+        if next_word_index == self._start_index:
             self.error_msg = "Invalid token. Expected a word to start here."
             return False
 
-        word = self._text[self._start_index:end_word_index + 1]
-        self._next_index = end_word_index + 1
-        print("word is " + word + " then '" + self._text[end_word_index+1:] + "'")
+        word = self._text[self._start_index:next_word_index]
+        self._next_index = next_word_index
         self._tokens.append(LexicalToken(TerminalType.word, word))
         return True

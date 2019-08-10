@@ -35,7 +35,7 @@ class RuleUnitRule(LexingRule):
             content_rule = RuleContentRule(self._text, self._next_index)
             if content_rule.matches():
                 self._tokens.extend(content_rule.get_lexical_tokens())
-                self._next_index = content_rule.get_next_index()
+                self._next_index = content_rule.get_next_index_to_match()
             else:
                 break
         

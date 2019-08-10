@@ -79,7 +79,7 @@ def find_unescaped(text, str_to_find, start_index=0, end_index=None):
             break
     
     if to_find_index == len(str_to_find):
-        return current_index-len(str_to_find)
+        return current_index - len(str_to_find)
     return None
 
 

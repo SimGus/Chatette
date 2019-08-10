@@ -43,14 +43,24 @@ class RuleContentRule(LexingRule):
 #      `RuleChoice`, which in turn can contain instances of `RuleContentRule`.
 class RuleChoice(LexingRule):
     def _apply_strategy(self, **kwargs):
-        if not self._text.startswith(OLD_CHOICE_START, self._next_index):
+        start_char = None
+        if self._text.startswith(OLD_CHOICE_START, self._next_index):
+            start_char = OLD_CHOICE_START
+            sep_char = OLD_CHOICE_SEP
+            end_char = OLD_CHOICE_END
+        elif self._text.startswith(CHOICE_START, self._next_index):
+            start_char = CHOICE_START
+            sep_char = CHOICE_SEP
+            end_char = CHOICE_END
+        
+        if start_char is None:
             self.error_msg = \
                 "Invalid token. Expected a choice to start there (starting " + \
-                "with '" + OLD_CHOICE_START + "')."
+                "with '" + CHOICE_START + "' or '" + OLD_CHOICE_START + "')."
             return False
         self._next_index += 1
         self._tokens.append(
-            LexicalToken(TerminalType.choice_start, OLD_CHOICE_START)
+            LexicalToken(TerminalType.choice_start, start_char)
         )
 
         if self._text.startswith(CASE_GEN_SYM, self._next_index):
@@ -63,16 +73,16 @@ class RuleChoice(LexingRule):
             self.error_msg = None
 
         while True:
-            if self._text.startswith(OLD_CHOICE_SEP, self._next_index):
+            if self._text.startswith(sep_char, self._next_index):
                 self._next_index += 1
                 self._tokens.append(
-                    LexicalToken(TerminalType.choice_sep, OLD_CHOICE_SEP)
+                    LexicalToken(TerminalType.choice_sep, sep_char)
                 )
                 if not self._try_to_match_rule(RuleWhitespaces):
                     self.error_msg = None
 
             rule_content_rule = RuleContentRule(self._text, self._next_index)
-            if not rule_content_rule.matches(inside_rule=True):
+            if not rule_content_rule.matches(inside_choice=True):
                 self.error_msg = None
                 break
             self._next_index = rule_content_rule.get_next_index_to_match()
@@ -81,13 +91,13 @@ class RuleChoice(LexingRule):
         if not self._try_to_match_rule(RuleRandGen):
             self.error_msg = None
         
-        if not self._text.startswith(OLD_CHOICE_END, self._next_index):
+        if not self._text.startswith(end_char, self._next_index):
             self.error_msg = \
                 "Invalid token. Expected the choice to end here (using " + \
-                "character '" + OLD_CHOICE_END + "')."
+                "character '" + end_char + "')."
             return False
         self._next_index += 1
         self._tokens.append(
-            LexicalToken(TerminalType.choice_end,OLD_CHOICE_END)
+            LexicalToken(TerminalType.choice_end, end_char)
         )
         return True
