@@ -21,7 +21,9 @@ class RuleUnitDecl(LexingRule):
             return False
         
         if self._text.startswith(CASE_GEN_SYM, self._next_index):
-            self._tokens.append(TerminalType.casegen_marker, CASE_GEN_SYM)
+            self._tokens.append(
+                LexicalToken(TerminalType.casegen_marker, CASE_GEN_SYM)
+            )
             self._next_index += 1
         
         identifier = extract_identifier(self._text, self._next_index)

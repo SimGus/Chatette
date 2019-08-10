@@ -8,7 +8,9 @@ to tokenize a key or a value inside an annotation.
 from chatette.refactor_parsing.lexing.lexing_rule import LexingRule
 from chatette.refactor_parsing.lexing import LexicalToken, TerminalType
 from chatette.refactor_parsing.utils import \
-    ANNOTATION_END, KEY_VAL_CONNECTOR, KEY_VAL_ENCLOSERS, find_unescaped
+    ANNOTATION_END, ANNOTATION_SEP, KEY_VAL_CONNECTOR, \
+    KEY_VAL_ENCLOSERS, \
+    find_unescaped
 from chatette.utils import min_if_exist
 
 
@@ -48,20 +50,31 @@ class RuleKeyValue(LexingRule):
             return True
         else:
             # Key/value not enclosed
-            next_connector_index = \
-                find_unescaped(self._text, KEY_VAL_CONNECTOR, self._next_index)
             end_annotation_index = \
                 find_unescaped(self._text, ANNOTATION_END, self._next_index)
-            end_key_value_index = \
-                min_if_exist(next_connector_index, end_annotation_index)
+            if extracting_key:
+                next_connector_index = \
+                    find_unescaped(
+                        self._text, KEY_VAL_CONNECTOR, self._next_index
+                    )
+                end_key_value_index = \
+                    min_if_exist(next_connector_index, end_annotation_index)
+            else:  # Extracting value
+                next_key_val_pair_index = \
+                    find_unescaped(
+                        self._text, ANNOTATION_SEP, self._next_index
+                    )
+                end_key_value_index = \
+                    min_if_exist(next_key_val_pair_index, end_annotation_index)
+
             if end_key_value_index is None:
                 self.error_msg = \
-                    "Couldn't find end of key/value. " + \
+                    "Couldn't find the end of key/value. " + \
                     "Didn't expect the end of the line there."
                 return False
             
             extracted_text = \
-                self._text[self._start_index:end_key_value_index + 1].rstrip()
+                self._text[self._start_index:end_key_value_index].rstrip()
             self._next_index += len(extracted_text)
             self._tokens.append(LexicalToken(terminal_type, extracted_text))
             return True

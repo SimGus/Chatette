@@ -140,7 +140,6 @@ class LexingRule(with_metaclass(ABCMeta, object)):
             else:
                 # match_size = rule._furthest_matched_index - index
                 match_size = rule.get_next_index_to_match() - index
-                print("match size for " + rule.__class__.__name__ + " is: " + str(match_size))
                 if best_failed_rule is None or match_size > longest_match_size:
                     best_failed_rule = rule
                     longest_match_size = match_size

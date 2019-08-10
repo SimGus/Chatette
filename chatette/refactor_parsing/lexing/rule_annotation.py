@@ -84,6 +84,11 @@ class RuleAnnotation(LexingRule):
                 # Ignoring the tokens because whitespaces here are not meaningful
             
             while self._text.startswith(ANNOTATION_SEP, self._next_index):
+                self._next_index += 1
+                self._tokens.append(
+                    LexicalToken(TerminalType.separator, ANNOTATION_SEP)
+                )
+
                 whitespaces_rule = RuleWhitespaces(self._text, self._next_index)
                 if whitespaces_rule.matches():
                     self._next_index = whitespaces_rule.get_next_index_to_match()

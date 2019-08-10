@@ -26,16 +26,17 @@ class RuleLine(LexingRule):
             **kwargs
         ):
             if self._next_index < len(self._text):
-                comment_rule = RuleComment(
-                    self._text, self._next_index
-                )
-                if comment_rule.matches():
-                    self._tokens.extend(comment_rule.get_lexical_tokens())
-                    self._next_index = comment_rule.get_next_index_to_match()
-                    # Comments end the line BY DESIGN
-                else:
+                comment_rule = RuleComment(self._text, self._next_index)
+                if not comment_rule.matches():
                     self.error_msg = "Invalid token. Expected a comment or " + \
                         "the end of the line there."
-            return True
+                    return False
+                self._tokens.extend(comment_rule.get_lexical_tokens())
+                self._next_index = comment_rule.get_next_index_to_match()
+                # Comments end the line BY DESIGN
+                return True
+            else:
+                return True
+
         return False
     
