@@ -98,8 +98,8 @@ class RuleChoice(LexingRule):
         
         if not self._text.startswith(end_char, self._next_index):
             self.error_msg = \
-                "Invalid token. Expected the choice to end here (using " + \
-                "character '" + end_char + "')."
+                "Unmatched choice opening character. Expected the choice to " + \
+                "end (using character '" + end_char + "')."
             return False
         self._next_index += 1
         self._update_furthest_matched_index()
