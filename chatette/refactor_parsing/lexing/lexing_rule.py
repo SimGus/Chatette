@@ -56,7 +56,6 @@ class LexingRule(with_metaclass(ABCMeta, object)):
                         "failed. Didn't expect an end of line there."
             else:
                 self._matched = self._apply_strategy(**kwargs)
-                self._furthest_matched_index = self._next_index - 1
             # TODO TMP DEBUG
             if self._matched:
                 print("Matched: " + self.__class__.__name__ + " => " + str(self._tokens))
@@ -98,9 +97,11 @@ class LexingRule(with_metaclass(ABCMeta, object)):
         if rule.matches():
             self._tokens.extend(rule.get_lexical_tokens())
             self._next_index = rule.get_next_index_to_match()
+            # self._update_furthest_matched_index(rule)
             return True
         else:
             self.error_msg = rule.error_msg
+            # self._update_furthest_matched_index(rule)
             return False
 
     def _match_one_of(self, rule_classes, index=None, **kwargs):
@@ -137,11 +138,14 @@ class LexingRule(with_metaclass(ABCMeta, object)):
                 self._next_index = rule.get_next_index_to_match()
                 return True
             else:
+                # match_size = rule._furthest_matched_index - index
                 match_size = rule.get_next_index_to_match() - index
                 print("match size for " + rule.__class__.__name__ + " is: " + str(match_size))
                 if best_failed_rule is None or match_size > longest_match_size:
                     best_failed_rule = rule
                     longest_match_size = match_size
+        
+        # self._update_furthest_matched_index(best_failed_rule)
 
         # No rule matched
         self._matched = False
@@ -203,10 +207,14 @@ class LexingRule(with_metaclass(ABCMeta, object)):
                     remaining_rules.remove(remaining_rules[i])
                 else:
                     i += 1
+                    # match_size = rule._furthest_matched_index - index
                     match_size = rule.get_next_index_to_match() - index
                     if best_failed_rule is None or match_size > longest_match_size:
                         best_failed_rule = rule
                         longest_match_size = match_size
+
+        # self._update_furthest_matched_index(best_failed_rule)
+
         if matched_some_rule:
             return True
         if no_match_allowed:
@@ -221,6 +229,26 @@ class LexingRule(with_metaclass(ABCMeta, object)):
             self.error_msg = best_failed_rule.error_msg
         return False
 
+
+    # Setters
+    def _update_furthest_matched_index(self, rule=None):
+        """
+        Updates the value of `self._furthest_matched_index`
+        so that it is the maximum between its current value and
+        the value of `rule._furthest_matched_index`.
+        If `rule` is `None`, updates `self._furthest_matched_index`
+        with respect to `self._next_index` (i.e. the index that should
+        be tested for a match next).
+        The value of `self._furthest_matched_index` represents
+        the maximum index that was matched by a rule
+        called by the current rule (or by this rule itself).
+        """
+        if rule is None:
+            self._furthest_matched_index = \
+                max(self._furthest_matched_index, self._next_index - 1)
+        else:
+            self._furthest_matched_index = \
+                max(self._furthest_matched_index, rule._furthest_matched_index)
     
     # Getters
     def get_lexical_tokens(self):

@@ -12,6 +12,7 @@ from chatette.refactor_parsing.lexing.lexing_rule import LexingRule
 from chatette.refactor_parsing.lexing import LexicalToken, TerminalType
 from chatette.refactor_parsing.utils import find_next_comment, \
     SLOT_VAL_SYM, \
+    CHOICE_START, CHOICE_END, CHOICE_SEP, \
     OLD_CHOICE_START, OLD_CHOICE_END, OLD_CHOICE_SEP, \
     CASE_GEN_SYM
 
@@ -89,3 +90,4 @@ class RuleChoice(LexingRule):
         self._tokens.append(
             LexicalToken(TerminalType.choice_end,OLD_CHOICE_END)
         )
+        return True
