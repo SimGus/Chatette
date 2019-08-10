@@ -38,14 +38,21 @@ class RuleUnitRule(LexingRule):
                 self._next_index = content_rule.get_next_index_to_match()
                 self._update_furthest_matched_index(content_rule)
             else:
+                self._update_furthest_matched_index(content_rule)
+                self.error_msg = content_rule.error_msg
                 break
         
         if parsing_slot_def:
+            old_error_msg = self.error_msg
             if not self._try_to_match_rule(RuleSlotVal):
-                self.error_msg = None
+                self.error_msg = old_error_msg
         
         if self._next_index < len(self._text):
-            self._try_to_match_rule(RuleComment)
+            old_error_msg = self.error_msg
+            if (
+                not self._try_to_match_rule(RuleComment) and old_error_msg is not None
+            ):
+                self.error_msg = old_error_msg
         
         if self._next_index < len(self._text):
             return False

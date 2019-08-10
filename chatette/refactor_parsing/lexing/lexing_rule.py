@@ -120,7 +120,6 @@ class LexingRule(with_metaclass(ABCMeta, object)):
               updated.
         @raises: `ValueError` if `rule_classes` does not contain any element.
         """
-        print("Match one of called: " + str(rule_classes))
         if len(rule_classes) == 0:
             raise ValueError(
                 "Lexer tried to apply no rule at all " + \
@@ -131,7 +130,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
             index = self._next_index
         
         best_failed_rule = None
-        longest_match_size = None
+        longest_match_last_index = None
         for rule_class in rule_classes:
             rule = rule_class(self._text, index)
             if rule.matches(**kwargs):
@@ -139,20 +138,17 @@ class LexingRule(with_metaclass(ABCMeta, object)):
                 self._next_index = rule.get_next_index_to_match()
                 return True
             else:
-                match_size = rule._furthest_matched_index - index
-                print(rule_class.__name__ + " not matched => size: " + str(match_size))
-                print("best: " + best_failed_rule.__class__.__name__ + " (" + str(longest_match_size) + ")")
-                # match_size = rule.get_next_index_to_match() - index
-                if best_failed_rule is None or match_size > longest_match_size:
+                match_last_index = rule._furthest_matched_index
+                # match_last_index = rule.get_next_index_to_match() - index
+                if best_failed_rule is None or match_last_index > longest_match_last_index:
                     best_failed_rule = rule
-                    longest_match_size = match_size
-                    print("now best: " + best_failed_rule.__class__.__name__ + " (" + str(longest_match_size) + ")")
+                    longest_match_last_index = match_last_index
         
         self._update_furthest_matched_index(best_failed_rule)
 
         # No rule matched
         self._matched = False
-        if longest_match_size == 0:
+        if longest_match_last_index - index == 0:
             self.error_msg = \
                 "Invalid token. Expected either of the following rules: '" + \
                 "', '".join([c.__name__ for c in rule_classes]) + "'."
@@ -192,7 +188,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
         remaining_rules = list(rule_classes)
         i = 0
         best_failed_rule = None
-        longest_match_size = None
+        longest_match_last_index = None
         while True:
             if i >= len(remaining_rules):
                 break
@@ -210,11 +206,11 @@ class LexingRule(with_metaclass(ABCMeta, object)):
                     remaining_rules.remove(remaining_rules[i])
                 else:
                     i += 1
-                    match_size = rule._furthest_matched_index - index
-                    # match_size = rule.get_next_index_to_match() - index
-                    if best_failed_rule is None or match_size > longest_match_size:
+                    match_last_index = rule._furthest_matched_index
+                    # match_last_index = rule.get_next_index_to_match() - index
+                    if best_failed_rule is None or match_last_index > longest_match_last_index:
                         best_failed_rule = rule
-                        longest_match_size = match_size
+                        longest_match_last_index = match_last_index
 
         self._update_furthest_matched_index(best_failed_rule)
 
@@ -224,7 +220,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
             return True
         # No rule matched and no match is not allowed
         self._matched = False
-        if longest_match_size == 0:
+        if longest_match_last_index - index == 0:
             self.error_msg = \
                 "Invalid token. Expected either of the following rules: '" + \
                 "', '".join([c.__name__ for c in rule_classes]) + "'."
