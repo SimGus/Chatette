@@ -30,7 +30,7 @@ class RuleUnitRef(LexingRule):
         if self._text.startswith(CASE_GEN_SYM, self._next_index):
             self._next_index += 1
             self._tokens.append(
-                LexicalToken(TerminalType.casegen_mmarker, CASE_GEN_SYM)
+                LexicalToken(TerminalType.casegen_marker, CASE_GEN_SYM)
             )
 
         identifier = extract_identifier(self._text, self._next_index)
