@@ -92,5 +92,6 @@ class RuleWord(LexingRule):
 
         word = self._text[self._start_index:next_word_index]
         self._next_index = next_word_index
+        self._update_furthest_matched_index()
         self._tokens.append(LexicalToken(TerminalType.word, word))
         return True

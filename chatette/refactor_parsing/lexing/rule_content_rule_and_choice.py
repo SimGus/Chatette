@@ -34,8 +34,8 @@ class RuleContentRule(LexingRule):
             if not self._try_to_match_rule(RuleWhitespaces):
                 self.error_msg = None
             return True
-        else:
-            return False
+
+        return False
 
 # NOTE Required to put it here rather than in its own module 
 #      to prevent circular imports.
@@ -59,12 +59,14 @@ class RuleChoice(LexingRule):
                 "with '" + CHOICE_START + "' or '" + OLD_CHOICE_START + "')."
             return False
         self._next_index += 1
+        self._update_furthest_matched_index()
         self._tokens.append(
             LexicalToken(TerminalType.choice_start, start_char)
         )
 
         if self._text.startswith(CASE_GEN_SYM, self._next_index):
             self._next_index += 1
+            self._update_furthest_matched_index()
             self._tokens.append(
                 LexicalToken(TerminalType.casegen_marker, CASE_GEN_SYM)
             )
@@ -75,6 +77,7 @@ class RuleChoice(LexingRule):
         while True:
             if self._text.startswith(sep_char, self._next_index):
                 self._next_index += 1
+                self._update_furthest_matched_index()
                 self._tokens.append(
                     LexicalToken(TerminalType.choice_sep, sep_char)
                 )
@@ -84,8 +87,10 @@ class RuleChoice(LexingRule):
             rule_content_rule = RuleContentRule(self._text, self._next_index)
             if not rule_content_rule.matches(inside_choice=True):
                 self.error_msg = None
+                self._update_furthest_matched_index(rule_content_rule)
                 break
             self._next_index = rule_content_rule.get_next_index_to_match()
+            self._update_furthest_matched_index(rule_content_rule)
             self._tokens.extend(rule_content_rule.get_lexical_tokens())
         
         if not self._try_to_match_rule(RuleRandGen):
@@ -97,7 +102,7 @@ class RuleChoice(LexingRule):
                 "character '" + end_char + "')."
             return False
         self._next_index += 1
-        self._tokens.append(
-            LexicalToken(TerminalType.choice_end, end_char)
-        )
+        self._update_furthest_matched_index()
+        self._tokens.append(LexicalToken(TerminalType.choice_end, end_char))
+
         return True

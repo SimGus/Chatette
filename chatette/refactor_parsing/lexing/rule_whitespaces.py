@@ -15,6 +15,7 @@ class RuleWhitespaces(LexingRule):
 
         while self._next_index < len(text) and text[self._next_index].isspace():
             self._next_index += 1
+            self._update_furthest_matched_index()
         if self._next_index > self._start_index:
             matched_text = text[self._start_index:self._next_index]
             self._tokens.append(

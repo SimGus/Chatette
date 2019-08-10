@@ -17,11 +17,11 @@ class RuleArgDecl(LexingRule):
                 "Invalid token. Expected an argument declaration there " + \
                 "(starting with '" + ARG_SYM + "')."
             return False
-        else:
-            self._next_index += 1
-            self._tokens.append(
-                LexicalToken(TerminalType.arg_marker, ARG_SYM)
-            )
+        self._next_index += 1
+        self._update_furthest_matched_index()
+        self._tokens.append(
+            LexicalToken(TerminalType.arg_marker, ARG_SYM)
+        )
         
         arg_name = extract_identifier(self._text, self._next_index)
         if arg_name is None:
@@ -33,7 +33,7 @@ class RuleArgDecl(LexingRule):
                 "Couldn't extract the argument name. Arguments must have a name."
             return False
         self._next_index += len(arg_name)
-        self._tokens.append(
-            LexicalToken(TerminalType.arg_name, arg_name)
-        )
+        self._update_furthest_matched_index()
+        self._tokens.append(LexicalToken(TerminalType.arg_name, arg_name))
+
         return True

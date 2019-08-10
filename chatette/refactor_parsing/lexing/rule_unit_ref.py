@@ -23,15 +23,18 @@ class RuleUnitRef(LexingRule):
         unit_start_rule = RuleUnitStart(self._text, self._next_index)
         if not unit_start_rule.matches(extracting_decl=False):
             self.error_msg = unit_start_rule.error_msg
+            self._update_furthest_matched_index(unit_start_rule)
             return False
-        self._tokens.extend(unit_start_rule.get_lexical_tokens())
         self._next_index = unit_start_rule.get_next_index_to_match()
+        self._update_furthest_matched_index(unit_start_rule)
+        self._tokens.extend(unit_start_rule.get_lexical_tokens())
         
         if self._text.startswith(CASE_GEN_SYM, self._next_index):
-            self._next_index += 1
             self._tokens.append(
                 LexicalToken(TerminalType.casegen_marker, CASE_GEN_SYM)
             )
+            self._next_index += 1
+            self._update_furthest_matched_index()
 
         identifier = extract_identifier(self._text, self._next_index)
         if identifier is not None:
@@ -39,6 +42,7 @@ class RuleUnitRef(LexingRule):
                 LexicalToken(TerminalType.unit_identifier, identifier)
             )
             self._next_index += len(identifier)
+            self._update_furthest_matched_index()
         
         if not self._match_any_order(
             [None, RuleVariation, RuleRandGen, RuleArgAssignment]
@@ -66,6 +70,7 @@ class RuleUnitRef(LexingRule):
             )
 
         self._next_index += 1
+        self._update_furthest_matched_index()
         self._tokens.append(LexicalToken(unit_end_type, UNIT_END_SYM))
         
         return True

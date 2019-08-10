@@ -18,6 +18,7 @@ class RuleArgAssignment(LexingRule):
                 "here (starting with '" + ARG_SYM + "')."
             return False
         self._next_index += 1
+        self._update_furthest_matched_index()
         self._tokens.append(LexicalToken(TerminalType.arg_marker, ARG_SYM))
 
         arg_name = extract_identifier(self._text, self._next_index)
@@ -30,6 +31,7 @@ class RuleArgAssignment(LexingRule):
                 "Couldn't extract the argument name. Arguments must have a name."
             return False
         self._next_index += len(arg_name)
+        self._update_furthest_matched_index()
         self._tokens.append(
             LexicalToken(TerminalType.arg_name, arg_name)
         )

@@ -36,6 +36,7 @@ class RuleUnitRule(LexingRule):
             if content_rule.matches():
                 self._tokens.extend(content_rule.get_lexical_tokens())
                 self._next_index = content_rule.get_next_index_to_match()
+                self._update_furthest_matched_index(content_rule)
             else:
                 break
         

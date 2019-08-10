@@ -44,7 +44,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
         @post: `self.get_lexical_tokens()` will return valid tokens
                iff this method returned `True`.
         """
-        # print("Trying to match: " + self.__class__.__name__ + " on '" + self._text[self._start_index:] + "'")
+        print("Trying to match: " + self.__class__.__name__ + " on '" + self._text[self._start_index:] + "'")
         if self._matched is None:
             if self._start_index >= len(self._text):
                 if self.__class__._empty_match_allowed:
@@ -57,10 +57,10 @@ class LexingRule(with_metaclass(ABCMeta, object)):
             else:
                 self._matched = self._apply_strategy(**kwargs)
             # TODO TMP DEBUG
-            # if self._matched:
-            #     print("Matched: " + self.__class__.__name__ + " => " + str(self._tokens))
-            # else:
-            #     print("Not matched: " + self.__class__.__name__)
+            if self._matched:
+                print("Matched: " + self.__class__.__name__ + " => " + str(self._tokens))
+            else:
+                print("Not matched: " + self.__class__.__name__)
         return self._matched
     @abstractmethod
     def _apply_strategy(self, **kwargs):
@@ -97,11 +97,11 @@ class LexingRule(with_metaclass(ABCMeta, object)):
         if rule.matches():
             self._tokens.extend(rule.get_lexical_tokens())
             self._next_index = rule.get_next_index_to_match()
-            # self._update_furthest_matched_index(rule)
+            self._update_furthest_matched_index(rule)
             return True
         else:
             self.error_msg = rule.error_msg
-            # self._update_furthest_matched_index(rule)
+            self._update_furthest_matched_index(rule)
             return False
 
     def _match_one_of(self, rule_classes, index=None, **kwargs):
@@ -120,6 +120,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
               updated.
         @raises: `ValueError` if `rule_classes` does not contain any element.
         """
+        print("Match one of called: " + str(rule_classes))
         if len(rule_classes) == 0:
             raise ValueError(
                 "Lexer tried to apply no rule at all " + \
@@ -138,13 +139,16 @@ class LexingRule(with_metaclass(ABCMeta, object)):
                 self._next_index = rule.get_next_index_to_match()
                 return True
             else:
-                # match_size = rule._furthest_matched_index - index
-                match_size = rule.get_next_index_to_match() - index
+                match_size = rule._furthest_matched_index - index
+                print(rule_class.__name__ + " not matched => size: " + str(match_size))
+                print("best: " + best_failed_rule.__class__.__name__ + " (" + str(longest_match_size) + ")")
+                # match_size = rule.get_next_index_to_match() - index
                 if best_failed_rule is None or match_size > longest_match_size:
                     best_failed_rule = rule
                     longest_match_size = match_size
+                    print("now best: " + best_failed_rule.__class__.__name__ + " (" + str(longest_match_size) + ")")
         
-        # self._update_furthest_matched_index(best_failed_rule)
+        self._update_furthest_matched_index(best_failed_rule)
 
         # No rule matched
         self._matched = False
@@ -206,13 +210,13 @@ class LexingRule(with_metaclass(ABCMeta, object)):
                     remaining_rules.remove(remaining_rules[i])
                 else:
                     i += 1
-                    # match_size = rule._furthest_matched_index - index
-                    match_size = rule.get_next_index_to_match() - index
+                    match_size = rule._furthest_matched_index - index
+                    # match_size = rule.get_next_index_to_match() - index
                     if best_failed_rule is None or match_size > longest_match_size:
                         best_failed_rule = rule
                         longest_match_size = match_size
 
-        # self._update_furthest_matched_index(best_failed_rule)
+        self._update_furthest_matched_index(best_failed_rule)
 
         if matched_some_rule:
             return True

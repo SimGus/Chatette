@@ -15,6 +15,7 @@ class RulePercentGen(LexingRule):
     def _apply_strategy(self, **kwargs):
         while self._text[self._next_index].isdigit():
             self._next_index += 1
+            self._update_furthest_matched_index()
         percentage = self._text[self._start_index:self._next_index]
 
         if self._text[self._next_index] != '.':
@@ -26,10 +27,12 @@ class RulePercentGen(LexingRule):
         else:
             percentage += '.'
             self._next_index += 1
+            self._update_furthest_matched_index()
 
             start_index_non_int_part = self._next_index
             while self._text[self._next_index].isdigit():
                 self._next_index += 1
+                self._update_furthest_matched_index()
             if self._next_index == start_index_non_int_part:
                 self.error_msg = \
                     "Invalid token. Cannot have a percentage with an empty " + \
@@ -42,9 +45,8 @@ class RulePercentGen(LexingRule):
             # Ignore tokens as this whitespace is not meaningful
         if self._text[self._next_index] == '%':
             self._next_index += 1
+            self._update_furthest_matched_index()
         
-        self._tokens.append(
-            LexicalToken(TerminalType.percentgen, percentage)
-        )
+        self._tokens.append(LexicalToken(TerminalType.percentgen, percentage))
 
         return True

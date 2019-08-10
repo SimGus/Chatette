@@ -32,7 +32,9 @@ class RuleKeyValue(LexingRule):
         for current_encloser in KEY_VAL_ENCLOSERS:
             if self._text.startswith(current_encloser, self._next_index):
                 self._next_index += 1
+                self._update_furthest_matched_index()
                 encloser = current_encloser
+                break
         
         if encloser is not None:
             # Enclosed key/value
@@ -46,6 +48,7 @@ class RuleKeyValue(LexingRule):
 
             extracted_text = self._text[self._start_index+1:next_encloser_index]
             self._next_index = next_encloser_index + 1
+            self._update_furthest_matched_index()
             self._tokens.append(LexicalToken(terminal_type, extracted_text))
             return True
         else:
@@ -76,5 +79,7 @@ class RuleKeyValue(LexingRule):
             extracted_text = \
                 self._text[self._start_index:end_key_value_index].rstrip()
             self._next_index += len(extracted_text)
+            self._update_furthest_matched_index()
             self._tokens.append(LexicalToken(terminal_type, extracted_text))
+
             return True

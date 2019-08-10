@@ -21,17 +21,19 @@ class RuleUnitDecl(LexingRule):
             return False
         
         if self._text.startswith(CASE_GEN_SYM, self._next_index):
+            self._next_index += 1
+            self._update_furthest_matched_index()
             self._tokens.append(
                 LexicalToken(TerminalType.casegen_marker, CASE_GEN_SYM)
             )
-            self._next_index += 1
         
         identifier = extract_identifier(self._text, self._next_index)
         if identifier is not None:
+            self._next_index += len(identifier)
+            self._update_furthest_matched_index()
             self._tokens.append(
                 LexicalToken(TerminalType.unit_identifier, identifier)
             )
-            self._next_index += len(identifier)
         
         if not self._match_any_order([None, RuleArgDecl, RuleVariation]):
             return False
@@ -41,6 +43,7 @@ class RuleUnitDecl(LexingRule):
                 "Invalid token. Expected the end of the unit declaration " + \
                 "there (using symbol '" + UNIT_END_SYM + "')."
             return False
+
         # TODO maybe making a function for this would be useful
         if self._tokens[0].type == TerminalType.alias_decl_start:
             unit_end_type = TerminalType.alias_decl_end
@@ -54,7 +57,10 @@ class RuleUnitDecl(LexingRule):
                 "parse the end of a unit but couldn't find its start in " + \
                 "the previously parsed data.\nData was: " + str(self._tokens)
             )
-        self._tokens.append(LexicalToken(unit_end_type, UNIT_END_SYM))
+
         self._next_index += 1
+        self._update_furthest_matched_index()
+        self._tokens.append(LexicalToken(unit_end_type, UNIT_END_SYM))
+
         return True
         

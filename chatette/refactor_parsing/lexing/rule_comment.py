@@ -18,6 +18,7 @@ class RuleComment(LexingRule):
         whitespaces_rule = RuleWhitespaces(self._text, self._next_index)
         if whitespaces_rule.matches():
             self._next_index = whitespaces_rule.get_next_index_to_match()
+            self._update_furthest_matched_index()
             # ignore the tokens it found since this whitespace is not meaningful
         if self._next_index >= len(text):
             return True
@@ -28,6 +29,7 @@ class RuleComment(LexingRule):
             matched_text = text[self._next_index:]
             self._tokens.append(LexicalToken(TerminalType.comment, matched_text))
             self._next_index = len(text)
+            self._update_furthest_matched_index()
             return True
 
         # No comment found

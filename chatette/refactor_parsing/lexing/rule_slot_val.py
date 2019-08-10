@@ -23,15 +23,18 @@ class RuleSlotVal(LexingRule):
             slot_value_tokens = []
             while self._text[index].isspace():
                 self._next_index += 1
+                self._update_furthest_matched_index()
 
             if self._text.startswith(SLOT_VAL_SYM, index):
                 slot_value_tokens.append(
                     LexicalToken(TerminalType.slot_val_marker, SLOT_VAL_SYM)
                 )
                 self._next_index += 1
+                self._update_furthest_matched_index()
 
                 while self._text[index].isspace():
                     self._next_index += 1
+                    self._update_furthest_matched_index()
 
                 comment_sym = find_next_comment(self._text, self._next_index)
                 if comment_sym is not None:
@@ -44,10 +47,11 @@ class RuleSlotVal(LexingRule):
                     LexicalToken(TerminalType.slot_val, slot_value)
                 )
                 self._next_index += len(slot_value)
+                self._update_furthest_matched_index()
 
                 return True
-            else:
-                return False
+
+            return False
         else:
             raise ValueError(
                 "Tried to extract a slot value within a rule that is not " + \

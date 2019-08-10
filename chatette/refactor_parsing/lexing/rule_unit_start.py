@@ -46,12 +46,14 @@ class RuleUnitStart(LexingRule):
                 INTENT_SYM + "'."
             return False
         self._next_index += 1
+        self._update_furthest_matched_index()
 
         if self._text.startswith(UNIT_START_SYM, self._next_index):
             self._tokens.append(
                 LexicalToken(terminal_type, text_start + UNIT_START_SYM)
             )
             self._next_index += 1
+            self._update_furthest_matched_index()
             return True
         
         self.error_msg = \

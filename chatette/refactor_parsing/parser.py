@@ -36,6 +36,6 @@ class Parser(object):
             line = self.input_file_manager.read_line()
             if line is None:
                 break
-            print("LINE:", str(line))
+            print("\nLINE:", str(line))
             lexed_line = self.lexer.lex(line)
             print("TOKENS:", lexed_line)

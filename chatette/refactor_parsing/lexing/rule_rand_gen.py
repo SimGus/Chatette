@@ -23,6 +23,7 @@ class RuleRandGen(LexingRule):
                 "begin there (starting with '" + RAND_GEN_SYM + "')."
             return False
         self._next_index += 1
+        self._update_furthest_matched_index()
         self._tokens.append(
             LexicalToken(TerminalType.randgen_marker, RAND_GEN_SYM)
         )
@@ -37,12 +38,14 @@ class RuleRandGen(LexingRule):
             return False
         if len(randgen_name) > 0:
             self._next_index += len(randgen_name)
+            self._update_furthest_matched_index()
             self._tokens.append(
                 LexicalToken(TerminalType.randgen_name, randgen_name)
             )
         
         if self._text.startswith(RAND_GEN_PERCENT_SYM, self._next_index):
             self._next_index += 1
+            self._update_furthest_matched_index()
             self._tokens.append(
                 LexicalToken(
                     TerminalType.percentgen_marker, RAND_GEN_PERCENT_SYM
@@ -54,4 +57,5 @@ class RuleRandGen(LexingRule):
                     " Percentage for the random generation is required after " + \
                     "its marker character ('" + RAND_GEN_PERCENT_SYM + "')."
                 return False
+
         return True

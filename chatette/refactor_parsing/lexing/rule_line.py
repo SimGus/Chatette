@@ -30,13 +30,15 @@ class RuleLine(LexingRule):
                 if not comment_rule.matches():
                     self.error_msg = "Invalid token. Expected a comment or " + \
                         "the end of the line there."
+                    self._update_furthest_matched_index(comment_rule)
                     return False
                 self._tokens.extend(comment_rule.get_lexical_tokens())
                 self._next_index = comment_rule.get_next_index_to_match()
+                self._update_furthest_matched_index()
                 # Comments end the line BY DESIGN
                 return True
-            else:
-                return True
+
+            return True
 
         return False
     
