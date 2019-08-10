@@ -29,6 +29,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
 
         self._start_index = start_index
         self._next_index = start_index
+        self._furthest_matched_index = start_index  # inclusive  # TODO keep this up-to-date
         self._tokens = []
         
         self._matched = None
@@ -45,7 +46,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
         """
         print("Trying to match: " + self.__class__.__name__ + " on '" + self._text[self._start_index:] + "'")
         if self._matched is None:
-            if self._next_index >= len(self._text):
+            if self._start_index >= len(self._text):
                 if self.__class__._empty_match_allowed:
                     self._matched = True
                 else:
@@ -55,6 +56,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
                         "failed. Didn't expect an end of line there."
             else:
                 self._matched = self._apply_strategy(**kwargs)
+                self._furthest_matched_index = self._next_index - 1
             # TODO TMP DEBUG
             if self._matched:
                 print("Matched: " + self.__class__.__name__ + " => " + str(self._tokens))
@@ -71,7 +73,13 @@ class LexingRule(with_metaclass(ABCMeta, object)):
         accordingly.
         `kwargs` can be used to pass arguments that are specific to
         the current strategy.
+        After this method was called, the following variables should be
+        up-to-date:
+        - if it matched: `self._tokens`, `self._next_index`,
+                         `self._furthest_matched_index`
+        - if it didn't match: `self._furthest_matched_index`, `self.error_msg`
         """
+        # TODO keep `self._furthest_matched_index` up-to-date
         raise NotImplementedError()
     
     # Helpers for matching rules
