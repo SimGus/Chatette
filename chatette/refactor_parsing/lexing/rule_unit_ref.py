@@ -50,9 +50,22 @@ class RuleUnitRef(LexingRule):
                 "Invalid token. Expected the unit reference to end here (" + \
                 "using character '" + UNIT_END_SYM + "')."
             return False
+
+        # TODO maybe making a function for this would be useful
+        if self._tokens[0].type == TerminalType.alias_ref_start:
+            unit_end_type = TerminalType.alias_ref_end
+        elif self._tokens[0].type == TerminalType.slot_ref_start:
+            unit_end_type = TerminalType.slot_ref_end
+        elif self._tokens[0].type == TerminalType.intent_ref_start:
+            unit_end_type = TerminalType.intent_ref_end
+        else:  # Should never happen
+            raise ValueError(
+                "An unexpected error happened during parsing: tried to " + \
+                "parse the end of a unit but couldn't find its start in " + \
+                "the previously parsed data.\nData was: " + str(self._tokens)
+            )
+
         self._next_index += 1
-        self._tokens.append(
-            LexicalToken(TerminalType.unit_ref_end, UNIT_END_SYM)
-        )
+        self._tokens.append(LexicalToken(unit_end_type, UNIT_END_SYM))
         
         return True
