@@ -44,7 +44,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
         @post: `self.get_lexical_tokens()` will return valid tokens
                iff this method returned `True`.
         """
-        print("Trying to match: " + self.__class__.__name__ + " on '" + self._text[self._start_index:] + "'")
+        # print("Trying to match: " + self.__class__.__name__ + " on '" + self._text[self._start_index:] + "'")
         if self._matched is None:
             if self._start_index >= len(self._text):
                 if self.__class__._empty_match_allowed:
@@ -56,11 +56,11 @@ class LexingRule(with_metaclass(ABCMeta, object)):
                         "failed. Didn't expect an end of line there."
             else:
                 self._matched = self._apply_strategy(**kwargs)
-            # TODO TMP DEBUG
-            if self._matched:
-                print("Matched: " + self.__class__.__name__ + " => " + str(self._tokens))
-            else:
-                print("Not matched: " + self.__class__.__name__)
+            # # TODO TMP DEBUG
+            # if self._matched:
+            #     print("Matched: " + self.__class__.__name__ + " => " + str(self._tokens))
+            # else:
+            #     print("Not matched: " + self.__class__.__name__)
         return self._matched
     @abstractmethod
     def _apply_strategy(self, **kwargs):
