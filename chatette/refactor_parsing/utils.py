@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# coding: utf-8
 """
 Module `chatette.refactor_parsing.utils`
 Contains utility functions that are used by various parsing components.

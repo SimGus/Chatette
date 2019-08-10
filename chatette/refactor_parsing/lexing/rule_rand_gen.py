@@ -12,6 +12,8 @@ from chatette.refactor_parsing.utils import \
     extract_identifier, \
     RAND_GEN_SYM, RAND_GEN_PERCENT_SYM
 
+from chatette.refactor_parsing.lexing.rule_percent_gen import RulePercentGen
+
 
 class RuleRandGen(LexingRule):
     def _apply_strategy(self, **kwargs):

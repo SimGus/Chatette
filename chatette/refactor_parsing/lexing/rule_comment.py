@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# coding: utf-8
 """
 Module `chatette.refactor_parsing.lexing.rule_comment`
 Contains the class representing the lexing rule that applies to comments.
