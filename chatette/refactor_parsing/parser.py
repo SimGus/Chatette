@@ -54,19 +54,7 @@ class Parser(object):
                 continue
 
             if lexical_tokens[0].type == TerminalType.file_inclusion_marker:
-                try:
-                    self.input_file_manager.open_file(lexical_tokens[1].text)
-                    print(
-                        "Parsing file: " + \
-                        self.input_file_manager.get_current_file_name()
-                    )
-                except IOError as e:
-                    print_warn(
-                        "There was an error while opening file '" + \
-                        lexical_tokens[1].text + "': " + str(e) + \
-                        "\nContinuing the parsing of '" + \
-                        self.input_file_manager.get_current_file_name() + "'."
-                    )
+                self._parse_file_inclusion(lexical_tokens)
             elif lexical_tokens[0].type == TerminalType.indentation:
                 print("Rule")
             elif (
@@ -78,3 +66,28 @@ class Parser(object):
                 print("Unit declaration")
             else:
                 print("nope")
+    
+
+    def _parse_file_inclusion(self, lexical_tokens):
+        """
+        Opens the file that is included by the tokenized line `lexical_tokens`.
+        @pre: `lexical_tokens` contain a tokenized file inclusion line.
+        """
+        try:
+            self.input_file_manager.open_file(lexical_tokens[1].text)
+            print(
+                "Parsing file: " + \
+                self.input_file_manager.get_current_file_name()
+            )
+        except IOError as e:
+            print_warn(
+                "There was an error while opening file '" + \
+                lexical_tokens[1].text + "': " + str(e) + \
+                "\nContinuing the parsing of '" + \
+                self.input_file_manager.get_current_file_name() + "'."
+            )
+        except ValueError as e:
+            print_warn(
+                str(e) + "\nContinuing the parsing of '" + \
+                self.input_file_manager.get_current_file_name() + "'."
+            )
