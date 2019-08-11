@@ -1,5 +1,7 @@
 # TODOs
 
+- [ ] add section in TODOs
+
 - [ ] parse in a better way asked number of generation of intents
 - [ ] accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax
 - [ ] add some kind of optional version number within template files
@@ -53,6 +55,7 @@
 - [ ] cache the examples when they are all generated and they are not too numerous
 - [ ] print the seed when starting the program, even if no seed was provided
 - [ ] improve lexing error messages
+- [ ] improve the systems of singletons to reduce code duplication
 
 - [ ] replace `print` by `six.print_`?
 
