@@ -6,6 +6,7 @@ Contains utility functions that are used by various parsing components.
 
 from enum import Enum
 from chatette.utils import min_if_exist
+from chatette.refactor_parsing.lexing import TerminalType
 
 
 ######## Symbols definitions ########
@@ -147,3 +148,26 @@ def is_special_identifier_char(c):
         CHOICE_START, CHOICE_END, CHOICE_SEP, OLD_CHOICE_START, OLD_CHOICE_END,
         OLD_CHOICE_SEP, CASE_GEN_SYM, RAND_GEN_SYM, ARG_SYM, VARIATION_SYM
     )
+
+
+def remove_comment_tokens(tokens):
+    """
+    Returns all the tokens except the ones that correspond to comments (and
+    the preceding whitespaces if any).
+    """
+    if len(tokens) == 0:
+        return tokens
+    
+    comment_index = None
+    for (i, token) in enumerate(tokens):
+        if token.type == TerminalType.comment:
+            comment_index = i
+            break
+    
+    if comment_index is None:
+        return tokens
+    if comment_index == 0:
+        return []
+    if tokens[comment_index - 1].type == TerminalType.whitespace:
+        return tokens[:comment_index - 1]
+    return tokens[:comment_index]

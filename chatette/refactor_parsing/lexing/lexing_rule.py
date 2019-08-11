@@ -82,19 +82,20 @@ class LexingRule(with_metaclass(ABCMeta, object)):
         raise NotImplementedError()
     
     # Helpers for matching rules
-    def _try_to_match_rule(self, rule_class, index=None):
+    def _try_to_match_rule(self, rule_class, index=None, **kwargs):
         """
         Tries to match the rule represented by `rule_class`
         and updates `self._tokens` and `self._next_index` if the rule could be
         applied. If the rule couldn't be applied, `self.error_msg` is updated.
         `rule_class` is a subclass of `LexingRule`; `index` is an index in the
         text `self._text`.
+        `kwargs` will be passed down to the subsequent `_matches`
         @returns: `True` iff the rule could be applied successfully.
         """
         if index is None:
             index = self._next_index
         rule = rule_class(self._text, index)
-        if rule.matches():
+        if rule.matches(**kwargs):
             self._tokens.extend(rule.get_lexical_tokens())
             self._next_index = rule.get_next_index_to_match()
             self._update_furthest_matched_index(rule)

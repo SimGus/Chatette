@@ -91,7 +91,7 @@ class InputFileManager(object):
 
     def get_current_file_information(self):
         return (self._current_file.name, self._current_file.line_nb)
-    def get_current_filename(self):
+    def get_current_file_name(self):
         return self._current_file.name
     
 

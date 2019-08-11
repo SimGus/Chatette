@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# coding: utf-8
 """
 Module `chatette.refactor_parsing.parser`
 Contains the definition of the parser
@@ -10,8 +10,11 @@ those files.
 from __future__ import print_function
 from six import string_types
 
+from chatette.utils import print_DBG
 from chatette.refactor_parsing.input_file_manager import InputFileManager
+from chatette.refactor_parsing.utils import remove_comment_tokens
 from chatette.refactor_parsing.lexing.lexer import Lexer
+from chatette.refactor_parsing.lexing import TerminalType
 
 
 class Parser(object):
@@ -32,10 +35,34 @@ class Parser(object):
         """
         Parses the template file(s) and translates them into an AST.
         """
+        print_DBG(
+            "Parsing master file: " + \
+            self.input_file_manager.get_current_file_name()
+        )
+
         while True:
             line = self.input_file_manager.read_line()
-            if line is None:
+            if line is None:  # End of file
                 break
             print("\nLINE:", str(line))
-            lexed_line = self.lexer.lex(line)
-            print("TOKENS:", lexed_line)
+            lexical_tokens = self.lexer.lex(line)
+            print("TOKENS:", lexical_tokens)
+            lexical_tokens = remove_comment_tokens(lexical_tokens)
+
+            if len(lexical_tokens) == 0:
+                print("Empty line")
+                continue
+
+            if lexical_tokens[0].type == TerminalType.file_inclusion_marker:
+                print("File inclusion")
+            elif lexical_tokens[0].type == TerminalType.indentation:
+                print("Rule")
+            elif (
+                lexical_tokens[0].type in \
+                (TerminalType.alias_decl_start,
+                 TerminalType.slot_decl_start,
+                 TerminalType.intent_decl_start)
+            ):
+                print("Unit declaration")
+            else:
+                print("nope")
