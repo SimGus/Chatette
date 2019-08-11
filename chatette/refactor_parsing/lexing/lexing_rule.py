@@ -303,4 +303,4 @@ class LexingRule(with_metaclass(ABCMeta, object)):
                 "'."
             )
         InputFileManager.get_or_create() \
-            .syntax_error(self.error_msg, self._next_index)
+            .syntax_error(self.error_msg, self._furthest_matched_index + 1)
