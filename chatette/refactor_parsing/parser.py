@@ -56,18 +56,20 @@ class Parser(object):
             if lexical_tokens[0].type == TerminalType.file_inclusion_marker:
                 self._parse_file_inclusion(lexical_tokens)
             elif lexical_tokens[0].type == TerminalType.indentation:
-                print("Rule")
+                self._parse_rule(lexical_tokens)
             elif (
                 lexical_tokens[0].type in \
                 (TerminalType.alias_decl_start,
                  TerminalType.slot_decl_start,
                  TerminalType.intent_decl_start)
             ):
-                print("Unit declaration")
+                self._parse_unit_declaration(lexical_tokens)
             else:
-                print("nope")
-    
-
+                self.input_file_manager.syntax_error(
+                    "Couldn't parse this line: a line can be either " + \
+                    "an empty line, a comment line, a file inclusion line, " + \
+                    "a unit declaration or a rule."
+                )
     def _parse_file_inclusion(self, lexical_tokens):
         """
         Opens the file that is included by the tokenized line `lexical_tokens`.
@@ -91,3 +93,14 @@ class Parser(object):
                 str(e) + "\nContinuing the parsing of '" + \
                 self.input_file_manager.get_current_file_name() + "'."
             )
+    def _parse_rule(self, lexical_tokens):
+        """
+        Handles the tokens `lexical tokens` that contain a rule (inside a unit
+        definition).
+        """
+        print("Rule")
+    def _parse_unit_declaration(self, lexical_tokens):
+        """
+        Handles the tokens `lexical tokens` that contain a unit declaration.
+        """
+        print("Unit declaration")
