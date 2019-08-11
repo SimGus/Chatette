@@ -30,6 +30,8 @@ class Parser(object):
         self.input_file_manager = \
             InputFileManager.get_or_create(master_file_path)
         self.lexer = Lexer()
+
+        self._declaration_line_allowed = True
     
 
     def parse(self):
@@ -93,14 +95,20 @@ class Parser(object):
                 str(e) + "\nContinuing the parsing of '" + \
                 self.input_file_manager.get_current_file_name() + "'."
             )
+    def _parse_unit_declaration(self, lexical_tokens):
+        """
+        Handles the tokens `lexical tokens` that contain a unit declaration.
+        """
+        print("Unit declaration")
+        if not self._declaration_line_allowed:
+            self.input_file_manager.syntax_error(
+                "Didn't expect a unit declaration to start here."
+            )
+        self._declaration_line_allowed = False
     def _parse_rule(self, lexical_tokens):
         """
         Handles the tokens `lexical tokens` that contain a rule (inside a unit
         definition).
         """
         print("Rule")
-    def _parse_unit_declaration(self, lexical_tokens):
-        """
-        Handles the tokens `lexical tokens` that contain a unit declaration.
-        """
-        print("Unit declaration")
+        self._declaration_line_allowed = True
