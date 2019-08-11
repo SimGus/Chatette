@@ -70,11 +70,11 @@ class LexicalToken(object):
         self.type = terminal_type
         if len(token_text) == 0 and (self.type != TerminalType.ignore):
             raise ValueError("Tried to create a lexed item of 0 characters.")
-        self.token = token_text
+        self.text = token_text
     
     def __str__(self):
         return self.__repr__()
     def __repr__(self):
         return \
             "LexicalToken(type: " + self.type.name + \
-            ", tokens: \"" + self.token + "\")"
+            ", tokens: \"" + self.text + "\")"

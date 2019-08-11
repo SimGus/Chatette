@@ -67,7 +67,11 @@ class InputFileManager(object):
 
         if self._current_file is not None:
             self._opened_files.append(self._current_file)
-        self._current_file = LineCountFileWrapper(file_path)
+        try:
+            self._current_file = LineCountFileWrapper(file_path)
+        except IOError as e:
+            self._current_file = self._opened_files.pop()
+            raise e
     
     def close_all_files(self):
         """Closes all the opened files."""

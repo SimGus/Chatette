@@ -10,9 +10,10 @@ those files.
 from __future__ import print_function
 from six import string_types
 
-from chatette.utils import print_DBG
-from chatette.refactor_parsing.input_file_manager import InputFileManager
+from chatette.utils import print_DBG, print_warn
 from chatette.refactor_parsing.utils import remove_comment_tokens
+
+from chatette.refactor_parsing.input_file_manager import InputFileManager
 from chatette.refactor_parsing.lexing.lexer import Lexer
 from chatette.refactor_parsing.lexing import TerminalType
 
@@ -44,17 +45,28 @@ class Parser(object):
             line = self.input_file_manager.read_line()
             if line is None:  # End of file
                 break
-            print("\nLINE:", str(line))
+            print("\nLINE: '" + str(line) + "'")
             lexical_tokens = self.lexer.lex(line)
             print("TOKENS:", lexical_tokens)
             lexical_tokens = remove_comment_tokens(lexical_tokens)
 
             if len(lexical_tokens) == 0:
-                print("Empty line")
                 continue
 
             if lexical_tokens[0].type == TerminalType.file_inclusion_marker:
-                print("File inclusion")
+                try:
+                    self.input_file_manager.open_file(lexical_tokens[1].text)
+                    print(
+                        "Parsing file: " + \
+                        self.input_file_manager.get_current_file_name()
+                    )
+                except IOError as e:
+                    print_warn(
+                        "There was an error while opening file '" + \
+                        lexical_tokens[1].text + "': " + str(e) + \
+                        "\nContinuing the parsing of '" + \
+                        self.input_file_manager.get_current_file_name() + "'."
+                    )
             elif lexical_tokens[0].type == TerminalType.indentation:
                 print("Rule")
             elif (
