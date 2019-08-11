@@ -24,7 +24,9 @@ class RuleUnitRule(LexingRule):
         """
         parsing_slot_def = kwargs.get("parsing_slot_def", False)
 
-        if not self._try_to_match_rule(RuleWhitespaces):
+        if not self._try_to_match_rule(
+            RuleWhitespaces, parsing_indentation=True
+        ):
             self.error_msg = \
                 "Invalid token. Expected indentation within unit definitions."
             return False
