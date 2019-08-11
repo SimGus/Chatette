@@ -22,5 +22,5 @@ class RuleUnitDeclLine(LexingRule):
         if annotation_rule.matches():
             self._next_index = annotation_rule.get_next_index_to_match()
             self._update_furthest_matched_index()
-            self._tokens.append(annotation_rule.get_lexical_tokens())
+            self._tokens.extend(annotation_rule.get_lexical_tokens())
         return True
