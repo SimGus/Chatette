@@ -39,7 +39,7 @@ class Parser(object):
         self.ast = AST.get_or_create()
 
         self._declaration_line_allowed = True
-        self._last_indentation_count = 0
+        self._last_indentation = None
         self._current_unit_declaration = None
     
 
@@ -67,10 +67,11 @@ class Parser(object):
             if lexical_tokens[0].type == TerminalType.file_inclusion_marker:
                 self._parse_file_inclusion(lexical_tokens)
                 self._declaration_line_allowed = True
-                self._last_indentation_count = 0
+                self._last_indentation = None
             elif lexical_tokens[0].type == TerminalType.indentation:
                 self._parse_rule(lexical_tokens)
                 self._declaration_line_allowed = True
+                self._last_indentation = lexical_tokens[0].text
             elif (
                 lexical_tokens[0].type in \
                 (TerminalType.alias_decl_start,
@@ -79,7 +80,7 @@ class Parser(object):
             ):
                 self._parse_unit_declaration(lexical_tokens)
                 self._declaration_line_allowed = False
-                self._last_indentation_count = 0
+                self._last_indentation = None
             else:
                 self.input_file_manager.syntax_error(
                     "Couldn't parse this line: a line can be either " + \
@@ -338,6 +339,9 @@ class Parser(object):
         definition).
         """
         print("Rule")
-
-
+        if (
+            self._last_indentation is not None
+            and lexical_tokens[0].text != self._last_indentation
+        ):
+            self.input_file_manager.syntax_error("Inconsistent indentation.")
 
