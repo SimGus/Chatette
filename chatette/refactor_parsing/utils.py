@@ -189,6 +189,7 @@ def extract_annotation_tokens(tokens):
             start_index = i
         if token.type == TerminalType.annotation_end:
             end_index = i
+            break
 
     if start_index is None:
         return None    

@@ -15,13 +15,15 @@ from chatette.refactor_units.definitions.unit_definition import UnitDefinition
 
 class IntentDefinition(UnitDefinition):
     """Represents an intent definition."""
-    def __init__(self, name, nb_training_examples, nb_testing_examples):
+    def __init__(
+        self, name, nb_training_examples=None, nb_testing_examples=None
+    ):
         super(IntentDefinition, self).__init__(name)
         self._nb_training_ex_asked = nb_training_examples
         self._nb_testing_ex_asked = nb_testing_examples
     
     def _compute_full_name(self):
-        return "intent '" + self._labelling_name + "'"
+        return "intent '" + self._name + "'"
     
     def set_nb_examples_asked(self, nb_training_ex, nb_testing_ex):
         """

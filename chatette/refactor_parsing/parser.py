@@ -11,8 +11,7 @@ from __future__ import print_function
 from six import string_types
 
 from chatette.utils import print_DBG, print_warn
-from chatette.refactor_parsing.utils import \
-    remove_comment_tokens, extract_annotation_tokens
+from chatette.refactor_parsing import utils
 
 from chatette.refactor_parsing.input_file_manager import InputFileManager
 from chatette.refactor_parsing.lexing.lexer import Lexer
@@ -38,6 +37,7 @@ class Parser(object):
         self.lexer = Lexer()
 
         self._declaration_line_allowed = True
+        self._current_unit_declaration = None
     
 
     def parse(self):
@@ -56,7 +56,7 @@ class Parser(object):
             print("\nLINE: '" + str(line) + "'")
             lexical_tokens = self.lexer.lex(line)
             print("TOKENS:", lexical_tokens)
-            lexical_tokens = remove_comment_tokens(lexical_tokens)
+            lexical_tokens = utils.remove_comment_tokens(lexical_tokens)
 
             if len(lexical_tokens) == 0:
                 continue
@@ -107,6 +107,7 @@ class Parser(object):
         """
         Handles the tokens `lexical tokens` that contain a unit declaration.
         """
+        # TODO this code doesn't seem very clean (should refactor)
         print("Unit declaration")
         if not self._declaration_line_allowed:
             self.input_file_manager.syntax_error(
@@ -208,15 +209,114 @@ class Parser(object):
                     token.text + "'."
                 )
 
+        annotation_tokens = utils.extract_annotation_tokens(lexical_tokens)
+        annotation = None
+        if annotation_tokens is not None and unit_decl_class != IntentDefinition:
+            if unit_decl_class == AliasDefinition:
+                unit_type = "alias"
+            else:
+                unit_type = "slot"
+            print_warn(
+                "Found an annotation when parsing " + unit_type + " '" + \
+                identifier + "'\n" + \
+                "Annotations are currently only supported for intent " + \
+                "definitions. Any other annotation is ignored."
+            )
+        elif annotation_tokens is not None:
+            annotation = self._annotation_tokens_to_dict(annotation_tokens)
         
-        annotation_tokens = extract_annotation_tokens(lexical_tokens)
-        if annotation_tokens is not None:
-            annotation = annotation_tokens_to_dict(annotation_tokens)
-        else:
-            annotation = None
+        unit = unit_decl_class(identifier)
+        if annotation is not None:  # parsing intent
+            (nb_training_ex, nb_testing_ex) = \
+                self._parse_intent_annotation(annotation)
+            unit.set_nb_examples_asked(nb_training_ex, nb_testing_ex)
         
-        
+        self._current_unit_declaration = unit
         self._declaration_line_allowed = False
+    def _parse_intent_annotation(self, annotation):
+        """
+        Given a dict representing the annotation corresponding to an intent
+        declaration, returns the number of examples asked in the training
+        and testing sets (as a 2-tuple).
+        Returns `None` instead of a number if a number was not provided.
+        @raises - `SyntaxError` if the number of examples provided are
+                  actually not integral numbers.
+                - `SyntaxError` if the annotation contains the same information
+                  at least twice.
+        Prints a warning if the annotation contains unrecognized keys.
+        """
+        nb_training_ex = None
+        nb_testing_ex = None
+        for key in annotation:
+            if key is None or key.lower() in ("training", "train"):
+                if nb_training_ex is not None:
+                    self.input_file_manager.syntax_error(
+                        "Detected a number of examples for training set " + \
+                        "several times."
+                    )
+                nb_training_ex = \
+                    self._str_to_int(
+                        annotation[key],
+                        "Couldn't parse the annotation of the intent."
+                    )
+            elif key.lower() in ("testing", "test"):
+                if nb_testing_ex is not None:
+                    self.input_file_manager.syntax_error(
+                        "Detected a number of examples for testing set " + \
+                        "several times."
+                    )
+                nb_testing_ex = \
+                    self._str_to_int(
+                        annotation[key],
+                        "Couldn't parse the annotation of the intent."
+                    )
+            else:
+                print_warn("Unsupported key in the annotation: '" + key + "'.")
+        return (nb_training_ex, nb_testing_ex)
+    def _annotation_tokens_to_dict(self, tokens):
+        """
+        Transforms the tokens `tokens` that contain an annotation into a dictionary
+        that contains the same information.
+        @pre: `tokens` really contains an annotation (starting at the beginning of
+            the list).
+        @raises: - `ValueError` if the precondition is not met.
+                - `SyntaxError` if the annotation contains the same key twice.
+        """
+        if len(tokens) == 0 or tokens[0].type != TerminalType.annotation_start:
+            raise ValueError(
+                "Tried to parse tokens as if they were an annotation while " + \
+                "they weren't"
+            )
+
+        result = dict()
+        current_key = None
+        for token in tokens:
+            if token.type == TerminalType.annotation_end:
+                break
+            elif token.type == TerminalType.key:
+                current_key = token.text
+            elif token.type == TerminalType.value:
+                if current_key in result:
+                    self.input_file_manager.syntax_error(
+                        "Annotation contained the key '" + current_key + \
+                        "' twice."
+                    )
+                result[current_key] = token.text
+
+        return result
+    def _str_to_int(self, text, err_msg):
+        """
+        Transforms the str `text` into an int.
+        @raises: `SyntaxError` with the message `err_msg` and a small message
+                 explaining `text` is not a valid int
+                 if the cast couldn't be performed.
+        """
+        try:
+            return int(text)
+        except ValueError:
+            self.input_file_manager.syntax_error(
+                err_msg + " '" + text + "' is not a valid integral number."
+            )
 
     def _parse_rule(self, lexical_tokens):
         """
@@ -227,33 +327,4 @@ class Parser(object):
         self._declaration_line_allowed = True
 
 
-def annotation_tokens_to_dict(tokens):
-    """
-    Transforms the tokens `tokens` that contain an annotation into a dictionary
-    that contains the same information.
-    @pre: `tokens` really contains an annotation (starting at the beginning of
-          the list).
-    @raises: - `ValueError` if the precondition is not met.
-             - `SyntaxError` if the annotation contains the same key twice.
-    """
-    if len(tokens) == 0 or tokens[0].type != TerminalType.annotation_start:
-        raise ValueError(
-            "Tried to parse tokens as if they were an annotation while " + \
-            "they weren't"
-        )
 
-    result = dict()
-    current_key = None
-    for token in tokens:
-        if token.type == TerminalType.annotation_end:
-            break
-        elif token.type == TerminalType.key:
-            current_key = token.text
-        elif token.type == TerminalType.value:
-            if current_key in result:
-                raise SyntaxError(
-                    "Annotation contained the key '" + current_key + "' twice."
-                )
-            result[current_key] = token.text
-
-    return result

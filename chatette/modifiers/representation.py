@@ -53,3 +53,12 @@ class ModifiersRepresentation(object):
 
         self.argument_name = None
         self.argument_value = None
+    def __repr__(self):
+        return \
+            self.__class__.__name__ + "(casegen: " + str(self.casegen) + \
+            " variation: " + str(self.variation) + " randgen: " + \
+            str(self.randgen_name) + " (" + str(self.randgen_percent) + \
+            ") arg name: " + str(self.argument_name) + " arg value: " + \
+            str(self.argument_value) + ")"
+    def __str__(self):
+        return self.__repr__()

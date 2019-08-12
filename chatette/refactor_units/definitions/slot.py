@@ -14,13 +14,13 @@ from chatette.refactor_units.definitions.unit_definition import UnitDefinition
 class SlotDefinition(UnitDefinition):
     """Represents an slot definition."""
     def _compute_full_name(self):
-        return "slot '" + self._labelling_name + "'"
+        return "slot '" + self._name + "'"
 
     def _generate_random_strategy(self):
         generated_example = \
             super(SlotDefinition, self)._generate_random_strategy()
         generated_example.entities.append(
-            Entity(self._labelling_name, len(generated_example.text))  # TODO value?
+            Entity(self._name, len(generated_example.text))  # TODO value?
         )
         return generated_example
     
@@ -29,5 +29,5 @@ class SlotDefinition(UnitDefinition):
             super(SlotDefinition, self)._generate_all_strategy()
         for ex in generated_examples:
             ex.entities.append(
-                Entity(self._labelling_name, len(ex.text))  # TODO value?
+                Entity(self._name, len(ex.text))  # TODO value?
             )
