@@ -10,6 +10,15 @@ import sys
 from random import randint
 
 
+from enum import Enum
+
+
+class UnitType(Enum):
+    alias = "alias"
+    slot = "slot"
+    intent = "intent"
+
+
 # pylint: disable=invalid-name
 def print_DBG(txt):
     """Prints debug information on stdout."""

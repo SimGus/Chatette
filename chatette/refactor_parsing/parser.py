@@ -16,6 +16,7 @@ from chatette.refactor_parsing import utils
 from chatette.refactor_parsing.input_file_manager import InputFileManager
 from chatette.refactor_parsing.lexing.lexer import Lexer
 from chatette.refactor_parsing.lexing import TerminalType
+from chatette.refactor_units.ast import AST
 
 from chatette.refactor_units.definitions.alias import AliasDefinition
 from chatette.refactor_units.definitions.slot import SlotDefinition
@@ -35,6 +36,7 @@ class Parser(object):
         self.input_file_manager = \
             InputFileManager.get_or_create(master_file_path)
         self.lexer = Lexer()
+        self.ast = AST.get_or_create()
 
         self._declaration_line_allowed = True
         self._current_unit_declaration = None
@@ -122,10 +124,13 @@ class Parser(object):
 
         if lexical_tokens[i].type == TerminalType.alias_decl_start:
             unit_decl_class = AliasDefinition
+            add_unit_def_function = self.ast.add_alias
         elif lexical_tokens[i].type == TerminalType.slot_decl_start:
             unit_decl_class = SlotDefinition
+            add_unit_def_function = self.ast.add_slot
         elif lexical_tokens[i].type == TerminalType.intent_decl_start:
             unit_decl_class = IntentDefinition
+            add_unit_def_function = self.ast.add_intent
         else:  # Should never happen
             raise ValueError(
                 "Tried to parse a line as if it was a unit declaration " + \
@@ -231,8 +236,10 @@ class Parser(object):
                 self._parse_intent_annotation(annotation)
             unit.set_nb_examples_asked(nb_training_ex, nb_testing_ex)
         
+        add_unit_def_function(unit)
         self._current_unit_declaration = unit
         self._declaration_line_allowed = False
+
     def _parse_intent_annotation(self, annotation):
         """
         Given a dict representing the annotation corresponding to an intent

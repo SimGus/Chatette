@@ -16,6 +16,7 @@ class UnitDefinition(GeneratingItem):
     """Abstract class base for all unit definitions."""
     def __init__(self, name):
         super(UnitDefinition, self).__init__(name)
+        self.identifier = name
         self._rules = []
 
     def _compute_nb_possibilities(self):
