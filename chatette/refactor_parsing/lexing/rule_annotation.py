@@ -144,7 +144,7 @@ class RuleAnnotation(LexingRule):
                     # Ignoring the tokens because whitespaces here are not meaningful
 
                 value_rule = RuleKeyValue(self._text, self._next_index)
-                if not value_rule.matches(extracting_key=True):
+                if not value_rule.matches(extracting_key=False):
                     self.error_msg = value_rule.error_msg
                     self._update_furthest_matched_index(value_rule)
                     return False
