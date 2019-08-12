@@ -90,17 +90,18 @@ class AST(object):
                 "Tried to declare " + unit_type.value + " '" + \
                 unit.identifier + "' twice."
             )
+        print("Adding " + unit_type.value + " '" + unit.identifier + "'")
         relevant_dict[unit.identifier] = unit
     
 
     def print_DBG(self):
-        print("Aliases:")
+        print("Aliases (" + str(len(self._alias_definitions)) + "):")
         for alias_name in self._alias_definitions:
             self._alias_definitions[alias_name].print_DBG()
-        print("Slots:")
+        print("Slots (" + str(len(self._slot_definitions)) + "):")
         for slot_name in self._slot_definitions:
             self._slot_definitions[slot_name].print_DBG()
-        print("Intents:")
+        print("Intents (" + str(len(self._intent_definitions)) + "):")
         for intent_name in self._intent_definitions:
             self._intent_definitions[intent_name].print_DBG()
         print()

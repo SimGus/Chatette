@@ -39,6 +39,7 @@ class Parser(object):
         self.ast = AST.get_or_create()
 
         self._declaration_line_allowed = True
+        self._last_indentation_count = 0
         self._current_unit_declaration = None
     
 
@@ -65,8 +66,11 @@ class Parser(object):
 
             if lexical_tokens[0].type == TerminalType.file_inclusion_marker:
                 self._parse_file_inclusion(lexical_tokens)
+                self._declaration_line_allowed = True
+                self._last_indentation_count = 0
             elif lexical_tokens[0].type == TerminalType.indentation:
                 self._parse_rule(lexical_tokens)
+                self._declaration_line_allowed = True
             elif (
                 lexical_tokens[0].type in \
                 (TerminalType.alias_decl_start,
@@ -74,12 +78,16 @@ class Parser(object):
                  TerminalType.intent_decl_start)
             ):
                 self._parse_unit_declaration(lexical_tokens)
+                self._declaration_line_allowed = False
+                self._last_indentation_count = 0
             else:
                 self.input_file_manager.syntax_error(
                     "Couldn't parse this line: a line can be either " + \
                     "an empty line, a comment line, a file inclusion line, " + \
                     "a unit declaration or a rule."
                 )
+            print("AST")
+            self.ast.print_DBG()
 
     def _parse_file_inclusion(self, lexical_tokens):
         """
@@ -238,7 +246,6 @@ class Parser(object):
         
         add_unit_def_function(unit)
         self._current_unit_declaration = unit
-        self._declaration_line_allowed = False
 
     def _parse_intent_annotation(self, annotation):
         """
@@ -331,7 +338,6 @@ class Parser(object):
         definition).
         """
         print("Rule")
-        self._declaration_line_allowed = True
 
 
 

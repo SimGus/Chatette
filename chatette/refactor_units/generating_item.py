@@ -139,3 +139,8 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
     # @abstractmethod
     # def print_DBG(self):
     #     raise NotImplementedError()
+
+    def print_DBG(self):
+        print(str(self))
+    def __str__(self):
+        return "<" + self.full_name + ">"
