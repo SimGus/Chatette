@@ -48,6 +48,7 @@ class RuleAnnotation(LexingRule):
             self.error_msg = first_key_val_rule.error_msg
             self._update_furthest_matched_index(first_key_val_rule)
             return False
+        self._tokens.extend(first_key_val_rule.get_lexical_tokens())
         self._update_furthest_matched_index(first_key_val_rule)
         self._next_index = first_key_val_rule.get_next_index_to_match()
 
@@ -59,11 +60,11 @@ class RuleAnnotation(LexingRule):
 
         if not self._text.startswith(KEY_VAL_CONNECTOR, self._next_index):
             # Single value
-            value_token = first_key_val_rule.get_lexical_tokens()[0]
-            value_token.type = TerminalType.value
-            self._tokens.append(value_token)
+            pass
         else:
             # Multiple key/value pairs
+            self._tokens[-1].type = TerminalType.key
+
             self._next_index += 1
             self._update_furthest_matched_index()
             self._tokens.append(
@@ -86,7 +87,7 @@ class RuleAnnotation(LexingRule):
             
             self._next_index = first_val_rule.get_next_index_to_match()
             self._update_furthest_matched_index(first_val_rule)
-            self._tokens.extend(first_key_val_rule.get_lexical_tokens())
+            self._tokens.extend(first_val_rule.get_lexical_tokens())
 
             whitespaces_rule = RuleWhitespaces(self._text, self._next_index)
             if whitespaces_rule.matches():
