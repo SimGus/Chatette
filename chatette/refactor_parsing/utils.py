@@ -171,3 +171,27 @@ def remove_comment_tokens(tokens):
     if tokens[comment_index - 1].type == TerminalType.whitespace:
         return tokens[:comment_index - 1]
     return tokens[:comment_index]
+
+
+def extract_annotation_tokens(tokens):
+    """
+    Given the list of tokens `tokens`,
+    returns a list of tokens that correspond to an annotation.
+    Returns `None` if there was no annotation in `tokens`.
+    """
+    if len(tokens) < 2:
+        return None
+
+    start_index = None
+    end_index = None
+    for (i, token) in enumerate(tokens):
+        if token.type == TerminalType.annotation_start:
+            start_index = i
+        if token.type == TerminalType.annotation_end:
+            end_index = i
+
+    if start_index is None:
+        return None    
+    if end_index is None:
+        return tokens[start_index:]
+    return tokens[start_index:end_index + 1]

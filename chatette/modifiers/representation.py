@@ -39,3 +39,17 @@ class ReferenceModifiersRepr(BaseModifiersRepr):
         self.percentage_randgen = percentage_randgen
         self.variation_name = variation_name
         self.argument_value = argument_value
+
+
+# NOTE this is the representation for the refactor
+class ModifiersRepresentation(object):
+    def __init__(self):
+        self.casegen = False
+        self.variation = None
+
+        self.randgen = False
+        self.randgen_name = None
+        self.randgen_percent = 50
+
+        self.argument_name = None
+        self.argument_value = None
