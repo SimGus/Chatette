@@ -43,12 +43,16 @@ class AST(object):
         @raises: - `KeyError` if `unit_type` is an invalid str.
                  - `ValueError` if `unit_type´ is neither a str or a `UnitType`.
         """
+        print("AAAAAAAAAAAAAAAAAAAAAAAAaaa")
         if isinstance(unit_type, str):
             if unit_type == UnitType.alias.value:
+                print("alias")
                 unit_type = UnitType.alias
             elif unit_type == UnitType.slot.value:
+                print("slot")
                 unit_type = UnitType.slot
             elif unit_type == UnitType.intent.value:
+                print("intent")
                 unit_type = UnitType.intent
             else:
                 raise KeyError(
@@ -58,6 +62,7 @@ class AST(object):
             raise ValueError(
                 "Invalid type of key: " + unit_type.__class__.__name__ + "."
             )
+        print("unit_type", unit_type)
         return self._get_relevant_dict(unit_type)
     
 

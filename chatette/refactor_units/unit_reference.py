@@ -20,7 +20,8 @@ class UnitReference(GeneratingItem):
     def __init__(self, name, unit_type):
         self._unit_type = unit_type
         super(UnitReference, self).__init__(name)
-        self._definition = AST.get_or_create().get_definition(unit_type, name)
+        # TODO not added yet
+        # self._definition = AST.get_or_create()[unit_type.value][name]
     
     def _compute_full_name(self):
         return "reference to " + self._unit_type.value + " '" + \
