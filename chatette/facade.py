@@ -97,7 +97,7 @@ class Facade(object):
         else:
             adapter = adapter_factory.create_adapter(adapter_str)
 
-        self.generator = Generator(self.ast_definitions)
+        self.generator = Generator()
         synonyms = self.generator.get_entities_synonyms()
 
         if os.path.exists(self.output_dir_path):

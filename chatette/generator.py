@@ -3,7 +3,8 @@
 
 # TODO shouldn't generate twice the same statement
 
-from chatette.utils import print_DBG, remove_duplicates
+from chatette.utils import print_DBG, remove_duplicates, UnitType
+from chatette.refactor_units.ast import AST
 
 
 class Generator(object):
@@ -15,8 +16,8 @@ class Generator(object):
     """
     DEFAULT_MAX_NB_EXAMPLES_PER_INTENT = 1000000  # TODO: this might not be relevant anymore
 
-    def __init__(self, definitions_ast):
-        self.ast = definitions_ast
+    def __init__(self):
+        self.ast = AST.get_or_create()
         self.max_nb_single_intent_examples = \
             Generator.DEFAULT_MAX_NB_EXAMPLES_PER_INTENT
 
@@ -53,9 +54,9 @@ class Generator(object):
         based on the slot value they are assigned.
         """
         synonyms = dict()
-        for slot_definition in self.ast.slot_definitions:
+        for slot_definition in self.ast[UnitType.slot]:
             current_synonyms_dict = \
-                self.ast.slot_definitions[slot_definition].get_synonyms_dict()
+                self.ast[UnitType.slot][slot_definition].get_synonyms_dict()
             for slot_value in current_synonyms_dict:
                 if slot_value not in synonyms:
                     synonyms[slot_value] = current_synonyms_dict[slot_value]
