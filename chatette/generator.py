@@ -26,8 +26,9 @@ class Generator(object):
 
     def generate_train(self):
         print_DBG("Generating training examples...")
-        for intent_name in self.ast.intent_definitions:
-            intent = self.ast.intent_definitions[intent_name]
+        intent_definitions = self.ast[UnitType.intent]
+        for intent_name in intent_definitions:
+            intent = intent_definitions[intent_name]
             examples = intent.generate(self.max_nb_single_intent_examples)
             for example in examples:
                 yield example
@@ -35,16 +36,23 @@ class Generator(object):
     def generate_test(self, training_examples=None):
         should_generate_test_set = False
 
-        for intent_name in self.ast.intent_definitions:
-            if self.ast.intent_definitions[intent_name].nb_testing_examples_asked is not None:
+        intent_definitions = self.ast[UnitType.intent]
+        for intent_name in intent_definitions:
+            if (
+                intent_definitions[intent_name].nb_testing_examples_asked \
+                is not None
+            ):
                 should_generate_test_set = True
                 break
 
         if should_generate_test_set:
             print_DBG("Generating testing examples...")
-            for intent_name in self.ast.intent_definitions:
-                intent = self.ast.intent_definitions[intent_name]
-                examples = intent.generate(self.max_nb_single_intent_examples, training_examples)
+            for intent_name in intent_definitions:
+                intent = intent_definitions[intent_name]
+                examples = \
+                    intent.generate(
+                        self.max_nb_single_intent_examples, training_examples
+                    )
                 for example in examples:
                     yield example
 

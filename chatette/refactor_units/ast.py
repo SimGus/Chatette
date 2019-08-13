@@ -43,7 +43,6 @@ class AST(object):
         @raises: - `KeyError` if `unit_type` is an invalid str.
                  - `ValueError` if `unit_type´ is neither a str or a `UnitType`.
         """
-        print("AAAAAAAAAAAAAAAAAAAAAAAAaaa")
         if isinstance(unit_type, str):
             if unit_type == UnitType.alias.value:
                 print("alias")
