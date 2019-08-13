@@ -401,6 +401,8 @@ class Parser(object):
             ):
                 rule_contents.append(current_repr.create_concrete())
                 current_repr = None
+            elif token.type == TerminalType.unit_identifier:
+                current_repr.identifier = token.text
             elif token.type == TerminalType.choice_start:
                 if current_repr is not None:
                     rule_contents.append(current_repr.create_concrete())
