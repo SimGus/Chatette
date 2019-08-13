@@ -70,7 +70,8 @@ class IntentDefinition(UnitDefinition):
             return test_examples
         else:
             test_examples = []
-            all_examples = shuffle(self.generate_all())
+            all_examples = self.generate_all()
+            shuffle(all_examples)
             for ex in all_examples:
                 add_example_no_dup(test_examples, ex)
                 if len(test_examples) == self._nb_testing_ex_asked:
