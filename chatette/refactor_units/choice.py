@@ -65,6 +65,6 @@ class Choice(GeneratingItem):
     def _generate_all_strategy(self):
         generated_examples = []
         for rule in self._rules:
-            current_ex = rule.generate_all()
-            generated_examples.append(current_ex)
+            current_examples = rule.generate_all()
+            generated_examples.extend(current_examples)
         return generated_examples

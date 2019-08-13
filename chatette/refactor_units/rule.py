@@ -23,7 +23,7 @@ class Rule(GeneratingItem):
         super(Rule, self).__init__(None)
         self._contents = contents
         print("rule created with: " + str(self._contents))
-        print("generates: " + str(self._generate_random_strategy()))
+        print("generates: " + str(self._generate_all_strategy()))
     
     def _compute_full_name(self):
         return "rule contained in " + self.parent_name
