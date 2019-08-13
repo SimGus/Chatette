@@ -21,7 +21,7 @@ class UnitReference(GeneratingItem):
         self._unit_type = unit_type
         super(UnitReference, self).__init__(name)
         try:
-            self._definition = AST.get_or_create()[unit_type.value][name]
+            self._definition = AST.get_or_create()[unit_type][name]
         except KeyError:
             self._definition = None
         
@@ -35,7 +35,7 @@ class UnitReference(GeneratingItem):
         if self._definition is None:
             try:
                 self._definition = \
-                    AST.get_or_create()[self._unit_type.value][self._name]
+                    AST.get_or_create()[self._unit_type][self._name]
             except KeyError:
                 raise KeyError(
                     "Couldn't find the definition corresponding to " + \
