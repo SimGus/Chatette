@@ -10,7 +10,7 @@ those files.
 from __future__ import print_function
 from six import string_types
 
-from chatette.utils import print_DBG, print_warn
+from chatette.utils import print_DBG, print_warn, UnitType
 from chatette.refactor_parsing import utils
 
 from chatette.refactor_parsing.input_file_manager import InputFileManager
@@ -18,10 +18,15 @@ from chatette.refactor_parsing.lexing.lexer import Lexer
 from chatette.refactor_parsing.lexing import TerminalType
 from chatette.refactor_units.ast import AST
 
+from chatette.modifiers.representation import ModifiersRepresentation
 from chatette.refactor_units.definitions.alias import AliasDefinition
 from chatette.refactor_units.definitions.slot import SlotDefinition
 from chatette.refactor_units.definitions.intent import IntentDefinition
-from chatette.modifiers.representation import ModifiersRepresentation
+from chatette.refactor_units.word import Word
+from chatette.refactor_units.choice import Choice
+from chatette.refactor_units.unit_reference import UnitReference
+
+from chatette.refactor_parsing import ChoiceRepr, UnitRefRepr
 
 
 class Parser(object):
@@ -69,7 +74,7 @@ class Parser(object):
                 self._declaration_line_allowed = True
                 self._last_indentation = None
             elif lexical_tokens[0].type == TerminalType.indentation:
-                self._parse_rule(lexical_tokens)
+                self._parse_rule_line(lexical_tokens)
                 self._declaration_line_allowed = True
                 self._last_indentation = lexical_tokens[0].text
             elif (
@@ -333,10 +338,10 @@ class Parser(object):
                 err_msg + " '" + text + "' is not a valid integral number."
             )
 
-    def _parse_rule(self, lexical_tokens):
+    def _parse_rule_line(self, lexical_tokens):
         """
-        Handles the tokens `lexical tokens` that contain a rule (inside a unit
-        definition).
+        Handles a line that is a rule within a unit definition.
+        Adds the rule to the currently parsed unit.
         """
         print("Rule")
         if (
@@ -344,4 +349,129 @@ class Parser(object):
             and lexical_tokens[0].text != self._last_indentation
         ):
             self.input_file_manager.syntax_error("Inconsistent indentation.")
+        
+        rule = self._parse_rule(lexical_tokens[1:])
+        print("\n\nFINALLY: " + str(rule))
 
+    def _parse_rule(self, tokens):
+        """
+        Handles the tokens `tokens` that contain a rule (inside a unit
+        definition).
+        Returns the rule (`Rule`) that `tokens` represent.
+        """
+        print("parsing new rule")
+        for token in tokens:
+            print("tok: ", str(token))
+
+        rule_contents = []
+        current_repr = None
+        i = 0
+        while i < len(tokens):
+            token = tokens[i]
+            print(token)
+            print("=> " + str(current_repr))
+            if token.type == TerminalType.whitespace:
+                # TODO put it in modifiers
+                if current_repr is not None:
+                    rule_contents.append(current_repr.create_concrete())
+                    current_repr = None
+            # Units and rule contents
+            elif token.type == TerminalType.word:
+                rule_contents.append(Word(token.text))
+            elif (
+                token.type in \
+                (TerminalType.alias_ref_start,
+                    TerminalType.slot_ref_start,
+                    TerminalType.intent_ref_end)
+            ):
+                if current_repr is not None:
+                    rule_contents.append(current_repr.create_concrete())
+                current_repr = UnitRefRepr()
+                if token.type == TerminalType.alias_ref_start:
+                    current_repr.type = UnitType.alias
+                elif token.type == TerminalType.slot_ref_start:
+                    current_repr.type = UnitType.slot
+                elif token.type == TerminalType.intent_ref_start:
+                    current_repr.type = UnitType.intent
+            elif (
+                token.type in \
+                (TerminalType.alias_ref_end,
+                 TerminalType.slot_ref_end,
+                 TerminalType.intent_ref_end)
+            ):
+                rule_contents.append(current_repr.create_concrete())
+                current_repr = None
+            elif token.type == TerminalType.choice_start:
+                if current_repr is not None:
+                    rule_contents.append(current_repr.create_concrete())
+                current_repr = ChoiceRepr()
+                end_choice_index = utils.find_matching_choice_end(tokens, i)
+                if end_choice_index is not None:
+                    internal_rules = \
+                        self._parse_choice(tokens[i:end_choice_index + 1])
+                    current_repr.rules = internal_rules
+                    i = end_choice_index
+                else:
+                    self.input_file_manager.syntax_error(
+                        "Inconsistent choice starts and endings."
+                    )
+            elif token.type == TerminalType.choice_end:
+                rule_contents.append(current_repr.create_concrete())
+            # Modifiers
+            elif token.type == TerminalType.casegen_marker:
+                current_repr.casegen = True
+            elif token.type == TerminalType.randgen_marker:
+                current_repr.randgen = True
+            elif token.type == TerminalType.randgen_name:
+                current_repr.randgen_name = token.text
+            elif token.type == TerminalType.variation_marker:
+                pass
+            elif token.type == TerminalType.variation_name:
+                current_repr.variation = token.text
+            elif token.type == TerminalType.arg_marker:
+                pass
+            elif token.type == TerminalType.arg_value:
+                current_repr.arg_value = token.text
+            i += 1
+        if current_repr is not None:
+            rule_contents.append(current_repr.create_concrete())
+
+        return rule_contents
+
+    def _parse_choice(self, tokens):
+        print("\nparsing choice")
+        tokens = tokens[1:-1]
+        rules = []
+
+        current_rule_start_index = 0
+        i = 0
+        while i < len(tokens):
+            token = tokens[i]
+            if token.type == TerminalType.choice_sep:
+                rules.append(
+                    self._parse_rule(tokens[current_rule_start_index:i])
+                )
+                current_rule_start_index = i+1
+            if token.type == TerminalType.choice_start:
+                end_choice_index = utils.find_matching_choice_end(tokens, i)
+                if end_choice_index is None:
+                    self.input_file_manager.syntax_error(
+                        "Inconsistent choice starts and endings."
+                    )
+                i = end_choice_index
+            i += 1
+
+        if i > 0 and tokens[i-1].type == TerminalType.percentgen:
+            i -= 1
+        if i > 0 and tokens[i-1].type == TerminalType.percentgen_marker:
+            i -= 1
+        if i > 0 and tokens[i-1].type == TerminalType.randgen_name:
+            i -= 1
+        if i > 0 and tokens[i-1].type == TerminalType.randgen_marker:
+            i -= 1
+        rules.append(
+            self._parse_rule(tokens[current_rule_start_index:i])
+        )
+
+        print("choice rules: " + str(rules) + "\n")
+        return rules

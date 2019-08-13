@@ -196,3 +196,32 @@ def extract_annotation_tokens(tokens):
     if end_index is None:
         return tokens[start_index:]
     return tokens[start_index:end_index + 1]
+
+
+def find_matching_choice_end(tokens, start_index):
+    """
+    Returns the index of the choice end that matches the choice start at
+    index `start_index`.
+    Returns `None` if there is no matching choice end.
+    @raises: - `ValueError` if there is no choice starting at `start_index`.
+             - `ValueError` if arguments are inconsistent.
+    """
+    if tokens[start_index].type != TerminalType.choice_start:
+        raise ValueError(
+            "Tried to get the matching choice end of something else than a " + \
+            "choice start."
+        )
+
+    nb_starts_to_match = 0
+    i = start_index + 1
+    while i < len(tokens):
+        token = tokens[i]
+        if token.type == TerminalType.choice_start:
+            nb_starts_to_match += 1
+        elif token.type == TerminalType.choice_end:
+            if nb_starts_to_match > 0:
+                nb_starts_to_match -= 1
+            else:
+                return i
+        i += 1
+    return None
