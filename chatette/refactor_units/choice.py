@@ -22,7 +22,7 @@ class Choice(GeneratingItem):
             self._rules.extend(rules)
 
     def _compute_full_name(self):
-        return "choice " + self._name + "'"
+        return "choice '" + self._name + "'"
     
     def _compute_nb_possibilities(self):
         acc = 0

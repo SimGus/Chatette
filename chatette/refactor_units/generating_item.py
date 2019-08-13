@@ -144,3 +144,5 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
         print(str(self))
     def __str__(self):
         return "<" + self.full_name + ">"
+    def __repr__(self):  # TODO TMP (for testing purposes)
+        return str(self)

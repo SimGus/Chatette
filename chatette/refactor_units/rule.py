@@ -53,6 +53,8 @@ class Rule(GeneratingItem):
             else:
                 for ex in generated_examples:
                     for content_ex in content_examples:
-                        tmp_buffer.append(deepcopy(ex).append(content_ex))
+                        new_example = deepcopy(ex)
+                        new_example.append(content_ex)
+                        tmp_buffer.append(new_example)
                 generated_examples = tmp_buffer
         return generated_examples
