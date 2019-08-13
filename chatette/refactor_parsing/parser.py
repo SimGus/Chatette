@@ -25,6 +25,7 @@ from chatette.refactor_units.definitions.intent import IntentDefinition
 from chatette.refactor_units.word import Word
 from chatette.refactor_units.choice import Choice
 from chatette.refactor_units.unit_reference import UnitReference
+from chatette.refactor_units.rule import Rule
 
 from chatette.refactor_parsing import ChoiceRepr, UnitRefRepr
 
@@ -351,7 +352,6 @@ class Parser(object):
             self.input_file_manager.syntax_error("Inconsistent indentation.")
         
         rule = self._parse_rule(lexical_tokens[1:])
-        print("\n\nFINALLY: " + str(rule))
 
     def _parse_rule(self, tokens):
         """
@@ -359,17 +359,11 @@ class Parser(object):
         definition).
         Returns the rule (`Rule`) that `tokens` represent.
         """
-        print("parsing new rule")
-        for token in tokens:
-            print("tok: ", str(token))
-
         rule_contents = []
         current_repr = None
         i = 0
         while i < len(tokens):
             token = tokens[i]
-            print(token)
-            print("=> " + str(current_repr))
             if token.type == TerminalType.whitespace:
                 # TODO put it in modifiers
                 if current_repr is not None:
@@ -438,10 +432,9 @@ class Parser(object):
         if current_repr is not None:
             rule_contents.append(current_repr.create_concrete())
 
-        return rule_contents
+        return Rule(self._current_unit_declaration.full_name, rule_contents)
 
     def _parse_choice(self, tokens):
-        print("\nparsing choice")
         tokens = tokens[1:-1]
         rules = []
 
@@ -475,5 +468,4 @@ class Parser(object):
             self._parse_rule(tokens[current_rule_start_index:i])
         )
 
-        print("choice rules: " + str(rules) + "\n")
         return rules
