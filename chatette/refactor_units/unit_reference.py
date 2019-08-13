@@ -9,6 +9,7 @@ that are present in template rules.
 
 
 from chatette.refactor_units.generating_item import GeneratingItem
+from chatette.refactor_units.ast import AST
 
 
 class UnitReference(GeneratingItem):
@@ -16,11 +17,10 @@ class UnitReference(GeneratingItem):
     Represents a reference to a unit definition that can be contained
     in a template rule.
     """
-    def __init__(self, name, unit_type, ast):
-        # TODO there could be a better way to use ast (singleton?)
+    def __init__(self, name, unit_type):
         super(UnitReference, self).__init__(name)
         self._unit_type = unit_type
-        self._definition = ast.get_definition(unit_type, name)
+        self._definition = AST.get_or_create().get_definition(unit_type, name)
     
     def _compute_full_name(self):
         return "reference to " + self._unit_type.name + " '" + \

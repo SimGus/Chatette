@@ -14,7 +14,7 @@ class Choice(GeneratingItem):
     """
     Represents a choice that can choose between rules and generate one of them.
     """
-    def __init__(self, name, rules=None):
+    def __init__(self, name, rules=None):  # TODO fix the problem that choice have no by design name
         super(Choice, self).__init__(name)
         self._rules = []
         if rules is not None:
