@@ -18,13 +18,13 @@ class UnitReference(GeneratingItem):
     in a template rule.
     """
     def __init__(self, name, unit_type):
-        super(UnitReference, self).__init__(name)
         self._unit_type = unit_type
+        super(UnitReference, self).__init__(name)
         self._definition = AST.get_or_create().get_definition(unit_type, name)
     
     def _compute_full_name(self):
-        return "reference to " + self._unit_type.name + " '" + \
-            self._labelling_name + "'"
+        return "reference to " + self._unit_type.value + " '" + \
+            self._name + "'"
     
     def _compute_nb_possibilities(self):
         return self._definition.get_max_nb_possibilities()

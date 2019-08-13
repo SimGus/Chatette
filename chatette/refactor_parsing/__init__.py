@@ -18,7 +18,6 @@ from chatette.refactor_units.unit_reference import UnitReference
 
 
 class IntermediateRepr(with_metaclass(ABCMeta, object)):
-    corresponding_class = None
     def __init__(self):
         self.casegen = False
         self.randgen = False
@@ -30,7 +29,6 @@ class IntermediateRepr(with_metaclass(ABCMeta, object)):
         raise NotImplementedError()
 
 class ChoiceRepr(IntermediateRepr):
-    corresponding_class = Choice
     def __init__(self):
         super(ChoiceRepr, self).__init__()
         self.rules = []
@@ -39,7 +37,6 @@ class ChoiceRepr(IntermediateRepr):
         return Choice("No name", self.rules)
 
 class UnitRefRepr(object):
-    corresponding_class = UnitReference
     def __init__(self):
         super(UnitRefRepr, self).__init__()
         self.type = None
@@ -53,4 +50,4 @@ class UnitRefRepr(object):
                 "Tried to create a concrete unit reference without setting " + \
                 "its identifier or type."
             )
-        return self.__class__.corresponding_class(self.identifier, self.type)
+        return UnitReference(self.identifier, self.type)
