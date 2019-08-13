@@ -44,6 +44,8 @@ class ReferenceModifiersRepr(BaseModifiersRepr):
 # NOTE this is the representation for the refactor
 class ModifiersRepresentation(object):
     def __init__(self):
+        self.leading_space = False
+
         self.casegen = False
         self.variation = None
 
