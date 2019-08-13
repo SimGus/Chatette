@@ -19,17 +19,17 @@ class Generator(object):
     def __init__(self):
         self.ast = AST.get_or_create()
         self.max_nb_single_intent_examples = \
-            Generator.DEFAULT_MAX_NB_EXAMPLES_PER_INTENT
+            Generator.DEFAULT_MAX_NB_EXAMPLES_PER_INTENT  # TODO remove this
 
     def set_max_nb_single_intent_examples(self, new_max):
-        self.max_nb_single_intent_examples = new_max
+        self.max_nb_single_intent_examples = new_max  # TODO that is to be removed
 
     def generate_train(self):
         print_DBG("Generating training examples...")
         intent_definitions = self.ast[UnitType.intent]
         for intent_name in intent_definitions:
             intent = intent_definitions[intent_name]
-            examples = intent.generate(self.max_nb_single_intent_examples)
+            examples = intent.generate_train()
             for example in examples:
                 yield example
 
@@ -39,7 +39,7 @@ class Generator(object):
         intent_definitions = self.ast[UnitType.intent]
         for intent_name in intent_definitions:
             if (
-                intent_definitions[intent_name].nb_testing_examples_asked \
+                intent_definitions[intent_name].get_nb_testing_examples_asked \
                 is not None
             ):
                 should_generate_test_set = True
@@ -49,10 +49,7 @@ class Generator(object):
             print_DBG("Generating testing examples...")
             for intent_name in intent_definitions:
                 intent = intent_definitions[intent_name]
-                examples = \
-                    intent.generate(
-                        self.max_nb_single_intent_examples, training_examples
-                    )
+                examples = intent.generate_test(training_examples)
                 for example in examples:
                     yield example
 

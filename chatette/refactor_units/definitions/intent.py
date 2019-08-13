@@ -32,6 +32,11 @@ class IntentDefinition(UnitDefinition):
         """
         self._nb_training_ex_asked = nb_training_ex
         self._nb_testing_ex_asked = nb_testing_ex
+    
+    def get_nb_training_examples_asked(self):
+        return self._nb_training_ex_asked
+    def get_nb_testing_examples_asked(self):
+        return self._nb_testing_ex_asked
 
     
     def generate_train(self):
@@ -50,7 +55,10 @@ class IntentDefinition(UnitDefinition):
         """
         if self._nb_testing_ex_asked == 0:
             return Example()
-        if self._nb_testing_ex_asked < float(self.get_max_nb_possibilities) / 5.0:
+        if (
+            self._nb_testing_ex_asked < \
+            float(self.get_max_nb_possibilities()) / 5.0
+        ):
             test_examples = []
             loop_count = 0
             while len(test_examples) < self._nb_testing_ex_asked:
