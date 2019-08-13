@@ -26,16 +26,16 @@ class Word(GeneratingItem):
         return 1
     
     def generate_random(self):
-        return Example(self.name)
+        return Example(self._name)
     def _generate_random_strategy(self):
-        return Example(self.name)
+        return Example(self._name)
     
     def generate_all(self):
-        return [Example(self.name)]
+        return [Example(self._name)]
     def _generate_all_strategy(self):
-        return [Example(self.name)]
+        return [Example(self._name)]
     
     def generate_nb_possibilities(self, nb_possibilities):
-        return [Example(self.name)]
+        return [Example(self._name)]
     def _generate_n_strategy(self, n):
-        return [Example(self.name)]
+        return [Example(self._name)]

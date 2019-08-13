@@ -6,6 +6,7 @@ Module `chatette.refactor_units.choice`
 Contains the class that represents choices (and old word groups).
 """
 
+from random import choice
 
 from chatette.refactor_units.generating_item import GeneratingItem
 

@@ -11,6 +11,7 @@ Contains a class representing rules
 from copy import deepcopy
 
 from chatette.refactor_units.generating_item import GeneratingItem
+from chatette.refactor_units import Example
 
 
 class Rule(GeneratingItem):
@@ -21,6 +22,8 @@ class Rule(GeneratingItem):
         self.parent_name = parent_name
         super(Rule, self).__init__(None)
         self._contents = contents
+        print("rule created with: " + str(self._contents))
+        print("generates: " + str(self._generate_random_strategy()))
     
     def _compute_full_name(self):
         return "rule contained in " + self.parent_name
