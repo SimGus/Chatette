@@ -80,9 +80,12 @@ class IntentDefinition(UnitDefinition):
             test_examples = []
             loop_count = 0
             while len(test_examples) < self._nb_testing_ex_asked:
-                current_ex = self.generate_random()
-                add_example_no_dup(test_examples, current_ex)
                 loop_count += 1
+                current_ex = self.generate_random()
+                if current_ex in training_examples:
+                    continue
+                add_example_no_dup(test_examples, current_ex)
+
                 if loop_count > 10*self._nb_testing_ex_asked:
                     break
             return test_examples
@@ -91,7 +94,10 @@ class IntentDefinition(UnitDefinition):
             all_examples = self.generate_all()
             shuffle(all_examples)
             for ex in all_examples:
+                if ex in training_examples:
+                    continue
                 add_example_no_dup(test_examples, ex)
+
                 if len(test_examples) == self._nb_testing_ex_asked:
                     break
             return test_examples
