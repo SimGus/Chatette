@@ -62,8 +62,9 @@ class IntentDefinition(UnitDefinition):
         The list has as many examples as were asked in teh templates.
         """
         if self._nb_training_ex_asked == 0:
-            return Example()
+            return IntentExample(self._name)
         return self.generate_nb_possibilities(self._nb_training_ex_asked)
+
     def generate_test(self, training_examples):
         """
         Returns a list of examples that can be put in the test set
@@ -71,7 +72,7 @@ class IntentDefinition(UnitDefinition):
         The list has as many examples as were asked in the templates.
         """
         if self._nb_testing_ex_asked == 0:
-            return Example()
+            return IntentExample(self._name)
         if (
             self._nb_testing_ex_asked < \
             float(self.get_max_nb_possibilities()) / 5.0
