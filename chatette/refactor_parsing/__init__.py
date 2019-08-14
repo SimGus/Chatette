@@ -17,7 +17,13 @@ from chatette.refactor_units.choice import Choice
 from chatette.refactor_units.unit_reference import UnitReference
 
 
-class IntermediateRepr(with_metaclass(ABCMeta, object)):
+class ItemBuilder(with_metaclass(ABCMeta, object)):
+    """
+    An intermediate representation of generating items that are used by the
+    parser. It is able to construct the corresponding item once it has
+    all the required information.
+    NOTE: This does not correspond to the *Builder* design pattern.
+    """
     def __init__(self):
         self.casegen = False
         self.randgen = False
@@ -28,17 +34,17 @@ class IntermediateRepr(with_metaclass(ABCMeta, object)):
     def create_concrete(self):
         raise NotImplementedError()
 
-class ChoiceRepr(IntermediateRepr):
+class ChoiceBuilder(ItemBuilder):
     def __init__(self):
-        super(ChoiceRepr, self).__init__()
+        super(ChoiceBuilder, self).__init__()
         self.rules = []
     
     def create_concrete(self):
         return Choice("No name", self.rules)
 
-class UnitRefRepr(object):
+class UnitRefBuilder(ItemBuilder):
     def __init__(self):
-        super(UnitRefRepr, self).__init__()
+        super(UnitRefBuilder, self).__init__()
         self.type = None
         self.identifier = None
         self.variation = None

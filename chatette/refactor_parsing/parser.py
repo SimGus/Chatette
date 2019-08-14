@@ -27,7 +27,7 @@ from chatette.refactor_units.choice import Choice
 from chatette.refactor_units.unit_reference import UnitReference
 from chatette.refactor_units.rule import Rule
 
-from chatette.refactor_parsing import ChoiceRepr, UnitRefRepr
+from chatette.refactor_parsing import ChoiceBuilder, UnitRefBuilder
 
 
 class Parser(object):
@@ -379,7 +379,7 @@ class Parser(object):
             ):
                 if current_repr is not None:
                     rule_contents.append(current_repr.create_concrete())
-                current_repr = UnitRefRepr()
+                current_repr = UnitRefBuilder()
                 if token.type == TerminalType.alias_ref_start:
                     current_repr.type = UnitType.alias
                 elif token.type == TerminalType.slot_ref_start:
@@ -399,7 +399,7 @@ class Parser(object):
             elif token.type == TerminalType.choice_start:
                 if current_repr is not None:
                     rule_contents.append(current_repr.create_concrete())
-                current_repr = ChoiceRepr()
+                current_repr = ChoiceBuilder()
                 end_choice_index = utils.find_matching_choice_end(tokens, i)
                 if end_choice_index is not None:
                     internal_rules = \
