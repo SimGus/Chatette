@@ -105,15 +105,16 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
         if nb_possibilities > max_nb_possibilities:
             nb_possibilities = max_nb_possibilities
 
-        if len(self._cached_examples) == max_nb_possibilities:
-            return sample(self._cached_examples, max_nb_possibilities)
+        if len(self._cached_examples) >= max_nb_possibilities:
+            return sample(self._cached_examples, nb_possibilities)
         if nb_possibilities < float(max_nb_possibilities) / 5.0:  # QUESTION: is 5 a good idea?
             return self._generate_n_strategy(nb_possibilities)
+        return sample(self.generate_all(), nb_possibilites)
     def _generate_n_strategy(self, n):
         """
         Strategy to generate `n` examples without using the cache.
         Returns the list of generated examples.
-        @pre: `n` <= self.get_max_nb_possibilities()
+        @pre: `n` <= `self.get_max_nb_possibilities()`
         """
         generated_examples = []
         loop_count = 0
