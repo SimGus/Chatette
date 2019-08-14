@@ -56,6 +56,7 @@
 - [ ] print the seed when starting the program, even if no seed was provided
 - [ ] improve lexing error messages
 - [ ] improve the systems of singletons to reduce code duplication
+- [ ] use decorators to make caches and improve code readability
 
 - [ ] replace `print` by `six.print_`?
 
