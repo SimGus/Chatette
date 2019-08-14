@@ -9,7 +9,7 @@ Contains the class representing an intent definition.
 
 from random import shuffle
 
-from chatette.refactor_units import Example, add_example_no_dup
+from chatette.refactor_units import Example, IntentExample, add_example_no_dup
 from chatette.refactor_units.definitions.unit_definition import UnitDefinition
 
 
@@ -37,6 +37,23 @@ class IntentDefinition(UnitDefinition):
         return self._nb_training_ex_asked
     def get_nb_testing_examples_asked(self):
         return self._nb_testing_ex_asked
+
+
+    def _example_to_intent_example(self, example):
+        """
+        Turns the example `example` (of type `Example`) into an instance of
+        `IntentExample`.
+        """
+        return IntentExample.from_example(example, self._name)
+
+
+    def _generate_random_strategy(self):
+        example = super(IntentDefinition, self)._generate_random_strategy()
+        return self._example_to_intent_example(example)
+    
+    def _generate_all_strategy(self):
+        examples = super(IntentDefinition, self)._generate_all_strategy()
+        return [self._example_to_intent_example(ex) for ex in examples]
 
     
     def generate_train(self):

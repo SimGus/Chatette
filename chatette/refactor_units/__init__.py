@@ -26,7 +26,7 @@ class Example(object):
         self.entities = entities
     
     def __repr__(self):
-        return "<'"+self.text+"' "+str(self.entities)+'>'
+        return "<'" + self.text + "' " + str(self.entities) + '>'
     def __str__(self):
         return self.text + '\n\tEntities: ' + str(self.entities)
 
@@ -66,6 +66,28 @@ class Example(object):
         for entity in example_to_append.entities:
             entity._start_index += starting_index
             self.entities.append(entity)
+
+class IntentExample(Example):
+    def __init__(self, intent_name, text=None, entities=None):
+        super(IntentExample, self).__init__(text, entities)
+        self.intent_name = intent_name
+    @classmethod
+    def from_example(cls, example, intent_name):
+        return cls(intent_name, example.text, example.entities)
+    
+    def __repr__(self):
+        return \
+            "<intent: " + self.intent_name + \
+            " '" + self.text + "' " + str(self.entities) + ">"
+    def __str__(self):
+        return \
+            "Intent: " + self.intent_name + " => " + self.text + \
+            "\n\tEntities: " + str(self.entities)
+    
+    def __eq__(self, other):
+        if isinstance(other, Example) and not isinstance(other, IntentExample):
+            raise TypeError("Tried to compare an Example and an IntentExample")
+        return super(IntentExample, self).__eq__(other)
 
 
 class Entity(object):

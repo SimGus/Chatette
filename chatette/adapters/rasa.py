@@ -31,7 +31,7 @@ class RasaAdapter(Adapter):
             }
 
         return {
-            "intent": example.name,
+            "intent": example.intent_name,
             "entities": [entity_to_rasa(e) for e in example.entities],
             # HACK: Call `entity_to_rasa` BEFORE storing "text" here
             #       (this function removes the entity markers)
