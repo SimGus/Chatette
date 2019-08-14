@@ -125,7 +125,6 @@ class Parser(object):
         Handles the tokens `lexical tokens` that contain a unit declaration.
         """
         # TODO this code doesn't seem very clean (should refactor)
-        print("Unit declaration")
         if not self._declaration_line_allowed:
             self.input_file_manager.syntax_error(
                 "Didn't expect a unit declaration to start here."
@@ -344,7 +343,6 @@ class Parser(object):
         Handles a line that is a rule within a unit definition.
         Adds the rule to the currently parsed unit.
         """
-        print("Rule")
         if (
             self._last_indentation is not None
             and lexical_tokens[0].text != self._last_indentation

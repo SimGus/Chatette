@@ -61,7 +61,6 @@ class AST(object):
             raise ValueError(
                 "Invalid type of key: " + unit_type.__class__.__name__ + "."
             )
-        print("unit_type", unit_type)
         return self._get_relevant_dict(unit_type)
     
 
@@ -94,7 +93,6 @@ class AST(object):
                 "Tried to declare " + unit_type.value + " '" + \
                 unit.identifier + "' twice."
             )
-        print("Adding " + unit_type.value + " '" + unit.identifier + "'")
         relevant_dict[unit.identifier] = unit
     
 
