@@ -352,6 +352,7 @@ class Parser(object):
             self.input_file_manager.syntax_error("Inconsistent indentation.")
         
         rule = self._parse_rule(lexical_tokens[1:])
+        self._current_unit_declaration.add_rule(rule)
 
     def _parse_rule(self, tokens):
         """
