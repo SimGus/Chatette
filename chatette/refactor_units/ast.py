@@ -9,6 +9,12 @@ NOTE: this is not exactly an AST as it is not a tree, but it has the same
 """
 
 from chatette.utils import UnitType
+from chatette.refactor_units.modifiable.definitions.alias import \
+    AliasDefinition
+from chatette.refactor_units.modifiable.definitions.slot import \
+    SlotDefinition
+from chatette.refactor_units.modifiable.definitions.intent import \
+    IntentDefinition
 
 
 class AST(object):
@@ -64,24 +70,6 @@ class AST(object):
         return self._get_relevant_dict(unit_type)
     
 
-    def add_alias(self, alias):
-        """
-        Adds the alias definition `alias` in the relevant dict.
-        @raises: `ValueError` if the alias was already defined.
-        """
-        self._add_unit(UnitType.alias, alias)
-    def add_slot(self, slot):
-        """
-        Adds the slot definition `slot` in the relevant dict.
-        @raises: `ValueError` if the slot was already defined.
-        """
-        self._add_unit(UnitType.slot, slot)
-    def add_intent(self, intent):
-        """
-        Adds the intent definition `intent` in the relevant dict.
-        @raises: `ValueError` if the intent was already defined.
-        """
-        self._add_unit(UnitType.intent, intent)
     def _add_unit(self, unit_type, unit):
         """
         Adds the intent definition `intent` in the relevant dict.
@@ -94,6 +82,50 @@ class AST(object):
                 unit.identifier + "' twice."
             )
         relevant_dict[unit.identifier] = unit
+
+    def add_alias(self, alias):
+        """
+        Adds the alias definition `alias` in the relevant dict.
+        @raises: `ValueError` if the alias was already defined.
+        """
+        # NOTE there might be a better way to check that the alias is not already defined without needing to call `get_relevant_dict`
+        self._add_unit(UnitType.alias, alias)
+        
+    def add_slot(self, slot):
+        """
+        Adds the slot definition `slot` in the relevant dict.
+        @raises: `ValueError` if the slot was already defined.
+        """
+        self._add_unit(UnitType.slot, slot)
+
+    def add_intent(self, intent):
+        """
+        Adds the intent definition `intent` in the relevant dict.
+        @raises: `ValueError` if the intent was already defined.
+        """
+        self._add_unit(UnitType.intent, intent)
+
+    def add_unit(self, unit, unit_type=None):
+        """
+        Adds the unit definition `unit` in the relevant dict.
+        If `unit_type` is `None`, detects the type of the definition
+        by itself.
+        @raises: - `TypeError` if the unit type is of an invalid type.
+                 - `ValueError` if the unit was already declared.
+        """
+        if unit_type is None:
+            if isinstance(unit, AliasDefinition):
+                unit_type = UnitType.alias
+            elif isinstance(unit, SlotDefinition):
+                unit_type = UnitType.slot
+            elif isinstance(unit, IntentDefinition):
+                unit_type = UnitType.intent
+            else:
+                raise TypeError(  # Should never happen
+                    "Tried to add something else than a unit definition " + \
+                    "to the AST."
+                )
+        self._add_unit(unit_type, unit)
     
 
     def print_DBG(self):

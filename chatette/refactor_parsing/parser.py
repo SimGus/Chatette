@@ -87,7 +87,7 @@ class Parser(object):
                  TerminalType.slot_decl_start,
                  TerminalType.intent_decl_start)
             ):
-                self._parse_unit_declaration(lexical_tokens)
+                self._parse_unit_declaration_line(lexical_tokens)
                 self._declaration_line_allowed = False
                 self._last_indentation = None
             else:
@@ -123,26 +123,33 @@ class Parser(object):
                 self.input_file_manager.get_current_file_name() + "'."
             )
 
-
-    def _parse_unit_declaration(self, lexical_tokens):
+    def _parse_unit_declaration_line(self, line_tokens):
         """
-        Handles the tokens `lexical tokens` that contain a unit declaration.
+        Parses the tokens `line_tokens` that correspond to a whole line
+        where a unit is declared.
+        Adds the definition to the AST.
         """
-        # TODO this code doesn't seem very clean (should refactor)
         if not self._declaration_line_allowed:
             self.input_file_manager.syntax_error(
                 "Didn't expect a unit declaration to start here."
             )
-        
+
+        unit = self._parse_unit_declaration(line_tokens)
+
+        self.ast.add_unit(unit)
+        self._current_unit_declaration = unit
+
+    def _parse_unit_declaration(self, lexical_tokens):
+        """
+        Parses the tokens `lexical_tokens` that contain a unit declaration.
+        Returns the corresponding concrete unit.
+        """
         if lexical_tokens[0].type == TerminalType.alias_decl_start:
             builder = AliasDefBuilder()
-            add_unit_def_function = self.ast.add_alias
         elif lexical_tokens[0].type == TerminalType.slot_decl_start:
             builder = SlotDefBuilder()
-            add_unit_def_function = self.ast.add_slot
         elif lexical_tokens[0].type == TerminalType.intent_decl_start:
             builder = IntentDefBuilder()
-            add_unit_def_function = self.ast.add_intent
         else:  # Should never happen
             raise ValueError(
                 "Tried to parse a line as if it was a unit declaration " + \
@@ -207,9 +214,7 @@ class Parser(object):
                 builder.nb_training_ex = nb_training_ex
                 builder.nb_testing_ex = nb_testing_ex
         
-        unit = builder.create_concrete()
-        add_unit_def_function(unit)
-        self._current_unit_declaration = unit
+        return builder.create_concrete()
 
     def _annotation_tokens_to_dict(self, tokens):
         """
