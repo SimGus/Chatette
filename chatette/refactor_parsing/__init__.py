@@ -13,8 +13,8 @@ The most important classes defined in this module are:
 from abc import ABCMeta, abstractmethod
 from future.utils import with_metaclass
 
-from chatette.refactor_units.choice import Choice
-from chatette.refactor_units.unit_reference import UnitReference
+from chatette.refactor_units.modifiable.choice import Choice
+from chatette.refactor_units.modifiable.unit_reference import UnitReference
 
 
 class ItemBuilder(with_metaclass(ABCMeta, object)):
