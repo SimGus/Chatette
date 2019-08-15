@@ -40,6 +40,7 @@
 - [ ] add bulk generation
 - [ ] add program options to change the names of the output files
 - [ ] add a command line option to run in case insensitive
+- [ ] add a development command line option that runs the debug in verbose and prevents `.pyc` and `__pycache__/` from being created
 
 - [ ] design patterns
 - [ ] make the division between processing and lookup more important in parser
