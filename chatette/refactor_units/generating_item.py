@@ -1,6 +1,4 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
+# coding: utf-8
 """
 Module `chatette.refactor_units.generating_item`
 Contains the abstract class representing every item in the AST (or in rules)
@@ -60,7 +58,10 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
         Can use the cached examples in some cases (better performance).
         """
         # use cache with probability `len(cached)/nb_possibilities`
-        if uniform(0, 1) <= float(len(self._cached_examples))/float(self.get_max_nb_possibilities()):
+        if (
+            uniform(0, 1) <= \
+            float(len(self._cached_examples)) / float(self.get_max_nb_possibilities())
+        ):
             return choice(self._cached_examples)
         return self._generate_random_strategy()
     @abstractmethod

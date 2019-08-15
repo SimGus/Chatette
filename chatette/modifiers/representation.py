@@ -1,3 +1,4 @@
+# coding: utf-8
 """
 Module `chatette.modifiers.representation`
 Contains structures that represent the possible modifiers
@@ -55,6 +56,7 @@ class ModifiersRepresentation(object):
 
         self.argument_name = None
         self.argument_value = None
+
     def __repr__(self):
         return \
             self.__class__.__name__ + "(casegen: " + str(self.casegen) + \

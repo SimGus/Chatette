@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# coding: utf-8
 """
 Module `chatette.refactor_parsing`
 Contains everything that is related to the management and parsing
