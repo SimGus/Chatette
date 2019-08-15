@@ -11,9 +11,9 @@ from chatette.refactor_units.modifiable import ModifiableItem
 
 class UnitDefinition(ModifiableItem):
     """Abstract class base for all unit definitions."""
-    def __init__(self, name):
-        super(UnitDefinition, self).__init__(name)
-        self.identifier = name
+    def __init__(self, identifier):
+        super(UnitDefinition, self).__init__(identifier)
+        self.identifier = identifier
         self._rules = []
 
     def _compute_nb_possibilities(self):

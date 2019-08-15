@@ -28,7 +28,9 @@ from chatette.refactor_units.modifiable.definitions.intent import \
 from chatette.refactor_units.word import Word
 from chatette.refactor_units.rule import Rule
 
-from chatette.refactor_parsing import ChoiceBuilder, UnitRefBuilder
+from chatette.refactor_parsing import \
+    ChoiceBuilder, UnitRefBuilder, \
+    AliasDefBuilder, SlotDefBuilder, IntentDefBuilder
 
 
 class Parser(object):
@@ -121,6 +123,7 @@ class Parser(object):
                 self.input_file_manager.get_current_file_name() + "'."
             )
 
+
     def _parse_unit_declaration(self, lexical_tokens):
         """
         Handles the tokens `lexical tokens` that contain a unit declaration.
@@ -130,21 +133,15 @@ class Parser(object):
             self.input_file_manager.syntax_error(
                 "Didn't expect a unit declaration to start here."
             )
-
-        i = 0
-
-        unit_decl_class = None
-        identifier = None
-        modifiers = ModifiersRepresentation()
-
-        if lexical_tokens[i].type == TerminalType.alias_decl_start:
-            unit_decl_class = AliasDefinition
+        
+        if lexical_tokens[0].type == TerminalType.alias_decl_start:
+            builder = AliasDefBuilder()
             add_unit_def_function = self.ast.add_alias
-        elif lexical_tokens[i].type == TerminalType.slot_decl_start:
-            unit_decl_class = SlotDefinition
+        elif lexical_tokens[0].type == TerminalType.slot_decl_start:
+            builder = SlotDefBuilder()
             add_unit_def_function = self.ast.add_slot
-        elif lexical_tokens[i].type == TerminalType.intent_decl_start:
-            unit_decl_class = IntentDefinition
+        elif lexical_tokens[0].type == TerminalType.intent_decl_start:
+            builder = IntentDefBuilder()
             add_unit_def_function = self.ast.add_intent
         else:  # Should never happen
             raise ValueError(
@@ -152,107 +149,99 @@ class Parser(object):
                 "while it wasn't."
             )
         
-        i += 1
-        if lexical_tokens[i].type == TerminalType.casegen_marker:
-            modifiers.casegen = True
-            i += 1
-        
-        if lexical_tokens[i].type == TerminalType.unit_identifier:
-            identifier = lexical_tokens[i].text
-            i += 1
-        else:  # Should never happen
-            self.input_file_manager.syntax_error(
-                "The unit declared here doesn't seem to have an identifier. " + \
-                "All units must have an identifier."
-            )
-        
-        expecting_variation_name = False
-        expecting_randgen_name = False
-        expecting_percent = False
-        expecting_arg_name = False
-        for token in lexical_tokens[i:]:
-            if expecting_variation_name:
-                if token.type == TerminalType.variation_name:
-                    modifiers.variation = token.text
-                else:  # Should never happen
-                    self.input_file_manager.syntax_error(
-                        "Couldn't extract the name of the variation."
-                    )
-                expecting_variation_name = False
-            elif expecting_randgen_name:
-                if token.type == TerminalType.randgen_name:
-                    modifiers.randgen_name = token.text
-                expecting_randgen_name = False
-            elif expecting_percent:
-                if token.type == TerminalType.percentgen:
-                    try:
-                        modifiers.randgen_percent = float(token.text)
-                    except ValueError as e:  # Should never happen
-                        self.input_file_manager.syntax_error(
-                            "Couldn't understand the percentage for " + \
-                            "the random generation modifier: " + str(e)
-                        )
-                else:  # Should never happen
-                    self.input_file_manager.syntax_error(
-                        "Couldn't extract the percentage for " + \
-                        "the random generation modifier."
-                    )
-                expecting_percent = False
-            elif expecting_arg_name:
-                if token.type == TerminalType.arg_name:
-                    modifiers.argument_name = token.text
-                else:  # Should never happen
-                    self.input_file_manager.syntax_error(
-                        "Couldn't extract the name of " + \
-                        "the argument modifier."
-                    )
-                expecting_arg_name = False
-            elif token.type == TerminalType.variation_marker:
-                expecting_variation_name = True
+        i = 1
+        while i < len(lexical_tokens):
+            token = lexical_tokens[i]
+            if token.type == TerminalType.unit_identifier:
+                builder.identifier = token.text
+            elif token.type == TerminalType.casegen_marker:
+                builder.casegen = True
             elif token.type == TerminalType.randgen_marker:
-                modifiers.randgen = True
-                expecting_randgen_name = True
-            elif token.type == TerminalType.percentgen_marker:
-                expecting_percent = True
+                builder.randgen = True
+            elif token.type == TerminalType.randgen_name:
+                builder.randgen_name = token.text
+            elif token.type == TerminalType.variation_marker:
+                pass
+            elif token.type == TerminalType.variation_name:
+                builder.variation = token.text
             elif token.type == TerminalType.arg_marker:
-                expecting_arg_name = True
+                pass
+            elif token.type == TerminalType.arg_name:
+                builder.arg_name = token.text
             elif (
                 token.type in \
                 (TerminalType.alias_decl_end,
                  TerminalType.slot_decl_end,
                  TerminalType.intent_decl_end)
             ):
+                i += 1
                 break
-            else:  # Should never happen
-                self.input_file_manager.syntax_error(
-                    "Invalid token type (" + str(token.type) + ") for '" + \
-                    token.text + "'."
-                )
-
-        annotation_tokens = utils.extract_annotation_tokens(lexical_tokens)
-        annotation = None
-        if annotation_tokens is not None and unit_decl_class != IntentDefinition:
-            if unit_decl_class == AliasDefinition:
-                unit_type = "alias"
             else:
-                unit_type = "slot"
-            print_warn(
-                "Found an annotation when parsing " + unit_type + " '" + \
-                identifier + "'\n" + \
-                "Annotations are currently only supported for intent " + \
-                "definitions. Any other annotation is ignored."
-            )
-        elif annotation_tokens is not None:
-            annotation = self._annotation_tokens_to_dict(annotation_tokens)
+                raise ValueError(  # Should never happen
+                    "Detected invalid token type in unit definition: " + \
+                    token.type.name
+                )
+            i += 1
+
+
+        if (
+            i < len(lexical_tokens)
+            and lexical_tokens[i].type == TerminalType.annotation_start
+        ):
+            if not isinstance(builder, IntentDefBuilder):
+                if isinstance(builder, AliasDefBuilder):
+                    unit_type = "alias"
+                else:
+                    unit_type = "slot"
+                print_warn(
+                    "Found an annotation when parsing " + unit_type + " '" + \
+                    identifier + "'\n" + \
+                    "Annotations are currently only supported for intent " + \
+                    "definitions. Any other annotation is ignored."
+                )
+            else:
+                annotation_tokens = lexical_tokens[i:]
+                annotation = self._annotation_tokens_to_dict(annotation_tokens)
+                (nb_training_ex, nb_testing_ex) = \
+                    self._parse_intent_annotation(annotation)
+                builder.nb_training_ex = nb_training_ex
+                builder.nb_testing_ex = nb_testing_ex
         
-        unit = unit_decl_class(identifier)
-        if annotation is not None:  # parsing intent
-            (nb_training_ex, nb_testing_ex) = \
-                self._parse_intent_annotation(annotation)
-            unit.set_nb_examples_asked(nb_training_ex, nb_testing_ex)
-        
+        unit = builder.create_concrete()
         add_unit_def_function(unit)
         self._current_unit_declaration = unit
+
+    def _annotation_tokens_to_dict(self, tokens):
+        """
+        Transforms the tokens `tokens` that contain an annotation into a dictionary
+        that contains the same information.
+        @pre: `tokens` really contains an annotation (starting at the beginning of
+            the list).
+        @raises: - `ValueError` if the precondition is not met.
+                - `SyntaxError` if the annotation contains the same key twice.
+        """
+        if len(tokens) == 0 or tokens[0].type != TerminalType.annotation_start:
+            raise ValueError(
+                "Tried to parse tokens as if they were an annotation while " + \
+                "they weren't"
+            )
+
+        result = dict()
+        current_key = None
+        for token in tokens:
+            if token.type == TerminalType.annotation_end:
+                break
+            elif token.type == TerminalType.key:
+                current_key = token.text
+            elif token.type == TerminalType.value:
+                if current_key in result:
+                    self.input_file_manager.syntax_error(
+                        "Annotation contained the key '" + current_key + \
+                        "' twice."
+                    )
+                result[current_key] = token.text
+
+        return result
 
     def _parse_intent_annotation(self, annotation):
         """
@@ -294,37 +283,7 @@ class Parser(object):
             else:
                 print_warn("Unsupported key in the annotation: '" + key + "'.")
         return (nb_training_ex, nb_testing_ex)
-    def _annotation_tokens_to_dict(self, tokens):
-        """
-        Transforms the tokens `tokens` that contain an annotation into a dictionary
-        that contains the same information.
-        @pre: `tokens` really contains an annotation (starting at the beginning of
-            the list).
-        @raises: - `ValueError` if the precondition is not met.
-                - `SyntaxError` if the annotation contains the same key twice.
-        """
-        if len(tokens) == 0 or tokens[0].type != TerminalType.annotation_start:
-            raise ValueError(
-                "Tried to parse tokens as if they were an annotation while " + \
-                "they weren't"
-            )
 
-        result = dict()
-        current_key = None
-        for token in tokens:
-            if token.type == TerminalType.annotation_end:
-                break
-            elif token.type == TerminalType.key:
-                current_key = token.text
-            elif token.type == TerminalType.value:
-                if current_key in result:
-                    self.input_file_manager.syntax_error(
-                        "Annotation contained the key '" + current_key + \
-                        "' twice."
-                    )
-                result[current_key] = token.text
-
-        return result
     def _str_to_int(self, text, err_msg):
         """
         Transforms the str `text` into an int.
@@ -338,6 +297,7 @@ class Parser(object):
             self.input_file_manager.syntax_error(
                 err_msg + " '" + text + "' is not a valid integral number."
             )
+
 
     def _parse_rule_line(self, lexical_tokens):
         """
@@ -360,15 +320,15 @@ class Parser(object):
         Returns the rule (`Rule`) that `tokens` represent.
         """
         rule_contents = []
-        current_repr = None
+        current_builder = None
         i = 0
         while i < len(tokens):
             token = tokens[i]
             if token.type == TerminalType.whitespace:
                 # TODO put it in modifiers
-                if current_repr is not None:
-                    rule_contents.append(current_repr.create_concrete())
-                    current_repr = None
+                if current_builder is not None:
+                    rule_contents.append(current_builder.create_concrete())
+                    current_builder = None
             # Units and rule contents
             elif token.type == TerminalType.word:
                 rule_contents.append(Word(token.text))
@@ -378,59 +338,72 @@ class Parser(object):
                     TerminalType.slot_ref_start,
                     TerminalType.intent_ref_end)
             ):
-                if current_repr is not None:
-                    rule_contents.append(current_repr.create_concrete())
-                current_repr = UnitRefBuilder()
+                if current_builder is not None:
+                    rule_contents.append(current_builder.create_concrete())
+                current_builder = UnitRefBuilder()
                 if token.type == TerminalType.alias_ref_start:
-                    current_repr.type = UnitType.alias
+                    current_builder.type = UnitType.alias
                 elif token.type == TerminalType.slot_ref_start:
-                    current_repr.type = UnitType.slot
+                    current_builder.type = UnitType.slot
                 elif token.type == TerminalType.intent_ref_start:
-                    current_repr.type = UnitType.intent
+                    current_builder.type = UnitType.intent
             elif (
                 token.type in \
                 (TerminalType.alias_ref_end,
                  TerminalType.slot_ref_end,
                  TerminalType.intent_ref_end)
             ):
-                rule_contents.append(current_repr.create_concrete())
-                current_repr = None
+                rule_contents.append(current_builder.create_concrete())
+                current_builder = None
             elif token.type == TerminalType.unit_identifier:
-                current_repr.identifier = token.text
+                current_builder.identifier = token.text
             elif token.type == TerminalType.choice_start:
-                if current_repr is not None:
-                    rule_contents.append(current_repr.create_concrete())
-                current_repr = ChoiceBuilder()
+                if current_builder is not None:
+                    rule_contents.append(current_builder.create_concrete())
+                current_builder = ChoiceBuilder()
                 end_choice_index = utils.find_matching_choice_end(tokens, i)
                 if end_choice_index is not None:
                     internal_rules = \
                         self._parse_choice(tokens[i:end_choice_index + 1])
-                    current_repr.rules = internal_rules
+                    current_builder.rules = internal_rules
                     i = end_choice_index
                 else:
                     self.input_file_manager.syntax_error(
                         "Inconsistent choice starts and endings."
                     )
             elif token.type == TerminalType.choice_end:
-                rule_contents.append(current_repr.create_concrete())
+                rule_contents.append(current_builder.create_concrete())
             # Modifiers
             elif token.type == TerminalType.casegen_marker:
-                current_repr.casegen = True
+                current_builder.casegen = True
             elif token.type == TerminalType.randgen_marker:
-                current_repr.randgen = True
+                current_builder.randgen = True
             elif token.type == TerminalType.randgen_name:
-                current_repr.randgen_name = token.text
+                current_builder.randgen_name = token.text
+            elif token.type == TerminalType.percentgen_marker:
+                pass
+            elif token.type == TerminalType.percentgen:
+                current_builder.randgen_percent = \
+                    self._str_to_int(
+                        token.text,
+                        "Couldn't parse the percentage " + \
+                        "for the random generation modifier."
+                    )
             elif token.type == TerminalType.variation_marker:
                 pass
             elif token.type == TerminalType.variation_name:
-                current_repr.variation = token.text
+                current_builder.variation = token.text
             elif token.type == TerminalType.arg_marker:
                 pass
             elif token.type == TerminalType.arg_value:
-                current_repr.arg_value = token.text
+                current_builder.arg_value = token.text
+            # else:
+            #     raise ValueError(  # Should never happen
+            #         "Detected invalid token type in rule: " + token.type.name
+            #     )
             i += 1
-        if current_repr is not None:
-            rule_contents.append(current_repr.create_concrete())
+        if current_builder is not None:
+            rule_contents.append(current_builder.create_concrete())
 
         return Rule(self._current_unit_declaration.full_name, rule_contents)
 

@@ -15,6 +15,9 @@ from future.utils import with_metaclass
 
 from chatette.refactor_units.modifiable.choice import Choice
 from chatette.refactor_units.modifiable.unit_reference import UnitReference
+from chatette.refactor_units.modifiable.definitions.alias import AliasDefinition
+from chatette.refactor_units.modifiable.definitions.slot import SlotDefinition
+from chatette.refactor_units.modifiable.definitions.intent import IntentDefinition
 
 
 class ItemBuilder(with_metaclass(ABCMeta, object)):
@@ -30,6 +33,14 @@ class ItemBuilder(with_metaclass(ABCMeta, object)):
         self.randgen_name = None
         self.randgen_percent = 50
     
+    def _check_information(self):
+        if not self.randgen and self.randgen_name is not None:  # Should never happen
+            raise ValueError(
+                "There was a problem with some modifiers: detected " + \
+                "a random generation modifier name but no " + \
+                "random generation modifier."
+            )
+    
     @abstractmethod
     def create_concrete(self):
         raise NotImplementedError()
@@ -40,6 +51,7 @@ class ChoiceBuilder(ItemBuilder):
         self.rules = []
     
     def create_concrete(self):
+        self._check_information()
         return Choice("No name", self.rules)
 
 class UnitRefBuilder(ItemBuilder):
@@ -50,10 +62,49 @@ class UnitRefBuilder(ItemBuilder):
         self.variation = None
         self.arg_value = None
     
-    def create_concrete(self):
+    def _check_information(self):
+        super(UnitRefBuilder, self)._check_information()
         if self.type is None or self.identifier is None:  # Should never happen
             raise ValueError(
                 "Tried to create a concrete unit reference without setting " + \
                 "its identifier or type."
             )
+
+    def create_concrete(self):
+        self._check_information()
         return UnitReference(self.identifier, self.type)
+
+class UnitDefBuilder(ItemBuilder):
+    def __init__(self):
+        super(UnitDefBuilder, self).__init__()
+        self.identifier = None
+        self.variation = None
+        self.arg_name = None
+    
+    def _check_information(self):
+        super(UnitDefBuilder, self)._check_information()
+        if self.identifier is None:  # Should never happen
+            raise ValueError(
+                "Tried to create a concrete unit definition " + \
+                "without setting its identifier."
+            )
+
+class AliasDefBuilder(UnitDefBuilder):
+    def create_concrete(self):
+        self._check_information()
+        return AliasDefinition(self.identifier)
+class SlotDefBuilder(UnitDefBuilder):
+    def create_concrete(self):
+        self._check_information()
+        return SlotDefinition(self.identifier)
+class IntentDefBuilder(UnitDefBuilder):
+    def __init__(self):
+        super(IntentDefBuilder, self).__init__()
+        self.nb_training_ex = None
+        self.nb_testing_ex = None
+    
+    def create_concrete(self):
+        self._check_information()
+        return IntentDefinition(
+            self.identifier, self.nb_training_ex, self.nb_testing_ex
+        )
