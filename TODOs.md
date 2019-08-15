@@ -1,6 +1,7 @@
 # TODOs
 
 - [ ] add section in TODOs
+- [ ] *Requirements* add `six`
 
 - [ ] parse in a better way asked number of generation of intents
 - [ ] accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax
