@@ -26,8 +26,6 @@ from chatette.refactor_units.modifiable.definitions.slot import \
 from chatette.refactor_units.modifiable.definitions.intent import \
     IntentDefinition
 from chatette.refactor_units.word import Word
-from chatette.refactor_units.modifiable.choice import Choice
-from chatette.refactor_units.modifiable.unit_reference import UnitReference
 from chatette.refactor_units.rule import Rule
 
 from chatette.refactor_parsing import ChoiceBuilder, UnitRefBuilder
