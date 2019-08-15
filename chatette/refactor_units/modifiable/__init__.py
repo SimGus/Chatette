@@ -30,15 +30,13 @@ class ModifiableItem(GeneratingItem):
         if self._total_nb_possibilities is None:
             basic_nb_possibilities = self._compute_nb_possibilities()
             self._total_nb_possibilities = \
-                ModifierApplier.modify_nb_possibilities(
-                    basic_nb_possibilities, self._modifiers_repr
-                )
+                self._modify_nb_possibilities(basic_nb_possibilities)
         return self._total_nb_possibilities
     
     # TODO this is quite hacky to avoid code duplication in subclasses (and not use the decorator pattern to avoid having too many objects)
     def generate_random(self):
         """Overriding."""
-        if not ModifierApplier.should_generate():
+        if not self._should_generate():
             return Example()
         if (
             uniform(0, 1) <= \
@@ -46,12 +44,46 @@ class ModifiableItem(GeneratingItem):
         ):
             return choice(self._cached_examples)
         basic_example = self._generate_random_strategy()
-        return ModifierApplier.apply_post_modifiers(basic_example)
+        return self._apply_modifiers(basic_example)
     
     # TODO this is quite hacky to avoid code duplication in subclasses (and not use the decorator pattern to avoid having too many objects)
     def generate_all(self):
         """Overriding."""
         if len(self._cached_examples) == 0:
             basic_examples = self._generate_all_strategy()
-            self._cached_examples = ModifierApplier.apply_all_examples(basic_examples)
+            self._cached_examples = \
+                self._apply_modifiers_to_all(basic_examples)
         return deepcopy(self._cached_examples)
+    
+
+    def _modify_nb_possibilities(self, nb_possibilities):
+        """
+        Returns the number of possible different examples after application
+        of the modifiers. `nb_possibilities` is the number of possibilities
+        before the application of modifiers.
+        """
+        return nb_possibilities
+    
+
+    def _should_generate(self):
+        """
+        Returns `True` iff the current object should generate one example
+        given its pre-modifiers (namely, the case generation modifier).
+        """
+        return True
+    
+    
+    def _apply_modifiers(self, example):
+        """
+        Returns the modified `example`
+        after its post-modifiers have been applied.
+        """
+        return example
+    
+    def _apply_modifiers_to_all(self, examples):
+        """
+        Returns the list of examples `examples` with some additional examples,
+        some removed examples and some modified examples as per application
+        of its post-modifiers.
+        """
+        return examples

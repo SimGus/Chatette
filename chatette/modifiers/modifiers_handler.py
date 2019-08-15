@@ -1,6 +1,8 @@
+# coding: utf-8
 """
 Module `chatette.modifiers.modifiers_handler`
-Contains an instantiable facade to a whole hierarchy of modifier objects.
+Contains an instantiable facade to a whole system that applies modifiers
+when needed.
 """
 
 
