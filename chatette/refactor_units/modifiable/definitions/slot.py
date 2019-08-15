@@ -1,14 +1,12 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
+# coding: utf-8
 """
-Module `chatette.refactor_units.definitions.slot`
+Module `chatette.refactor_units.modifiable.definitions.slot`
 Contains the class representing a slot definition.
 """
 
-
 from chatette.refactor_units import Entity
-from chatette.refactor_units.definitions.unit_definition import UnitDefinition
+from chatette.refactor_units.modifiable.definitions.unit_definition import \
+    UnitDefinition
 
 
 class SlotDefinition(UnitDefinition):

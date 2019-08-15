@@ -12,7 +12,7 @@ from random import choice, uniform
 from copy import deepcopy
 
 from chatette.refactor_units.generating_item import GeneratingItem
-from chatette.refactor_units import Example()
+from chatette.refactor_units import Example
 
 
 class ModifiableItem(GeneratingItem):

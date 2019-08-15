@@ -1,24 +1,27 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
+# coding: utf-8
 """
-Module `chatette.refactor_units.definitions.unit_definition`
-Contains the abstract class that is base for all unit definitions.
+Module `chatette.refactor_units.modifiable.choice`
+Contains the class that represents choices (and old word groups).
 """
-
 
 from random import choice
 
-from chatette.refactor_units.generating_item import GeneratingItem
+from chatette.refactor_units.modifiable import ModifiableItem
 
 
-class UnitDefinition(GeneratingItem):
-    """Abstract class base for all unit definitions."""
-    def __init__(self, name):
-        super(UnitDefinition, self).__init__(name)
-        self.identifier = name
+class Choice(ModifiableItem):
+    """
+    Represents a choice that can choose between rules and generate one of them.
+    """
+    def __init__(self, name, rules=None):  # TODO fix the problem that choice have no by design name
+        super(Choice, self).__init__(name)
         self._rules = []
+        if rules is not None:
+            self._rules.extend(rules)
 
+    def _compute_full_name(self):
+        return "choice '" + self._name + "'"
+    
     def _compute_nb_possibilities(self):
         acc = 0
         for rule in self._rules:
@@ -63,4 +66,3 @@ class UnitDefinition(GeneratingItem):
             current_examples = rule.generate_all()
             generated_examples.extend(current_examples)
         return generated_examples
-    

@@ -1,13 +1,13 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+# coding: utf-8
 
 """
-Module `chatette.refactor_units.definitions.alias`
+Module `chatette.refactor_units.modifiable.definitions.alias`
 Contains the class representing an alias definition.
 """
 
 
-from chatette.refactor_units.definitions.unit_definition import UnitDefinition
+from chatette.refactor_units.modifiable.definitions.unit_definition import \
+    UnitDefinition
 
 
 class AliasDefinition(UnitDefinition):

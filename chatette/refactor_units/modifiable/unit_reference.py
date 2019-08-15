@@ -1,18 +1,15 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
+# coding: utf-8
 """
-Module `chatette.refactor_units.unit_reference`
+Module `chatette.refactor_units.modifiable.unit_reference`
 Contains a class representing all the references to unit definition
 that are present in template rules.
 """
 
-
-from chatette.refactor_units.generating_item import GeneratingItem
+from chatette.refactor_units.modifiable import ModifiableItem
 from chatette.refactor_units.ast import AST
 
 
-class UnitReference(GeneratingItem):
+class UnitReference(ModifiableItem):
     """
     Represents a reference to a unit definition that can be contained
     in a template rule.

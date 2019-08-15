@@ -19,12 +19,15 @@ from chatette.refactor_parsing.lexing import TerminalType
 from chatette.refactor_units.ast import AST
 
 from chatette.modifiers.representation import ModifiersRepresentation
-from chatette.refactor_units.definitions.alias import AliasDefinition
-from chatette.refactor_units.definitions.slot import SlotDefinition
-from chatette.refactor_units.definitions.intent import IntentDefinition
+from chatette.refactor_units.modifiable.definitions.alias import \
+    AliasDefinition
+from chatette.refactor_units.modifiable.definitions.slot import \
+    SlotDefinition
+from chatette.refactor_units.modifiable.definitions.intent import \
+    IntentDefinition
 from chatette.refactor_units.word import Word
-from chatette.refactor_units.choice import Choice
-from chatette.refactor_units.unit_reference import UnitReference
+from chatette.refactor_units.modifiable.choice import Choice
+from chatette.refactor_units.modifiable.unit_reference import UnitReference
 from chatette.refactor_units.rule import Rule
 
 from chatette.refactor_parsing import ChoiceBuilder, UnitRefBuilder

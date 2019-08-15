@@ -1,16 +1,14 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
+# coding: utf-8
 """
-Module `chatette.refactor_units.definitions.intent`
+Module `chatette.refactor_units.modifiable.definitions.intent`
 Contains the class representing an intent definition.
 """
-
 
 from random import shuffle
 
 from chatette.refactor_units import Example, IntentExample, add_example_no_dup
-from chatette.refactor_units.definitions.unit_definition import UnitDefinition
+from chatette.refactor_units.modifiable.definitions.unit_definition import \
+    UnitDefinition
 
 
 class IntentDefinition(UnitDefinition):
