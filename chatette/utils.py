@@ -7,8 +7,8 @@ Contains utility functions used everywhere in the project.
 
 from __future__ import print_function
 import sys
-from random import randint
-
+from random import randint, sample
+from copy import deepcopy
 
 from enum import Enum
 
@@ -67,6 +67,16 @@ def choose(array):
     if array_len <= 0:
         return None  # None and not [] (it is used later on in the code)
     return array[randint(0, array_len - 1)]
+
+def sample_indulgent(array, nb_items):
+    """
+    Same as `random.sample` but doesn't raise an error if `nb_items`
+    is larger than the length of `array`: in that case,
+    simply returns (a copy of) the whole array.
+    """
+    if nb_items <= len(array):
+        return sample(array, nb_items)
+    return deepcopy(array)
 
 
 def rchop(string, ending):

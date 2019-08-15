@@ -48,7 +48,6 @@ class ModifiersRepresentation(object):
         self.leading_space = False
 
         self.casegen = False
-        self.variation = None
 
         self.randgen = False
         self.randgen_name = None
@@ -60,8 +59,8 @@ class ModifiersRepresentation(object):
     def __repr__(self):
         return \
             self.__class__.__name__ + "(casegen: " + str(self.casegen) + \
-            " variation: " + str(self.variation) + " randgen: " + \
-            str(self.randgen_name) + " (" + str(self.randgen_percent) + \
+            " randgen: " + str(self.randgen_name) + " (" + \
+            str(self.randgen_percent) + \
             ") arg name: " + str(self.argument_name) + " arg value: " + \
             str(self.argument_value) + ")"
     def __str__(self):

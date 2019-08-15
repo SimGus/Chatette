@@ -11,6 +11,7 @@ from future.utils import with_metaclass
 from random import uniform, choice, sample
 from copy import deepcopy
 
+from chatette.utils import sample_indulgent
 from chatette.refactor_units import add_example_no_dup
 
 
@@ -110,7 +111,7 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
             return sample(self._cached_examples, nb_possibilities)
         if nb_possibilities < float(max_nb_possibilities) / 5.0:  # QUESTION: is 5 a good idea?
             return self._generate_n_strategy(nb_possibilities)
-        return sample(self.generate_all(), nb_possibilities)
+        return sample_indulgent(self.generate_all(), nb_possibilities)
     def _generate_n_strategy(self, n):
         """
         Strategy to generate `n` examples without using the cache.

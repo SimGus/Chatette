@@ -42,7 +42,7 @@ class Example(object):
         Returns `True` if this example is a duplicate of `other`.
         A duplicate is an example with the same text.
         """
-        return this.text == other.text
+        return self.text == other.text
     
     def prepend(self, text_to_prepend):
         """
@@ -128,6 +128,7 @@ def add_example_no_dup(example_list, new_example):
           `example_list` does not contain duplicates.
     @post: the returned list is sorted.
     """
+    # TODO maybe using sets would be a better idea?
     # Find closest example
     lo = 0
     hi = len(example_list) - 1

@@ -14,10 +14,14 @@ from copy import deepcopy
 from chatette.refactor_units.generating_item import GeneratingItem
 from chatette.refactor_units import Example
 
+from chatette.modifiers import casegen
+
 
 class ModifiableItem(GeneratingItem):
     def __init__(self, name, modifiers=None):
         super(ModifiableItem, self).__init__(name)
+        if modifiers is None:
+            raise ValueError("Modifiers is none: " + self.__class__.__name__)
         self._modifiers_repr = modifiers
     
     def get_max_nb_possibilities(self):
@@ -62,6 +66,9 @@ class ModifiableItem(GeneratingItem):
         of the modifiers. `nb_possibilities` is the number of possibilities
         before the application of modifiers.
         """
+        if self._modifiers_repr.casegen:
+            nb_possibilities = \
+                casegen.modify_nb_possibilities(nb_possibilities)
         return nb_possibilities
     
 
@@ -78,6 +85,8 @@ class ModifiableItem(GeneratingItem):
         Returns the modified `example`
         after its post-modifiers have been applied.
         """
+        if self._modifiers_repr.casegen:
+            example = casegen.modify_example(example)
         return example
     
     def _apply_modifiers_to_all(self, examples):
@@ -86,4 +95,6 @@ class ModifiableItem(GeneratingItem):
         some removed examples and some modified examples as per application
         of its post-modifiers.
         """
+        if self._modifiers_repr.casegen:
+            examples = casegen.make_all_possibilities(examples)
         return examples
