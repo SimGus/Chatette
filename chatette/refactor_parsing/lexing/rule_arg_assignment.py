@@ -21,18 +21,18 @@ class RuleArgAssignment(LexingRule):
         self._update_furthest_matched_index()
         self._tokens.append(LexicalToken(TerminalType.arg_marker, ARG_SYM))
 
-        arg_name = extract_identifier(self._text, self._next_index)
-        if arg_name is None:
+        arg_value = extract_identifier(self._text, self._next_index)
+        if arg_value is None:
             self.error_msg = \
                 "Didn't expect the line to end there. Expected an argument name."
             return False
-        elif len(arg_name) == 0:
+        elif len(arg_value) == 0:
             self.error_msg = \
                 "Couldn't extract the argument name. Arguments must have a name."
             return False
-        self._next_index += len(arg_name)
+        self._next_index += len(arg_value)
         self._update_furthest_matched_index()
         self._tokens.append(
-            LexicalToken(TerminalType.arg_name, arg_name)
+            LexicalToken(TerminalType.arg_value, arg_value)
         )
         return True

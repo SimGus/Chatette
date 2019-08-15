@@ -402,10 +402,11 @@ class Parser(object):
                 pass
             elif token.type == TerminalType.arg_value:
                 current_builder.arg_value = token.text
-            # else:
-            #     raise ValueError(  # Should never happen
-            #         "Detected invalid token type in rule: " + token.type.name
-            #     )
+            else:
+                raise ValueError(  # Should never happen
+                    "Detected invalid token type in rule: " + \
+                    token.type.name + " for text '" + token.text + "'."
+                )
             i += 1
         if current_builder is not None:
             rule_contents.append(current_builder.create_concrete())
