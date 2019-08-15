@@ -368,6 +368,9 @@ class Parser(object):
                 current_builder = ChoiceBuilder()
                 end_choice_index = utils.find_matching_choice_end(tokens, i)
                 if end_choice_index is not None:
+                    if tokens[i+1].type == TerminalType.casegen_marker:
+                        current_builder.casegen = True
+                        i += 1
                     internal_rules = \
                         self._parse_choice(tokens[i:end_choice_index + 1])
                     current_builder.rules = internal_rules
@@ -425,7 +428,7 @@ class Parser(object):
                 rules.append(
                     self._parse_rule(tokens[current_rule_start_index:i])
                 )
-                current_rule_start_index = i+1
+                current_rule_start_index = i + 1
             if token.type == TerminalType.choice_start:
                 end_choice_index = utils.find_matching_choice_end(tokens, i)
                 if end_choice_index is None:
