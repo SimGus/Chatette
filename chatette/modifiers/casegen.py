@@ -43,7 +43,7 @@ def make_all_possibilities(examples):
             result.append(uppercase_ex)
     return result
 
-########### Utility functions ##############
+############# Utility functions ##############
 def may_change_leading_case(text):
     """
     Checks whether the string `text` can

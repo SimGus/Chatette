@@ -36,8 +36,11 @@ class Rule(GeneratingItem):
     
     def _generate_random_strategy(self):
         generated_example = Example()
+        randgen_mapping = dict()
         for content in self._contents:
-            generated_example.append(content.generate_random())
+            generated_example.append(
+                content.generate_random(randgen_mapping=randgen_mapping)
+            )
         return generated_example
     
     def _generate_all_strategy(self):

@@ -56,7 +56,7 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
         raise NotImplementedError()
     
 
-    def generate_random(self):
+    def generate_random(self, **kwargs):
         """
         Returns an example generated at random.
         Can use the cached examples in some cases (better performance).

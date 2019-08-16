@@ -14,7 +14,7 @@ from copy import deepcopy
 from chatette.refactor_units.generating_item import GeneratingItem
 from chatette.refactor_units import Example
 
-from chatette.modifiers import casegen, argument
+from chatette.modifiers import casegen, argument, randgen
 
 
 class ModifiableItem(GeneratingItem):
@@ -38,9 +38,14 @@ class ModifiableItem(GeneratingItem):
         return self._total_nb_possibilities
     
     # TODO this is quite hacky to avoid code duplication in subclasses (and not use the decorator pattern to avoid having too many objects)
-    def generate_random(self):
-        """Overriding."""
-        if not self._should_generate():
+    def generate_random(self, **kwargs):
+        """
+        Overriding.
+        `kwargs` can contain the random name mapping `randgen_mapping`.
+        """
+        print("gen rand")
+        randgen_mapping = kwargs.get("randgen_mapping", None)
+        if not self._should_generate(randgen_mapping):
             return Example()
         if (
             uniform(0, 1) <= \
@@ -55,6 +60,7 @@ class ModifiableItem(GeneratingItem):
     # TODO this is quite hacky to avoid code duplication in subclasses (and not use the decorator pattern to avoid having too many objects)
     def generate_all(self):
         """Overriding."""
+        print("gen all")
         if len(self._cached_examples) == 0:
             basic_examples = self._generate_all_strategy()
             if self._leading_space:
@@ -80,12 +86,20 @@ class ModifiableItem(GeneratingItem):
         return nb_possibilities
     
 
-    def _should_generate(self):
+    def _should_generate(self, randgen_mapping):
         """
         Returns `True` iff the current object should generate one example
         given its pre-modifiers (namely, the case generation modifier).
+        `randgen_mapping` is the mapping from random generation modifier names
+        to their boolean value.
         """
-        return True
+        print("SHOULD GEN")
+        return \
+            randgen.should_generate(
+                self._modifiers_repr.randgen_name,
+                self._modifiers_repr.randgen_percent,
+                randgen_mapping
+            )
     
     
     def _apply_modifiers(self, example):

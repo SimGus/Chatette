@@ -25,7 +25,7 @@ class Word(GeneratingItem):
     def _compute_nb_possibilities(self):
         return 1
     
-    def generate_random(self):
+    def generate_random(self, **kwargs):
         return self._generate_random_strategy()
     def _generate_random_strategy(self):
         if self._leading_space:
