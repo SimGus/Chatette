@@ -127,6 +127,7 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
         Returns the list of generated examples.
         @pre: `n` <= `self.get_max_nb_possibilities()`
         """
+        # TODO wouldn't it be better with a set rather than a list?
         generated_examples = []
         loop_count = 0
         while len(generated_examples) < n:

@@ -331,18 +331,14 @@ class Parser(object):
         while i < len(tokens):
             token = tokens[i]
             if token.type == TerminalType.whitespace:
-                # TODO put it in modifiers
+                leading_space = True
                 if current_builder is not None:
-                    current_builder.leading_space = True
                     rule_contents.append(current_builder.create_concrete())
                     current_builder = None
-                else:
-                    leading_space = True
-                    i += 1
-                    continue
             # Units and rule contents
             elif token.type == TerminalType.word:
                 rule_contents.append(Word(token.text, leading_space))
+                leading_space = False
             elif (
                 token.type in \
                 (TerminalType.alias_ref_start,
@@ -352,6 +348,7 @@ class Parser(object):
                 if current_builder is not None:
                     rule_contents.append(current_builder.create_concrete())
                 current_builder = UnitRefBuilder()
+                current_builder.leading_space = leading_space
                 if token.type == TerminalType.alias_ref_start:
                     current_builder.type = UnitType.alias
                 elif token.type == TerminalType.slot_ref_start:
@@ -366,12 +363,14 @@ class Parser(object):
             ):
                 rule_contents.append(current_builder.create_concrete())
                 current_builder = None
+                leading_space = False
             elif token.type == TerminalType.unit_identifier:
                 current_builder.identifier = token.text
             elif token.type == TerminalType.choice_start:
                 if current_builder is not None:
                     rule_contents.append(current_builder.create_concrete())
                 current_builder = ChoiceBuilder()
+                current_builder.leading_space = leading_space
                 end_choice_index = utils.find_matching_choice_end(tokens, i)
                 if end_choice_index is not None:
                     if tokens[i+1].type == TerminalType.casegen_marker:
@@ -387,6 +386,8 @@ class Parser(object):
                     )
             elif token.type == TerminalType.choice_end:
                 rule_contents.append(current_builder.create_concrete())
+                current_builder = None
+                leading_space = Fakse
             # Modifiers
             elif token.type == TerminalType.casegen_marker:
                 current_builder.casegen = True
@@ -416,7 +417,6 @@ class Parser(object):
                     "Detected invalid token type in rule: " + \
                     token.type.name + " for text '" + token.text + "'."
                 )
-            leading_space = False
             i += 1
         if current_builder is not None:
             rule_contents.append(current_builder.create_concrete())

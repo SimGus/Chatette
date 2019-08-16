@@ -26,16 +26,22 @@ class Word(GeneratingItem):
         return 1
     
     def generate_random(self):
-        return Example(self._name)
+        return self._generate_random_strategy()
     def _generate_random_strategy(self):
+        if self._leading_space:
+            return Example(' ' + self._name)
         return Example(self._name)
     
     def generate_all(self):
-        return [Example(self._name)]
+        return self._generate_all_strategy()
     def _generate_all_strategy(self):
+        if self._leading_space:
+            return [Example(' ' + self._name)]
         return [Example(self._name)]
     
     def generate_nb_possibilities(self, nb_possibilities):
-        return [Example(self._name)]
+        return self._generate_n_strategy()
     def _generate_n_strategy(self, n):
+        if self._leading_space:
+            return [Example(' ' + self._name)]
         return [Example(self._name)]
