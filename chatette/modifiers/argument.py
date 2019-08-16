@@ -14,7 +14,7 @@ def modify_nb_possibilities(unmodified_nb_possibilities):
     an argument modifier, given the number of possibilities for
     the same item without this modifier.
     """
-    return unmodified_nb_possibilities + 1
+    return unmodified_nb_possibilities
 
 
 def modify_example(example, arg_mapping):

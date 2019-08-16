@@ -74,6 +74,9 @@ class ModifiableItem(GeneratingItem):
         if self._modifiers_repr.casegen:
             nb_possibilities = \
                 casegen.modify_nb_possibilities(nb_possibilities)
+        if self._modifiers_repr.argument_value is not None:
+            nb_possibilities = \
+                argument.modify_nb_possibilities(nb_possibilities)
         return nb_possibilities
     
 
