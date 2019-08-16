@@ -52,7 +52,7 @@ class ModifiersRepresentation(object):
         self.randgen_percent = 50
 
         self.argument_name = None
-        self.argument_value = None  # Should be a dict {name -> value}
+        self.argument_value = None  # Should be an OrderedDict {name -> value} sorted in decreasing length of keys (but should be just the arg value as a str at first for single argument)
 
     def __repr__(self):
         return \

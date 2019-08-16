@@ -5,6 +5,8 @@ Contains a class representing all the references to unit definition
 that are present in template rules.
 """
 
+from collections import OrderedDict
+
 from chatette.refactor_units.modifiable import ModifiableItem
 from chatette.refactor_units.ast import AST
 
@@ -89,4 +91,8 @@ class UnitReference(ModifiableItem):
                         "it references defines several arguments."
                     )
                 mapping = {arg_name: self._modifiers_repr.argument_value}  # TODO make that an OrderedDict to avoid having problems with arg names that are the same as the start of other ones (order the keys in descendent length of arg name)
+                mapping = \
+                    OrderedDict(
+                        [(arg_name, self._modifiers_repr.argument_value)]
+                    )
                 self._modifiers_repr.argument_value = mapping
