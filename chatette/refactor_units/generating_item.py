@@ -27,6 +27,7 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
         self.full_name = self._compute_full_name()
 
         self._leading_space = leading_space
+        print("for " + self.full_name + " leading space: " + str(leading_space))
 
         self._total_nb_possibilities = None
 
@@ -66,7 +67,10 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
             float(len(self._cached_examples)) / float(self.get_max_nb_possibilities())
         ):
             return choice(self._cached_examples)
-        return self._generate_random_strategy()
+        example = self._generate_random_strategy()
+        if self._leading_space:
+            example.prepend(' ')
+        return example
     @abstractmethod
     def _generate_random_strategy(self):
         """
@@ -85,6 +89,9 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
             return deepcopy(self._cached_examples)
 
         all_examples = self._generate_all_strategy()
+        if self._leading_space:
+            for ex in all_examples:
+                ex.prepend(' ')
         if len(self._cached_examples) == 0:
             # TODO don't cache it all in all cases
             self._cached_examples = deepcopy(all_examples)

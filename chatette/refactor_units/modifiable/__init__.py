@@ -48,6 +48,8 @@ class ModifiableItem(GeneratingItem):
         ):
             return choice(self._cached_examples)
         basic_example = self._generate_random_strategy()
+        if self._leading_space:
+            basic_example.prepend(' ')
         return self._apply_modifiers(basic_example)
     
     # TODO this is quite hacky to avoid code duplication in subclasses (and not use the decorator pattern to avoid having too many objects)
@@ -55,6 +57,9 @@ class ModifiableItem(GeneratingItem):
         """Overriding."""
         if len(self._cached_examples) == 0:
             basic_examples = self._generate_all_strategy()
+            if self._leading_space:
+                for ex in basic_examples:
+                    ex.prepend(' ')
             self._cached_examples = \
                 self._apply_modifiers_to_all(basic_examples)
         return deepcopy(self._cached_examples)

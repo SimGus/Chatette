@@ -59,7 +59,7 @@ class Example(object):
         """
         Appends the text of `example_to_append` to the example text
         and manages its pointers to entities if needed.
-        @post: don't use `example_to_append` any longer
+        @post: don't use `example_to_append` any longer.
         """
         starting_index = len(self.text)
         self.text += example_to_append.text
