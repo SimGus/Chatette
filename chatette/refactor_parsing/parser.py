@@ -326,17 +326,23 @@ class Parser(object):
         """
         rule_contents = []
         current_builder = None
+        leading_space = False
         i = 0
         while i < len(tokens):
             token = tokens[i]
             if token.type == TerminalType.whitespace:
                 # TODO put it in modifiers
                 if current_builder is not None:
+                    current_builder.leading_space = True
                     rule_contents.append(current_builder.create_concrete())
                     current_builder = None
+                else:
+                    leading_space = True
+                    i += 1
+                    continue
             # Units and rule contents
             elif token.type == TerminalType.word:
-                rule_contents.append(Word(token.text))
+                rule_contents.append(Word(token.text, leading_space))
             elif (
                 token.type in \
                 (TerminalType.alias_ref_start,
@@ -410,6 +416,7 @@ class Parser(object):
                     "Detected invalid token type in rule: " + \
                     token.type.name + " for text '" + token.text + "'."
                 )
+            leading_space = False
             i += 1
         if current_builder is not None:
             rule_contents.append(current_builder.create_concrete())

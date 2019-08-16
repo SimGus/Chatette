@@ -19,7 +19,7 @@ class Rule(GeneratingItem):
     """
     def __init__(self, parent_name=None, contents=None):
         self.parent_name = parent_name
-        super(Rule, self).__init__(None)
+        super(Rule, self).__init__(None, leading_space=False)
         self._contents = contents
     
     def _compute_full_name(self):

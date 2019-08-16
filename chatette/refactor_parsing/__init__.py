@@ -32,6 +32,7 @@ class ItemBuilder(with_metaclass(ABCMeta, object)):
     NOTE: This does not correspond to the *Builder* design pattern.
     """
     def __init__(self):
+        self.leading_space = False
         self.casegen = False
         self.randgen = False
         self.randgen_name = None
@@ -69,7 +70,8 @@ class ChoiceBuilder(ItemBuilder):
     def create_concrete(self):
         self._check_information()
         return Choice(
-            "No name",  self._build_modifiers_repr(), self.rules
+            "No name",  self.leading_space, self._build_modifiers_repr(),
+            self.rules
         )  # TODO fix the problem with the name here
 
 class UnitRefBuilder(ItemBuilder):
@@ -96,7 +98,8 @@ class UnitRefBuilder(ItemBuilder):
     def create_concrete(self):
         self._check_information()
         return UnitReference(
-            self.identifier, self.type, self._build_modifiers_repr()
+            self.identifier, self.type,
+            self.leading_space, self._build_modifiers_repr()
         )
 
 class UnitDefBuilder(ItemBuilder):
@@ -122,11 +125,15 @@ class UnitDefBuilder(ItemBuilder):
 class AliasDefBuilder(UnitDefBuilder):
     def create_concrete(self):
         self._check_information()
-        return AliasDefinition(self.identifier, self._build_modifiers_repr())
+        return AliasDefinition(
+            self.identifier, self.leading_space, self._build_modifiers_repr()
+        )
 class SlotDefBuilder(UnitDefBuilder):
     def create_concrete(self):
         self._check_information()
-        return SlotDefinition(self.identifier, self._build_modifiers_repr())
+        return SlotDefinition(
+            self.identifier, self.leading_space, self._build_modifiers_repr()
+        )
 class IntentDefBuilder(UnitDefBuilder):
     def __init__(self):
         super(IntentDefBuilder, self).__init__()
@@ -136,6 +143,6 @@ class IntentDefBuilder(UnitDefBuilder):
     def create_concrete(self):
         self._check_information()
         return IntentDefinition(
-            self.identifier, self._build_modifiers_repr(),
+            self.identifier, self.leading_space, self._build_modifiers_repr(),
             self.nb_training_ex, self.nb_testing_ex
         )

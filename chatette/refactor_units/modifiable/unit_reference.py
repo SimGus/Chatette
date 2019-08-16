@@ -14,9 +14,11 @@ class UnitReference(ModifiableItem):
     Represents a reference to a unit definition that can be contained
     in a template rule.
     """
-    def __init__(self, identifier, unit_type, modifiers):
+    def __init__(self, identifier, unit_type, leading_space, modifiers):
         self._unit_type = unit_type
-        super(UnitReference, self).__init__(identifier, modifiers)
+        super(UnitReference, self).__init__(
+            identifier, leading_space, modifiers
+        )
         try:
             self._definition = AST.get_or_create()[unit_type][identifier]
         except KeyError:

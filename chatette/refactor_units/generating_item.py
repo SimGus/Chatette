@@ -22,9 +22,11 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
     Each possibility of string that this item can generate is called
     a possibility or an example.
     """
-    def __init__(self, name):
+    def __init__(self, name, leading_space):
         self._name = name
         self.full_name = self._compute_full_name()
+
+        self._leading_space = leading_space
 
         self._total_nb_possibilities = None
 

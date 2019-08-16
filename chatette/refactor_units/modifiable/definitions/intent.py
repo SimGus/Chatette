@@ -14,10 +14,12 @@ from chatette.refactor_units.modifiable.definitions.unit_definition import \
 class IntentDefinition(UnitDefinition):
     """Represents an intent definition."""
     def __init__(
-        self, identifier, modifiers,
+        self, identifier, leading_space, modifiers,
         nb_training_examples=None, nb_testing_examples=None
     ):
-        super(IntentDefinition, self).__init__(identifier, modifiers)
+        super(IntentDefinition, self).__init__(
+            identifier, leading_space, modifiers
+        )
         self._nb_training_ex_asked = nb_training_examples
         self._nb_testing_ex_asked = nb_testing_examples
     

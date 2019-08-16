@@ -13,8 +13,8 @@ from chatette.refactor_units.generating_item import GeneratingItem
 
 class Word(GeneratingItem):
     """Represents a word as a content of a rule."""
-    def __init__(self, name=None):
-        super(Word, self).__init__(name)
+    def __init__(self, name, leading_space):
+        super(Word, self).__init__(name, leading_space)
         self.word = name
 
     def _compute_full_name(self):

@@ -18,8 +18,8 @@ from chatette.modifiers import casegen
 
 
 class ModifiableItem(GeneratingItem):
-    def __init__(self, name, modifiers=None):
-        super(ModifiableItem, self).__init__(name)
+    def __init__(self, name, leading_space, modifiers=None):
+        super(ModifiableItem, self).__init__(name, leading_space)
         if modifiers is None:
             raise ValueError("Modifiers is none: " + self.__class__.__name__)
         self._modifiers_repr = modifiers
