@@ -59,6 +59,7 @@
 - [ ] improve lexing error messages
 - [ ] improve the systems of singletons to reduce code duplication
 - [ ] use decorators to make caches and improve code readability
+- [ ] fix the code duplication between `GeneratingItem` and `ModifiableItem`
 
 - [ ] replace `print` by `six.print_`?
 
