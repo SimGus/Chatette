@@ -125,15 +125,11 @@ class UnitDefBuilder(ItemBuilder):
 class AliasDefBuilder(UnitDefBuilder):
     def create_concrete(self):
         self._check_information()
-        return AliasDefinition(
-            self.identifier, self.leading_space, self._build_modifiers_repr()
-        )
+        return AliasDefinition(self.identifier, self._build_modifiers_repr())
 class SlotDefBuilder(UnitDefBuilder):
     def create_concrete(self):
         self._check_information()
-        return SlotDefinition(
-            self.identifier, self.leading_space, self._build_modifiers_repr()
-        )
+        return SlotDefinition(self.identifier, self._build_modifiers_repr())
 class IntentDefBuilder(UnitDefBuilder):
     def __init__(self):
         super(IntentDefBuilder, self).__init__()
@@ -143,6 +139,6 @@ class IntentDefBuilder(UnitDefBuilder):
     def create_concrete(self):
         self._check_information()
         return IntentDefinition(
-            self.identifier, self.leading_space, self._build_modifiers_repr(),
+            self.identifier, self._build_modifiers_repr(),
             self.nb_training_ex, self.nb_testing_ex
         )

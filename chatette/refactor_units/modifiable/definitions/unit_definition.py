@@ -11,9 +11,9 @@ from chatette.refactor_units.modifiable import ModifiableItem
 
 class UnitDefinition(ModifiableItem):
     """Abstract class base for all unit definitions."""
-    def __init__(self, identifier, leading_space, modifiers):
+    def __init__(self, identifier, modifiers):
         super(UnitDefinition, self).__init__(
-            identifier, leading_space, modifiers
+            identifier, False, modifiers  # NOTE `False` corresponds to `leading_space`
         )
         self.identifier = identifier
         self._rules = []
