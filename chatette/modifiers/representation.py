@@ -52,7 +52,7 @@ class ModifiersRepresentation(object):
         self.randgen_percent = 50
 
         self.argument_name = None
-        self.argument_value = None
+        self.argument_value = None  # Should be a dict {name -> value}
 
     def __repr__(self):
         return \

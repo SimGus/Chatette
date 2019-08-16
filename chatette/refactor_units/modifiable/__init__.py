@@ -14,7 +14,7 @@ from copy import deepcopy
 from chatette.refactor_units.generating_item import GeneratingItem
 from chatette.refactor_units import Example
 
-from chatette.modifiers import casegen
+from chatette.modifiers import casegen, argument
 
 
 class ModifiableItem(GeneratingItem):
@@ -92,6 +92,11 @@ class ModifiableItem(GeneratingItem):
         """
         if self._modifiers_repr.casegen:
             example = casegen.modify_example(example)
+        if self._modifiers_repr.argument_value is not None:
+            example = \
+                argument.modify_example(
+                    example, self._modifiers_repr.argument_value
+                )
         return example
     
     def _apply_modifiers_to_all(self, examples):
@@ -102,4 +107,9 @@ class ModifiableItem(GeneratingItem):
         """
         if self._modifiers_repr.casegen:
             examples = casegen.make_all_possibilities(examples)
+        if self._modifiers_repr.argument_value is not None:
+            examples = \
+                argument.make_all_possibilities(
+                    examples, self._modifiers_repr.argument_value
+                )
         return examples
