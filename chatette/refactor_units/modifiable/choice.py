@@ -25,6 +25,7 @@ class Choice(ModifiableItem):
     def _compute_nb_possibilities(self):
         acc = 0
         for rule in self._rules:
+            print("for rule " + str(rule.full_name) + " max: " + str(rule.get_max_nb_possibilities()))
             acc += rule.get_max_nb_possibilities()
         return acc
     

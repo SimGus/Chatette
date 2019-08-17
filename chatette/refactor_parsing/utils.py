@@ -225,3 +225,22 @@ def find_matching_choice_end(tokens, start_index):
                 return i
         i += 1
     return None
+
+def index_end_choice_rules(tokens, start_index):
+    """
+    Returns the index of the last token that makes up the internal rules
+    of the choice starting at index `start_index`.
+    Returns `None` if the choice is incorrectly closed.
+    @raises: - `ValueError` if there isno choice starting at `start_index`.
+    """
+    end_choice_index = find_matching_choice_end(tokens, start_index)
+    i = end_choice_index - 1
+    if i > 0 and tokens[i-1].type == TerminalType.percentgen:
+        i -= 1
+    if i > 0 and tokens[i-1].type == TerminalType.percentgen_marker:
+        i -= 1
+    if i > 0 and tokens[i-1].type == TerminalType.randgen_name:
+        i -= 1
+    if i > 0 and tokens[i-1].type == TerminalType.randgen_marker:
+        i -= 1
+    return i - 1

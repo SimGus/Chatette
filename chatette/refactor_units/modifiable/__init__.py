@@ -54,7 +54,6 @@ class ModifiableItem(GeneratingItem):
         Overriding.
         `kwargs` can contain the random name mapping `randgen_mapping`.
         """
-        print("gen rand")
         randgen_mapping = kwargs.get("randgen_mapping", None)
         if not self._should_generate(randgen_mapping):
             return self._make_empty_example()
@@ -72,7 +71,6 @@ class ModifiableItem(GeneratingItem):
     # TODO this is quite hacky to avoid code duplication in subclasses (and not use the decorator pattern to avoid having too many objects)
     def generate_all(self):
         """Overriding."""
-        print("gen all")
         if len(self._cached_examples) == 0:
             basic_examples = self._generate_all_strategy()
             if self._leading_space:
@@ -105,13 +103,14 @@ class ModifiableItem(GeneratingItem):
         `randgen_mapping` is the mapping from random generation modifier names
         to their boolean value.
         """
-        print("SHOULD GEN")
-        return \
-            randgen.should_generate(
-                self._modifiers_repr.randgen_name,
-                self._modifiers_repr.randgen_percent,
-                randgen_mapping
-            )
+        if self._modifiers_repr.randgen:
+            return \
+                randgen.should_generate(
+                    self._modifiers_repr.randgen_name,
+                    self._modifiers_repr.randgen_percent,
+                    randgen_mapping
+                )
+        return True
     
     
     def _apply_modifiers(self, example):
@@ -134,6 +133,8 @@ class ModifiableItem(GeneratingItem):
         some removed examples and some modified examples as per application
         of its post-modifiers.
         """
+        print("bf modifiers: " + str(examples))
+        print("randgen? " + str(self._modifiers_repr.randgen))
         if self._modifiers_repr.casegen:
             examples = casegen.make_all_possibilities(examples)
         if self._modifiers_repr.argument_value is not None:
@@ -141,4 +142,10 @@ class ModifiableItem(GeneratingItem):
                 argument.make_all_possibilities(
                     examples, self._modifiers_repr.argument_value
                 )
+        if self._modifiers_repr.randgen:
+            examples = \
+                randgen.make_all_possibilities(
+                    examples, self._make_empty_example()
+                )
+        print("after modifiers: " + str(examples))
         return examples

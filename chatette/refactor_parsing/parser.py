@@ -330,6 +330,7 @@ class Parser(object):
         i = 0
         while i < len(tokens):
             token = tokens[i]
+            print("TOK: " + str(token))
             if token.type == TerminalType.whitespace:
                 leading_space = True
                 if current_builder is not None:
@@ -371,15 +372,18 @@ class Parser(object):
                     rule_contents.append(current_builder.create_concrete())
                 current_builder = ChoiceBuilder()
                 current_builder.leading_space = leading_space
-                end_choice_index = utils.find_matching_choice_end(tokens, i)
-                if end_choice_index is not None:
+                last_internal_choice_token = \
+                    utils.index_end_choice_rules(tokens, i)
+                if last_internal_choice_token is not None:
                     if tokens[i+1].type == TerminalType.casegen_marker:
                         current_builder.casegen = True
                         i += 1
                     internal_rules = \
-                        self._parse_choice(tokens[i:end_choice_index + 1])
+                        self._parse_choice(
+                            tokens[i:last_internal_choice_token + 1]
+                        )
                     current_builder.rules = internal_rules
-                    i = end_choice_index
+                    i = last_internal_choice_token
                 else:
                     self.input_file_manager.syntax_error(
                         "Inconsistent choice starts and endings."
@@ -387,7 +391,7 @@ class Parser(object):
             elif token.type == TerminalType.choice_end:
                 rule_contents.append(current_builder.create_concrete())
                 current_builder = None
-                leading_space = Fakse
+                leading_space = False
             # Modifiers
             elif token.type == TerminalType.casegen_marker:
                 current_builder.casegen = True
@@ -445,14 +449,6 @@ class Parser(object):
                 i = end_choice_index
             i += 1
 
-        if i > 0 and tokens[i-1].type == TerminalType.percentgen:
-            i -= 1
-        if i > 0 and tokens[i-1].type == TerminalType.percentgen_marker:
-            i -= 1
-        if i > 0 and tokens[i-1].type == TerminalType.randgen_name:
-            i -= 1
-        if i > 0 and tokens[i-1].type == TerminalType.randgen_marker:
-            i -= 1
         rules.append(
             self._parse_rule(tokens[current_rule_start_index:i])
         )

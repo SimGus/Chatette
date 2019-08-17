@@ -89,6 +89,7 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
             return deepcopy(self._cached_examples)
 
         all_examples = self._generate_all_strategy()
+        print("for " + self.full_name + " all ex: " + str(all_examples))
         if self._leading_space:
             for ex in all_examples:
                 ex.prepend(' ')

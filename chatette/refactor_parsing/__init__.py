@@ -54,6 +54,8 @@ class ItemBuilder(with_metaclass(ABCMeta, object)):
         modifiers = ModifiersRepresentation()
         modifiers.casegen = self.casegen
         modifiers.randgen = self.randgen
+        print("in builder randgen: " + str(self.randgen))
+        print("=> repr: " + str(modifiers.randgen))
         modifiers.randgen_name = self.randgen_name
         modifiers.randgen_percent = self.randgen_percent
         return modifiers
