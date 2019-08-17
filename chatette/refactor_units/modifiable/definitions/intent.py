@@ -38,6 +38,9 @@ class IntentDefinition(UnitDefinition):
         return self._nb_testing_ex_asked
 
 
+    def _make_empty_example(self):
+        return IntentExample(self._name)
+
     def _example_to_intent_example(self, example):
         """
         Turns the example `example` (of type `Example`) into an instance of

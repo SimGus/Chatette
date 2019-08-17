@@ -23,6 +23,16 @@ class ModifiableItem(GeneratingItem):
         if modifiers is None:
             raise ValueError("Modifiers is none: " + self.__class__.__name__)
         self._modifiers_repr = modifiers
+
+
+    def _make_empty_example(self):
+        """
+        Returns an example without any text or entity.
+        Needed to be able to return a different type of example
+        within intent definitions and other items.
+        """
+        return Example()
+
     
     def get_max_nb_possibilities(self):
         """
@@ -37,6 +47,7 @@ class ModifiableItem(GeneratingItem):
                 self._modify_nb_possibilities(basic_nb_possibilities)
         return self._total_nb_possibilities
     
+
     # TODO this is quite hacky to avoid code duplication in subclasses (and not use the decorator pattern to avoid having too many objects)
     def generate_random(self, **kwargs):
         """
@@ -46,7 +57,7 @@ class ModifiableItem(GeneratingItem):
         print("gen rand")
         randgen_mapping = kwargs.get("randgen_mapping", None)
         if not self._should_generate(randgen_mapping):
-            return Example()
+            return self._make_empty_example()
         if (
             uniform(0, 1) <= \
             float(len(self._cached_examples)) / float(self.get_max_nb_possibilities())
@@ -57,6 +68,7 @@ class ModifiableItem(GeneratingItem):
             basic_example.prepend(' ')
         return self._apply_modifiers(basic_example)
     
+
     # TODO this is quite hacky to avoid code duplication in subclasses (and not use the decorator pattern to avoid having too many objects)
     def generate_all(self):
         """Overriding."""
