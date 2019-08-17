@@ -26,6 +26,8 @@ class Rule(GeneratingItem):
         return "rule contained in " + self.parent_name
     
     def _compute_nb_possibilities(self):
+        if len(self._contents) == 0:
+            return 1
         acc = None
         for content in self._contents:
             if acc is None:
