@@ -46,6 +46,8 @@ class Rule(GeneratingItem):
         return generated_example
     
     def _generate_all_strategy(self):
+        if len(self._contents) == 0:
+            return []
         generated_examples = None
         for content in self._contents:
             tmp_buffer = []
