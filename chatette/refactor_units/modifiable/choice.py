@@ -17,6 +17,7 @@ class Choice(ModifiableItem):
         super(Choice, self).__init__(name, leading_space, modifiers)
         self._rules = []
         if rules is not None:
+            print("choice rules: " + str(rules))
             self._rules.extend(rules)
 
     def _compute_full_name(self):

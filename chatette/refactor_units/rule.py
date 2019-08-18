@@ -58,7 +58,20 @@ class Rule(GeneratingItem):
                 for ex in generated_examples:
                     for content_ex in content_examples:
                         new_example = deepcopy(ex)
+                        print("new ex: " + str(new_example))
+                        print("current ex: " + str(content_ex))
                         new_example.append(content_ex)
+                        print("new ex af: " + str(new_example))
                         tmp_buffer.append(new_example)
                 generated_examples = tmp_buffer
         return generated_examples
+    
+
+    def __str__(self):
+        result = self.full_name + ": "
+        if len(self._contents) == 0:
+            result += "no contents"
+        else:
+            for content in self._contents:
+                result += str(content) + ", "
+        return '<' + result + '>'

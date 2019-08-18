@@ -234,6 +234,7 @@ def index_end_choice_rules(tokens, start_index):
     @raises: - `ValueError` if there isno choice starting at `start_index`.
     """
     end_choice_index = find_matching_choice_end(tokens, start_index)
+    print("end choice: " + str(tokens[end_choice_index]))
     i = end_choice_index - 1
     if i > 0 and tokens[i-1].type == TerminalType.percentgen:
         i -= 1
@@ -243,4 +244,5 @@ def index_end_choice_rules(tokens, start_index):
         i -= 1
     if i > 0 and tokens[i-1].type == TerminalType.randgen_marker:
         i -= 1
-    return i - 1
+    print("CHOICE ENDS AT " + str(tokens[i]))
+    return i

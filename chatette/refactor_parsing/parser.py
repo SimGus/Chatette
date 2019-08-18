@@ -436,6 +436,7 @@ class Parser(object):
         while i < len(tokens):
             token = tokens[i]
             if token.type == TerminalType.choice_sep:
+                print("parsed in choice: " + str(self._parse_rule(tokens[current_rule_start_index:i])))
                 rules.append(
                     self._parse_rule(tokens[current_rule_start_index:i])
                 )
@@ -449,6 +450,7 @@ class Parser(object):
                 i = end_choice_index
             i += 1
 
+        print("parsed in choice: " + str(self._parse_rule(tokens[current_rule_start_index:i])))
         rules.append(
             self._parse_rule(tokens[current_rule_start_index:i])
         )
