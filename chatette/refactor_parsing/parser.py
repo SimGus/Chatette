@@ -324,6 +324,7 @@ class Parser(object):
         definition).
         Returns the rule (`Rule`) that `tokens` represent.
         """
+        print("========= parse rule =============")
         rule_contents = []
         current_builder = None
         leading_space = False
@@ -375,15 +376,17 @@ class Parser(object):
                 last_internal_choice_token = \
                     utils.index_end_choice_rules(tokens, i)
                 if last_internal_choice_token is not None:
+                    print("last internal choice tok: " + str(tokens[last_internal_choice_token]))
                     if tokens[i+1].type == TerminalType.casegen_marker:
                         current_builder.casegen = True
                         i += 1
                     internal_rules = \
                         self._parse_choice(
-                            tokens[i:last_internal_choice_token + 1]
+                            tokens[i + 1:last_internal_choice_token]
                         )
                     current_builder.rules = internal_rules
                     i = last_internal_choice_token
+                    print("i back to :" + str(tokens[i]))
                 else:
                     self.input_file_manager.syntax_error(
                         "Inconsistent choice starts and endings."
@@ -425,10 +428,12 @@ class Parser(object):
         if current_builder is not None:
             rule_contents.append(current_builder.create_concrete())
 
+        print("======== END parse rule ============")
         return Rule(self._current_unit_declaration.full_name, rule_contents)
 
     def _parse_choice(self, tokens):
-        tokens = tokens[1:-1]
+        print("--------- parse choice ------------")
+        print("choice got: " + str(tokens))
         rules = []
 
         current_rule_start_index = 0
@@ -436,7 +441,6 @@ class Parser(object):
         while i < len(tokens):
             token = tokens[i]
             if token.type == TerminalType.choice_sep:
-                print("parsed in choice: " + str(self._parse_rule(tokens[current_rule_start_index:i])))
                 rules.append(
                     self._parse_rule(tokens[current_rule_start_index:i])
                 )
@@ -450,9 +454,9 @@ class Parser(object):
                 i = end_choice_index
             i += 1
 
-        print("parsed in choice: " + str(self._parse_rule(tokens[current_rule_start_index:i])))
         rules.append(
             self._parse_rule(tokens[current_rule_start_index:i])
         )
 
+        print("------------ END parse choice ---------------")
         return rules

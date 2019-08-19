@@ -229,20 +229,20 @@ def find_matching_choice_end(tokens, start_index):
 def index_end_choice_rules(tokens, start_index):
     """
     Returns the index of the last token that makes up the internal rules
-    of the choice starting at index `start_index`.
+    of the choice starting at index `start_index`. In other words,
+    the returned index points to the last token before the end of the choice
+    or its random generation markers.
     Returns `None` if the choice is incorrectly closed.
     @raises: - `ValueError` if there isno choice starting at `start_index`.
     """
     end_choice_index = find_matching_choice_end(tokens, start_index)
-    print("end choice: " + str(tokens[end_choice_index]))
     i = end_choice_index - 1
-    if i > 0 and tokens[i-1].type == TerminalType.percentgen:
+    if i > 0 and tokens[i].type == TerminalType.percentgen:
         i -= 1
-    if i > 0 and tokens[i-1].type == TerminalType.percentgen_marker:
+    if i > 0 and tokens[i].type == TerminalType.percentgen_marker:
         i -= 1
-    if i > 0 and tokens[i-1].type == TerminalType.randgen_name:
+    if i > 0 and tokens[i].type == TerminalType.randgen_name:
         i -= 1
-    if i > 0 and tokens[i-1].type == TerminalType.randgen_marker:
+    if i > 0 and tokens[i].type == TerminalType.randgen_marker:
         i -= 1
-    print("CHOICE ENDS AT " + str(tokens[i]))
     return i
