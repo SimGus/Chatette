@@ -109,7 +109,7 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
         Returns a list containing `nb_possibilities` examples,
         chosen at random in the set of all possible examples.
         Can use the cached examples in some cases (better performances).
-        @pre: `nb_possibilites` >= 2 (otherwise call `generate_random`)
+        @pre: `nb_possibilities` >= 2 (otherwise call `generate_random`)
         """
         max_nb_possibilities = self.get_max_nb_possibilities()
         if nb_possibilities > max_nb_possibilities:
@@ -119,7 +119,10 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
             return sample(self._cached_examples, nb_possibilities)
         if nb_possibilities < float(max_nb_possibilities) / 5.0:  # QUESTION: is 5 a good idea?
             return self._generate_n_strategy(nb_possibilities)
-        return sample_indulgent(self.generate_all(), nb_possibilities)
+        all_ex = self.generate_all()
+        result = sample_indulgent(all_ex, nb_possibilities)
+        # return sample_indulgent(self.generate_all(), nb_possibilities)
+        return result
     def _generate_n_strategy(self, n):
         """
         Strategy to generate `n` examples without using the cache.

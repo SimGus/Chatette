@@ -287,6 +287,7 @@ class Parser(object):
                     )
             else:
                 print_warn("Unsupported key in the annotation: '" + key + "'.")
+        print("ANNOTATION PARSED: " + str(annotation) + " => TR: " + str(nb_training_ex) + " TE: " + str(nb_testing_ex))
         return (nb_training_ex, nb_testing_ex)
 
     def _str_to_int(self, text, err_msg):
@@ -375,7 +376,6 @@ class Parser(object):
                 current_builder.leading_space = leading_space
                 last_internal_choice_token = \
                     utils.index_end_choice_rules(tokens, i)
-                print("Last choice token: " + str(tokens[last_internal_choice_token]))
                 if last_internal_choice_token is not None:
                     i += 1
                     if tokens[i].type == TerminalType.casegen_marker:

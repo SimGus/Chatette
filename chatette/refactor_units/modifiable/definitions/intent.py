@@ -20,6 +20,7 @@ class IntentDefinition(UnitDefinition):
         super(IntentDefinition, self).__init__(identifier, modifiers)
         self._nb_training_ex_asked = nb_training_examples
         self._nb_testing_ex_asked = nb_testing_examples
+        print(self.full_name + " TRAIN: " + str(self._nb_training_ex_asked) + " TEST: " + str(self._nb_testing_ex_asked))
     
     def _compute_full_name(self):
         return "intent '" + self._name + "'"
@@ -63,8 +64,8 @@ class IntentDefinition(UnitDefinition):
         Returns a list of examples to make up the training set.
         The list has as many examples as were asked in teh templates.
         """
-        if self._nb_training_ex_asked == 0:
-            return IntentExample(self._name)
+        if self._nb_training_ex_asked is None or self._nb_training_ex_asked == 0:
+            return []
         return self.generate_nb_possibilities(self._nb_training_ex_asked)
 
     def generate_test(self, training_examples):
@@ -73,8 +74,8 @@ class IntentDefinition(UnitDefinition):
         (not present in the training set).
         The list has as many examples as were asked in the templates.
         """
-        if self._nb_testing_ex_asked == 0:
-            return IntentExample(self._name)
+        if self._nb_testing_ex_asked is None or self._nb_testing_ex_asked == 0:
+            return []
         if (
             self._nb_testing_ex_asked < \
             float(self.get_max_nb_possibilities()) / 5.0
