@@ -160,10 +160,11 @@ def add_example_no_dup(example_list, new_example):
             found = True
             break
         elif current_text > new_example.text:
-            hi = i - 1
+            hi = float(i - 1)
         else:  # current_text < new_example.text
-            lo = i + 1
-        i = int(floor((hi - lo)/2)) + lo
+            lo = float(i + 1)
+        
+        i = int(floor(abs(hi - lo)/2) + lo)
 
     # Add example if needed
     if not found:

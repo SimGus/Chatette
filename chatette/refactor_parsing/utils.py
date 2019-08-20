@@ -235,9 +235,7 @@ def index_end_choice_rules(tokens, start_index):
     Returns `None` if the choice is incorrectly closed.
     @raises: - `ValueError` if there isno choice starting at `start_index`.
     """
-    print("::::::: index end choice ::::::::::::::")
     end_choice_index = find_matching_choice_end(tokens, start_index)
-    print("end: " + str(tokens[end_choice_index]))
     i = end_choice_index - 1
     if i > 0 and tokens[i].type == TerminalType.percentgen:
         i -= 1
@@ -247,6 +245,4 @@ def index_end_choice_rules(tokens, start_index):
         i -= 1
     if i > 0 and tokens[i].type == TerminalType.randgen_marker:
         i -= 1
-    print("finally: " + str(tokens[i]))
-    print(":::::::::::: END index end choice :::::::::::::::::")
     return i

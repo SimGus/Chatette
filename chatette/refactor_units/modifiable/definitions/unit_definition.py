@@ -62,10 +62,14 @@ class UnitDefinition(ModifiableItem):
     def _generate_all_strategy(self):
         generated_examples = []
         for rule in self._rules:
+            print("rule: " + str(rule))
             current_examples = rule.generate_all()
             for ex in current_examples:
                 ex.remove_leading_space()
-            # extend_no_dup(generated_examples, current_examples)
-            generated_examples.extend(current_examples)
+            print("Adding " + str(current_examples))
+            print("To " + str(generated_examples))
+            generated_examples = extend_no_dup(generated_examples, current_examples)
+            # generated_examples.extend(current_examples)
+            print("=> " + str(generated_examples))
         return generated_examples
     

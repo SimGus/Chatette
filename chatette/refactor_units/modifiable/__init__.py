@@ -133,8 +133,6 @@ class ModifiableItem(GeneratingItem):
         some removed examples and some modified examples as per application
         of its post-modifiers.
         """
-        print("bf modifiers: " + str(examples))
-        print("randgen? " + str(self._modifiers_repr.randgen))
         if self._modifiers_repr.casegen:
             examples = casegen.make_all_possibilities(examples)
         if self._modifiers_repr.argument_value is not None:
@@ -147,5 +145,4 @@ class ModifiableItem(GeneratingItem):
                 randgen.make_all_possibilities(
                     examples, self._make_empty_example()
                 )
-        print("after modifiers: " + str(examples))
         return examples
