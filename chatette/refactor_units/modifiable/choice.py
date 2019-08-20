@@ -7,6 +7,7 @@ Contains the class that represents choices (and old word groups).
 from random import choice
 
 from chatette.refactor_units.modifiable import ModifiableItem
+from chatette.refactor_units import extend_no_dup
 
 
 class Choice(ModifiableItem):
@@ -65,5 +66,6 @@ class Choice(ModifiableItem):
         generated_examples = []
         for rule in self._rules:
             current_examples = rule.generate_all()
-            generated_examples.extend(current_examples)
+            generated_examples = \
+                extend_no_dup(generated_examples, current_examples)
         return generated_examples

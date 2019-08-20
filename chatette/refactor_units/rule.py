@@ -59,11 +59,7 @@ class Rule(GeneratingItem):
                     for content_ex in content_examples:
                         new_example = deepcopy(ex)
                         new_example.append(content_ex)
-                        print("ADDING: " + str(new_example))
-                        print("TO: " + str(tmp_buffer))
                         add_example_no_dup(tmp_buffer, new_example)
-                        print("==> " + str(tmp_buffer))
-                        # tmp_buffer.append(new_example)
                 generated_examples = tmp_buffer
         return sort_by_texts(generated_examples)
     
