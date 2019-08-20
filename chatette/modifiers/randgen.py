@@ -7,6 +7,8 @@ the random generation modifier to one or several examples.
 
 from random import randrange
 
+from chatette.refactor_units import add_example_no_dup
+
 
 def modify_nb_possibilities(unmodified_nb_possibilities):
     """
@@ -25,14 +27,10 @@ def should_generate(randgen_name, percentgen, randgen_mappings=None):
     associated to the current item and the choices of random generation names
     made previously `randgen_mappings`.
     """
-    print("should generate?")
     if randgen_name is None:
-        print("no randgen name")
         return randrange(100) < percentgen
     if randgen_name not in randgen_mappings:
-        print("randgen name not in mapping")
         randgen_mappings[randgen_name] = (randrange(100) < percentgen)
-    print("done")
     return randgen_mappings[randgen_name]
 
 
@@ -42,6 +40,4 @@ def make_all_possibilities(examples, empty_example):
     of all possible examples after the random generation modifier applied.
     `empty_example` is a new example that has an empty text and no entities.
     """
-    examples.append(empty_example)
-    print("added empty => " + str(examples))
-    return examples
+    return add_example_no_dup(examples, empty_example)
