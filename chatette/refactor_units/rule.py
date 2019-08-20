@@ -10,7 +10,7 @@ Contains a class representing rules
 from copy import deepcopy
 
 from chatette.refactor_units.generating_item import GeneratingItem
-from chatette.refactor_units import Example
+from chatette.refactor_units import Example, sort_by_texts
 
 
 class Rule(GeneratingItem):
@@ -64,7 +64,7 @@ class Rule(GeneratingItem):
                         print("new ex af: " + str(new_example))
                         tmp_buffer.append(new_example)
                 generated_examples = tmp_buffer
-        return generated_examples
+        return sort_by_texts(generated_examples)
     
 
     def __str__(self):

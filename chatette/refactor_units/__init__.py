@@ -144,8 +144,8 @@ def add_example_no_dup(example_list, new_example):
     and then removes duplicates.
     An example is a duplicate of another if they have the same text. The one
     that is kept is the one with the largest amount of entities.
-    @pre: `example_list` must be a sorted list (with key == text).
-          `example_list` does not contain duplicates.
+    @pre: - `example_list` must be a sorted list (with key == text).
+          - `example_list` does not contain duplicates.
     @post: the returned list is sorted.
     """
     # TODO maybe using sets would be a better idea?
@@ -168,7 +168,34 @@ def add_example_no_dup(example_list, new_example):
     # Add example if needed
     if not found:
         example_list.insert(i, new_example)
-    # Remove example if needed
+    # Replace example if needed
     elif len(example_list[i].entities) < len(new_example.entities):
         example_list[i] = new_example
     return example_list
+
+def extend_no_dup(example_list, new_examples):
+    """
+    Adds each example in `new_examples`
+    iff it has no duplicate in `example_list`
+    @pre: - `example_list` must be a sorted list (with key == text).
+          - `example_list` does not contain duplicates.
+          - `new_examples` must be a sorted list (with key == text).
+          - `new_examples` does not contain duplicates.
+    @post: the returned list is sorted.
+    """
+    if len(new_examples) == 0:
+        return example_list
+    if len(example_list) == 0:
+        return new_examples
+    # TODO there might be a more optimized way to do that
+    for ex in new_examples:
+        example_list = add_example_no_dup(example_list, ex)
+    return example_list
+
+
+def sort_by_texts(example_list):
+    """
+    Returns a sorted list of examples (with key == text).
+    @pre: - `example_list` contains no duplicates.
+    """
+    return sorted(example_list, key=lambda ex: ex.text)

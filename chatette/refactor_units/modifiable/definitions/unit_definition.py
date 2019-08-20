@@ -7,6 +7,7 @@ Contains the abstract class that is base for all unit definitions.
 from random import choice
 
 from chatette.refactor_units.modifiable import ModifiableItem
+from chatette.refactor_units import extend_no_dup
 
 
 class UnitDefinition(ModifiableItem):
@@ -64,6 +65,7 @@ class UnitDefinition(ModifiableItem):
             current_examples = rule.generate_all()
             for ex in current_examples:
                 ex.remove_leading_space()
+            # extend_no_dup(generated_examples, current_examples)
             generated_examples.extend(current_examples)
         return generated_examples
     
