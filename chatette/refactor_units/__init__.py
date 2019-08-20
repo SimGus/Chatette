@@ -64,6 +64,14 @@ class Example(object):
         for entity in example_to_append.entities:
             entity._start_index += starting_index
             self.entities.append(entity)
+        
+    def remove_leading_space(self):
+        """Removes the leading space of `self.text` if there is one."""
+        if len(self.text) > 0 and self.text[0].isspace():
+            self.text = self.text[1:]
+            for entity in self.entities:
+                entity._remove_leading_space()
+
 
 class IntentExample(Example):
     def __init__(self, intent_name, text=None, entities=None):
@@ -98,6 +106,20 @@ class Entity(object):
         self.value = value
         self._len = length
         self._start_index = start_index
+
+    def _remove_leading_space(self):
+        """
+        Adapts the start index and length if needed, after a leading space was
+        removed from the example text.
+        @returns: `True` if the entity still makes sense.
+        """
+        if self._start_index == 0:
+            self._len -= 1
+            if self._len <= 0:
+                return False
+        else:
+            self._start_index -= 1
+        return True
     
     def __repr__(self):
         representation = "entity '" + self.name + "'"

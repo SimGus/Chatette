@@ -54,12 +54,16 @@ class UnitDefinition(ModifiableItem):
                 "generate."
             )
         
-        return rule.generate_random()
+        example = rule.generate_random()
+        example.remove_leading_space()
+        return example
     
     def _generate_all_strategy(self):
         generated_examples = []
         for rule in self._rules:
             current_examples = rule.generate_all()
+            for ex in current_examples:
+                ex.remove_leading_space()
             generated_examples.extend(current_examples)
         return generated_examples
     

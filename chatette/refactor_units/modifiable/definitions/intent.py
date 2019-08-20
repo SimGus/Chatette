@@ -48,7 +48,7 @@ class IntentDefinition(UnitDefinition):
         """
         return IntentExample.from_example(example, self._name)
 
-
+    
     def _generate_random_strategy(self):
         example = super(IntentDefinition, self)._generate_random_strategy()
         return self._example_to_intent_example(example)
