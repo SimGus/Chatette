@@ -64,7 +64,9 @@ class IntentDefinition(UnitDefinition):
         Returns a list of examples to make up the training set.
         The list has as many examples as were asked in teh templates.
         """
-        if self._nb_training_ex_asked is None or self._nb_training_ex_asked == 0:
+        if self._nb_training_ex_asked is None:
+            return self.generate_all()
+        if self._nb_training_ex_asked == 0:
             return []
         return self.generate_nb_possibilities(self._nb_training_ex_asked)
 
