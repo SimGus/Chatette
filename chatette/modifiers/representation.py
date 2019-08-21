@@ -47,6 +47,8 @@ class ModifiersRepresentation(object):
     def __init__(self):
         self.casegen = False
 
+        self.variation_name = None  # Only for unit references
+
         self.randgen = False
         self.randgen_name = None
         self.randgen_percent = 50

@@ -93,6 +93,7 @@ class UnitRefBuilder(ItemBuilder):
     def _build_modifiers_repr(self):
         modifiers = super(UnitRefBuilder, self)._build_modifiers_repr()
         modifiers.argument_value = self.arg_value
+        modifiers.variation_name = self.variation
         return modifiers
 
     def create_concrete(self):
