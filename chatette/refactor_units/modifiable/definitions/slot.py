@@ -4,6 +4,7 @@ Module `chatette.refactor_units.modifiable.definitions.slot`
 Contains the class representing a slot definition.
 """
 
+from chatette.utils import UnitType
 from chatette.refactor_units import Entity
 from chatette.refactor_units.modifiable.definitions.unit_definition import \
     UnitDefinition
@@ -11,6 +12,7 @@ from chatette.refactor_units.modifiable.definitions.unit_definition import \
 
 class SlotDefinition(UnitDefinition):
     """Represents an slot definition."""
+    unit_type = UnitType.slot
     def _compute_full_name(self):
         return "slot '" + self._name + "'"
 

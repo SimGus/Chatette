@@ -12,6 +12,7 @@ from chatette.refactor_units import extend_no_dup
 
 class UnitDefinition(ModifiableItem):
     """Abstract class base for all unit definitions."""
+    unit_type = None
     def __init__(self, identifier, modifiers):
         super(UnitDefinition, self).__init__(
             identifier, False, modifiers  # NOTE `False` corresponds to `leading_space`
@@ -20,11 +21,18 @@ class UnitDefinition(ModifiableItem):
         self._all_rules = []
         self._variation_rules = dict()
 
+
     def _compute_nb_possibilities(self):
         acc = 0
         for rule in self._all_rules:
             acc += rule.get_max_nb_possibilities()
         return acc
+
+
+    def has_variation(self, variation_name):
+        """Returns `True` iff `variation_name` was declared for this unit."""
+        return (variation_name in self._variation_rules)
+
     
     def add_rule(self, rule, variation_name=None):
         """
@@ -58,6 +66,7 @@ class UnitDefinition(ModifiableItem):
             raise ValueError("Tried to remove rule at invalid index.")
         del self._rule[index]
     
+
     def _choose_rule(self, variation_name=None):
         """
         Returns a rule at random from the list of rules for this definition.
@@ -76,6 +85,7 @@ class UnitDefinition(ModifiableItem):
             ):
                 return None
             return choice(self._variation_rules[variation_name])
+
 
     def _generate_random_strategy(self, variation_name=None):
         rule = self._choose_rule(variation_name)

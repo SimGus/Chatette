@@ -6,6 +6,7 @@ Contains the class representing an intent definition.
 
 from random import shuffle
 
+from chatette.utils import UnitType
 from chatette.refactor_units import Example, IntentExample, add_example_no_dup
 from chatette.refactor_units.modifiable.definitions.unit_definition import \
     UnitDefinition
@@ -13,6 +14,7 @@ from chatette.refactor_units.modifiable.definitions.unit_definition import \
 
 class IntentDefinition(UnitDefinition):
     """Represents an intent definition."""
+    unit_type = UnitType.intent
     def __init__(
         self, identifier, modifiers,
         nb_training_examples=None, nb_testing_examples=None

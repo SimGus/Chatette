@@ -144,9 +144,14 @@ class Parser(object):
             self.ast.add_unit(unit)
         except ValueError as e:
             if variation is None:
-                raise e
-            # else:  # TODO check that the variation wasn't already in there
-            #     self.ast.
+                self.input_file_manager.syntax_error(str(e))
+            elif variation in self.ast[unit.unit_type][unit.identifier]:
+                self.input_file_manager.syntax_error(
+                    "Variation '" + str(variation) + "' was already " + \
+                    "declared for " + unit.full_name + "."
+                )
+            else:  # new variation was declared
+                pass
         self._current_variation_name = variation
         self._current_unit_declaration = unit
 
