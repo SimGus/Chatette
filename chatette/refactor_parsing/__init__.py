@@ -23,6 +23,9 @@ from chatette.refactor_units.modifiable.definitions.intent import IntentDefiniti
 
 from chatette.modifiers.representation import ModifiersRepresentation
 
+from chatette.refactor_units.ast import AST
+from chatette.utils import UnitType
+
 
 class ItemBuilder(with_metaclass(ABCMeta, object)):
     """
@@ -126,10 +129,18 @@ class UnitDefBuilder(ItemBuilder):
 class AliasDefBuilder(UnitDefBuilder):
     def create_concrete(self):
         self._check_information()
+        if self.variation is not None:
+            definitions = AST.get_or_create()[UnitType.alias]
+            if self.identifier in definitions:
+                return definitions[self.identifier]
         return AliasDefinition(self.identifier, self._build_modifiers_repr())
 class SlotDefBuilder(UnitDefBuilder):
     def create_concrete(self):
         self._check_information()
+        if self.variation is not None:
+            definitions = AST.get_or_create()[UnitType.slot]
+            if self.identifier in definitions:
+                return definitions[self.identifier]
         return SlotDefinition(self.identifier, self._build_modifiers_repr())
 class IntentDefBuilder(UnitDefBuilder):
     def __init__(self):
@@ -139,6 +150,10 @@ class IntentDefBuilder(UnitDefBuilder):
     
     def create_concrete(self):
         self._check_information()
+        if self.variation is not None:
+            definitions = AST.get_or_create()[UnitType.intent]
+            if self.identifier in definitions:
+                return definitions[self.identifier]
         return IntentDefinition(
             self.identifier, self._build_modifiers_repr(),
             self.nb_training_ex, self.nb_testing_ex

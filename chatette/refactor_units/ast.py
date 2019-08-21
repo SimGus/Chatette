@@ -51,13 +51,10 @@ class AST(object):
         """
         if isinstance(unit_type, str):
             if unit_type == UnitType.alias.value:
-                print("alias")
                 unit_type = UnitType.alias
             elif unit_type == UnitType.slot.value:
-                print("slot")
                 unit_type = UnitType.slot
             elif unit_type == UnitType.intent.value:
-                print("intent")
                 unit_type = UnitType.intent
             else:
                 raise KeyError(

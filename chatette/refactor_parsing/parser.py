@@ -134,9 +134,16 @@ class Parser(object):
                 "Didn't expect a unit declaration to start here."
             )
 
-        unit = self._parse_unit_declaration(line_tokens)
+        (unit, variation) = self._parse_unit_declaration(line_tokens)
 
-        self.ast.add_unit(unit)
+        try:
+            self.ast.add_unit(unit)
+        except ValueError as e:
+            if variation is None:
+                raise e
+            # else:  # TODO check that the variation wasn't already in there
+            #     self.ast.
+            # TODO add variation to unit
         self._current_unit_declaration = unit
 
     def _parse_unit_declaration(self, lexical_tokens):
@@ -214,7 +221,7 @@ class Parser(object):
                 builder.nb_training_ex = nb_training_ex
                 builder.nb_testing_ex = nb_testing_ex
         
-        return builder.create_concrete()
+        return (builder.create_concrete(), builder.variation)
 
     def _annotation_tokens_to_dict(self, tokens):
         """
@@ -325,14 +332,12 @@ class Parser(object):
         definition).
         Returns the rule (`Rule`) that `tokens` represent.
         """
-        print("============ parse rule ================")
         rule_contents = []
         current_builder = None
         leading_space = False
         i = 0
         while i < len(tokens):
             token = tokens[i]
-            print("TOK: " + str(token))
             if token.type == TerminalType.whitespace:
                 leading_space = True
                 if current_builder is not None:
@@ -428,12 +433,9 @@ class Parser(object):
         if current_builder is not None:
             rule_contents.append(current_builder.create_concrete())
 
-        print("============== END parse rule ===============")
         return Rule(self._current_unit_declaration.full_name, rule_contents)
 
     def _parse_choice(self, tokens):
-        print("------------- parse choice ------------------")
-        print("choice interior: " + str(tokens))
         rules = []
 
         current_rule_start_index = 0
@@ -458,5 +460,4 @@ class Parser(object):
             self._parse_rule(tokens[current_rule_start_index:i])
         )
 
-        print("---------------------- END parse choice -----------------")
         return rules
