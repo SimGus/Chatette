@@ -49,7 +49,9 @@ class Parser(object):
 
         self._declaration_line_allowed = True
         self._last_indentation = None
+
         self._current_unit_declaration = None
+        self._current_variation_name = None
     
 
     def parse(self):
@@ -77,6 +79,8 @@ class Parser(object):
                 self._parse_file_inclusion(lexical_tokens)
                 self._declaration_line_allowed = True
                 self._last_indentation = None
+                self._current_unit_declaration = None
+                self._current_variation_name = None
             elif lexical_tokens[0].type == TerminalType.indentation:
                 self._parse_rule_line(lexical_tokens)
                 self._declaration_line_allowed = True
@@ -143,7 +147,7 @@ class Parser(object):
                 raise e
             # else:  # TODO check that the variation wasn't already in there
             #     self.ast.
-            # TODO add variation to unit
+        self._current_variation_name = variation
         self._current_unit_declaration = unit
 
     def _parse_unit_declaration(self, lexical_tokens):
