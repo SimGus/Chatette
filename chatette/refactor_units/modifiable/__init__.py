@@ -146,6 +146,7 @@ class ModifiableItem(GeneratingItem):
         if self._modifiers_repr.randgen:
             examples = \
                 randgen.make_all_possibilities(
-                    examples, self._make_empty_example()
+                    examples, self._make_empty_example(),
+                    self._modifiers_repr.randgen_name
                 )
         return examples

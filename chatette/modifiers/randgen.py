@@ -6,6 +6,7 @@ the random generation modifier to one or several examples.
 """
 
 from random import randrange
+from copy import deepcopy
 
 from chatette.refactor_units import add_example_no_dup
 
@@ -66,6 +67,59 @@ def make_all_possibilities(examples, empty_example, randgen_name=None):
                 "Didn't expect the random generation name '" + randgen_name + \
                 "' to already be set."
             )
+        current_randgen_mapping[randgen_name] = False
         setattr(empty_example, RANDGEN_MAPPING_KEY, current_randgen_mapping)
 
     return add_example_no_dup(examples, empty_example)
+
+
+def can_concat_examples(example1, example2):
+    """
+    Returns `True` iff the random generation names that are common to both
+    mappings of examples `example1` and `example2` are associated with
+    the same boolean value.
+    """
+    mapping1 = getattr(example1, RANDGEN_MAPPING_KEY, None)
+    mapping2 = getattr(example2, RANDGEN_MAPPING_KEY, None)
+    if mapping1 is None or mapping2 is None:
+        return True
+
+    for randgen_name in mapping1:
+        if (
+            randgen_name in mapping2
+            and mapping1[randgen_name] != mapping2[randgen_name]
+        ):
+            return False
+    return True
+
+def merge_randgen_mappings(example1, example2):
+    """
+    Returns the random generation mapping that corresponds to the union
+    of that of both examples `example1` and `example2`.
+    @pre: both mappings can be merged together.
+    """
+    mapping1 = getattr(example1, RANDGEN_MAPPING_KEY, None)
+    mapping2 = getattr(example2, RANDGEN_MAPPING_KEY, None)
+    if mapping1 is None:
+        return deepcopy(mapping2)
+    if mapping2 is None:
+        return deepcopy(mapping1)
+    
+    result = deepcopy(mapping1)
+    for randgen_name in mapping2:
+        if randgen_name not in result:
+            result[randgen_name] = deepcopy(mapping2[randgen_name])
+    return result
+
+def concat_examples_with_randgen(example, example_to_append):
+    """
+    Returns the concatenation of examples `example` and `example_to_append`
+    taking into account their randgen mappings.
+    @pre: the randgen mappings of those examples can be merged.
+    """
+    result = deepcopy(example)
+    result.append(example_to_append)
+    mapping = merge_randgen_mappings(example, example_to_append)
+    if mapping is not None:
+        setattr(result, RANDGEN_MAPPING_KEY, mapping)
+    return result

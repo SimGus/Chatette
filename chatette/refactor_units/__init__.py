@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # coding: utf-8
 """
 Module `chatette.refactor_units`
@@ -24,9 +23,11 @@ class Example(object):
         self.entities = entities
     
     def __repr__(self):
-        return "<'" + self.text + "' " + str(self.entities) + '>'
+        # return "<'" + self.text + "' " + str(self.entities) + '>'
+        return str(self)
     def __str__(self):
-        return self.text + '\n\tEntities: ' + str(self.entities)
+        # return self.text + '\n\tEntities: ' + str(self.entities)
+        return "Ex" + str(self.__dict__)
 
     def __hash__(self):
         return hash(self.text+str(self.entities.__hash__()))

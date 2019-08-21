@@ -11,6 +11,8 @@ from copy import deepcopy
 
 from chatette.refactor_units.generating_item import GeneratingItem
 from chatette.refactor_units import Example, sort_by_texts, add_example_no_dup
+from chatette.modifiers.randgen import \
+    can_concat_examples, concat_examples_with_randgen
 
 
 class Rule(GeneratingItem):
@@ -57,9 +59,10 @@ class Rule(GeneratingItem):
             else:
                 for ex in generated_examples:
                     for content_ex in content_examples:
-                        new_example = deepcopy(ex)
-                        new_example.append(content_ex)
-                        add_example_no_dup(tmp_buffer, new_example)
+                        if can_concat_examples(ex, content_ex):
+                            new_example = \
+                                concat_examples_with_randgen(ex, content_ex)
+                            add_example_no_dup(tmp_buffer, new_example)
                 generated_examples = tmp_buffer
         return sort_by_texts(generated_examples)
     
