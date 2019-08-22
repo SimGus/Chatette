@@ -30,7 +30,7 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
 
         self._total_nb_possibilities = None
 
-        # Cache: can contain a certain number of exampels previously generated
+        # Cache: can contain a certain number of examples previously generated
         self._cached_examples = []
     @abstractmethod
     def _compute_full_name(self):

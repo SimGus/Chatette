@@ -5,6 +5,7 @@ Contains the abstract class that is base for all unit definitions.
 """
 
 from random import choice
+from copy import deepcopy
 
 from chatette.refactor_units.modifiable import ModifiableItem
 from chatette.refactor_units import extend_no_dup
@@ -123,6 +124,25 @@ class UnitDefinition(ModifiableItem):
         example = rule.generate_random()
         example.remove_leading_space()
         return example
+
+
+    def generate_all(self, variation_name=None):
+        """Overriding to prevent caching of examples for just one variation."""
+        if not self._variation_rules:
+            return super(UnitDefinition, self).generate_all()
+        
+        if isinstance(self._cached_examples, list):
+            self._cached_examples = dict()
+        if variation_name not in self._cached_examples:
+            basic_examples = \
+                self._generate_all_strategy(variation_name=variation_name)
+            if self._leading_space:
+                for ex in basic_examples:
+                    ex.prepend(' ')
+            self._cached_examples[variation_name] = \
+                self._apply_modifiers_to_all(basic_examples)
+        return deepcopy(self._cached_examples[variation_name])
+
     
     def _generate_all_strategy(self, variation_name=None):
         if variation_name is None:
