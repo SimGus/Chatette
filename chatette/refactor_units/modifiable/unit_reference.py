@@ -48,16 +48,32 @@ class UnitReference(ModifiableItem):
 
     
     def _compute_nb_possibilities(self):
-        return self.get_definition().get_max_nb_possibilities()
+        return \
+            self.get_definition() \
+                .get_max_nb_possibilities(
+                    variation_name=self._modifiers_repr.variation_name
+                )
     
     def _generate_random_strategy(self):
-        return self.get_definition().generate_random()
+        return \
+            self.get_definition() \
+                .generate_random(
+                    variation_name=self._modifiers_repr.variation_name
+                )
     
     def _generate_all_strategy(self):
-        return self.get_definition().generate_all()
+        return \
+            self.get_definition() \
+                .generate_all(
+                    variation_name=self._modifiers_repr.variation_name
+                )
     
     def _generate_n_strategy(self, n):
-        return self.get_definition().generate_nb_possibilities(n)
+        return \
+            self.get_definition() \
+                .generate_nb_possibilities(
+                    n, variation_name=self._modifiers_repr.variation_name
+                )
 
 
     def _fix_arg_value_modifier(self):

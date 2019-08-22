@@ -22,9 +22,20 @@ class UnitDefinition(ModifiableItem):
         self._variation_rules = dict()
 
 
-    def _compute_nb_possibilities(self):
+    def _compute_nb_possibilities(self, variation_name=None):
+        if variation_name is None:
+            relevant_rules = self._all_rules
+        elif variation_name in self._variation_rules:
+            relevant_rules = self._variation_rules[variation_name]
+        else:
+            raise SyntaxError(
+                "Referenced variation '" + str(variation_name) + "' for" + \
+                self.full_name + ", but this variation has no rules " + \
+                "associated to it."
+            )
+
         acc = 0
-        for rule in self._all_rules:
+        for rule in relevant_rules:
             acc += rule.get_max_nb_possibilities()
         return acc
 
@@ -114,7 +125,7 @@ class UnitDefinition(ModifiableItem):
             raise SyntaxError(
                 "Tried to generate examples for variation '" + \
                 str(variation_name) + "' of " + self.full_name + \
-                ", but this variation has no rule associated to it."
+                ", but this variation has no rules associated to it."
             )
 
         generated_examples = []

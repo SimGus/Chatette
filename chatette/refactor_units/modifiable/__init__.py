@@ -35,15 +35,16 @@ class ModifiableItem(GeneratingItem):
         return Example()
 
     
-    def get_max_nb_possibilities(self):
+    def get_max_nb_possibilities(self, **kwargs):
         """
         Overriding.
         Calls the abstract method that computes the number of possibilities
         (without modifiers) and applies the modifiers.
         Caches the number of possibilities after computation.
+        `kwargs` can contain `variation_name`.
         """
         if self._total_nb_possibilities is None:
-            basic_nb_possibilities = self._compute_nb_possibilities()
+            basic_nb_possibilities = self._compute_nb_possibilities(**kwargs)
             self._total_nb_possibilities = \
                 self._modify_nb_possibilities(basic_nb_possibilities)
         return self._total_nb_possibilities
@@ -53,27 +54,35 @@ class ModifiableItem(GeneratingItem):
     def generate_random(self, **kwargs):
         """
         Overriding.
-        `kwargs` can contain the random name mapping `randgen_mapping`.
+        `kwargs` can contain the random name mapping `randgen_mapping` or
+        `variation_name`.
         """
+        variation_name = kwargs.get("variation_name", None)
+
         randgen_mapping = kwargs.get("randgen_mapping", None)
         if not self._should_generate(randgen_mapping):
             return self._make_empty_example()
         if (
             uniform(0, 1) <= \
-            float(len(self._cached_examples)) / float(self.get_max_nb_possibilities())
+            float(len(self._cached_examples)) / float(self.get_max_nb_possibilities(variation_name=variation_name))
         ):
             return choice(self._cached_examples)
-        basic_example = self._generate_random_strategy()
+        basic_example = \
+            self._generate_random_strategy(variation_name=variation_name)
         if self._leading_space:
             basic_example.prepend(' ')
         return self._apply_modifiers(basic_example)
     
 
     # TODO this is quite hacky to avoid code duplication in subclasses (and not use the decorator pattern to avoid having too many objects)
-    def generate_all(self):
-        """Overriding."""
+    def generate_all(self, **kwargs):
+        """
+        Overriding.
+        `kwargs` can contain `variation_name`.
+        """
         if len(self._cached_examples) == 0:
-            basic_examples = self._generate_all_strategy()
+            basic_examples = \
+                self._generate_all_strategy(**kwargs)
             if self._leading_space:
                 for ex in basic_examples:
                     ex.prepend(' ')

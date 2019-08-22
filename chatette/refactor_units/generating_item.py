@@ -104,36 +104,38 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
         """
         raise NotImplementedError()
 
-    def generate_nb_possibilities(self, nb_possibilities):
+    def generate_nb_possibilities(self, nb_possibilities, **kwargs):
         """
         Returns a list containing `nb_possibilities` examples,
         chosen at random in the set of all possible examples.
         Can use the cached examples in some cases (better performances).
+        `kwargs` can contain `variation_name`.
         @pre: `nb_possibilities` >= 2 (otherwise call `generate_random`)
         """
-        max_nb_possibilities = self.get_max_nb_possibilities()
+        max_nb_possibilities = self.get_max_nb_possibilities(**kwargs)
         if nb_possibilities > max_nb_possibilities:
             nb_possibilities = max_nb_possibilities
 
         if len(self._cached_examples) >= max_nb_possibilities:
             return sample(self._cached_examples, nb_possibilities)
         if nb_possibilities < float(max_nb_possibilities) / 5.0:  # QUESTION: is 5 a good idea?
-            return self._generate_n_strategy(nb_possibilities)
-        all_ex = self.generate_all()
+            return self._generate_n_strategy(nb_possibilities, **kwargs)
+        all_ex = self.generate_all(**kwargs)
         result = sample_indulgent(all_ex, nb_possibilities)
         # return sample_indulgent(self.generate_all(), nb_possibilities)
         return result
-    def _generate_n_strategy(self, n):
+    def _generate_n_strategy(self, n, **kwargs):
         """
         Strategy to generate `n` examples without using the cache.
         Returns the list of generated examples.
+        `kwargs` can contain `variation_name`.
         @pre: `n` <= `self.get_max_nb_possibilities()`
         """
         # TODO wouldn't it be better with a set rather than a list?
         generated_examples = []
         loop_count = 0
         while len(generated_examples) < n:
-            current_ex = self.generate_random()
+            current_ex = self.generate_random(**kwargs)
             add_example_no_dup(generated_examples, current_ex)
             loop_count += 1
             if loop_count > 10*n:  # QUESTION is that a good idea?
