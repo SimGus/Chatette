@@ -20,6 +20,14 @@ class UnitDefinition(ModifiableItem):
         self.identifier = identifier
         self._all_rules = []
         self._variation_rules = dict()
+    
+    
+    def __contains__(self, variation_name):
+        """
+        Returns `True` if `variation_name` is a variation
+        that is declared for the current definition.
+        """
+        return (variation_name in self._variation_rules)
 
 
     def _compute_nb_possibilities(self, variation_name=None):
@@ -29,7 +37,7 @@ class UnitDefinition(ModifiableItem):
             relevant_rules = self._variation_rules[variation_name]
         else:
             raise SyntaxError(
-                "Referenced variation '" + str(variation_name) + "' for" + \
+                "Referenced variation '" + str(variation_name) + "' for " + \
                 self.full_name + ", but this variation has no rules " + \
                 "associated to it."
             )
