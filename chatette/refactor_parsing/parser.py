@@ -68,7 +68,11 @@ class Parser(object):
             if line is None:  # End of file
                 break
             print("\nLINE: '" + str(line) + "'")
-            lexical_tokens = self.lexer.lex(line)
+            currently_parsing_slot = (
+                self._current_unit_declaration is not None
+                and self._current_unit_declaration.unit_type == UnitType.slot
+            )
+            lexical_tokens = self.lexer.lex(line, currently_parsing_slot)
             print("TOKENS:", lexical_tokens)
             lexical_tokens = utils.remove_comment_tokens(lexical_tokens)
 

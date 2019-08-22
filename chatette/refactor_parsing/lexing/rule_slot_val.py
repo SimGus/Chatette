@@ -18,21 +18,19 @@ class RuleSlotVal(LexingRule):
         If this boolean is not in `kwargs`, defaults to `False`.
         """
         parsing_slot_def = kwargs.get("parsing_slot_def", False)
-
         if parsing_slot_def:
-            slot_value_tokens = []
-            while self._text[index].isspace():
+            while self._text[self._next_index].isspace():
                 self._next_index += 1
                 self._update_furthest_matched_index()
 
-            if self._text.startswith(SLOT_VAL_SYM, index):
-                slot_value_tokens.append(
+            if self._text.startswith(SLOT_VAL_SYM, self._next_index):
+                self._tokens.append(
                     LexicalToken(TerminalType.slot_val_marker, SLOT_VAL_SYM)
                 )
                 self._next_index += 1
                 self._update_furthest_matched_index()
 
-                while self._text[index].isspace():
+                while self._text[self._next_index].isspace():
                     self._next_index += 1
                     self._update_furthest_matched_index()
 
@@ -43,7 +41,7 @@ class RuleSlotVal(LexingRule):
                 else:
                     slot_value = self._text[self._next_index:].rstrip()
 
-                slot_value_tokens.append(
+                self._tokens.append(
                     LexicalToken(TerminalType.slot_val, slot_value)
                 )
                 self._next_index += len(slot_value)

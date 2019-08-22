@@ -13,6 +13,7 @@ from chatette.refactor_parsing.lexing.rule_whitespaces import RuleWhitespaces
 from chatette.refactor_parsing.lexing.rule_content_rule_and_choice import \
     RuleContentRule
 from chatette.refactor_parsing.lexing.rule_comment import RuleComment
+from chatette.refactor_parsing.lexing.rule_slot_val import RuleSlotVal
 
 
 class RuleUnitRule(LexingRule):
@@ -35,7 +36,7 @@ class RuleUnitRule(LexingRule):
             if self._next_index == len(self._text):
                 return True
             content_rule = RuleContentRule(self._text, self._next_index)
-            if content_rule.matches():
+            if content_rule.matches(**kwargs):
                 self._tokens.extend(content_rule.get_lexical_tokens())
                 self._next_index = content_rule.get_next_index_to_match()
                 self._update_furthest_matched_index(content_rule)
@@ -46,7 +47,7 @@ class RuleUnitRule(LexingRule):
         
         if parsing_slot_def:
             old_error_msg = self.error_msg
-            if not self._try_to_match_rule(RuleSlotVal):
+            if not self._try_to_match_rule(RuleSlotVal, **kwargs):
                 self.error_msg = old_error_msg
         
         if self._next_index < len(self._text):

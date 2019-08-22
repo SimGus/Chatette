@@ -25,23 +25,29 @@ class RuleWord(LexingRule):
         FILE_INCLUSION_SYM,
         UNIT_START_SYM, UNIT_END_SYM,
         ALIAS_SYM, SLOT_SYM, INTENT_SYM,
-        SLOT_VAL_SYM,
-        # CHOICE_START, CHOICE_END, 
+        CHOICE_START, CHOICE_END, 
         OLD_CHOICE_START, OLD_CHOICE_END
     ]
     _should_be_escaped_in_choices_chars = [
-        # CHOICE_SEP,
+        CHOICE_SEP,
         OLD_CHOICE_SEP,
         RAND_GEN_SYM
     ]
+    _should_be_escaped_in_slot_def_chars = [SLOT_VAL_SYM]
 
     def _apply_strategy(self, **kwargs):
         """
         `kwargs` can contain a boolean with key `inside_choice` that is
         `True` when the current word is inside a choice and `False` otherwise.
         If this boolean is not in `kwargs`, defaults to `False`.
+        ´kwargs´ can also contain a boolean with key `parsing_slot_def`
+        which is `True` iff the current is in a rule inside a slot definition.
+        If this boolean is not in `kwargs`, defaults to `False`.
         """
+        print("word? " + self._text)
+        print("kwargs: " + str(kwargs))
         inside_choice = kwargs.get("inside_choice", False)
+        parsing_slot_def = kwargs.get("parsing_slot_def", False)
 
         # TODO this might be better using regexes
         if self._text[self._start_index].isspace():
@@ -52,9 +58,10 @@ class RuleWord(LexingRule):
         # Find whitespace after the word
         next_word_index = self._start_index + 1  # NOTE exclusive
         while True:
-            if next_word_index == len(self._text):
-                break
-            if self._text[next_word_index].isspace():
+            if (
+                next_word_index == len(self._text)
+                or self._text[next_word_index].isspace()
+            ):
                 break
             next_word_index += 1
         
@@ -77,12 +84,22 @@ class RuleWord(LexingRule):
                 )
         
         if inside_choice and next_word_index > self._start_index:
-            for choice_sep_char in RuleWord._should_be_escaped_in_choices_chars:
+            for char_to_escape in RuleWord._should_be_escaped_in_choices_chars:
                 next_word_index = \
                     min_if_exist(
                         next_word_index,
                         find_unescaped(
-                            self._text, choice_sep_char, self._start_index
+                            self._text, char_to_escape, self._start_index
+                        )
+                    )
+        
+        if parsing_slot_def and next_word_index > self._start_index:
+            for char_to_escape in RuleWord._should_be_escaped_in_slot_def_chars:
+                next_word_index = \
+                    min_if_exist(
+                        next_word_index,
+                        find_unescaped(
+                            self._text, char_to_escape, self._start_index
                         )
                     )
 
