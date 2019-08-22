@@ -19,10 +19,12 @@ class Rule(GeneratingItem):
     """
     Represents a rule (as it will be contained in choices or unit definitions).
     """
-    def __init__(self, parent_name=None, contents=None):
+    def __init__(self, parent_name=None, contents=None, slot_value=None):
         self.parent_name = parent_name
         super(Rule, self).__init__(None, leading_space=False)
         self._contents = contents
+
+        self.slot_value = slot_value
     
     def _compute_full_name(self):
         return "rule contained in " + self.parent_name
@@ -64,6 +66,8 @@ class Rule(GeneratingItem):
                                 concat_examples_with_randgen(ex, content_ex)
                             add_example_no_dup(tmp_buffer, new_example)
                 generated_examples = tmp_buffer
+        if generated_examples is None:
+            return []
         return sort_by_texts(generated_examples)
     
 

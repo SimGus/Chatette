@@ -16,6 +16,12 @@ class SlotDefinition(UnitDefinition):
     def _compute_full_name(self):
         return "slot '" + self._name + "'"
 
+
+    def _check_rule_validity(self, rule):
+        """Override."""
+        pass
+
+
     def _generate_random_strategy(self):
         generated_example = \
             super(SlotDefinition, self)._generate_random_strategy()
@@ -31,6 +37,7 @@ class SlotDefinition(UnitDefinition):
             ex.entities.append(
                 Entity(self._name, len(ex.text))  # TODO value?
             )
+
 
     def get_synonyms_dict(self):
         # TODO find out what this was supposed to do in old code

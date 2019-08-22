@@ -53,13 +53,23 @@ class UnitDefinition(ModifiableItem):
         """Returns `True` iff `variation_name` was declared for this unit."""
         return (variation_name in self._variation_rules)
 
+
+    def _check_rule_validity(self, rule):
+        """Raises a `ValueError` if the rule `rule` is not valid."""
+        if rule.slot_value is not None:
+            raise ValueError(
+                "One of the rules in " + self.full_name + " was not valid: " + \
+                "it contained a slot value. The invalid rule is " + str(rule)
+            )
     
     def add_rule(self, rule, variation_name=None):
         """
         Adds the rule `rule` to the list of rules.
         If `variation_name` is not `None`, adds the rule to the corresponding
         variation.
+        @raises: `ValueError` if `rule` is not valid.
         """
+        self._check_rule_validity(rule)
         if variation_name is not None:
             if variation_name in self._variation_rules:
                 self._variation_rules[variation_name].append(rule)
@@ -71,7 +81,10 @@ class UnitDefinition(ModifiableItem):
         Adds each of the rules `rule` to the list of rules.
         If `variation_name` is not `None`, adds the rules to the corresponding
         variation.
+        @raises: `ValueError` if one of the rules in `rules` is not valid.
         """
+        for rule in rules:
+            self._check_rule_validity(rule)
         if variation_name is not None:
             if variation_name in self._variation_rules:
                 self._variation_rules[variation_name].extend(rule)

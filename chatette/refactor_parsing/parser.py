@@ -350,6 +350,7 @@ class Parser(object):
         rule_contents = []
         current_builder = None
         leading_space = False
+        slot_value = None
         i = 0
         while i < len(tokens):
             token = tokens[i]
@@ -439,6 +440,10 @@ class Parser(object):
                 pass
             elif token.type == TerminalType.arg_value:
                 current_builder.arg_value = token.text
+            elif token.type == TerminalType.slot_val_marker:
+                pass
+            elif token.type == TerminalType.slot_val:
+                slot_value = token.text
             else:
                 raise ValueError(  # Should never happen
                     "Detected invalid token type in rule: " + \
@@ -448,7 +453,9 @@ class Parser(object):
         if current_builder is not None:
             rule_contents.append(current_builder.create_concrete())
 
-        return Rule(self._current_unit_declaration.full_name, rule_contents)
+        return Rule(
+            self._current_unit_declaration.full_name, rule_contents, slot_value
+        )
 
     def _parse_choice(self, tokens):
         rules = []
