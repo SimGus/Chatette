@@ -34,34 +34,33 @@ class TerminalType(Enum):
     key = 16
     value = 17
     key_value_connector = 18
-    separator = 19
-    encloser = 20
+    encloser = 19
     # Rule contents
-    word = 21
-    choice_start = 22
-    choice_end = 23
-    choice_sep = 24
-    alias_ref_start = 25
-    alias_ref_end = 26
-    slot_ref_start = 27
-    slot_ref_end = 28
-    intent_ref_start = 29
-    intent_ref_end = 30
-    slot_val_marker = 31  # '='
-    slot_val = 32
+    word = 20
+    choice_start = 21
+    choice_end = 22
+    choice_sep = 23
+    alias_ref_start = 24
+    alias_ref_end = 25
+    slot_ref_start = 26
+    slot_ref_end = 27
+    intent_ref_start = 28
+    intent_ref_end = 29
+    slot_val_marker = 30  # '='
+    slot_val = 31
     # Modifiers
-    casegen_marker = 33
-    arg_marker = 34
-    arg_name = 35
-    arg_value = 36
-    arg_start = 37  # '('
-    arg_end = 38  # ')'
-    randgen_marker = 39
-    randgen_name = 40
-    percentgen_marker = 41
-    percentgen = 42
-    variation_marker = 43
-    variation_name = 44
+    casegen_marker = 32
+    arg_marker = 33
+    arg_name = 34
+    arg_value = 35
+    arg_start = 36  # '('
+    arg_end = 37  # ')'
+    randgen_marker = 38
+    randgen_name = 39
+    percentgen_marker = 40
+    percentgen = 41
+    variation_marker = 42
+    variation_name = 43
 
 
 class LexicalToken(object):
