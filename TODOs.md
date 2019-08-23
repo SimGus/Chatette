@@ -32,7 +32,7 @@
 - [ ] accept anything inside an arg, especially unit references
 - [ ] add percentages of all possible examples for training and test (rather than simple numbers)
 - [ ] add "auto-aliases" feature (cf. *Chatito* v2.3.4)
-- [ ] add several files import in one line
+- [ ] add several files import in one line?
 
 - [ ] add regex to rasa JSON file
 
@@ -60,11 +60,10 @@
 - [ ] improve the systems of singletons to reduce code duplication
 - [ ] use decorators to make caches and improve code readability
 - [ ] fix the code duplication between `GeneratingItem` and `ModifiableItem`
+- [ ] use re-exports to simplify the import statements
 
 - [ ] replace `print` by `six.print_`?
 
-- [ ] complete refactor of the code: the code is almost unmaintainable
-- [ ] refactor units to remove duplicated code: make modifiers act after the string has been generated
 - [ ] add more unit tests
 
 - [ ] *Interactive mode* add support for argument values in relevant commands
@@ -138,6 +137,8 @@
 - [x] use more list/dict comprehensions (faster than using `append`)
 - [x] replace `getcwd` by `six.moves.getcwd` to be sure to have python 2 and 3 compliant code
 - [x] replace `range` by `six.moves.range`
+- [x] complete refactor of the code: the code is almost unmaintainable
+- [x] refactor units to remove duplicated code: make modifiers act after the string has been generated
 
 # Bugs
 
