@@ -37,6 +37,7 @@ class SlotDefinition(UnitDefinition):
             ex.entities.append(
                 Entity(self._name, len(ex.text))  # TODO value?
             )
+        return generated_examples
 
 
     def get_synonyms_dict(self):
