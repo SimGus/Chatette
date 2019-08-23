@@ -10,6 +10,7 @@ from copy import deepcopy
 from chatette.utils import UnitType
 from chatette.refactor_units.modifiable import ModifiableItem
 from chatette.refactor_units import extend_no_dup
+from chatette.refactor_parsing.utils import SLOT_VAL_FIRST_RULE
 
 
 class UnitDefinition(ModifiableItem):
@@ -139,6 +140,17 @@ class UnitDefinition(ModifiableItem):
         example.remove_leading_space()
         if self.unit_type == UnitType.slot:
             example._slot_value = rule.slot_value
+            if (
+                example._slot_value is not None
+                and example._slot_value.strip() == SLOT_VAL_FIRST_RULE
+            ):
+                if len(rule._contents) == 0:
+                    raise SyntaxError(
+                        "The slot value given for one of the rules of " + \
+                        self.full_name + " references the first token of " + \
+                        "an empty rule."
+                    )
+                example._slot_value = rule._contents[0]._name
         return example
 
 
@@ -178,6 +190,17 @@ class UnitDefinition(ModifiableItem):
             if self.unit_type == UnitType.slot:
                 for ex in current_examples:
                     ex._slot_value = rule.slot_value
+                    if (
+                        ex._slot_value is not None
+                        and ex._slot_value.strip() == SLOT_VAL_FIRST_RULE
+                    ):
+                        if len(rule._contents) == 0:
+                            raise SyntaxError(
+                                "The slot value given for one of the rules " + \
+                                "of " + self.full_name + \
+                                " references the first token of an empty rule."
+                            )
+                        ex._slot_value = rule._contents[0]._name
             for ex in current_examples:
                 ex.remove_leading_space()
             generated_examples = \

@@ -30,6 +30,7 @@ KEY_VAL_CONNECTOR = ':'
 KEY_VAL_ENCLOSERS = ["'", '"']
 # Unit rules
 SLOT_VAL_SYM = '='
+SLOT_VAL_FIRST_RULE = '/'
 CHOICE_START = '['
 CHOICE_END = ']'
 CHOICE_SEP = '|'
