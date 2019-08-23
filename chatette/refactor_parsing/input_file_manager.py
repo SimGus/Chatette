@@ -80,7 +80,8 @@ class InputFileManager(object):
         try:
             self._current_file = LineCountFileWrapper(file_path)
         except IOError as e:
-            self._current_file = self._opened_files.pop()
+            if len(self._opened_files) > 0:
+                self._current_file = self._opened_files.pop()
             raise e
     
     def close_all_files(self):
