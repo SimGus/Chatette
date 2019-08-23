@@ -1,6 +1,5 @@
 import json
 
-from chatette.units import ENTITY_MARKER
 from chatette.utils import cast_to_unicode
 from ._base import Adapter
 
@@ -16,26 +15,17 @@ class RasaAdapter(Adapter):
 
     def prepare_example(self, example):
         def entity_to_rasa(entity):
-            first_index = self.__find_entity(example.text, entity["text"])
-            entity["text"] = entity["text"].rstrip()
-            # NOTE: This always finds something
-            # Remove the entity marker of this entity
-            # (works unless entities are not recorded in order)
-            example.text = example.text[:first_index] + \
-                            example.text[first_index+len(ENTITY_MARKER):]
             return {
-                "value": entity["value"],
-                "entity": entity["slot-name"],
-                "start": first_index,
-                "end": first_index + len(entity["text"]),
+                "entity": entity.slot_name,
+                "value": entity.value,
+                "start": entity._start_index,
+                "end": entity._start_index + entity._len,
             }
 
         return {
             "intent": example.intent_name,
-            "entities": [entity_to_rasa(e) for e in example.entities],
-            # HACK: Call `entity_to_rasa` BEFORE storing "text" here
-            #       (this function removes the entity markers)
             "text": example.text,
+            "entities": [entity_to_rasa(entity) for entity in example.entities]
         }
 
 
@@ -63,17 +53,6 @@ class RasaAdapter(Adapter):
             if len(synonyms[slot_name]) > 1
         ]
 
-    @staticmethod
-    def __find_entity(text, entity_str):
-        """
-        Finds the entity `entity_str` in `text`
-        ignoring the case of the first non-space.
-        """
-        index = text.find((ENTITY_MARKER+entity_str).rstrip())
-        if index == -1:
-            return text.lower().find(entity_str.lower())
-        return index
-
 
     def _get_base_to_extend(self):
         if self._base_file_contents is None:
@@ -86,13 +65,13 @@ class RasaAdapter(Adapter):
 
     def _get_empty_base(self):
         return {
-                    "rasa_nlu_data": {
-                        "common_examples": None,
-                        "regex_features": [],
-                        "lookup_tables": [],
-                        "entity_synonyms": None,
-                    }
-                }
+            "rasa_nlu_data": {
+                "common_examples": None,
+                "regex_features": [],
+                "lookup_tables": [],
+                "entity_synonyms": None,
+            }
+        }
 
     def check_base_file_contents(self): 
         """

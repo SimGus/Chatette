@@ -7,6 +7,7 @@ Contains the abstract class that is base for all unit definitions.
 from random import choice
 from copy import deepcopy
 
+from chatette.utils import UnitType
 from chatette.refactor_units.modifiable import ModifiableItem
 from chatette.refactor_units import extend_no_dup
 
@@ -136,6 +137,8 @@ class UnitDefinition(ModifiableItem):
         
         example = rule.generate_random()
         example.remove_leading_space()
+        if self.unit_type == UnitType.slot:
+            example._slot_value = rule._slot_value
         return example
 
 
@@ -172,6 +175,9 @@ class UnitDefinition(ModifiableItem):
         generated_examples = []
         for rule in relevant_rules:
             current_examples = rule.generate_all()
+            if self.unit_type == UnitType.slot:
+                for ex in current_examples:
+                    ex._slot_value = rule.slot_value
             for ex in current_examples:
                 ex.remove_leading_space()
             generated_examples = \

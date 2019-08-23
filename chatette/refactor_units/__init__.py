@@ -21,6 +21,7 @@ class Example(object):
         
         self.text = text
         self.entities = entities
+        self._slot_value = None  # HACK used by slot to prevent code duplication
     
     def __repr__(self):
         # return "<'" + self.text + "' " + str(self.entities) + '>'
@@ -102,8 +103,8 @@ class Entity(object):
     Represents an entity as it will be contained in examples
     (instances of `Example`).
     """
-    def __init__(self, name, length, start_index=0, value=None):
-        self.name = name  # name of the entity (not the associated text)
+    def __init__(self, name, length, value=None, start_index=0):
+        self.slot_name = name  # name of the entity (not the associated text)
         self.value = value
         self._len = length
         self._start_index = start_index
@@ -123,15 +124,17 @@ class Entity(object):
         return True
     
     def __repr__(self):
-        representation = "entity '" + self.name + "'"
+        representation = "entity '" + self.slot_name + "'"
         if self.value is not None:
             representation += ":'" + self.value + "'"
         return representation
     def __str__(self):
-        return self.name + "@" + str(self._index) + "\t=>\t" + str(self.value)
+        return \
+            self.slot_name + "@" + str(self._index) + "\t=>\t" + str(self.value)
     
     def __hash__(self):
-        return hash(self.name +"@" + str(self._index) + ":" + str(self.value))
+        return \
+            hash(self.slot_name +"@" + str(self._index) + ":" + str(self.value))
     
     def __eq__(self, other):
         return self.__dict__ == other.__dict__

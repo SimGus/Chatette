@@ -25,18 +25,30 @@ class SlotDefinition(UnitDefinition):
     def _generate_random_strategy(self):
         generated_example = \
             super(SlotDefinition, self)._generate_random_strategy()
+        
+        slot_value = generated_example._slot_value
+        if slot_value is None:
+            slot_value = generated_example.text
         generated_example.entities.append(
-            Entity(self._name, len(generated_example.text))  # TODO value?
+            Entity(self._name, len(generated_example.text), slot_value)
         )
+        generated_example._slot_value = None
+
         return generated_example
     
     def _generate_all_strategy(self):
         generated_examples = \
             super(SlotDefinition, self)._generate_all_strategy()
+        
         for ex in generated_examples:
+            slot_value = ex._slot_value
+            if slot_value is None:
+                slot_value = ex.text
             ex.entities.append(
-                Entity(self._name, len(ex.text))  # TODO value?
+                Entity(self._name, len(ex.text), slot_value)
             )
+            ex._slot_value = None
+
         return generated_examples
 
 
