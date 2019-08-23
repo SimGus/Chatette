@@ -108,12 +108,10 @@ class Facade(object):
                 return
 
         train_examples = list(self.generator.generate_train())
-        print("train: " + str(train_examples))
         if train_examples:
             adapter.write(os.path.join(self.output_dir_path, "train"),
                           train_examples, synonyms)
         test_examples = list(self.generator.generate_test(train_examples))
-        print("test: " + str(test_examples))
         if test_examples:
             adapter.write(os.path.join(self.output_dir_path, "test"),
                           test_examples, synonyms)

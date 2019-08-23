@@ -67,13 +67,11 @@ class Parser(object):
             line = self.input_file_manager.read_line()
             if line is None:  # End of file
                 break
-            print("\nLINE: '" + str(line) + "'")
             currently_parsing_slot = (
                 self._current_unit_declaration is not None
                 and self._current_unit_declaration.unit_type == UnitType.slot
             )
             lexical_tokens = self.lexer.lex(line, currently_parsing_slot)
-            print("TOKENS:", lexical_tokens)
             lexical_tokens = utils.remove_comment_tokens(lexical_tokens)
 
             if len(lexical_tokens) == 0:
@@ -104,8 +102,6 @@ class Parser(object):
                     "an empty line, a comment line, a file inclusion line, " + \
                     "a unit declaration or a rule."
                 )
-            print("AST")
-            self.ast.print_DBG()
 
     def _parse_file_inclusion(self, lexical_tokens):
         """

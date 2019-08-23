@@ -22,7 +22,6 @@ class IntentDefinition(UnitDefinition):
         super(IntentDefinition, self).__init__(identifier, modifiers)
         self._nb_training_ex_asked = nb_training_examples
         self._nb_testing_ex_asked = nb_testing_examples
-        print(self.full_name + " TRAIN: " + str(self._nb_training_ex_asked) + " TEST: " + str(self._nb_testing_ex_asked))
     
     def _compute_full_name(self):
         return "intent '" + self._name + "'"
