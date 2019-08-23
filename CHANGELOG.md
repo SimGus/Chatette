@@ -5,13 +5,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- New choice syntax: `[choice1|choice2]`
+
 ### Changed
-- Refactor part of the parser to separate the parsing process from the definitions (AST)
+- Allow the percent symbol `%` to be appended to random generation percentages
+- Accept non-integer percentages for random generation percentages
+- Choices can contain other choices
+- Choices can now take random generation names and random generation percentages
+- Merge word groups and choices together to make the new choice syntax
+- Large refactor of the parser and generator to improve the quality, maintainability and readability of the code
 - Manage parsing statistics by creating a class intended for that
-- Improve readability of parser
 - Only require `rasa_nlu_data` as a top-level field in base file (not `common_examples` and `entity_synonyms` anymore)
 
 ### Fixed
+- Take random generation names into account when generating all possible examples (issue #19)
 - Prevent some compatibility issues when using different versions of Python
 - Double space generated in choices in some very precise cases
 
