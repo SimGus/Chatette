@@ -62,13 +62,23 @@ class ModifiableItem(GeneratingItem):
         randgen_mapping = kwargs.get("randgen_mapping", None)
         if not self._should_generate(randgen_mapping):
             return self._make_empty_example()
+
+        if variation_name is not None:
+            max_nb_possibilities = \
+                self.get_max_nb_possibilities(variation_name=variation_name)
+        else:
+            max_nb_possibilities = self.get_max_nb_possibilities()
         if (
             uniform(0, 1) <= \
-            float(len(self._cached_examples)) / float(self.get_max_nb_possibilities(variation_name=variation_name))
+            float(len(self._cached_examples)) / float(max_nb_possibilities)
         ):
             return choice(self._cached_examples)
-        basic_example = \
-            self._generate_random_strategy(variation_name=variation_name)
+
+        if variation_name is not None:
+            basic_example = \
+                self._generate_random_strategy(variation_name=variation_name)
+        else:
+            basic_example = self._generate_random_strategy()
         if self._leading_space:
             basic_example.prepend(' ')
         return self._apply_modifiers(basic_example)

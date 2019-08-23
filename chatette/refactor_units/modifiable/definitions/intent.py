@@ -52,12 +52,16 @@ class IntentDefinition(UnitDefinition):
         return IntentExample.from_example(example, self._name)
 
     
-    def _generate_random_strategy(self):
-        example = super(IntentDefinition, self)._generate_random_strategy()
+    def _generate_random_strategy(self, variation_name=None):
+        example = \
+            super(IntentDefinition, self) \
+                ._generate_random_strategy(variation_name=variation_name)
         return self._example_to_intent_example(example)
     
-    def _generate_all_strategy(self):
-        examples = super(IntentDefinition, self)._generate_all_strategy()
+    def _generate_all_strategy(self, variation_name=None):
+        examples = \
+            super(IntentDefinition, self) \
+                ._generate_all_strategy(variation_name=variation_name)
         return [self._example_to_intent_example(ex) for ex in examples]
 
     
