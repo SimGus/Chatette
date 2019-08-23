@@ -60,11 +60,9 @@ class RuleAnnotation(LexingRule):
 
         if not self._text.startswith(KEY_VAL_CONNECTOR, self._next_index):
             # Single value
-            pass
+            self._tokens[-1].type = TerminalType.value
         else:
             # Multiple key/value pairs
-            self._tokens[-1].type = TerminalType.key
-
             self._next_index += 1
             self._update_furthest_matched_index()
             self._tokens.append(

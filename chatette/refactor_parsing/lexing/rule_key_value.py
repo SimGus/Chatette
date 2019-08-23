@@ -20,9 +20,9 @@ class RuleKeyValue(LexingRule):
         `kwargs` can contain a value with key `extracting_key`.
         `extracting_key` is a boolean that is `True` if this rule should extract 
         a key and `False` if this rule should extract a value.
-        If `kwargs` doesn't contain `extracting_key`, defaults to `False`.
+        If `kwargs` doesn't contain `extracting_key`, defaults to `True`.
         """
-        extracting_key = kwargs.get("extracting_key", False)
+        extracting_key = kwargs.get("extracting_key", True)
         if extracting_key:
             terminal_type = TerminalType.key
         else:

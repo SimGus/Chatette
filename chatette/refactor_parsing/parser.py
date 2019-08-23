@@ -307,7 +307,6 @@ class Parser(object):
                     )
             else:
                 print_warn("Unsupported key in the annotation: '" + key + "'.")
-        print("ANNOTATION PARSED: " + str(annotation) + " => TR: " + str(nb_training_ex) + " TE: " + str(nb_testing_ex))
         return (nb_training_ex, nb_testing_ex)
 
     def _str_to_int(self, text, err_msg):
