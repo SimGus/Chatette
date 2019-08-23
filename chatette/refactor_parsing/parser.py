@@ -119,11 +119,9 @@ class Parser(object):
                 self.input_file_manager.get_current_file_name()
             )
         except IOError as e:
-            print_warn(
+            raise IOError(
                 "There was an error while opening file '" + \
-                lexical_tokens[1].text + "': " + str(e) + \
-                "\nContinuing the parsing of '" + \
-                self.input_file_manager.get_current_file_name() + "'."
+                lexical_tokens[1].text + "': " + str(e) + "'."
             )
         except ValueError as e:
             print_warn(

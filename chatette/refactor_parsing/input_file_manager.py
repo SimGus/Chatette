@@ -54,10 +54,20 @@ class InputFileManager(object):
         """
         Opens the file at `file_path` if and only if it wasn't opened before.
         Stores the currently read file for further reading if needed.
+        `file_path` is understood with respect to the currently being parsed
+        file (rather than working directory),
+        unless it is an absolute path or there is no file currently being
+        parsed.
         @raises: - `ValueError` if the file at `file_path` was already opened.
         """
         if not os.path.isabs(file_path):
-            file_path = os.path.abspath(file_path)
+            if self._current_file is None:
+                file_path = os.path.abspath(file_path)
+            else:
+                file_path = \
+                    os.path.join(
+                        os.path.dirname(self._current_file.name), file_path
+                    )
 
         opened_file_paths = [f.name for f in self._opened_files]
         if file_path in opened_file_paths:

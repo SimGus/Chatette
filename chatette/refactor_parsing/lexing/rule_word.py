@@ -44,8 +44,6 @@ class RuleWord(LexingRule):
         which is `True` iff the current is in a rule inside a slot definition.
         If this boolean is not in `kwargs`, defaults to `False`.
         """
-        print("word? " + self._text)
-        print("kwargs: " + str(kwargs))
         inside_choice = kwargs.get("inside_choice", False)
         parsing_slot_def = kwargs.get("parsing_slot_def", False)
 
