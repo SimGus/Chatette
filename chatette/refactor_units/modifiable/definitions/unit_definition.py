@@ -138,7 +138,7 @@ class UnitDefinition(ModifiableItem):
         example = rule.generate_random()
         example.remove_leading_space()
         if self.unit_type == UnitType.slot:
-            example._slot_value = rule._slot_value
+            example._slot_value = rule.slot_value
         return example
 
 
