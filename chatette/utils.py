@@ -10,6 +10,9 @@ import sys
 from random import randint, sample
 from copy import deepcopy
 
+from random import choice
+from string import ascii_letters
+
 from enum import Enum
 
 
@@ -115,6 +118,13 @@ def min_if_exist(n1, n2):
     elif n2 is None:
         return n1
     return min(n1, n2)
+
+
+def random_string(length=6):
+    """
+    Returns a random string of length `length` containing only ASCII letters.
+    """
+    return ''.join([choice(ascii_letters) for _ in range(length)])
 
 
 if __name__ == "__main__":

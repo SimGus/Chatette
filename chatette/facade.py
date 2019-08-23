@@ -10,7 +10,7 @@ import shutil
 from random import seed as random_seed
 from six.moves import input, getcwd
 
-from chatette.utils import print_DBG, print_warn
+from chatette.utils import print_DBG, print_warn, random_string
 # from chatette.parsing.parser import Parser
 from chatette.refactor_parsing.parser import Parser
 from chatette.generator import Generator
@@ -41,8 +41,12 @@ class Facade(object):
         self.force_overwriting = force_overwriting
 
         # Initialize the random number generator
-        if seed is not None:
-            random_seed(seed)
+        if seed is None:
+            seed = random_string()
+            print("Executing Chatette with random seed '" + seed + "'.")
+        else:
+            print("Executing Chatette with seed '" + seed + "'.")
+        random_seed(seed)
 
         self.adapter = adapter_factory.create_adapter(adapter_str,
                                                       base_filepath)
