@@ -24,6 +24,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Prevent some compatibility issues when using different versions of Python
 - Double space generated in choices in some very precise cases
 
+### Deprecated
+- Deprecate old choice syntax `{choice1/choice2}` in favor of the new syntax `[choice1|choice2]`
+
 ## [1.5.0] - 2019-06-13
 ### Added
 - Program option `-f` or `--force` to overwrite the output folder without asking the user for confirmation
