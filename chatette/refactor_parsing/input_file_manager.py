@@ -108,6 +108,11 @@ class InputFileManager(object):
         return (self._current_file.name, self._current_file.line_nb)
     def get_current_file_name(self):
         return self._current_file.name
+    def get_current_line_information(self):
+        return (
+            self._current_file.name, self._current_file.line_nb,
+            self._last_read_line
+        )
     
 
     def syntax_error(self, message, char_index=0, word_to_find=None):

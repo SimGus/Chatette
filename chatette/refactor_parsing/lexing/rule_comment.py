@@ -4,6 +4,9 @@ Module `chatette.refactor_parsing.lexing.rule_comment`
 Contains the class representing the lexing rule that applies to comments.
 """
 
+from chatette.deprecations import Deprecations
+from chatette.refactor_parsing.input_file_manager import InputFileManager
+
 from chatette.refactor_parsing.lexing.lexing_rule import LexingRule
 from chatette.refactor_parsing.lexing import LexicalToken, TerminalType
 from chatette.refactor_parsing.utils import COMMENT_SYM, OLD_COMMENT_SYM
@@ -26,6 +29,12 @@ class RuleComment(LexingRule):
         if (   text.startswith(COMMENT_SYM, self._next_index)
             or text.startswith(OLD_COMMENT_SYM, self._next_index)
         ):
+            if text.startswith(OLD_COMMENT_SYM, self._next_index):
+                Deprecations.get_or_create().warn_old_comment(
+                    *(InputFileManager \
+                        .get_or_create() \
+                        .get_current_line_information())
+                )
             matched_text = text[self._next_index:]
             self._tokens.append(LexicalToken(TerminalType.comment, matched_text))
             self._next_index = len(text)

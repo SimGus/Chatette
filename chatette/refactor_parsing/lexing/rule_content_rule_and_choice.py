@@ -8,6 +8,9 @@ to tokenize a choice (inside the contents of a rule).
 Both classes are defined here to prevent circular imports (cf. below).
 """
 
+from chatette.deprecations import Deprecations
+from chatette.refactor_parsing.input_file_manager import InputFileManager
+
 from chatette.refactor_parsing.lexing.lexing_rule import LexingRule
 from chatette.refactor_parsing.lexing import LexicalToken, TerminalType
 from chatette.refactor_parsing.utils import find_next_comment, \
@@ -48,6 +51,11 @@ class RuleChoice(LexingRule):
             start_char = OLD_CHOICE_START
             sep_char = OLD_CHOICE_SEP
             end_char = OLD_CHOICE_END
+            Deprecations.get_or_create().warn_old_choice(
+                *(InputFileManager \
+                    .get_or_create() \
+                    .get_current_line_information())
+            )
         elif self._text.startswith(CHOICE_START, self._next_index):
             start_char = CHOICE_START
             sep_char = CHOICE_SEP
