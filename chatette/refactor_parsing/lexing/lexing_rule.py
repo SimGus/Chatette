@@ -29,7 +29,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
 
         self._start_index = start_index
         self._next_index = start_index
-        self._furthest_matched_index = start_index  # inclusive  # TODO keep this up-to-date
+        self._furthest_matched_index = start_index  # inclusive
         self._tokens = []
         
         self._matched = None
@@ -187,12 +187,19 @@ class LexingRule(with_metaclass(ABCMeta, object)):
         matched_some_rule = False
         
         remaining_rules = list(rule_classes)
+        last_nb_remaining_rules = len(remaining_rules)  # Checked everytime every rules have been tested
         i = 0
         best_failed_rule = None
         longest_match_last_index = None
         while True:
             if i >= len(remaining_rules):
-                break
+                if (
+                    len(remaining_rules) == 0
+                    or len(remaining_rules) == last_nb_remaining_rules
+                ):
+                    break
+                i = 0
+                last_nb_remaining_rules = len(remaining_rules)
             if remaining_rules[i] is None:
                 no_match_allowed = True
                 remaining_rules.remove(None)

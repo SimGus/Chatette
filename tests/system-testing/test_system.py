@@ -10,6 +10,7 @@ from six.moves import getcwd
 import pytest
 
 from chatette.refactor_parsing.parser import Parser
+from chatette.refactor_units.ast import AST
 from chatette.generator import Generator
 from chatette.adapters import RasaAdapter, JsonListAdapter
 
@@ -40,6 +41,8 @@ class ChatetteFacade(object):
         return ChatetteFacade.instance
 
     def run(self, template_filepath):
+        AST.reset_instance()
+
         parser = Parser(template_filepath)
         parser.parse()
 

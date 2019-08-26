@@ -20,7 +20,6 @@ from chatette.refactor_units.modifiable.definitions.intent import \
 class AST(Singleton):
     _instance = None
     def __init__(self):
-        print("called AST init")
         self._alias_definitions = dict()
         self._slot_definitions = dict()
         self._intent_definitions = dict()
