@@ -157,7 +157,7 @@ class TestSystem(object):
                             "Generated: "+str(facade.train_examples))
             legal_examples = TestSystem.get_legal_examples(file_path)
             for ex in facade.train_examples:
-                formatted_ex = {"intent": ex.name, "text": ex.text}
+                formatted_ex = {"intent": ex.intent_name, "text": ex.text}
                 if formatted_ex not in legal_examples:
                     pytest.fail(str(formatted_ex) + 
                                 " is not a legal example for '" +
