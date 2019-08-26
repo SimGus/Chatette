@@ -43,9 +43,8 @@ class AddRuleCommand(CommandStrategy):
             )
         else:
             count = 0
-            for (
-                unit_name in self.next_matching_unit_name(
-                facade.parser, unit_type, unit_regex)
+            for unit_name in self.next_matching_unit_name(
+                facade.parser, unit_type, unit_regex
             ):
                 self._add_rule(
                     facade.parser, unit_type, unit_name, None, rule_str
