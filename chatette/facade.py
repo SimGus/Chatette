@@ -10,21 +10,21 @@ import shutil
 from random import seed as random_seed
 from six.moves import input, getcwd
 
-from chatette.utils import print_DBG, print_warn, random_string
+from chatette.utils import Singleton, print_DBG, print_warn, random_string
 # from chatette.parsing.parser import Parser
 from chatette.refactor_parsing.parser import Parser
 from chatette.generator import Generator
 import chatette.adapters.factory as adapter_factory
 
 
-class Facade(object):
+class Facade(Singleton):
     """
     Facade of the whole program in charge of instantiating the different
     components required for the parsing, generation and writing of the
     relevant informations.
     Implements the design patterns facade and singleton.
     """
-    instance = None
+    _instance = None
     def __init__(self, master_file_path, output_dir_path, adapter_str="rasa",
                  base_filepath=None, local=False, seed=None,
                  force_overwriting=False):
@@ -54,23 +54,19 @@ class Facade(object):
         self.parser = Parser(master_file_path)
         self.ast_definitions = None
         self.generator = None
+
     @classmethod
     def from_args(cls, args):
-        return cls(args.input, args.output, args.adapter, args.base_filepath,
-                   args.local, args.seed, args.force)
+        return cls(
+            args.input, args.output, args.adapter, args.base_filepath,
+            args.local, args.seed, args.force
+        )
+    @classmethod
+    def get_or_create_from_args(cls, args):
+        if cls._instance is None:
+            cls._instance = cls.from_args(args)
+        return cls._instance
 
-    @staticmethod
-    def get_or_create(master_file_path, output_dir_path, adapter_str=None,
-                      local=False, seed=None):
-        if Facade.instance is None:
-            Facade.instance = Facade(master_file_path, output_dir_path,
-                                     adapter_str, local, seed)
-        return Facade.instance
-    @staticmethod
-    def get_or_create_from_args(args):
-        if Facade.instance is None:
-            instance = Facade.from_args(args)
-        return instance
 
     def run(self):
         """

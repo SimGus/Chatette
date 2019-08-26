@@ -2,7 +2,7 @@
 
 from warnings import warn
 
-from chatette.utils import print_warn
+from chatette.utils import Singleton, print_warn
 from chatette.refactor_parsing.utils import \
      OLD_COMMENT_SYM, COMMENT_SYM, \
      OLD_CHOICE_START, OLD_CHOICE_END, CHOICE_START, CHOICE_END
@@ -35,16 +35,11 @@ def warn_semicolon_comments():
 
 
 # REFACTOR
-class Deprecations(object):
+class Deprecations(Singleton):
      _instance = None
      def __init__(self):
           self._old_comment_warned = False
           self._old_choice_warned = False
-     @staticmethod
-     def get_or_create():
-          if Deprecations._instance is None:
-               Deprecations._instance = Deprecations()
-          return Deprecations._instance
      
      def warn_old_comment(self, filename=None, line_nb=None, line=None):
           """

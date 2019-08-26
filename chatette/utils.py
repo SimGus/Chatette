@@ -2,7 +2,7 @@
 # coding: utf-8
 """
 Module `chatette.utils`
-Contains utility functions used everywhere in the project.
+Contains utility functions and classes used everywhere in the project.
 """
 
 from __future__ import print_function
@@ -20,6 +20,34 @@ class UnitType(Enum):
     alias = "alias"
     slot = "slot"
     intent = "intent"
+
+
+class Singleton(object):
+    """
+    The base class for all singleton objects.
+    Every class that subclasses this class will have the behavior
+    of a singleton: their constructor will always return the same instance.
+    @pre: In order to work, a sub-class needs to have an `_instance` class
+          variable.
+    """
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super(Singleton, cls).__new__(cls, *args, **kwargs)
+        return cls._instance
+
+    @classmethod
+    def get_or_create(cls, *args, **kwargs):
+        return cls(*args, **kwargs)
+
+    @classmethod
+    def reset_instance(cls, *args, **kwargs):
+        """
+        Completely resets the instance of the class
+        (representing the singleton), makes a new one and 
+        returns this instance.
+        """
+        cls._instance = cls(*args, **kwargs)
+        return cls._instance
 
 
 # pylint: disable=invalid-name

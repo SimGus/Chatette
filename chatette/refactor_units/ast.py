@@ -8,7 +8,7 @@ NOTE: this is not exactly an AST as it is not a tree, but it has the same
       of the parsed information used to generate the output.
 """
 
-from chatette.utils import UnitType
+from chatette.utils import Singleton, UnitType
 from chatette.refactor_units.modifiable.definitions.alias import \
     AliasDefinition
 from chatette.refactor_units.modifiable.definitions.slot import \
@@ -17,17 +17,12 @@ from chatette.refactor_units.modifiable.definitions.intent import \
     IntentDefinition
 
 
-class AST(object):
-    instance = None
+class AST(Singleton):
+    _instance = None
     def __init__(self):
         self._alias_definitions = dict()
         self._slot_definitions = dict()
         self._intent_definitions = dict()
-    @staticmethod
-    def get_or_create():
-        if AST.instance is None:
-            AST.instance = AST()
-        return AST.instance
 
 
     def _get_relevant_dict(self, unit_type):

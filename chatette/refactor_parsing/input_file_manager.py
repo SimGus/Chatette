@@ -8,38 +8,30 @@ to template files.
 
 import os.path
 
+from chatette.utils import Singleton
 from chatette.parsing.line_count_file_wrapper import LineCountFileWrapper
 
 
-class InputFileManager(object):
+class InputFileManager(Singleton):
     """
     Singleton in charge of managing the opening, closing and read accesses
     to templates file(s). In charge of raising the information about
     syntax errors if asked by other objects (namely the ones in charge of
     lexing and parsing the files).
     """
-    instance = None
-
-    @staticmethod
-    def get_or_create(file_path=None):
+    _instance = None
+    @classmethod
+    def get_or_create(cls, file_path=None):
         """
         Returns the instance of the class (representing the singleton)
         or instantiate it if no instance already exists.
         If `file_path` is provided, starts to read it.
         """
-        if InputFileManager.instance is None:
-            InputFileManager.instance = InputFileManager(file_path)
+        if cls._instance is None:
+            cls._instance = cls(file_path)
         elif file_path is not None:
-            InputFileManager.instance.open_file(file_path)
-        return InputFileManager.instance
-    def reset_instance(file_path=None):
-        """
-        Completely resets the instance of the class (representing the singleton)
-        ands makes a new one that opens the file at `file_path` if provided
-        and returns this instance.
-        """
-        InputFileManager.instance = InputFileManager(file_path)
-        return InputFileManager.instance
+            cls._instance.open_file(file_path)
+        return cls._instance
     
     def __init__(self, file_path=None):
         self._current_file = None
