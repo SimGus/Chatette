@@ -31,7 +31,10 @@ class Example(object):
         return "Ex" + str(self.__dict__)
 
     def __hash__(self):
-        return hash(self.text+str(self.entities.__hash__()))
+        entities_hash = 0
+        for entity in self.entities:
+            entities_hash += hash(entity)
+        return hash(self.text) * 10000 + entities_hash  # QUESTION not sure this a very good hash
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
@@ -130,11 +133,11 @@ class Entity(object):
         return representation
     def __str__(self):
         return \
-            self.slot_name + "@" + str(self._index) + "\t=>\t" + str(self.value)
+            self.slot_name + "@" + str(self._start_index) + "\t=>\t" + str(self.value)
     
     def __hash__(self):
         return \
-            hash(self.slot_name +"@" + str(self._index) + ":" + str(self.value))
+            hash(self.slot_name +"@" + str(self._start_index) + ":" + str(self.value))
     
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
