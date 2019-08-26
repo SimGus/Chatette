@@ -52,7 +52,6 @@ class Facade(Singleton):
                                                       base_filepath)
 
         self.parser = Parser(master_file_path)
-        self.ast_definitions = None
         self.generator = None
 
     @classmethod
@@ -77,14 +76,14 @@ class Facade(Singleton):
 
     def run_parsing(self):
         """Executes the parsing alone."""
-        self.ast_definitions = self.parser.parse()
+        self.parser.parse()
 
     def parse_file(self, filepath):
         """
         Parses the new template file at `filepath` with the current parser.
         """
         self.parser.open_new_master_file(filepath)
-        self.ast_definitions = self.parser.parse()
+        self.parser.parse()
 
     def run_generation(self, adapter_str=None):
         """"
