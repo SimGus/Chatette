@@ -9,7 +9,7 @@ from six.moves import getcwd
 
 import pytest
 
-from chatette.parsing.parser import Parser
+from chatette.refactor_parsing.parser import Parser
 from chatette.generator import Generator
 from chatette.adapters import RasaAdapter, JsonListAdapter
 
@@ -198,7 +198,8 @@ class TestSystem(object):
         """
         facade = ChatetteFacade.get_or_create()
 
-        input_dir_path = "tests/system-testing/inputs/generate-nb/training-only/"
+        input_dir_path = \
+            "tests/system-testing/inputs/generate-nb/training-only/"
         input_filenames = \
             ["only-words.chatette", "words-and-groups.chatette",
              "alias.chatette", "include.chatette", "slot.chatette"]
@@ -211,7 +212,7 @@ class TestSystem(object):
             #                 "Generated: "+str(facade.train_examples))
             legal_examples = TestSystem.get_legal_examples(file_path)
             for ex in facade.train_examples:
-                formatted_ex = {"intent": ex.name, "text": ex.text}
+                formatted_ex = {"intent": ex.intent_name, "text": ex.text}
                 if formatted_ex not in legal_examples:
                     pytest.fail(str(formatted_ex) + 
                                 " is not a legal example for '" +
@@ -241,6 +242,7 @@ class TestSystem(object):
         filename_one = "one-ex.chatette"
         file_path = os.path.join(input_dir_path, filename_one)
         facade.run(file_path)
+        print("TRAIN EX: " + str(facade.train_examples))
         if len(facade.train_examples) != 1:
             pytest.fail("When dealing with file 'one-ex.chatette', one "+
                         "examples should be generated.\nGenerated: "+
