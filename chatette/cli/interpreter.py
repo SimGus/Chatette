@@ -8,7 +8,7 @@ import io
 from six.moves import input
 
 from chatette import __version__
-from chatette.utils import print_DBG
+from chatette.utils import Singleton, print_DBG
 
 from chatette.cli.interactive_commands import exit_command, stats_command, \
                                               parse_command, exist_command, \
@@ -21,7 +21,8 @@ from chatette.cli.interactive_commands import exit_command, stats_command, \
                                               set_modifier_command, save_command
 
 
-class CommandLineInterpreter(object):
+class CommandLineInterpreter(Singleton):
+    _instance = None
     def __init__(self, facade, commands_file_path):
         self.facade = facade
         self._dont_enter_interactive_mode = True
