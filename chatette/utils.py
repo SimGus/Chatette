@@ -30,6 +30,7 @@ class Singleton(object):
     @pre: In order to work, a sub-class needs to have an `_instance` class
           variable.
     """
+    _instance = None
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
             cls._instance = super(Singleton, cls).__new__(cls, *args, **kwargs)
@@ -37,7 +38,9 @@ class Singleton(object):
 
     @classmethod
     def get_or_create(cls, *args, **kwargs):
-        return cls(*args, **kwargs)
+        if cls._instance is None:
+            cls._instance = cls(*args, **kwargs)
+        return cls._instance
 
     @classmethod
     def reset_instance(cls, *args, **kwargs):

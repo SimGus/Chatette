@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# coding: utf-8 -*-
 """
 Module `chatette.facade`
 Contains a facade to the system, allowing to run the parsing, generation and

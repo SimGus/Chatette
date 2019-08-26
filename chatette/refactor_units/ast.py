@@ -20,10 +20,11 @@ from chatette.refactor_units.modifiable.definitions.intent import \
 class AST(Singleton):
     _instance = None
     def __init__(self):
+        print("called AST init")
         self._alias_definitions = dict()
         self._slot_definitions = dict()
         self._intent_definitions = dict()
-
+    
 
     def _get_relevant_dict(self, unit_type):
         """Returns the dict that stores units of type `unit_type`."""
