@@ -8,7 +8,7 @@ which is a sub-class of `GeneratingItem`.
 """
 
 from abc import abstractmethod
-from random import choice, uniform
+from random import choice as random_choice, uniform
 from copy import deepcopy
 
 from chatette.refactor_units.generating_item import GeneratingItem
@@ -72,7 +72,7 @@ class ModifiableItem(GeneratingItem):
             uniform(0, 1) <= \
             float(len(self._cached_examples)) / float(max_nb_possibilities)
         ):
-            return choice(self._cached_examples)
+            return random_choice(self._cached_examples)
 
         if variation_name is not None:
             basic_example = \
