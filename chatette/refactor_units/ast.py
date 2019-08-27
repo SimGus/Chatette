@@ -9,6 +9,8 @@ NOTE: this is not exactly an AST as it is not a tree, but it has the same
 """
 
 from chatette.utils import Singleton, UnitType
+from chatette.statistics import Stats
+
 from chatette.refactor_units.modifiable.definitions.alias import \
     AliasDefinition
 from chatette.refactor_units.modifiable.definitions.slot import \

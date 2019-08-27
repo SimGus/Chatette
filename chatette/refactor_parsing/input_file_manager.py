@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# coding: utf-8
 """
 Module `chatette.refactor_parsing.input_file_manager`
 Contains the definition of the singleton `ÌnputFileManager`
@@ -10,6 +10,7 @@ import os.path
 
 from chatette.utils import Singleton
 from chatette.parsing.line_count_file_wrapper import LineCountFileWrapper
+from chatette.statistics import Stats
 
 
 class InputFileManager(Singleton):
@@ -71,6 +72,7 @@ class InputFileManager(Singleton):
             self._opened_files.append(self._current_file)
         try:
             self._current_file = LineCountFileWrapper(file_path)
+            Stats().new_file_parsed()
         except IOError as e:
             if len(self._opened_files) > 0:
                 self._current_file = self._opened_files.pop()

@@ -12,6 +12,7 @@ from six import string_types
 
 from chatette.utils import print_DBG, print_warn, UnitType
 from chatette.refactor_parsing import utils
+from chatette.statistics import Stats
 
 from chatette.refactor_parsing.input_file_manager import InputFileManager
 from chatette.refactor_parsing.lexing.lexer import Lexer
@@ -140,6 +141,7 @@ class Parser(object):
 
         try:
             self.ast.add_unit(unit)
+            Stats().new_unit_declared(unit.unit_type)
         except ValueError as e:
             if variation is None:
                 self.input_file_manager.syntax_error(str(e))
@@ -333,6 +335,8 @@ class Parser(object):
         self._current_unit_declaration.add_rule(
             rule, self._current_variation_name
         )
+
+        Stats().new_rule_parsed()
 
     def _parse_rule(self, tokens):
         """
