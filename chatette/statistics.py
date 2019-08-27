@@ -41,7 +41,7 @@ class Stats(Singleton):
     # def new_file_written(self):
     #     self.nb_output_files += 1
 
-    def new_unit_decared(self, unit_type):
+    def new_unit_declared(self, unit_type):
         if unit_type == UnitType.alias:
             self.new_alias_declared()
         elif unit_type == UnitType.slot:
