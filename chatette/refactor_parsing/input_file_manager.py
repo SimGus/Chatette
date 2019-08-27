@@ -85,6 +85,7 @@ class InputFileManager(Singleton):
                 f.close()
         if self._current_file is not None and not self._current_file.closed:
             self._current_file.close()
+
     def _close_current_file(self):
         """
         Closes current file and
@@ -99,10 +100,18 @@ class InputFileManager(Singleton):
     
 
     def get_current_file_information(self):
+        if self._current_file is None:
+            return (None, None)
         return (self._current_file.name, self._current_file.line_nb)
+        
     def get_current_file_name(self):
+        if self._current_file is None:
+            return None
         return self._current_file.name
+
     def get_current_line_information(self):
+        if self._current_file is None:
+            return (None, None, self._last_read_line)
         return (
             self._current_file.name, self._current_file.line_nb,
             self._last_read_line

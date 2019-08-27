@@ -25,9 +25,10 @@ class Facade(Singleton):
     Implements the design patterns facade and singleton.
     """
     _instance = None
-    def __init__(self, master_file_path, output_dir_path, adapter_str="rasa",
-                 base_filepath=None, local=False, seed=None,
-                 force_overwriting=False):
+    def __init__(self,
+        master_file_path, output_dir_path=None, adapter_str="rasa",
+        base_filepath=None, local=False, seed=None, force_overwriting=False
+    ):
         if local:
             self.output_dir_path = os.path.dirname(master_file_path)
         else:
@@ -82,7 +83,7 @@ class Facade(Singleton):
         """
         Parses the new template file at `filepath` with the current parser.
         """
-        self.parser.open_new_master_file(filepath)
+        self.parser.open_new_file(filepath)
         self.parser.parse()
 
     def run_generation(self, adapter_str=None):

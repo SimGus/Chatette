@@ -55,6 +55,25 @@ class Parser(object):
         self._current_variation_name = None
     
 
+    def open_new_file(self, filepath):
+        """Opens the new (master) file, making the parser ready to parse it."""
+        try:
+            self.input_file_manager.open_file(filepath)
+        except IOError as e:
+            raise IOError(
+                "There was an error while oenin file '" + str(filepath) + \
+                "': " + str(e) + "."
+            )
+        except ValueError as e:
+            err_msg = str(e)
+            current_file_name = self.input_file_manager.get_current_file_name()
+            if current_file_name is not None:
+                err_msg += \
+                    "\nContinuing the parsing of '" + str(current_file_name) + \
+                    "'."
+            print_warn(err_msg)
+    
+
     def parse(self):
         """
         Parses the template file(s) and translates them into an AST.
@@ -104,27 +123,18 @@ class Parser(object):
                     "a unit declaration or a rule."
                 )
 
+
     def _parse_file_inclusion(self, lexical_tokens):
         """
         Opens the file that is included by the tokenized line `lexical_tokens`.
         @pre: `lexical_tokens` contain a tokenized file inclusion line.
         """
-        try:
-            self.input_file_manager.open_file(lexical_tokens[1].text)
-            print_DBG(
-                "Parsing file: " + \
-                self.input_file_manager.get_current_file_name()
-            )
-        except IOError as e:
-            raise IOError(
-                "There was an error while opening file '" + \
-                lexical_tokens[1].text + "': " + str(e) + "'."
-            )
-        except ValueError as e:
-            print_warn(
-                str(e) + "\nContinuing the parsing of '" + \
-                self.input_file_manager.get_current_file_name() + "'."
-            )
+        self.open_new_file(lexical_tokens[1].text)
+        print_DBG(
+            "Parsing file: " + \
+            self.input_file_manager.get_current_file_name()
+        )
+
 
     def _parse_unit_declaration_line(self, line_tokens):
         """
