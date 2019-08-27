@@ -51,6 +51,10 @@ class Singleton(object):
         """
         cls._instance = cls(*args, **kwargs)
         return cls._instance
+    
+    @classmethod
+    def was_instantiated(cls):
+        return (cls._instance is not None)
 
 
 # pylint: disable=invalid-name

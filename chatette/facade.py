@@ -79,11 +79,12 @@ class Facade(Singleton):
         """Executes the parsing alone."""
         self.parser.parse()
 
-    def parse_file(self, filepath):
+    def parse_file(self, file_path):
         """
-        Parses the new template file at `filepath` with the current parser.
+        Parses the new template file at `file_path` with the current parser.
         """
-        self.parser.open_new_file(filepath)
+        print("FACADE parse file: " + str(file_path))
+        self.parser.open_new_file(file_path)
         self.parser.parse()
 
     def run_generation(self, adapter_str=None):

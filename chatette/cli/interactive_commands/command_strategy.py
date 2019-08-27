@@ -266,10 +266,9 @@ class CommandStrategy(object):
         """
         return False
 
-    def execute(self, facade):
+    def execute(self):
         """
         Executes the whole command represented by this object.
-        `facade` is a facade to the whole system (contains links to the parser).
         This method can be overriden by subclasses if a different algorithm is
         required.
         """
@@ -299,19 +298,19 @@ class CommandStrategy(object):
                     "Unit identifier couldn't be interpreted. " + \
                     "Did you mean to escape some hashtags '#'?")
                 return
-            self.execute_on_unit(facade, unit_type, unit_name, variation_name)
+            self.execute_on_unit(unit_type, unit_name, variation_name)
         else:
             count = 0
             for unit_name in self.next_matching_unit_name(
-                facade.parser,unit_type, unit_regex
+                unit_type, unit_regex
             ):
-                self.execute_on_unit(facade, unit_type, unit_name)
+                self.execute_on_unit(unit_type, unit_name)
                 count += 1
             if count == 0:
                 self.print_wrapper.write("No " + unit_type.name + " matched.")
-        self.finish_execution(facade)
+        self.finish_execution()
 
-    def execute_on_unit(self, facade, unit_type, unit_name, variation_name=None):
+    def execute_on_unit(self, unit_type, unit_name, variation_name=None):
         """
         Executes the command on a specific unit.
         This method HAS to be overriden by subclasses if they don't override
@@ -319,7 +318,7 @@ class CommandStrategy(object):
         """
         raise NotImplementedError()
 
-    def finish_execution(self, facade):
+    def finish_execution(self):
         """
         This function is executed at the end of the command and
         can be overriden to implement things such as cleaning up or changing

@@ -98,7 +98,7 @@ class CommandLineInterpreter(Singleton):
             return False
         if command.should_exit():
             return True
-        result = command.execute(self.facade)
+        result = command.execute()
         if isinstance(command, execute_command.ExecuteCommand):
             self.execute_commands(result)
         command.flush_output()
