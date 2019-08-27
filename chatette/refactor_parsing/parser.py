@@ -61,7 +61,7 @@ class Parser(object):
             self.input_file_manager.open_file(filepath)
         except IOError as e:
             raise IOError(
-                "There was an error while oenin file '" + str(filepath) + \
+                "There was an error while opening file '" + str(filepath) + \
                 "': " + str(e) + "."
             )
         except ValueError as e:
