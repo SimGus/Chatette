@@ -33,6 +33,17 @@ class UnitDefinition(ModifiableItem):
         return (variation_name in self._variation_rules)
 
 
+    def set_identifier(self, new_identifier):
+        """
+        Changes the identifier of the current unit and recomputes its full name.
+        @pre: `new_identifier` wasn't already in use for another unit of the
+              same type.
+        """
+        self.identifier = new_identifier
+        self._name = new_identifier
+        self.full_name = self._compute_full_name()
+
+
     def _compute_nb_possibilities(self, variation_name=None):
         if variation_name is None:
             relevant_rules = self._all_rules

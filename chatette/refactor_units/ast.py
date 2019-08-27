@@ -122,6 +122,32 @@ class AST(Singleton):
         self._add_unit(unit_type, unit)
     
 
+    def rename_unit(self, unit_type, old_name, new_name):
+        """
+        Changes the name of the unit `old_name` to `new_name` if it exists.
+        @raises: - `KeyError` if the unit of type `unit_type` and name
+                   `unit_name` wasn't declared.
+                 - `ValueError` if the unit with name `new_name` already
+                   existed.
+        """
+        relevant_dict = self._get_relevant_dict(unit_type)
+        if old_name not in relevant_dict:
+            raise KeyError(
+                "Tried to rename " + unit_type.name + " '" + old_name + \
+                "', but it wasn't declared."
+            )
+        if new_name in relevant_dict:
+            raise ValueError(
+                "Tried to rename " + unit_type.name + " '" + old_name + \
+                "' to '" + new_name + "', but this " + unit_type.name + \
+                " already existed."
+            )
+        unit = relevant_dict[old_name]
+        del relevant_dict[old_name]
+        unit.set_identifier(new_name)
+        relevant_dict[new_name] = unit
+    
+
     def print_DBG(self):
         print("Aliases (" + str(len(self._alias_definitions)) + "):")
         for alias_name in self._alias_definitions:
