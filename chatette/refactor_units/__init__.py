@@ -30,6 +30,14 @@ class Example(object):
         # return self.text + '\n\tEntities: ' + str(self.entities)
         return "Ex" + str(self.__dict__)
 
+    def as_dict(self):
+        result = {"text": self.text, "entities": []}
+        if self._slot_value is not None:
+            result["slot-value": self._slot_value]
+        for entity in self.entities:
+            result["entities"].append(entity.as_dict())
+        return result
+
     def __hash__(self):
         entities_hash = 0
         for entity in self.entities:
@@ -85,6 +93,11 @@ class IntentExample(Example):
     @classmethod
     def from_example(cls, example, intent_name):
         return cls(intent_name, example.text, example.entities)
+
+    def as_dict(self):
+        result = super(IntentExample, self).as_dict()
+        result["intent-name"] = self.intent_name
+        return result
     
     def __repr__(self):
         return \
@@ -125,6 +138,13 @@ class Entity(object):
         else:
             self._start_index -= 1
         return True
+    
+    def as_dict(self):
+        return {
+            "slot-name": self.slot_name,
+            "value": self.value,
+            "start-index": self._start_index
+        }
     
     def __repr__(self):
         representation = "entity '" + self.slot_name + "'"

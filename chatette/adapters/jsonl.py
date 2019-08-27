@@ -14,7 +14,7 @@ class JsonListAdapter(Adapter):
     def prepare_example(self, example):
         example.text = example.text.replace(ENTITY_MARKER, "")
         return json.dumps(
-            cast_to_unicode(example.__dict__),
+            cast_to_unicode(example.as_dict()),
             ensure_ascii=False, sort_keys=True
         )
 
