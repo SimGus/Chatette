@@ -110,7 +110,7 @@ class Parser(object):
         """
         try:
             self.input_file_manager.open_file(lexical_tokens[1].text)
-            print(
+            print_DBG(
                 "Parsing file: " + \
                 self.input_file_manager.get_current_file_name()
             )
