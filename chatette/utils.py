@@ -65,7 +65,7 @@ def print_DBG(txt):
 
 def print_warn(txt):
     """Warns the user using stdout."""
-    print("\n[WARN] " + txt, file=sys.stderr)
+    print("\n[WARN] " + txt + "\n", file=sys.stderr)
 
 
 def cast_to_unicode(anything):
