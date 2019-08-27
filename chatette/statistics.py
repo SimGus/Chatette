@@ -65,7 +65,9 @@ class Stats(Singleton):
 
     def new_rule_parsed(self):
         self.nb_rules_parsed += 1
-
+    def new_rules_parsed(self, nb_rules):
+        self.nb_rules_parsed += nb_rules
+    
     def one_intent_removed(self):
         self.nb_units_declared -= 1
         if self.nb_units_declared < 0:
@@ -98,5 +100,18 @@ class Stats(Singleton):
         if self.nb_aliases_declared < 0:
             raise InvalidStatsState(
                 "Tried to decrement statistics for alias declarations below 0."
+            )
+
+    def one_rule_removed(self):
+        self.nb_rules_parsed -= 1
+        if self.nb_rules_parsed < 0:
+            raise InvalidStatsState(
+                "Tried to decrement statistics for parsed rules below 0."
+            )
+    def several_rules_removed(self, nb_rules):
+        self.nb_rules_parsed -= nb_rules
+        if self.nb_rules_parsed < 0:
+            raise InvalidStatsState(
+                "Tried to decrement statistics for parsed rules below 0."
             )
         
