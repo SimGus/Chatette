@@ -30,8 +30,8 @@ class CommandStrategy(object):
         if redirection_tuple is not None:
             self.remove_redirection_tokens()
             (redirection_type, redirection_filepath) = redirection_tuple
-            self.print_wrapper = TerminalWriter(redirection_type,
-                                                redirection_filepath)
+            self.print_wrapper = \
+                TerminalWriter(redirection_type, redirection_filepath)
         elif quiet:
             self.print_wrapper = \
                 TerminalWriter(redirection_type=RedirectionType.quiet)
@@ -65,8 +65,10 @@ class CommandStrategy(object):
                     inside_regex = False
                     tokens.append(current_token)
                     current_token = ""
-            elif (    word.startswith('"') and word.endswith('"') \
-                  and (len(word) < 2 or word[-2] != '\\')):
+            elif (
+                word.startswith('"') and word.endswith('"')
+                and (len(word) < 2 or word[-2] != '\\')
+            ):
                 tokens.append(word)
             elif word.startswith('"'):
                 inside_token = True
@@ -84,9 +86,10 @@ class CommandStrategy(object):
     @staticmethod
     def _is_end_regex(word):
         """Returns `True` if `word` is the end of a regex."""
-        return    word.endswith("/") or word.endswith("/g") \
-               or word.endswith("/i") or word.endswith("/ig") \
-               or word.endswith("/gi")
+        return \
+            word.endswith("/") or word.endswith("/g") \
+            or word.endswith("/i") or word.endswith("/ig") \
+            or word.endswith("/gi")
 
     @staticmethod
     def find_redirection_file_path(tokens):
@@ -108,8 +111,10 @@ class CommandStrategy(object):
             return (RedirectionType.append, tokens[-1])
         if tokens[-2] == REDIRECTION_SYM:
             return (RedirectionType.truncate, tokens[-1])
-        if (   tokens[-1] == REDIRECTION_APPEND_SYM
-            or tokens[-1] == REDIRECTION_SYM):
+        if (
+            tokens[-1] == REDIRECTION_APPEND_SYM
+            or tokens[-1] == REDIRECTION_SYM
+        ):
             return (RedirectionType.quiet, None)
         return None
 
@@ -178,9 +183,13 @@ class CommandStrategy(object):
         that matches some pattern.
         Returns `None` otherwise.
         """
-        if name.startswith(REGEX_SYM) and (   name.endswith(REGEX_SYM)
-                                           or name[-2] == REGEX_SYM
-                                           or name[-3] == REGEX_SYM):
+        if (
+            name.startswith(REGEX_SYM)
+            and (
+                name.endswith(REGEX_SYM)
+                or name[-2] == REGEX_SYM
+                or name[-3] == REGEX_SYM)
+        ):
             splitted_str = [e for e in name.split(REGEX_SYM) if e != ""]
             if len(splitted_str) == 1:
                 return re.compile(name[1:-1].replace('\\'+REGEX_SYM, REGEX_SYM))
@@ -189,9 +198,15 @@ class CommandStrategy(object):
             text_without_flags = rchop(name, flags)
             self._is_regex_global = 'g' in flags
             if 'i' in flags:
-                return re.compile(text_without_flags[1:-1].replace('\\'+REGEX_SYM, REGEX_SYM),
-                                    re.IGNORECASE)
-            return re.compile(text_without_flags[1:-1].replace('\\'+REGEX_SYM, REGEX_SYM))
+                return re.compile(
+                    text_without_flags[1:-1].replace(
+                        '\\'+REGEX_SYM, REGEX_SYM
+                    ),
+                    re.IGNORECASE
+                )
+            return re.compile(
+                text_without_flags[1:-1].replace('\\'+REGEX_SYM, REGEX_SYM)
+            )
         return None
 
     def next_matching_unit_name(self, parser, unit_type, regex):
@@ -227,8 +242,10 @@ class CommandStrategy(object):
         from `self.command_tokens`.
         @pre: There are redirection tokens in the tokens.
         """
-        if (   self.command_tokens[-2] == REDIRECTION_APPEND_SYM
-            or self.command_tokens[-2] == REDIRECTION_SYM):
+        if (
+            self.command_tokens[-2] == REDIRECTION_APPEND_SYM
+            or self.command_tokens[-2] == REDIRECTION_SYM
+        ):
             self.command_tokens = self.command_tokens[:-2]
         else:
             self.command_tokens = self.command_tokens[:-1]
@@ -258,32 +275,36 @@ class CommandStrategy(object):
         """
         # TODO support variations
         if len(self.command_tokens) < 3:
-            self.print_wrapper.error_log("Missing some arguments\nUsage: " +
-                                         self.usage_str)
+            self.print_wrapper.error_log(
+                "Missing some arguments\nUsage: " + self.usage_str
+            )
             return
 
         unit_type = CommandStrategy.get_unit_type_from_str(self.command_tokens[1])
         if unit_type is None:
-            self.print_wrapper.error_log("Unknown unit type: '" +
-                                         str(self.command_tokens[1]) + "'.")
+            self.print_wrapper.error_log(
+                "Unknown unit type: '" + str(self.command_tokens[1]) + "'."
+            )
             return
 
         unit_regex = self.get_regex_name(self.command_tokens[2])
         if unit_regex is None:
             try:
                 [unit_name, variation_name] = \
-                    CommandStrategy.split_exact_unit_name(self.command_tokens[2])
+                    CommandStrategy.split_exact_unit_name(
+                        self.command_tokens[2]
+                    )
             except SyntaxError:
-                self.print_wrapper.error_log("Unit identifier couldn't be " + \
-                                             "interpreted. Did you mean to " + \
-                                             "escape some hashtags '#'?")
+                self.print_wrapper.error_log(
+                    "Unit identifier couldn't be interpreted. " + \
+                    "Did you mean to escape some hashtags '#'?")
                 return
             self.execute_on_unit(facade, unit_type, unit_name, variation_name)
         else:
             count = 0
-            for unit_name in self.next_matching_unit_name(facade.parser,
-                                                          unit_type,
-                                                          unit_regex):
+            for unit_name in self.next_matching_unit_name(
+                facade.parser,unit_type, unit_regex
+            ):
                 self.execute_on_unit(facade, unit_type, unit_name)
                 count += 1
             if count == 0:
