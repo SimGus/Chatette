@@ -65,3 +65,32 @@ class ModifiersRepresentation(object):
             str(self.argument_value) + ")"
     def __str__(self):
         return self.__repr__()
+    
+    def short_description(self):
+        """
+        Returns a short description (as a `str`) that can be displayed to the
+        user.
+        """
+        at_least_one_modifier = False
+        desc = ""
+        if self.casegen:
+            desc += "- case generation\n"
+            at_least_one_modifier = True
+        if self.randgen:
+            desc += "- random generation"
+            if self.randgen_name is not None:
+                desc += ": " + self.randgen_name
+            desc += " (" + str(self.randgen_percent) + "%)\n"
+            at_least_one_modifier = True
+        if self.argument_name is not None:
+            desc += "- argument name: " + self.argument_name + "\n"
+            at_least_one_modifier = True
+        if self.argument_value is not None:
+            desc += "- argument value: " + self.argument_value + "\n"
+            at_least_one_modifier = True
+
+        if not at_least_one_modifier:
+            desc = "No modifiers\n"
+        else:
+            desc = "Modifiers:\n" + desc
+        return desc

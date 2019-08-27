@@ -7,10 +7,9 @@ in order to implement the strategy design pattern.
 
 import re
 
-from chatette.utils import rchop
-from chatette.parsing.parser_utils import UnitType, \
-                                          ALIAS_SYM, SLOT_SYM, INTENT_SYM, \
-                                          VARIATION_SYM, ESCAPE_SYM
+from chatette.utils import rchop, UnitType
+from chatette.parsing.parser_utils import \
+    ALIAS_SYM, SLOT_SYM, INTENT_SYM, VARIATION_SYM, ESCAPE_SYM
 from chatette.cli.terminal_writer import TerminalWriter, RedirectionType
 
 
