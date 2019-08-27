@@ -9,6 +9,7 @@ from six.moves import input
 
 from chatette import __version__
 from chatette.utils import Singleton, print_DBG
+from chatette.facade import Facade
 
 from chatette.cli.interactive_commands import \
     exit_command, stats_command, parse_command, exist_command, rename_command, \
@@ -19,15 +20,21 @@ from chatette.cli.interactive_commands import \
 
 class CommandLineInterpreter(Singleton):
     _instance = None
-    def __init__(self, facade, commands_file_path):
-        self.facade = facade
+    def __init__(self, args):
+        commands_file_path = args.interactive_commands_file
         self._dont_enter_interactive_mode = True
+        if args.input is None:
+            self.facade = None
+        else:
+            self.facade = Facade.get_or_create_from_args(args)
+        
         self.introduce()
         if commands_file_path is not None:
             self._dont_enter_interactive_mode = \
                 self._execute_commands_file(commands_file_path)
         else:
             self._dont_enter_interactive_mode = False
+
 
 
     def _execute_commands_file(self, commands_file_path):
@@ -57,7 +64,8 @@ class CommandLineInterpreter(Singleton):
         asks the facade to execute the parsing of the master file if needed.
         """
         print("Chatette v"+__version__+" running in *interactive mode*.")
-        self.facade.run_parsing()
+        if self.facade is not None:
+            self.facade.run_parsing()
 
     def wait_for_input(self):
         """

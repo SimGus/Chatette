@@ -31,9 +31,12 @@ class JsonListAdapter(Adapter):
         if processed_synonyms is not None:
             synonyms_file_path = os.path.join(output_directory, "synonyms.json")
             with io.open(synonyms_file_path, 'w') as output_file:
-                output_file.write(json.dumps(cast_to_unicode(processed_synonyms),
-                                             ensure_ascii=False,
-                                             sort_keys=True, indent=2))
+                output_file.write(
+                    json.dumps(
+                        cast_to_unicode(processed_synonyms),
+                        ensure_ascii=False, sort_keys=True, indent=2
+                    )
+                )
 
 
     @classmethod

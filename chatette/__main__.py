@@ -17,11 +17,11 @@ def main():
 
     args = argument_parser.parse_args()
 
-    facade = Facade.get_or_create_from_args(args)
     if not args.interactive_mode and args.interactive_commands_file is None:
+        facade = Facade.get_or_create_from_args(args)
         facade.run()
     else:
-        cli = CommandLineInterpreter(facade, args.interactive_commands_file)
+        cli = CommandLineInterpreter(args)
         cli.wait_for_input()
 
 
@@ -35,13 +35,32 @@ def make_argument_parser():
         add_help=True
     )
 
-    argument_parser.add_argument(
-        "input", type=str, help="Path to master template file"
+    _add_positional_arguments(
+        argument_parser, ("-i" in sys.argv or "--interactive" in sys.argv)
     )
+
     argument_parser.add_argument(
         "-v", "--version", action="version", version="%(prog)s v" + __version__,
         help="Print the version number of the module"
     )
+    _add_optional_arguments(argument_parser)
+    
+    return argument_parser
+
+def _add_positional_arguments(argument_parser, should_be_optional=False):
+    if should_be_optional:
+        argument_parser.add_argument(
+            "input", type=str,
+            nargs="?",
+            help="Path to master template file"
+        )
+    else:
+        argument_parser.add_argument(
+            "input", type=str,
+            help="Path to master template file"
+        )
+
+def _add_optional_arguments(argument_parser):
     argument_parser.add_argument(
         "-o", "--out", dest="output", required=False, type=str, default=None,
         help="Output directory path"
@@ -86,8 +105,6 @@ def make_argument_parser():
         required=False, action="store_true", default=False,
         help="Don't ask for confirmation before overwriting files and folders"
     )
-    
-    return argument_parser
 
 
 if __name__ == "__main__":
