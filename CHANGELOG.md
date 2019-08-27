@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New choice syntax: `[choice1|choice2]`
 
 ### Changed
+- Running the interactive command line interpreter without asking to parse a file is now allowed, using the command `python -m chatette -i`
 - Show the seed used during execution to allow to re-execute the program in the exact same way
 - Allow the percent symbol `%` to be appended to random generation percentages
 - Accept non-integer percentages for random generation percentages
