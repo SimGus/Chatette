@@ -4,7 +4,7 @@ Module `chatette.refactor_units.modifiable.definitions.slot`
 Contains the class representing a slot definition.
 """
 
-from chatette.utils import UnitType
+from chatette.utils import UnitType, append_to_list_in_dict, extend_list_in_dict
 from chatette.refactor_units import Entity
 from chatette.refactor_units.modifiable.definitions.unit_definition import \
     UnitDefinition
@@ -13,6 +13,10 @@ from chatette.refactor_units.modifiable.definitions.unit_definition import \
 class SlotDefinition(UnitDefinition):
     """Represents an slot definition."""
     unit_type = UnitType.slot
+    def __init__(self, *args, **kwargs):
+        super(SlotDefinition, self).__init__(*args, **kwargs)
+        self._synonyms = None
+
     def _compute_full_name(self):
         return "slot '" + self._name + "'"
 
@@ -53,5 +57,13 @@ class SlotDefinition(UnitDefinition):
 
 
     def get_synonyms_dict(self):
-        # TODO find out what this was supposed to do in old code
-        return dict()
+        if self._synonyms is None:
+            self._synonyms = dict()
+            for rule in self._all_rules:
+                texts = [ex.text for ex in rule.generate_all()]
+                if rule.slot_value is None:
+                    for text in texts:
+                        append_to_list_in_dict(self._synonyms, text, text)
+                else:
+                    extend_list_in_dict(self._synonyms, rule.slot_value, texts)
+        return self._synonyms

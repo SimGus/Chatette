@@ -38,8 +38,11 @@ class JsonListAdapter(Adapter):
 
     @classmethod
     def __synonym_format(cls, synonyms):
-        result = {key: values for (key, values)in synonyms.items()
-                              if len(values) > 1 or values[0] != key}
+        result = {
+            key: values
+            for (key, values) in synonyms.items()
+            if len(values) > 1 or values[0] != key
+        }
         if not result:
             return None
         return result

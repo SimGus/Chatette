@@ -158,6 +158,29 @@ def random_string(length=6):
     return ''.join([choice(ascii_letters) for _ in range(length)])
 
 
+def append_to_list_in_dict(dict_of_lists, key, value):
+    """
+    Given the dict of key->lists `dict_of_lists`, appends the value `value` to
+    the list at key `key` if this list exist. Otherwise, creates a list
+    containing `value` and puts it at key `key`.
+    """
+    if key not in dict_of_lists:
+        dict_of_lists[key] = [value]
+    else:
+        dict_of_lists[key].append(value)
+
+def extend_list_in_dict(dict_of_lists, key, values):
+    """
+    Given the dict of key->lists `dict_of_lists`, extends the list at key `key`
+    with the values `values` if this list exist. Otherwise, puts the list
+    `values` at key `key`.
+    """
+    if key not in dict_of_lists:
+        dict_of_lists[key] = values
+    else:
+        dict_of_lists[key].extend(values)
+
+
 if __name__ == "__main__":
     # pylint: disable=wrong-import-position
     import warnings
