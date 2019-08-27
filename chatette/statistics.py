@@ -30,7 +30,7 @@ class Stats(Singleton):
     
     def __str__(self):
         return \
-            "Stats\n\tParsed files : " + str(self.nb_input_files_parsed) + \
+            "Statistics\n\tParsed files : " + str(self.nb_input_files_parsed) + \
             "\n\tDeclared units: " + str(self.nb_units_declared) + \
             "\n\t\tDeclared intents: " + str(self.nb_intents_declared) + \
             "\n\t\tDeclared slots: " + str(self.nb_slots_declared) + \
