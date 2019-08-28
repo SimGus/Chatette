@@ -66,7 +66,7 @@ class Facade(Singleton):
         if cls._instance is None:
             cls._instance = cls.from_args(args)
         return cls._instance
-
+    
 
     def run(self):
         """
