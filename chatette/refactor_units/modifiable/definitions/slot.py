@@ -26,9 +26,11 @@ class SlotDefinition(UnitDefinition):
         pass
 
 
-    def _generate_random_strategy(self):
+    def _generate_random_strategy(self, variation_name=None):
         generated_example = \
-            super(SlotDefinition, self)._generate_random_strategy()
+            super(SlotDefinition, self)._generate_random_strategy(
+                variation_name=variation_name
+            )
         
         slot_value = generated_example._slot_value
         if slot_value is None:
@@ -40,9 +42,11 @@ class SlotDefinition(UnitDefinition):
 
         return generated_example
     
-    def _generate_all_strategy(self):
+    def _generate_all_strategy(self, variation_name=None):
         generated_examples = \
-            super(SlotDefinition, self)._generate_all_strategy()
+            super(SlotDefinition, self)._generate_all_strategy(
+                variation_name=variation_name
+            )
         
         for ex in generated_examples:
             slot_value = ex._slot_value
