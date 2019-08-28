@@ -20,7 +20,7 @@ def test_obj():
 
 def test_execute(capsys):
     cmd = ExitCommand("")
-    cmd.execute(None)
+    cmd.execute()
     captured = capsys.readouterr()
     assert captured.out == ""
 
@@ -34,4 +34,4 @@ def test_abstract_methods():
     with pytest.raises(NotImplementedError):
         cmd.execute_on_unit(None, None, None)
     with pytest.raises(NotImplementedError):
-        cmd.finish_execution(None)
+        cmd.finish_execution()
