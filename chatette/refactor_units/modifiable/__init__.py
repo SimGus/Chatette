@@ -170,3 +170,40 @@ class ModifiableItem(GeneratingItem):
                     self._modifiers_repr.randgen_name
                 )
         return examples
+    
+
+    def set_arg_name(self, new_arg_name):
+        """
+        Changes the name of the argument modifier and uncaches everything.
+        """
+        self._modifiers_repr.argument_name = new_arg_name
+        self._reset_caches()
+    def set_arg_value(self, new_arg_value):
+        """
+        Changes the value of the argument modifier and uncaches everything.
+        """
+        self._modifiers_repr.argument_value = new_arg_value
+        self._reset_caches()
+    def set_casegen(self, new_casegen=True):
+        """
+        Changes the value of the casegen modifier and uncaches everything.
+        """
+        self._modifiers_repr.casegen = new_casegen
+        self._reset_caches()
+    def set_randgen(self, new_randgen=True):
+        """
+        Changes the value of the randgen modifier and uncaches everything.
+        """
+        self._modifiers_repr.randgen = new_randgen
+        self._reset_caches()
+    def set_randgen_name(self, new_randgen_name):
+        """
+        Changes the value of the randgen name modifier and uncaches everything.
+        """
+        self._modifiers_repr.randgen_name = new_randgen_name
+        self._reset_caches()
+    def set_randgen_percent(self, new_randgen_percent=50):
+        """
+        Changes the value of the randgen name modifier and uncaches everything.
+        """
+        self._modifiers_repr.randgen_percent = new_randgen_percent

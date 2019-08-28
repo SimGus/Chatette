@@ -141,6 +141,11 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
             if loop_count > 10*n:  # QUESTION is that a good idea?
                 break
         return generated_examples
+    
+    def _reset_caches(self):
+        """Resets the caches of examples and number of possibilities."""
+        self._total_nb_possibilities = None
+        self._cached_examples = []
 
     # @abstractmethod
     # def short_description(self):
