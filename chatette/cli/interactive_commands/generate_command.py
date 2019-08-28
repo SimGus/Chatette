@@ -92,7 +92,7 @@ class GenerateCommand(CommandStrategy):
         else:
             count = 0
             for unit_name in self.next_matching_unit_name(
-                facade.parser, unit_type, unit_regex
+                unit_type, unit_regex
             ):
                 self._generate_unit(adapter, unit_type, unit_name)
                 count += 1

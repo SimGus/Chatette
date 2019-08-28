@@ -12,6 +12,8 @@ from chatette.parsing.parser_utils import \
     ALIAS_SYM, SLOT_SYM, INTENT_SYM, VARIATION_SYM, ESCAPE_SYM
 from chatette.cli.terminal_writer import TerminalWriter, RedirectionType
 
+from chatette.refactor_units.ast import AST
+
 
 REDIRECTION_SYM = ">"
 REDIRECTION_APPEND_SYM = ">>"
@@ -207,12 +209,12 @@ class CommandStrategy(object):
             )
         return None
 
-    def next_matching_unit_name(self, parser, unit_type, regex):
+    def next_matching_unit_name(self, unit_type, regex):
         """
         Yields the next unit name of type `unit_type`
         whose name matches `regex`.
         """
-        relevant_dict = parser.ast._get_relevant_dict(unit_type)
+        relevant_dict = AST.get_or_create()._get_relevant_dict(unit_type)
         if self._is_regex_global:
             for unit_name in relevant_dict:
                 if regex.search(unit_name):

@@ -6,11 +6,14 @@ Contains the strategy class that represents the interactive mode command
 
 from chatette.cli.interactive_commands.command_strategy import CommandStrategy
 
+from chatette.facade import Facade
+from chatette.refactor_units.ast import AST
+
 
 class AddRuleCommand(CommandStrategy):
     usage_str = 'add-rule <unit-type> "<unit-name>" "<rule>"'
 
-    def execute(self, facade):
+    def execute(self):
         # TODO support variations
         if len(self.command_tokens) < 4:
             self.print_wrapper.error_log(
@@ -36,28 +39,26 @@ class AddRuleCommand(CommandStrategy):
             except SyntaxError:
                 self.print_wrapper.error_log(
                     "Unit identifier couldn't be interpreted. " + \
-                    "Did you mean to escape some hashtags '#'?")
+                    "Did you mean to escape some hashtags '#'?"
+                )
                 return
-            self._add_rule(
-                facade.parser, unit_type, unit_name, variation_name, rule_str
-            )
+            self._add_rule(unit_type, unit_name, variation_name, rule_str)
         else:
             count = 0
             for unit_name in self.next_matching_unit_name(
-                facade.parser, unit_type, unit_regex
+                unit_type, unit_regex
             ):
-                self._add_rule(
-                    facade.parser, unit_type, unit_name, None, rule_str
-                )
+                self._add_rule(unit_type, unit_name, None, rule_str)
                 count += 1
             if count == 0:
                 self.print_wrapper.write("No " + unit_type.name + " matched.")
 
-    def _add_rule(self, parser, unit_type, unit_name, variation_name, rule_str):
-        rule_tokens = parser.tokenizer.tokenize(rule_str)
-        rule = parser.tokens_to_sub_rules(rule_tokens)
+    def _add_rule(self, unit_type, unit_name, variation_name, rule_str):
+        parser = Facade.get_or_create().parser
+        rule_tokens = parser.lexer.lex("\t" + rule_str)
+        rule = parser._parse_rule(rule_tokens[1:])
 
-        unit = parser.ast.get_definition(unit_name, unit_type)
+        unit = AST.get_or_create()[unit_type][unit_name]
         unit.add_rule(rule, variation_name)
 
         self.print_wrapper.write(
