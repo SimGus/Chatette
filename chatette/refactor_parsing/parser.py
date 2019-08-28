@@ -36,7 +36,10 @@ from chatette.refactor_parsing import \
 
 class Parser(object):
     def __init__(self, master_file_path):
-        if not isinstance(master_file_path, string_types):
+        if (
+            master_file_path is not None
+            and not isinstance(master_file_path, string_types)
+        ):
             raise ValueError(
                 "Since v1.4.0, the parser takes as an argument " + \
                 "the path of the master file directly, rather " + \
@@ -340,6 +343,10 @@ class Parser(object):
             and lexical_tokens[0].text != self._last_indentation
         ):
             self.input_file_manager.syntax_error("Inconsistent indentation.")
+        if self._current_unit_declaration is None:
+            self.input_file_manager.syntax_error(
+                "Detected a rule outside a unit declaration."
+            )
         
         rule = self._parse_rule(lexical_tokens[1:])
         self._current_unit_declaration.add_rule(
@@ -460,9 +467,13 @@ class Parser(object):
         if current_builder is not None:
             rule_contents.append(current_builder.create_concrete())
 
-        return Rule(
-            self._current_unit_declaration.full_name, rule_contents, slot_value
-        )
+        if self._current_unit_declaration is not None:
+            return Rule(
+                self._current_unit_declaration.full_name,
+                rule_contents, slot_value
+            )
+        # NOTE can only come from an interactive command (the 'rule' command)
+        return Rule(None, rule_contents, slot_value)
 
     def _parse_choice(self, tokens):
         rules = []

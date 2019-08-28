@@ -29,7 +29,9 @@ class Rule(GeneratingItem):
         self.slot_value = slot_value
     
     def _compute_full_name(self):
-        return "rule contained in " + self.parent_name
+        if self.parent_name is not None:
+            return "rule contained in " + self.parent_name
+        return "rule not contained in anything"
     
     def _compute_nb_possibilities(self):
         if len(self._contents) == 0:

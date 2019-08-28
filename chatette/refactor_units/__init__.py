@@ -27,8 +27,9 @@ class Example(object):
         # return "<'" + self.text + "' " + str(self.entities) + '>'
         return str(self)
     def __str__(self):
-        # return self.text + '\n\tEntities: ' + str(self.entities)
-        return "Ex" + str(self.__dict__)
+        return \
+            "Text: '" + self.text + \
+            "'\n\tEntities: " + str(self.entities)
 
     def as_dict(self):
         result = {"text": self.text, "entities": []}
@@ -106,8 +107,8 @@ class IntentExample(Example):
     def __str__(self):
         return \
             "Intent: '" + self.intent_name + \
-            "'\n\tText: " + self.text + \
-            "\n\tEntities: " + str(self.entities)
+            "'\n\tText: '" + self.text + \
+            "'\n\tEntities: " + str(self.entities)
     
     def __eq__(self, other):
         if isinstance(other, Example) and not isinstance(other, IntentExample):

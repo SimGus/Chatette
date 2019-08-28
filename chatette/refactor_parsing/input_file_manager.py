@@ -127,10 +127,15 @@ class InputFileManager(Singleton):
             char_index = line.find(word_to_find)
         
         self.close_all_files()
+        if self._current_file is not None:
+            raise SyntaxError(
+                message,
+                (self._current_file.name, self._current_file.line_nb,
+                char_index, self._last_read_line)
+            )
         raise SyntaxError(
             message,
-            (self._current_file.name, self._current_file.line_nb,
-             char_index, self._last_read_line)
+            (None, None, char_index, self._last_read_line)
         )
 
 

@@ -7,12 +7,13 @@ can generate.
 
 from chatette.cli.interactive_commands.command_strategy import CommandStrategy
 from chatette.units.alias.definition import AliasDefinition
-from chatette.units import ENTITY_MARKER
+
+from chatette.refactor_parsing.parser import Parser
 
 
 class RuleCommand(CommandStrategy):
 
-    def execute(self, facade):
+    def execute(self):
         """
         Implements the command `rule` which generates a certain number of
         examples according to a provided rule.
@@ -28,24 +29,26 @@ class RuleCommand(CommandStrategy):
             try:
                 nb_examples = int(self.command_tokens[2])
             except ValueError:
-                self.print_wrapper.error_log("The number of examples asked (" +
-                                             self.command_tokens[2] + ") is " +
-                                             "a valid integer.")
+                self.print_wrapper.error_log(
+                    "The number of examples asked (" + \
+                    self.command_tokens[2] + ") is a valid integer."
+                )
 
-        rule_tokens = facade.parser.tokenizer.tokenize(rule_str)
-        rule = facade.parser.tokens_to_sub_rules(rule_tokens)
-        definition = AliasDefinition("INTERNAL", None, [rule])
-        try:
-            examples = definition.generate_nb_examples(nb_examples)
-            self.print_wrapper.write("Generated examples:")
-            for ex in examples:
-                self.print_wrapper.write(ex.text.replace(ENTITY_MARKER, ""))
-        except KeyError as e:
-            self.print_wrapper.error_log("Upon generation: " + str(e))
+        parser = Parser(None)
+        rule_tokens = parser.lexer.lex("\t" + rule_str)
+        rule = parser._parse_rule(rule_tokens[1:])
+
+        if nb_examples is None:
+            examples = rule.generate_all()
+        else:
+            examples = rule.generate_nb_examples(nb_examples)
+        self.print_wrapper.write("Generated examples:")
+        for ex in examples:
+            self.print_wrapper.write(str(ex))
 
 
     # Override abstract methods
-    def execute_on_unit(self, facade, unit_type, unit_name, variation_name=None):
+    def execute_on_unit(self, unit_type, unit_name, variation_name=None):
         raise NotImplementedError()
-    def finish_execution(self, facade):
+    def finish_execution(self):
         raise NotImplementedError()
