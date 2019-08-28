@@ -73,8 +73,6 @@ class SetModifierCommand(CommandStrategy):
     def _set_modifier(self, unit_type, unit_name, modifier_name, value):
         unit = AST.get_or_create()[unit_type][unit_name]
         modifier_name = modifier_name.lower()
-        print(unit_type, unit_name, modifier_name, value)
-        print("VALUE: " +str(value))
         if modifier_name in ("casegen", CASE_GEN_SYM):
             try:
                 value = str_to_bool(value)
