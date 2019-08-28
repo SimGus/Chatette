@@ -72,12 +72,15 @@ class ModifiableItem(GeneratingItem):
                 self.get_max_nb_possibilities(variation_name=variation_name)
         else:
             max_nb_possibilities = self.get_max_nb_possibilities()
-        if (
-            len(self._cached_examples) > 0
-            and uniform(0, 1) <= \
-            float(len(self._cached_examples)) / float(max_nb_possibilities)
-        ):
-            return random_choice(self._cached_examples)
+        if isinstance(self._cached_examples, list):
+            if (
+                len(self._cached_examples) > 0
+                and uniform(0, 1) <= \
+                float(len(self._cached_examples)) / float(max_nb_possibilities)
+            ):
+                return random_choice(self._cached_examples)
+        else:
+            pass  # TODO dict case for unit definitions with variations
 
         if variation_name is not None:
             basic_example = \
