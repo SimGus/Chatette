@@ -263,7 +263,7 @@ class UnitDefinition(ModifiableItem):
     def as_template_str(self):
         result = ""
         for variation_name in self._variation_rules:
-            result += putils.get_template_unit_sym(unit_type)
+            result += putils.get_template_unit_sym(self.unit_type)
             result += putils.UNIT_START_SYM
             result += putils.get_template_pre_modifiers(self._modifiers_repr)
             result += self._name

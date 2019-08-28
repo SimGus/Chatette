@@ -129,15 +129,15 @@ class IntentDefinition(UnitDefinition):
             result += putils.ANNOTATION_START
             if self._nb_training_ex_asked is not None:
                 result += \
-                    putils.KEY_VAL_ENCLOSERS[0] + "training" + \
-                    putils.KEY_VAL_ENCLOSERS[0] + \
+                    putils.KEY_VAL_ENCLOSERS[1] + "training" + \
+                    putils.KEY_VAL_ENCLOSERS[1] + \
                     putils.KEY_VAL_CONNECTOR + ' '
                 result += str(self._nb_training_ex_asked)
                 if self._nb_testing_ex_asked is not None:
                     result += putils.ANNOTATION_SEP
                     result += \
-                        putils.KEY_VAL_ENCLOSERS[0] + "testing" + \
-                        putils.KEY_VAL_ENCLOSERS[0] + \
+                        putils.KEY_VAL_ENCLOSERS[1] + "testing" + \
+                        putils.KEY_VAL_ENCLOSERS[1] + \
                         putils.KEY_VAL_CONNECTOR + ' '
                     result += str(self._nb_testing_ex_asked)
             result += putils.ANNOTATION_END

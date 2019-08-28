@@ -288,5 +288,10 @@ def get_template_post_modifiers(modifiers_repr):
     if modifiers_repr.argument_name is not None:
         result += ARG_SYM + modifiers_repr.argument_name
     elif modifiers_repr.argument_value is not None:
-        result += ARG_SYM + modifiers_repr.argument_value
+        result += ARG_SYM
+        if len(modifiers_repr.argument_value) == 1:
+            for (name, value) in modifiers_repr.argument_value.items():
+                result += value
+        else:
+            result += "ERROR"  # TODO do this when the new arg assignment lexing rule has been coded
     return result
