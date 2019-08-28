@@ -30,14 +30,14 @@ class HideCommand(CommandStrategy):
                     "' was successfully hidden."
                 )
             else:
-                if variation_name not in unit.variations:
+                if variation_name not in unit._variation_rules:
                     self.print_wrapper.error_log(
                         "Couldn't find variation '" + variation_name + \
                         "' in " + unit_type.name + " '" + unit_name + "'."
                     )
                     return
                 self._var_to_delete.append((unit_type, unit_name, variation_name))
-                rules = unit.variations[variation_name]
+                rules = unit._variation_rules[variation_name]
                 if unit_name not in self.stored_variations[unit_type.name]:
                     self.stored_variations[unit_type.name][unit_name] = \
                         {variation_name: rules}

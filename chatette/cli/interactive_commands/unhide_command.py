@@ -87,14 +87,14 @@ class UnhideCommand(CommandStrategy):
             try:
                 rules = \
                     HideCommand.stored_variations[unit_type.name][unit_name][variation_name]
-                if variation_name in unit.variations:
+                if variation_name in unit._variation_rules:
                     self.print_wrapper.error_log(
                         "Variation '" + variation_name + \
                         "' is already defined for " + unit_type.name + \
                         " '" + unit_name + "'."
                     )
                     return
-                unit.add_rules(rules, variation_name)
+                unit.add_all_rules(rules, variation_name)
                 self.print_wrapper.write(
                     "Variation '" + variation_name + "' of " + \
                     unit_type.name + " '" + unit_name + \
