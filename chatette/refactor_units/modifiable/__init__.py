@@ -78,7 +78,7 @@ class ModifiableItem(GeneratingItem):
                 and uniform(0, 1) <= \
                 float(len(self._cached_examples)) / float(max_nb_possibilities)
             ):
-                return random_choice(self._cached_examples)
+                return random_choice(deepcopy(self._cached_examples))
         else:
             pass  # TODO dict case for unit definitions with variations
 

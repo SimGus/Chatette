@@ -53,7 +53,7 @@ class Generator(object):
                 for example in examples:
                     yield example
 
-    def get_entities_synonyms(self):
+    def get_entities_synonyms(self):  # TODO move that into AST
         """
         Makes a dict of all the synonyms of entities
         based on the slot value they are assigned.

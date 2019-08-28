@@ -66,7 +66,7 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
             and uniform(0, 1) <= \
             float(len(self._cached_examples)) / float(self.get_max_nb_possibilities())
         ):
-            return choice(self._cached_examples)
+            return choice(deepcopy(self._cached_examples))
         example = self._generate_random_strategy()
         if self._leading_space:
             example.prepend(' ')
@@ -94,7 +94,7 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
                 ex.prepend(' ')
         if len(self._cached_examples) == 0:
             # TODO don't cache it all in all cases
-            self._cached_examples = deepcopy(all_examples)
+            self._cached_examples = deepcopy(all_examples)  # BUG THERE IS A BUG HERE? (pytest)
             self._total_nb_possibilities = len(all_examples)
         return all_examples
     @abstractmethod
