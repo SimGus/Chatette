@@ -14,6 +14,8 @@ from chatette.refactor_units import Example, sort_by_texts, add_example_no_dup
 from chatette.modifiers.randgen import \
     can_concat_examples, concat_examples_with_randgen
 
+from chatette.refactor_parsing.utils import SLOT_VAL_SYM
+
 
 class Rule(GeneratingItem):
     """
@@ -79,3 +81,11 @@ class Rule(GeneratingItem):
             for content in self._contents:
                 result += str(content) + ", "
         return '<' + result + '>'
+    
+    def as_template_str(self):
+        result = ""
+        for content in self._contents:
+            result += content.as_template_str()
+        if self.slot_value is not None:
+            result += ' ' + SLOT_VAL_SYM + ' ' + self.slot_value
+        return result

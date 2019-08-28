@@ -45,3 +45,8 @@ class Word(GeneratingItem):
         if self._leading_space:
             return [Example(' ' + self._name)]
         return [Example(self._name)]
+    
+    def as_template_str(self):
+        if self._leading_space:
+            return ' ' + self.word
+        return self.word

@@ -4,7 +4,7 @@ Module `chatette.refactor_parsing`
 Contains the lexer used by the parser and the definition of the tokens it uses.
 """
 
-import chatette.refactor_parsing.utils as putils
+from chatette.refactor_parsing import utils as putils
 from chatette.refactor_parsing.input_file_manager import InputFileManager
 from chatette.refactor_parsing.lexing.rule_line import RuleLine
 

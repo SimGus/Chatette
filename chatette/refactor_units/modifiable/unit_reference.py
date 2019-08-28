@@ -10,6 +10,8 @@ from collections import OrderedDict
 from chatette.refactor_units.modifiable import ModifiableItem
 from chatette.refactor_units.ast import AST
 
+from chatette.refactor_parsing import utils as putils
+
 
 class UnitReference(ModifiableItem):
     """
@@ -112,3 +114,15 @@ class UnitReference(ModifiableItem):
                         [(arg_name, self._modifiers_repr.argument_value)]
                     )
                 self._modifiers_repr.argument_value = mapping
+
+    def as_template_str(self):
+        result = ""
+        result += putils.get_template_unit_sym(self._unit_type)
+        result += putils.UNIT_START_SYM
+        result += putils.get_template_pre_modifiers(self._modifiers_repr)
+        result += self._name
+        result += putils.get_template_post_modifiers(self._modifiers_repr)
+        result += putils.UNIT_END_SYM
+        if self._leading_space:
+            result = ' ' + result
+        return result

@@ -11,6 +11,8 @@ from chatette.refactor_units import Example, IntentExample, add_example_no_dup
 from chatette.refactor_units.modifiable.definitions.unit_definition import \
     UnitDefinition
 
+from chatette.refactor_parsing import utils as putils
+
 
 class IntentDefinition(UnitDefinition):
     """Represents an intent definition."""
@@ -111,3 +113,35 @@ class IntentDefinition(UnitDefinition):
                 if len(test_examples) == self._nb_testing_ex_asked:
                     break
             return test_examples
+
+
+    def as_template_str(self):
+        result = ""
+        for variation_name in self._variation_rules:
+            result += putils.INTENT_SYM
+            result += putils.UNIT_START_SYM
+            result += putils.get_template_pre_modifiers(self._modifiers_repr)
+            result += self._name
+            result += putils.get_template_post_modifiers(self._modifiers_repr)
+            if variation_name is not None:
+                result += putils.VARIATION_SYM + variation_name
+            result += putils.UNIT_END_SYM
+            result += putils.ANNOTATION_START
+            if self._nb_training_ex_asked is not None:
+                result += \
+                    putils.KEY_VAL_ENCLOSERS[0] + "training" + \
+                    putils.KEY_VAL_ENCLOSERS[0] + \
+                    putils.KEY_VAL_CONNECTOR + ' '
+                result += str(self._nb_training_ex_asked)
+                if self._nb_testing_ex_asked is not None:
+                    result += putils.ANNOTATION_SEP
+                    result += \
+                        putils.KEY_VAL_ENCLOSERS[0] + "testing" + \
+                        putils.KEY_VAL_ENCLOSERS[0] + \
+                        putils.KEY_VAL_CONNECTOR + ' '
+                    result += str(self._nb_testing_ex_asked)
+            result += putils.ANNOTATION_END
+
+            for rule in self._variation_rules[variation_name]:
+                result += '\n\t' + rule.as_template_str()
+        return result

@@ -10,7 +10,9 @@ from copy import deepcopy
 from chatette.utils import UnitType
 from chatette.refactor_units.modifiable import ModifiableItem
 from chatette.refactor_units import extend_no_dup
+
 from chatette.refactor_parsing.utils import SLOT_VAL_FIRST_RULE
+from chatette.refactor_parsing import utils as putils
 
 
 class UnitDefinition(ModifiableItem):
@@ -257,4 +259,20 @@ class UnitDefinition(ModifiableItem):
                 desc += "\n\t- ..."
                 break
         return desc
+
+    def as_template_str(self):
+        result = ""
+        for variation_name in self._variation_rules:
+            result += putils.get_template_unit_sym(unit_type)
+            result += putils.UNIT_START_SYM
+            result += putils.get_template_pre_modifiers(self._modifiers_repr)
+            result += self._name
+            result += putils.get_template_post_modifiers(self._modifiers_repr)
+            if variation_name is not None:
+                result += putils.VARIATION_SYM + variation_name
+            result += putils.UNIT_END_SYM
+
+            for rule in self._variation_rules[variation_name]:
+                result += '\n\t' + rule.as_template_str()
+        return result
     

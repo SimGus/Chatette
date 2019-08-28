@@ -9,6 +9,10 @@ from random import choice
 from chatette.refactor_units.modifiable import ModifiableItem
 from chatette.refactor_units import extend_no_dup
 
+from chatette.refactor_parsing.utils import \
+    CHOICE_START, CHOICE_END, CHOICE_SEP
+from chatette.refactor_parsing import utils as putils
+
 
 class Choice(ModifiableItem):
     """
@@ -68,3 +72,18 @@ class Choice(ModifiableItem):
             generated_examples = \
                 extend_no_dup(generated_examples, current_examples)
         return generated_examples
+
+    def as_template_str(self):
+        result = CHOICE_START
+        result += putils.get_template_pre_modifiers(self._modifiers_repr)
+        i = 0
+        for i in range(len(self._rules)):
+            if i != 0:
+                result += CHOICE_SEP
+            result += self._rules[i].as_template_str()
+            i += 1
+        result += putils.get_template_post_modifiers(self._modifiers_repr)
+        result += CHOICE_END
+        if self._leading_space:
+            result = ' ' + result
+        return result

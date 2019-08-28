@@ -5,7 +5,8 @@ Contains utility functions that are used by various parsing components.
 """
 
 from enum import Enum
-from chatette.utils import min_if_exist
+
+from chatette.utils import min_if_exist, UnitType
 from chatette.refactor_parsing.lexing import TerminalType
 
 
@@ -247,3 +248,45 @@ def index_end_choice_rules(tokens, start_index):
     if i > 0 and tokens[i].type == TerminalType.randgen_marker:
         i -= 1
     return i
+
+
+def get_template_unit_sym(unit_type):
+    """Returns the symbol that corresponds to unit type `unit_type`."""
+    if unit_type == UnitType.alias:
+        return ALIAS_SYM
+    if unit_type == UnitType.slot:
+        return SLOT_SYM
+    if unit_type == UnitType.intent:
+        return INTENT_SYM
+    raise TypeError(
+        "Tried to get the symbol associated to an invalid unit type: '" + \
+        unit_type.__class__.__name__ + "'."
+    )
+def get_template_pre_modifiers(modifiers_repr):
+    """
+    Returns the string of pre-modifiers as a string that would be found in
+    a template file.
+    """
+    if modifiers_repr.casegen:
+        return CASE_GEN_SYM
+    return ""
+def get_template_post_modifiers(modifiers_repr):
+    """
+    Returns the string of pre-modifiers as a string that would be found in
+    a template file.
+    """
+    result = ""
+    if modifiers_repr.randgen:
+        result += RAND_GEN_SYM
+        if modifiers_repr.randgen_name is not None:
+            result += modifiers_repr.randgen_name
+        if modifiers_repr.randgen_percent != 50:
+            result += \
+                RAND_GEN_PERCENT_SYM + str(modifiers_repr.randgen_percent) + '%'
+    if modifiers_repr.variation_name is not None:
+        result += VARIATION_SYM + modifiers_repr.variation_name
+    if modifiers_repr.argument_name is not None:
+        result += ARG_SYM + modifiers_repr.argument_name
+    elif modifiers_repr.argument_value is not None:
+        result += ARG_SYM + modifiers_repr.argument_value
+    return result

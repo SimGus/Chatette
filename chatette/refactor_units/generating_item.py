@@ -163,3 +163,11 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
         return "<" + self.full_name + ">"
     def __repr__(self):  # TODO TMP (for testing purposes)
         return str(self)
+
+    @abstractmethod
+    def as_template_str(self):
+        """
+        Returns the representation of this generating item as it would be
+        written in a template file.
+        """
+        raise NotImplementedError()
