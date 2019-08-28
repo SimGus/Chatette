@@ -62,7 +62,8 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
         """
         # use cache with probability `len(cached)/nb_possibilities`
         if (
-            uniform(0, 1) <= \
+            len(self._cached_examples) > 0
+            and uniform(0, 1) <= \
             float(len(self._cached_examples)) / float(self.get_max_nb_possibilities())
         ):
             return choice(self._cached_examples)

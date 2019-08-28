@@ -73,7 +73,8 @@ class ModifiableItem(GeneratingItem):
         else:
             max_nb_possibilities = self.get_max_nb_possibilities()
         if (
-            uniform(0, 1) <= \
+            len(self._cached_examples) > 0
+            and uniform(0, 1) <= \
             float(len(self._cached_examples)) / float(max_nb_possibilities)
         ):
             return random_choice(self._cached_examples)
