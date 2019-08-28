@@ -9,8 +9,6 @@ import pytest
 from chatette.cli.interactive_commands.command_strategy import CommandStrategy
 from chatette.cli.interactive_commands.show_command import ShowCommand
 
-from test_command_strategy import get_facade
-
 
 def test_obj():
     cmd = ShowCommand("")
