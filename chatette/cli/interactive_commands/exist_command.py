@@ -17,15 +17,15 @@ class ExistCommand(CommandStrategy):
             unit = AST.get_or_create()[unit_type][unit_name]
             self.print_wrapper.write(unit.short_description())
             if variation_name is not None:
-                if variation_name in unit.variations:
+                if variation_name in unit._variation_rules:
                     self.print_wrapper.write(
                         "Variation '" + variation_name + \
-                        "' is defined for this " + unit.type + "."
+                        "' is defined for this " + unit.unit_type.name + "."
                     )
                 else:
                     self.print_wrapper.write(
                         "Variation '" + variation_name + \
-                        "' is not defined for this " + unit.type + "."
+                        "' is not defined for this " + unit.unit_type.name + "."
                     )
         except KeyError:
             self.print_wrapper.write(
