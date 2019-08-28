@@ -10,7 +10,7 @@ import pytest
 from chatette.facade import Facade
 from chatette.cli.interactive_commands.command_strategy import CommandStrategy
 from chatette.cli.terminal_writer import RedirectionType
-from chatette.parsing.parser_utils import UnitType
+from chatette.utils import UnitType
 
 
 FACADE = None
@@ -214,7 +214,7 @@ class TestExecute(object):
     # NOTE: for coverage
     def test(self):
         with pytest.raises(NotImplementedError):
-            CommandStrategy("NOTHING alias a, b, c").execute(None)
+            CommandStrategy("NOTHING alias a, b, c").execute()
 
 
 class TestExecuteOnUnit(object):
@@ -226,4 +226,4 @@ class TestExecuteOnUnit(object):
 class TestFinishExecution(object):
     # NOTE: for coverage
     def test(self):
-        CommandStrategy("").finish_execution(None)
+        CommandStrategy("").finish_execution()
