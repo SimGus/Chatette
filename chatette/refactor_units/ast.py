@@ -36,8 +36,10 @@ class AST(Singleton):
         elif unit_type == UnitType.intent:
             return self._intent_definitions
         else:
-            raise ValueError("Tried to get a definition with wrong type "+
-                             "(expected alias, slot or intent)")
+            raise TypeError(
+                "Tried to get a definition with wrong type " + \
+                "(expected alias, slot or intent)"
+            )
     def __getitem__(self, unit_type):
         """
         Returns the dictionary requested.
@@ -58,7 +60,7 @@ class AST(Singleton):
                     "Invalid key for the AST: '" + unit_type + "'."
                 )
         elif not isinstance(unit_type, UnitType):
-            raise ValueError(
+            raise TypeError(
                 "Invalid type of key: " + unit_type.__class__.__name__ + "."
             )
         return self._get_relevant_dict(unit_type)
@@ -146,6 +148,24 @@ class AST(Singleton):
         del relevant_dict[old_name]
         unit.set_identifier(new_name)
         relevant_dict[new_name] = unit
+    
+    def delete_unit(self, unit_type, unit_name, variation_name=None):
+        """
+        Deletes the declared unit `unit_name` of type `unit_type`.
+        If `variation_name` is not `None`, only deletes this particular
+        variation for this unit.
+        @raises: - `KeyError` if the unit `unit_name` wasn't declared.
+        """
+        relevant_dict = self._get_relevant_dict(unit_type)
+        if unit_name not in relevant_dict:
+            raise KeyError(
+                "Tried to delete " + unit_type.name + " '" + unit_name + \
+                "', but it wasn't declared."
+            )
+        if variation_name is None:
+            del relevant_dict[unit_name]
+        else:
+            relevant_dict[unit_name].delete_variation(variation_name)
     
 
     def print_DBG(self):

@@ -62,11 +62,6 @@ class UnitDefinition(ModifiableItem):
         return acc
 
 
-    def has_variation(self, variation_name):
-        """Returns `True` iff `variation_name` was declared for this unit."""
-        return (variation_name in self._variation_rules)
-
-
     def _check_rule_validity(self, rule):
         """Raises a `ValueError` if the rule `rule` is not valid."""
         if rule.slot_value is not None:
@@ -83,11 +78,10 @@ class UnitDefinition(ModifiableItem):
         @raises: `ValueError` if `rule` is not valid.
         """
         self._check_rule_validity(rule)
-        if variation_name is not None:
-            if variation_name in self._variation_rules:
-                self._variation_rules[variation_name].append(rule)
-            else:
-                self._variation_rules[variation_name] = [rule]
+        if variation_name in self._variation_rules:
+            self._variation_rules[variation_name].append(rule)
+        else:
+            self._variation_rules[variation_name] = [rule]
         self._all_rules.append(rule)
     def add_all_rules(self, rules, variation_name=None):
         """
@@ -98,12 +92,21 @@ class UnitDefinition(ModifiableItem):
         """
         for rule in rules:
             self._check_rule_validity(rule)
-        if variation_name is not None:
-            if variation_name in self._variation_rules:
-                self._variation_rules[variation_name].extend(rule)
-            else:
-                self._variation_rules[variation_name] = rules
+        if variation_name in self._variation_rules:
+            self._variation_rules[variation_name].extend(rule)
+        else:
+            self._variation_rules[variation_name] = rules
         self._all_rules.extend(rules)
+    
+    def _recompute_all_rules(self):
+        """
+        Given all the rules in `self._variation_rules`,
+        recomputes all the possible rules and put them in `self._all_rules`.
+        """
+        all_rules = []
+        for rules in self._variation_rules:
+            all_rules.extend(rules)
+        self._all_rules = all_rules
     
     def remove_rule(self, index, variation_name=None):
         """Removes the rule at `index`th rule."""
@@ -131,6 +134,23 @@ class UnitDefinition(ModifiableItem):
             ):
                 return None
             return choice(self._variation_rules[variation_name])
+
+
+    def has_variation(self, variation_name):
+        """Returns `True` iff `variation_name` was declared for this unit."""
+        return (variation_name in self._variation_rules)
+    def delete_variation(self, variation_name):
+        """
+        Deletes the variation named `variation_name`.
+        @raises: - `KeyError` if the variation doesn't exist.
+        """
+        if not self.has_variation(variation_name):
+            raise KeyError(
+                "Tried to delete variation '" + str(variation_name) + \
+                "' of " + self.full_name + ", but it wasn't defined."
+            )
+        del self._variation_rules[variation_name]
+        self._recompute_all_rules()
 
 
     def _generate_random_strategy(self, variation_name=None):
