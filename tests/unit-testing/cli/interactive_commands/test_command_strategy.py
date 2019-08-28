@@ -13,16 +13,14 @@ from chatette.cli.terminal_writer import RedirectionType
 from chatette.utils import UnitType
 
 
-FACADE = None
 def get_facade():
-    global FACADE
-    if FACADE is None:
-        FACADE = \
+    if not Facade.was_instantiated():
+        facade = \
             Facade("tests/unit-testing/cli/interactive_commands/toilets.chatette",
                    "tests/unit-testing/cli/interactive_commands/", None, False,
                    None)
-        FACADE.run_parsing()
-    return FACADE
+        facade.run_parsing()
+    return Facade.get_or_create()
 
 def new_facade():
     if not Facade.was_instantiated():
