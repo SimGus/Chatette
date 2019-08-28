@@ -105,7 +105,8 @@ class IntentExample(Example):
             " '" + self.text + "' " + str(self.entities) + ">"
     def __str__(self):
         return \
-            "Intent: " + self.intent_name + " => " + self.text + \
+            "Intent: '" + self.intent_name + \
+            "'\n\tText: " + self.text + \
             "\n\tEntities: " + str(self.entities)
     
     def __eq__(self, other):
