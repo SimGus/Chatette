@@ -223,7 +223,7 @@ class CommandStrategy(object):
             for unit_name in relevant_dict:
                 if regex.match(unit_name):
                     yield unit_name
-    def get_all_matching_unit_names(self, parser, unit_type, regex):
+    def get_all_matching_unit_names(self, unit_type, regex):
         """
         Returns a list of unit names of type `unit_type`
         whose name matches `regex`.
@@ -231,7 +231,7 @@ class CommandStrategy(object):
               returns the same data cannot be used in that case (dict changes
               size during iteration).
         """
-        relevant_dict = parser.ast._get_relevant_dict(unit_type)
+        relevant_dict = AST.get_or_create()[unit_type]
         if self._is_regex_global:
             return [name for name in relevant_dict if regex.search(name)]
         return [name for name in relevant_dict if regex.match(name)]
