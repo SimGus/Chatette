@@ -150,8 +150,7 @@ class CommandStrategy(object):
         Those two parts are separated in `text` by a hashtag `#` (unescaped).
         Returns a list with both those str inside it or the unit name and
         `None` for the variation identifier if it wasn't found.
-        If `text` is not valid (several hashtags),
-        raises a `SyntaxError`.
+        @raises: - `SyntaxError` if `text` is not valid (several hashtags),
         """
         no_quote_text = text[1:-1].replace(ESCAPE_SYM + '"', '"')
         splitted = no_quote_text.split(VARIATION_SYM)
