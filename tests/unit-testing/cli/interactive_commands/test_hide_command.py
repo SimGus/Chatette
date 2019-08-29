@@ -57,8 +57,8 @@ def test_err(capsys):
 
 
 def test_execute(capsys):
-    cmd = HideCommand('hide alias "tell me"')
     facade = new_facade()
+    cmd = HideCommand('hide alias "tell me"')
     try:
         AST.get_or_create()[UnitType.alias]["tell me"]
     except KeyError:
@@ -79,7 +79,7 @@ def test_execute(capsys):
     except KeyError:
         pytest.fail("Unexpected KeyError. Alias 'tell me' wasn't restored.")
     captured = capsys.readouterr()
-    assert "Alias 'tell me' was successfully restored."
+    assert "Alias 'tell me' was successfully restored." in captured.out
 
     cmd = HideCommand("hide ~ /./")
     cmd.execute()
