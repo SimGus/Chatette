@@ -248,7 +248,10 @@ class UnitDefinition(ModifiableItem):
         """
         desc = self.full_name + "\n"
         desc += self._modifiers_repr.short_description()
-        desc += str(max(0, len(self._variation_rules) - 1)) + " variation(s)"
+        if None in self._variation_rules:
+            desc += str(max(0, len(self._variation_rules) - 1)) + " variation(s)"
+        else:
+            desc += str(len(self._variation_rules)) + " variation(s)"
         if len(self._variation_rules) > 1:
             desc += ':'
         for (i, variation_name) in enumerate(self._variation_rules):
