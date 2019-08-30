@@ -1,6 +1,6 @@
 """
 Test module.
-Tests the functions in module 'chatette.utils'.
+Tests the functions and classes in module 'chatette.utils'.
 """
 
 import sys
@@ -8,7 +8,35 @@ import pytest
 import imp
 
 import chatette.utils
-from chatette.utils import cast_to_unicode
+from chatette.utils import \
+    UnitType, Singleton, cast_to_unicode
+
+
+class TestUnitType(object):
+    def test_existence(self):
+        assert "UnitType" in dir(chatette.utils)
+        UnitType.alias
+        UnitType.slot
+        UnitType.intent
+
+
+class TestSingleton(object):
+    def test_was_instantiated(self):
+        assert not Singleton.was_instantiated()
+        Singleton()
+        assert Singleton.was_instantiated()
+
+    def test_singleton(self):
+        singleton = Singleton()
+        other = Singleton()
+        assert singleton == other
+        third = Singleton.get_or_create()
+        assert third == singleton
+    
+    def test_reset(self):
+        singleton = Singleton()
+        reset = Singleton.reset_instance()
+        assert singleton != reset
 
 
 class TestPrints(object):
@@ -34,7 +62,9 @@ class TestCastToUnicode(object):
         assert res_complex == complex(1,2)
 
     def test_dict(self):
-        dicts = [{"a": "b"}, {}, {"c": 0, 1: "d"}, {"e": {"f": "g", 0: ["h", 3]}}]
+        dicts = [
+            {"a": "b"}, {}, {"c": 0, 1: "d"}, {"e": {"f": "g", 0: ["h", 3]}}
+        ]
 
         for d in dicts:
             res_dict = cast_to_unicode(d)
@@ -46,8 +76,10 @@ class TestCastToUnicode(object):
     def check_is_unicode(self, anything):
         """This can only be called when running python 2.7."""
         if sys.version_info[0] != 2:
-            pytest.fail("Called unicode checker for python 2.7 "+
-                        "using another python version.")
+            pytest.fail(
+                "Called unicode checker for python 2.7 " + \
+                "using another python version."
+            )
         if isinstance(anything, unicode):
             return True
         elif isinstance(anything, str):
