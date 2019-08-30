@@ -179,5 +179,7 @@ if __name__ == "__main__":
     # pylint: disable=wrong-import-position
     import warnings
 
-    warnings.warn("You are running the wrong file ('utils.py')." +
-                  "The file that should be run is 'run.py'.")
+    warnings.warn(
+        "You are running the wrong file ('utils.py')." +
+        "The file that should be run is 'run.py'."
+    )

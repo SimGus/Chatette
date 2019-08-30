@@ -57,7 +57,6 @@ def test_err(capsys):
 
 
 def test_execute(capsys):
-    print("AAAAAAA")
     facade = new_facade()
     cmd = HideCommand('hide alias "tell me"')
     try:
@@ -73,7 +72,6 @@ def test_execute(capsys):
     captured = capsys.readouterr()
     assert "Alias 'tell me' was successfully hidden." in captured.out
 
-    print("BBBBBBBB")
     cmd = UnhideCommand('unhide alias "tell me"')
     cmd.execute()
     try:
@@ -83,7 +81,6 @@ def test_execute(capsys):
     captured = capsys.readouterr()
     assert "Alias 'tell me' was successfully restored." in captured.out
 
-    print("CCCCCCCCCc")
     cmd = HideCommand("hide ~ /./")
     cmd.execute()
     _ = capsys.readouterr()
