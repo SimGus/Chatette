@@ -18,16 +18,16 @@ class DeleteCommand(CommandStrategy):
 
     def execute_on_unit(self, unit_type, unit_name, variation_name=None):
         self._units_to_delete.append((unit_type, unit_name, variation_name))
-        self.print_wrapper.write(
-            unit_type.name.capitalize() + " '" + unit_name + \
-            "' was successfully deleted."
-        )
 
     def finish_execution(self):
         for (unit_type, unit_name, variation_name) in self._units_to_delete:
             try:
                 AST.get_or_create().delete_unit(
                     unit_type, unit_name, variation_name
+                )
+                self.print_wrapper.write(
+                    unit_type.name.capitalize() + " '" + unit_name + \
+                    "' was successfully deleted."
                 )
             except KeyError:
                 self.print_wrapper.write(
