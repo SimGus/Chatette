@@ -32,7 +32,6 @@ class Singleton(object):
     """
     _instance = None
     def __new__(cls, *args, **kwargs):
-        print("NEW " + cls.__name__)
         if cls._instance is None:
             cls._instance = super(Singleton, cls).__new__(cls)
         return cls._instance
@@ -50,15 +49,12 @@ class Singleton(object):
         (representing the singleton), makes a new one and 
         returns this instance.
         """
-        print("RESET " + cls.__name__)
         cls._instance = None
         cls._instance = cls(*args, **kwargs)
         return cls._instance
     
     @classmethod
     def was_instantiated(cls):
-        print(cls.__name__ + " was instantiated? " + str(cls._instance is not None))
-        print("instance: " + str(cls._instance))
         return (cls._instance is not None)
 
 
