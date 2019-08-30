@@ -21,7 +21,7 @@ class ShowCommand(CommandStrategy):
 
             if variation_name is None:
                 self.print_wrapper.write(
-                    "Template:\n" + str(unit.as_template_str())
+                    "Template rules:\n" + str(unit.as_template_str())
                 )
             else:  # TODO
                 pass
