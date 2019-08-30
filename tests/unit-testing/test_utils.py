@@ -10,7 +10,8 @@ import imp
 import chatette.utils
 from chatette.utils import \
     UnitType, Singleton, cast_to_unicode, sample_indulgent, rchop, str_to_bool, \
-    remove_duplicates
+    remove_duplicates, min_if_exist, random_string, append_to_list_in_dict, \
+    extend_list_in_dict
 
 
 class TestUnitType(object):
@@ -156,6 +157,44 @@ class TestRemoveDuplicates(object):
         assert 1 in dictionary["a"]
         assert "o" in dictionary["b"]
         assert len(dictionary["a"]) == 1
+
+
+class TestMinIfExist(object):
+    def test_min_if_exist(self):
+        assert min_if_exist(None, None) is None
+        assert min_if_exist(1, None) == 1
+        assert min_if_exist(None, 0) == 0
+        assert min_if_exist(5, 3) == 3
+        assert min_if_exist(1.2, 8.12) == 1.2
+        assert min_if_exist(-0.2, -8.9) == -8.9
+
+
+class TestRandomString(object):
+    def test_random_string(self):
+        for i in range(12):
+            assert len(random_string(12)) == 12
+
+
+class TestAppendToListInDict(object):
+    def test_append(self):
+        dictionary = {"a": ["one"]}
+        append_to_list_in_dict(dictionary, "b", 1)
+        assert "b" in dictionary
+        assert len(dictionary["b"]) == 1
+        append_to_list_in_dict(dictionary, "a", 1)
+        assert "a" in dictionary
+        assert len(dictionary["a"]) == 2
+
+
+class TestExtendListInDict(object):
+    def test_extend(self):
+        dictionary = {"a": ["one"], "b": [1,2]}
+        extend_list_in_dict(dictionary, "c", [1,2])
+        assert "c" in dictionary
+        assert len(dictionary["c"]) == 2
+        extend_list_in_dict(dictionary, "a", ["a", "bc"])
+        assert "a" in dictionary
+        assert len(dictionary["a"]) == 3
 
 
 class TestMain(object):
