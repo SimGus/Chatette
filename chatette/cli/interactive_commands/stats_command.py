@@ -12,7 +12,7 @@ class StatsCommand(CommandStrategy):
 
     def execute(self):
         """Implements the command `stats`, printing parsing statistics."""
-        self.print_wrapper.write(str(Stats()))
+        self.print_wrapper.write(str(Stats.get_or_create()))
 
 
     # Override abstract methods

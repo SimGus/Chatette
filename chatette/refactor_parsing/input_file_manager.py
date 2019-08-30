@@ -72,7 +72,7 @@ class InputFileManager(Singleton):
             self._opened_files.append(self._current_file)
         try:
             self._current_file = LineCountFileWrapper(file_path)
-            Stats().new_file_parsed()
+            Stats.get_or_create().new_file_parsed()
         except IOError as e:
             if len(self._opened_files) > 0:
                 self._current_file = self._opened_files.pop()

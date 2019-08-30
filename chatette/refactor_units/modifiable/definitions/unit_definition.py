@@ -14,6 +14,8 @@ from chatette.refactor_units import extend_no_dup
 from chatette.refactor_parsing.utils import SLOT_VAL_FIRST_RULE
 from chatette.refactor_parsing import utils as putils
 
+from chatette.statistics import Stats
+
 
 class UnitDefinition(ModifiableItem):
     """Abstract class base for all unit definitions."""
@@ -141,6 +143,10 @@ class UnitDefinition(ModifiableItem):
     def has_variation(self, variation_name):
         """Returns `True` iff `variation_name` was declared for this unit."""
         return (variation_name in self._variation_rules)
+    def get_number_variations(self):
+        if None in self._variation_rules:
+            return len(self._variation_rules) - 1
+        return len(self._variation_rules)
     def delete_variation(self, variation_name):
         """
         Deletes the variation named `variation_name`.
@@ -151,6 +157,7 @@ class UnitDefinition(ModifiableItem):
                 "Tried to delete variation '" + str(variation_name) + \
                 "' of " + self.full_name + ", but it wasn't defined."
             )
+        Stats.get_or_create().one_variation_unit_removed(self.unit_type)
         del self._variation_rules[variation_name]
         self._recompute_all_rules()
 

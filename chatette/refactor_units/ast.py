@@ -163,6 +163,10 @@ class AST(Singleton):
                 "', but it wasn't declared."
             )
         if variation_name is None:
+            Stats.get_or_create().one_unit_removed(unit_type)
+            Stats.get_or_create().several_variation_units_removed(
+                unit_type, relevant_dict[unit_name].get_number_variations()
+            )
             del relevant_dict[unit_name]
         else:
             relevant_dict[unit_name].delete_variation(variation_name)
