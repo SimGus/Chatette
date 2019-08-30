@@ -8,7 +8,7 @@ import pytest
 import imp
 
 import chatette.utils
-from chatette.utils import cast_to_unicode, choose
+from chatette.utils import cast_to_unicode
 
 
 class TestPrints(object):
@@ -68,37 +68,6 @@ class TestCastToUnicode(object):
                     return False
             return okay
         return True
-
-
-class TestChoose(object):
-    def test_empty_array(self):
-        assert choose([]) is None
-    
-    def test_not_array(self):
-        with pytest.raises(TypeError):
-            choose(None)
-        with pytest.raises(TypeError):
-            choose(5)
-        with pytest.raises(TypeError):
-            choose(3.14)
-        with pytest.raises(KeyError):
-            choose({"a": 5})
-
-    def test_short_array(self):
-        arrays = [[1],[1,2,3],["a","b"],[None,4,2.7,int]]
-        for array in arrays:
-            res = choose(array)
-            assert res in array
-
-    def test_long_array(self):
-        arrays = [
-                    [1,2,3,4,5,6,7,8,9,10,11],
-                    ["a","b","c","d","hello","pytest","very","long","array"],
-                    [None,4,2.7,int,"different",["tests",1],{"a": 18, 0: None}]
-                 ]
-        for array in arrays:
-            res = choose(array)
-            assert res in array
 
 
 class TestMain(object):

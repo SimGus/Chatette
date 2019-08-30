@@ -96,17 +96,6 @@ def cast_to_unicode(anything):
     return anything
 
 
-def choose(array):
-    """
-    Same as `random.choice(array)` but doesn't throw an error
-    if `array` is empty
-    """
-    # ([anything]) -> anything or None
-    array_len = len(array)
-    if array_len <= 0:
-        return None  # None and not [] (it is used later on in the code)
-    return array[randint(0, array_len - 1)]
-
 def sample_indulgent(array, nb_items):
     """
     Same as `random.sample` but doesn't raise an error if `nb_items`
