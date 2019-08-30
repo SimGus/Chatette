@@ -25,9 +25,7 @@ def get_facade():
     return Facade.get_or_create()
 
 def new_facade():
-    print("TEST NEW FACADE")
     if Facade.was_instantiated():
-        print("reset system")
         facade = \
             Facade.reset_system(
                 "tests/unit-testing/cli/interactive_commands/toilets.chatette",
@@ -35,7 +33,6 @@ def new_facade():
                 None
             )
     else:
-        print("1st instantiation")
         facade = \
             Facade(
                 "tests/unit-testing/cli/interactive_commands/toilets.chatette",
