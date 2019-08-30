@@ -9,7 +9,8 @@ import imp
 
 import chatette.utils
 from chatette.utils import \
-    UnitType, Singleton, cast_to_unicode
+    UnitType, Singleton, cast_to_unicode, sample_indulgent, rchop, str_to_bool, \
+    remove_duplicates
 
 
 class TestUnitType(object):
@@ -100,6 +101,54 @@ class TestCastToUnicode(object):
                     return False
             return okay
         return True
+
+
+class TestSampleIndulgent(object):
+    def test_sample(self):
+        array = [2, 3, 5, 7, 11, 13]
+        assert sample_indulgent(array, 1)[0] in array
+        for item in sample_indulgent(array, 4):
+            assert item in array
+        for item in sample_indulgent(array, 1000):
+            assert item in array
+    
+    def test_empty(self):
+        assert len(sample_indulgent([], 5)) == 0
+
+
+class TestRChop(object):
+    def test_ending(self):
+        assert rchop("this is a test", "test") == "this is a "
+        assert rchop("another example", "ample") == "another ex"
+    
+    def test_not_ending(self):
+        assert rchop("this is a test", "nothing") == "this is a test"
+        assert rchop("Hello", "hello") == "Hello"
+
+
+class TestStrToBool(object):
+    def test_str_to_bool(self):
+        assert str_to_bool("True") == True
+        assert str_to_bool("False") == False
+        assert str_to_bool("true") == True
+        assert str_to_bool("false") == False
+        assert str_to_bool("TRUE") == True
+        assert str_to_bool("FALSE") == False
+        assert str_to_bool("tRuE") == True
+        assert str_to_bool("FaLSe") == False
+    
+    def test_not_bool(self):
+        with pytest.raises(ValueError):
+            str_to_bool("Test")
+
+
+class TestRemoveDuplicates(object):
+    def test_no_dup(self):
+        assert remove_duplicates({"a": ["one", "two"]}) == {"a": ["one", "two"]}
+    
+    def test_dup(self):
+        assert \
+            remove_duplicates({"a": [1, 1], "b": ["o"]}) != {"a": [1, 1], "b": "o"}
 
 
 class TestMain(object):
