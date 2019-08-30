@@ -115,6 +115,14 @@ class IntentExample(Example):
             raise TypeError("Tried to compare an Example and an IntentExample")
         return super(IntentExample, self).__eq__(other)
 
+    def __hash__(self):
+        entities_hash = 0
+        for entity in self.entities:
+            entities_hash += hash(entity)
+        return \
+            hash(self.intent_name) * 1000000000 + \
+            hash(self.text) * 10000 + entities_hash  # QUESTION not sure this a very good hash
+
 
 class Entity(object):
     """
