@@ -16,21 +16,33 @@ from chatette.utils import UnitType
 def get_facade():
     if not Facade.was_instantiated():
         facade = \
-            Facade("tests/unit-testing/cli/interactive_commands/toilets.chatette",
-                   "tests/unit-testing/cli/interactive_commands/", None, False,
-                   None)
-        facade.run_parsing()
-    return Facade.get_or_create()
-
-def new_facade():
-    if not Facade.was_instantiated():
-        facade = \
             Facade(
                 "tests/unit-testing/cli/interactive_commands/toilets.chatette",
                 "tests/unit-testing/cli/interactive_commands/", None, False,
                 None
             )
         facade.run_parsing()
+    return Facade.get_or_create()
+
+def new_facade():
+    print("TEST NEW FACADE")
+    if Facade.was_instantiated():
+        print("reset system")
+        facade = \
+            Facade.reset_system(
+                "tests/unit-testing/cli/interactive_commands/toilets.chatette",
+                "tests/unit-testing/cli/interactive_commands/", None, False,
+                None
+            )
+    else:
+        print("1st instantiation")
+        facade = \
+            Facade(
+                "tests/unit-testing/cli/interactive_commands/toilets.chatette",
+                "tests/unit-testing/cli/interactive_commands/", None, False,
+                None
+            )
+    facade.run_parsing()
     return Facade.get_or_create()
 
 

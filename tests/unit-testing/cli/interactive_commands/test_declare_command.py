@@ -59,8 +59,9 @@ def test_err(capsys):
 
 
 def test_execute(capsys):
-    cmd = DeclareCommand('declare alias "machin"')
+    print("AAAAAAAAAAAA")
     facade = new_facade()
+    cmd = DeclareCommand('declare alias "machin"')
     cmd.execute()
     try:
         unit = AST.get_or_create()[UnitType.alias]["machin"]
@@ -72,8 +73,9 @@ def test_execute(capsys):
     captured = capsys.readouterr()
     assert "Alias 'machin' was successfully declared." in captured.out
 
-    cmd = DeclareCommand('declare slot "machin"')
+    print("AAAAAAAAAAAA")
     facade = new_facade()
+    cmd = DeclareCommand('declare slot "machin"')
     cmd.execute()
     try:
         unit = AST.get_or_create()[UnitType.slot]["machin"]
@@ -85,8 +87,9 @@ def test_execute(capsys):
     captured = capsys.readouterr()
     assert "Slot 'machin' was successfully declared." in captured.out
 
-    cmd = DeclareCommand('declare intent "machin"')
+    print("AAAAAAAAAAAA")
     facade = new_facade()
+    cmd = DeclareCommand('declare intent "machin"')
     cmd.execute()
     try:
         unit = AST.get_or_create()[UnitType.intent]["machin"]

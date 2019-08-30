@@ -16,6 +16,11 @@ from chatette.refactor_parsing.parser import Parser
 from chatette.generator import Generator
 import chatette.adapters.factory as adapter_factory
 
+from chatette.statistics import Stats
+from chatette.deprecations import Deprecations
+from chatette.refactor_units.ast import AST
+from chatette.refactor_parsing.input_file_manager import InputFileManager
+
 
 class Facade(Singleton):
     """
@@ -49,8 +54,9 @@ class Facade(Singleton):
             print("Executing Chatette with seed '" + seed + "'.")
         random_seed(seed)
 
-        self.adapter = adapter_factory.create_adapter(adapter_str,
-                                                      base_filepath)
+        self.adapter = adapter_factory.create_adapter(
+            adapter_str, base_filepath
+        )
 
         self.parser = Parser(master_file_path)
         self.generator = None
@@ -66,6 +72,15 @@ class Facade(Singleton):
         if cls._instance is None:
             cls._instance = cls.from_args(args)
         return cls._instance
+    
+
+    @classmethod
+    def reset_system(cls, *args, **kwargs):
+        Stats.reset_instance()
+        Deprecations.reset_instance()
+        AST.reset_instance()
+        InputFileManager.reset_instance(None)
+        return cls.reset_instance(*args, **kwargs)
     
 
     def run(self):
