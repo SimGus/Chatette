@@ -144,11 +144,18 @@ class TestStrToBool(object):
 
 class TestRemoveDuplicates(object):
     def test_no_dup(self):
-        assert remove_duplicates({"a": ["one", "two"]}) == {"a": ["one", "two"]}
+        dictionary = remove_duplicates({"a": ["one", "two"]})
+        assert "a" in dictionary
+        assert "one" in dictionary["a"]
+        assert "two" in dictionary["a"]
     
     def test_dup(self):
-        assert \
-            remove_duplicates({"a": [1, 1], "b": ["o"]}) != {"a": [1, 1], "b": "o"}
+        dictionary = remove_duplicates({"a": [1, 1], "b": ["o"]})
+        assert "a" in dictionary
+        assert "b" in dictionary
+        assert 1 in dictionary["a"]
+        assert "o" in dictionary["b"]
+        assert len(dictionary["a"]) == 1
 
 
 class TestMain(object):
