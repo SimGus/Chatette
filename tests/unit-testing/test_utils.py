@@ -75,17 +75,13 @@ class TestChoose(object):
         assert choose([]) is None
     
     def test_not_array(self):
-        with pytest.raises(TypeError, message="Expecting TypeError when calling"+
-                                              "choose on None"):
+        with pytest.raises(TypeError):
             choose(None)
-        with pytest.raises(TypeError, message="Expecting TypeError when calling"+
-                                              "choose on an integer"):
+        with pytest.raises(TypeError):
             choose(5)
-        with pytest.raises(TypeError, message="Expecting TypeError when calling"+
-                                              "choose on a floating number"):
+        with pytest.raises(TypeError):
             choose(3.14)
-        with pytest.raises(KeyError, message="Expecting TypeError when calling"+
-                                              "choose on a dict"):
+        with pytest.raises(KeyError):
             choose({"a": 5})
 
     def test_short_array(self):
