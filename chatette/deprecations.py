@@ -3,7 +3,7 @@
 from warnings import warn
 
 from chatette.utils import Singleton, print_warn
-from chatette.refactor_parsing.utils import \
+from chatette.parsing.utils import \
      OLD_COMMENT_SYM, COMMENT_SYM, \
      OLD_CHOICE_START, OLD_CHOICE_END, CHOICE_START, CHOICE_END
 

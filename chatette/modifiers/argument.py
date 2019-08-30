@@ -5,7 +5,7 @@ Contaisn the different functions that allow to apply
 the argument generation modifier to one or several examples.
 """
 
-from chatette.refactor_parsing.utils import ARG_SYM
+from chatette.parsing.utils import ARG_SYM
 
 
 def modify_nb_possibilities(unmodified_nb_possibilities):

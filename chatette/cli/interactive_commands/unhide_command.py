@@ -7,7 +7,7 @@ Contains the strategy class that represents the interacive mode command
 from chatette.cli.interactive_commands.command_strategy import CommandStrategy
 from chatette.cli.interactive_commands.hide_command import HideCommand
 
-from chatette.refactor_units.ast import AST
+from chatette.units.ast import AST
 
 
 class UnhideCommand(CommandStrategy):

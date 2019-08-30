@@ -4,7 +4,7 @@
 # TODO shouldn't generate twice the same statement
 
 from chatette.utils import print_DBG, remove_duplicates, UnitType
-from chatette.refactor_units.ast import AST
+from chatette.units.ast import AST
 
 
 class Generator(object):

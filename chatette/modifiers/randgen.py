@@ -8,7 +8,7 @@ the random generation modifier to one or several examples.
 from random import randrange
 from copy import deepcopy
 
-from chatette.refactor_units import add_example_no_dup
+from chatette.units import add_example_no_dup
 
 
 RANDGEN_MAPPING_KEY = "randgen_mapping"

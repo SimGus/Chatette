@@ -11,14 +11,14 @@ from random import seed as random_seed
 from six.moves import input, getcwd
 
 from chatette.utils import Singleton, print_DBG, print_warn, random_string
-from chatette.refactor_parsing.parser import Parser
+from chatette.parsing.parser import Parser
 from chatette.generator import Generator
 import chatette.adapters.factory as adapter_factory
 
 from chatette.statistics import Stats
 from chatette.deprecations import Deprecations
-from chatette.refactor_units.ast import AST
-from chatette.refactor_parsing.input_file_manager import InputFileManager
+from chatette.units.ast import AST
+from chatette.parsing.input_file_manager import InputFileManager
 
 
 class Facade(Singleton):

@@ -11,7 +11,7 @@ from test_command_strategy import new_facade, get_facade
 from chatette.cli.interactive_commands.command_strategy import CommandStrategy
 from chatette.cli.interactive_commands.rename_command import RenameCommand
 from chatette.utils import UnitType
-from chatette.refactor_units.ast import AST
+from chatette.units.ast import AST
 
 
 def test_obj():

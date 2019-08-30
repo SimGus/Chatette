@@ -7,7 +7,7 @@ can generate.
 
 from chatette.cli.interactive_commands.command_strategy import CommandStrategy
 
-from chatette.refactor_parsing.parser import Parser
+from chatette.parsing.parser import Parser
 
 
 class RuleCommand(CommandStrategy):

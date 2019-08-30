@@ -6,7 +6,7 @@ Contains the strategy class that represents the interactive mode command
 
 from chatette.cli.interactive_commands.command_strategy import CommandStrategy
 
-from chatette.refactor_units.ast import AST
+from chatette.units.ast import AST
 
 
 class RenameCommand(CommandStrategy):

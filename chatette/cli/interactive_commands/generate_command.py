@@ -9,7 +9,7 @@ from chatette.cli.interactive_commands.command_strategy import CommandStrategy
 from chatette.adapters.factory import create_adapter
 
 from chatette.facade import Facade
-from chatette.refactor_units.ast import AST
+from chatette.units.ast import AST
 
 
 class GenerateCommand(CommandStrategy):

@@ -8,11 +8,11 @@ in order to implement the strategy design pattern.
 import re
 
 from chatette.utils import rchop, UnitType
-from chatette.refactor_parsing.utils import \
+from chatette.parsing.utils import \
     ALIAS_SYM, SLOT_SYM, INTENT_SYM, VARIATION_SYM, ESCAPEMENT_SYM
 from chatette.cli.terminal_writer import TerminalWriter, RedirectionType
 
-from chatette.refactor_units.ast import AST
+from chatette.units.ast import AST
 
 
 REDIRECTION_SYM = ">"

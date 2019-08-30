@@ -7,10 +7,10 @@ declaration.
 
 from chatette.cli.interactive_commands.command_strategy import CommandStrategy
 from chatette.utils import str_to_bool
-from chatette.refactor_parsing.utils import \
+from chatette.parsing.utils import \
     CASE_GEN_SYM, ARG_SYM, RAND_GEN_SYM, RAND_GEN_PERCENT_SYM
 
-from chatette.refactor_units.ast import AST
+from chatette.units.ast import AST
 
 
 class SetModifierCommand(CommandStrategy):
