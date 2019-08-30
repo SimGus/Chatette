@@ -98,7 +98,6 @@ class Facade(Singleton):
         """
         Parses the new template file at `file_path` with the current parser.
         """
-        print("FACADE parse file: " + str(file_path))
         self.parser.open_new_file(file_path)
         self.parser.parse()
 
