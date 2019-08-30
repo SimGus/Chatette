@@ -8,8 +8,8 @@ in order to implement the strategy design pattern.
 import re
 
 from chatette.utils import rchop, UnitType
-from chatette.parsing.parser_utils import \
-    ALIAS_SYM, SLOT_SYM, INTENT_SYM, VARIATION_SYM, ESCAPE_SYM
+from chatette.refactor_parsing.utils import \
+    ALIAS_SYM, SLOT_SYM, INTENT_SYM, VARIATION_SYM, ESCAPEMENT_SYM
 from chatette.cli.terminal_writer import TerminalWriter, RedirectionType
 
 from chatette.refactor_units.ast import AST
@@ -142,7 +142,7 @@ class CommandStrategy(object):
         Removes the double quotes at the beginning and end of `text` and
         returns it. Double quotes that shouldn't be considered are escaped.
         """
-        return text[1:-1].replace(ESCAPE_SYM + '"', '"')
+        return text[1:-1].replace(ESCAPEMENT_SYM + '"', '"')
 
     @staticmethod
     def split_exact_unit_name(text):
@@ -154,12 +154,12 @@ class CommandStrategy(object):
         `None` for the variation identifier if it wasn't found.
         @raises: - `SyntaxError` if `text` is not valid (several hashtags),
         """
-        no_quote_text = text[1:-1].replace(ESCAPE_SYM + '"', '"')
+        no_quote_text = text[1:-1].replace(ESCAPEMENT_SYM + '"', '"')
         splitted = no_quote_text.split(VARIATION_SYM)
         processed_splitted = []
         current_word = ""
         for word in splitted:
-            if word.endswith(ESCAPE_SYM):
+            if word.endswith(ESCAPEMENT_SYM):
                 if current_word == "":
                     current_word = word[:-1]
                 else:

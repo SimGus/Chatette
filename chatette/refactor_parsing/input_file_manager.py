@@ -9,7 +9,8 @@ to template files.
 import os.path
 
 from chatette.utils import Singleton
-from chatette.parsing.line_count_file_wrapper import LineCountFileWrapper
+from chatette.refactor_parsing.line_count_file_wrapper import \
+    LineCountFileWrapper
 from chatette.statistics import Stats
 
 

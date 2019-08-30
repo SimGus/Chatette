@@ -11,7 +11,6 @@ from random import seed as random_seed
 from six.moves import input, getcwd
 
 from chatette.utils import Singleton, print_DBG, print_warn, random_string
-# from chatette.parsing.parser import Parser
 from chatette.refactor_parsing.parser import Parser
 from chatette.generator import Generator
 import chatette.adapters.factory as adapter_factory

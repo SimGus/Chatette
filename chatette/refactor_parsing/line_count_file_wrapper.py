@@ -1,5 +1,5 @@
 """
-Module `chatette.parsing.line_count_file_wrapper`.
+Module `chatette.refactor_parsing.line_count_file_wrapper`.
 Contains a wrapper of `io.File` that counts on which line it is currently.
 """
 

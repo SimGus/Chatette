@@ -3,7 +3,6 @@ import json
 import os
 
 from chatette.utils import cast_to_unicode
-from chatette.units import ENTITY_MARKER
 from ._base import Adapter
 
 
@@ -12,7 +11,6 @@ class JsonListAdapter(Adapter):
         return "jsonl"
 
     def prepare_example(self, example):
-        example.text = example.text.replace(ENTITY_MARKER, "")
         return json.dumps(
             cast_to_unicode(example.as_dict()),
             ensure_ascii=False, sort_keys=True

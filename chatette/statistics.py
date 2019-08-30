@@ -70,7 +70,6 @@ class Stats(Singleton):
         self.nb_units_declared += 1
         self.nb_slots_declared += 1
     def new_alias_declared(self):
-        print("NEW ALIAS")
         self.nb_units_declared += 1
         self.nb_aliases_declared += 1
     
@@ -144,7 +143,6 @@ class Stats(Singleton):
                 "Tried to decrement statistics for unit declarations below 0."
             )
         self.nb_aliases_declared -= 1
-        print("REMOVE ALIAS: " + str(self.nb_aliases_declared))
         if self.nb_aliases_declared < 0:
             raise InvalidStatsState(
                 "Tried to decrement statistics for alias declarations below 0."

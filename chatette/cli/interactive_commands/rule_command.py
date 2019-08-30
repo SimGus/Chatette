@@ -6,7 +6,6 @@ can generate.
 """
 
 from chatette.cli.interactive_commands.command_strategy import CommandStrategy
-from chatette.units.alias.definition import AliasDefinition
 
 from chatette.refactor_parsing.parser import Parser
 
