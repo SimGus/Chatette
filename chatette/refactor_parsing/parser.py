@@ -154,8 +154,6 @@ class Parser(object):
 
         try:
             self.ast.add_unit(unit)
-            Stats.get_or_create().new_unit_declared(unit.unit_type)
-            Stats.get_or_create().new_variation_unit_declared(unit.unit_type)
         except ValueError as e:
             if variation is None:
                 self.input_file_manager.syntax_error(str(e))
@@ -165,9 +163,7 @@ class Parser(object):
                     "declared for " + unit.full_name + "."
                 )
             else:  # new variation was declared
-                Stats.get_or_create().new_variation_unit_declared(
-                    unit.unit_type
-                )
+                pass
         self._current_variation_name = variation
         self._current_unit_declaration = unit
 

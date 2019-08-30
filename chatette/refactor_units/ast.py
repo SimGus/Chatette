@@ -18,6 +18,8 @@ from chatette.refactor_units.modifiable.definitions.slot import \
 from chatette.refactor_units.modifiable.definitions.intent import \
     IntentDefinition
 
+from chatette.statistics import Stats
+
 
 class AST(Singleton):
     _instance = None
@@ -25,6 +27,8 @@ class AST(Singleton):
         self._alias_definitions = dict()
         self._slot_definitions = dict()
         self._intent_definitions = dict()
+
+        self.stats = Stats.get_or_create()
     
 
     def _get_relevant_dict(self, unit_type):
@@ -71,6 +75,7 @@ class AST(Singleton):
         Adds the intent definition `intent` in the relevant dict.
         @raises: `ValueError` if the intent was already defined.
         """
+        self.stats.new_variation_unit_declared(unit_type)
         relevant_dict = self._get_relevant_dict(unit_type)
         if unit.identifier in relevant_dict:
             raise ValueError(
@@ -78,6 +83,7 @@ class AST(Singleton):
                 unit.identifier + "' twice."
             )
         relevant_dict[unit.identifier] = unit
+        self.stats.new_unit_declared(unit_type)
 
     def add_alias(self, alias):
         """
@@ -155,6 +161,7 @@ class AST(Singleton):
         If `variation_name` is not `None`, only deletes this particular
         variation for this unit.
         @raises: - `KeyError` if the unit `unit_name` wasn't declared.
+                 - `KeyError` if the variation `variation_name` doesn't exist.
         """
         relevant_dict = self._get_relevant_dict(unit_type)
         if unit_name not in relevant_dict:
@@ -163,13 +170,14 @@ class AST(Singleton):
                 "', but it wasn't declared."
             )
         if variation_name is None:
-            Stats.get_or_create().one_unit_removed(unit_type)
-            Stats.get_or_create().several_variation_units_removed(
+            self.stats.one_unit_removed(unit_type)
+            self.stats.several_variation_units_removed(
                 unit_type, relevant_dict[unit_name].get_number_variations()
             )
             del relevant_dict[unit_name]
         else:
             relevant_dict[unit_name].delete_variation(variation_name)
+            self.stats.one_variation_unit_removed(unit_type)
     
 
     def print_DBG(self):
