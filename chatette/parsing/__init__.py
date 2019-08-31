@@ -40,7 +40,7 @@ class ItemBuilder(with_metaclass(ABCMeta, object)):
         self.randgen = False
         self.randgen_name = None
         self.randgen_percent = 50
-    
+
     def _check_information(self):
         if not self.randgen and self.randgen_name is not None:  # Should never happen
             raise ValueError(
@@ -48,7 +48,7 @@ class ItemBuilder(with_metaclass(ABCMeta, object)):
                 "a random generation modifier name but no " + \
                 "random generation modifier."
             )
-        
+
     def _build_modifiers_repr(self):
         """
         Returns an instance of `ModifiersRepresentation` that corresponds
@@ -60,7 +60,7 @@ class ItemBuilder(with_metaclass(ABCMeta, object)):
         modifiers.randgen_name = self.randgen_name
         modifiers.randgen_percent = self.randgen_percent
         return modifiers
-    
+
     @abstractmethod
     def create_concrete(self):
         raise NotImplementedError()
@@ -69,11 +69,11 @@ class ChoiceBuilder(ItemBuilder):
     def __init__(self):
         super(ChoiceBuilder, self).__init__()
         self.rules = []
-    
+
     def create_concrete(self):
         self._check_information()
         return Choice(
-            "No name",  self.leading_space, self._build_modifiers_repr(),
+            "No name", self.leading_space, self._build_modifiers_repr(),
             self.rules
         )  # TODO fix the problem with the name here
 
@@ -84,7 +84,7 @@ class UnitRefBuilder(ItemBuilder):
         self.identifier = None
         self.variation = None
         self.arg_value = None
-    
+
     def _check_information(self):
         super(UnitRefBuilder, self)._check_information()
         if self.type is None or self.identifier is None:  # Should never happen
@@ -92,7 +92,7 @@ class UnitRefBuilder(ItemBuilder):
                 "Tried to create a concrete unit reference without setting " + \
                 "its identifier or type."
             )
-    
+
     def _build_modifiers_repr(self):
         modifiers = super(UnitRefBuilder, self)._build_modifiers_repr()
         modifiers.argument_value = self.arg_value
@@ -117,7 +117,7 @@ class UnitDefBuilder(ItemBuilder):
         modifiers = super(UnitDefBuilder, self)._build_modifiers_repr()
         modifiers.argument_name = self.arg_name
         return modifiers
-    
+
     def _check_information(self):
         super(UnitDefBuilder, self)._check_information()
         if self.identifier is None:  # Should never happen
@@ -147,7 +147,7 @@ class IntentDefBuilder(UnitDefBuilder):
         super(IntentDefBuilder, self).__init__()
         self.nb_training_ex = None
         self.nb_testing_ex = None
-    
+
     def create_concrete(self):
         self._check_information()
         if self.variation is not None:
