@@ -22,6 +22,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Manage parsing statistics by creating a class intended for that
 - Only require `rasa_nlu_data` as a top-level field in base file (not `common_examples` and `entity_synonyms` anymore)
 
+### Removed
+- Completely removed the limits on the number of examples that can be generated
+
 ### Fixed
 - Take random generation names into account when generating all possible examples (issue #19)
 - Prevent some compatibility issues when using different versions of Python

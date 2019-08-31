@@ -14,15 +14,8 @@ class Generator(object):
     If there were inconsistencies in the input file, they are likely to be
     detected here.
     """
-    DEFAULT_MAX_NB_EXAMPLES_PER_INTENT = 1000000  # TODO: this might not be relevant anymore
-
     def __init__(self):
         self.ast = AST.get_or_create()
-        self.max_nb_single_intent_examples = \
-            Generator.DEFAULT_MAX_NB_EXAMPLES_PER_INTENT  # TODO remove this
-
-    def set_max_nb_single_intent_examples(self, new_max):
-        self.max_nb_single_intent_examples = new_max  # TODO that is to be removed
 
     def generate_train(self):
         print_DBG("Generating training examples...")
