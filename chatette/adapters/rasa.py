@@ -1,3 +1,9 @@
+# coding: utf-8
+"""
+Module `chatette.adapters.rasa`
+Contains the definition of the adapter that writes output in JSON
+for Rasa NLU.
+"""
 import json
 
 from chatette.utils import cast_to_unicode
@@ -38,8 +44,9 @@ class RasaAdapter(Adapter):
             self.__synonym_format(batch.synonyms)
         json_data = cast_to_unicode(json_data)
 
-        output_file_handle.write(json.dumps(json_data, ensure_ascii=False,
-                                            indent=2, sort_keys=True))
+        output_file_handle.write(
+            json.dumps(json_data, ensure_ascii=False, indent=2, sort_keys=True)
+        )
 
     @classmethod
     def __synonym_format(cls, synonyms):

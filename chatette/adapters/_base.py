@@ -1,3 +1,9 @@
+# coding: utf-8
+"""
+Module `chatette.adapters._base`
+Contains the definition of the superclass for all adapters and
+for the batches of examples written to output files.
+"""
 import io
 import os
 import shutil
@@ -34,14 +40,19 @@ class Adapter(with_metaclass(ABCMeta, object)):
         writes batches of the examples `examples` and synonyms `synonyms`
         into them.
         """
-        single_file_output = (len(examples) <= self._batch_size)
+        if self._batch_size is not None:
+            single_file_output = (len(examples) <= self._batch_size)
+        else:
+            single_file_output = True
 
         if not os.path.exists(output_directory):
             os.makedirs(output_directory)
 
         for batch in self.__generate_batch(examples, synonyms, self._batch_size):
             output_file_path = \
-                self.__get_file_name(batch, output_directory, single_file_output)
+                self.__get_file_name(
+                    batch, output_directory, single_file_output
+                )
             with io.open(output_file_path, 'w') as output_file:
                 self._write_batch(output_file, batch)
 
@@ -51,10 +62,15 @@ class Adapter(with_metaclass(ABCMeta, object)):
     def __get_file_name(self, batch, output_directory, single_file):
         # pylint: disable=bad-continuation
         if single_file:
-            return os.path.join(output_directory, "output." +
-                                                  self._get_file_extension())
-        return os.path.join(output_directory, "output." + str(batch.index) +
-                                              "." + self._get_file_extension())
+            return \
+                os.path.join(
+                    output_directory, "output." + self._get_file_extension()
+                )
+        return \
+            os.path.join(
+                output_directory, "output." + str(batch.index) + "." + \
+                self._get_file_extension()
+            )
 
 
     @abstractmethod
@@ -66,10 +82,27 @@ class Adapter(with_metaclass(ABCMeta, object)):
         raise NotImplementedError()
 
     @classmethod
-    def __generate_batch(cls, examples, synonyms, n=1):
-        length = len(examples)
-        for index, ndx in enumerate(range(0, length, n)):
-            yield Batch(index, examples[ndx:min(ndx + n, length)], synonyms)
+    def __generate_batch(cls, examples, synonyms, nb_examples_per_batch):
+        """
+        Generates a batch every time it is called, containing
+        `nb_examples_per_batch` of the examples `examples`
+        and the synonyms `synonyms`.
+        If `nb_examples_per_batch` is `None`,
+        one batch containing all the examples will be generated.
+        """
+        if nb_examples_per_batch is None:
+            yield Batch(0, examples[:], synonyms)
+        else:
+            length = len(examples)
+            for (batch_index, i) in enumerate(
+                range(0, length, nb_examples_per_batch)
+            ):
+                yield \
+                    Batch(
+                        batch_index,
+                        examples[i:min(i + nb_examples_per_batch, length)],
+                        synonyms
+                    )
 
     
     @abstractmethod
