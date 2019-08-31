@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- New adapter to output *Markdown* a file that can be used as input for *Rasa NLU*
 - New choice syntax: `[choice1|choice2]`
 
 ### Changed
