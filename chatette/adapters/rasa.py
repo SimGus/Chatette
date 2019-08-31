@@ -41,7 +41,7 @@ class RasaAdapter(Adapter):
         json_data = self._get_base_to_extend()
         json_data["rasa_nlu_data"]["common_examples"] = rasa_entities
         json_data["rasa_nlu_data"]["entity_synonyms"] = \
-            self.__synonym_format(batch.synonyms)
+            self.__format_synonyms(batch.synonyms)
         json_data = cast_to_unicode(json_data)
 
         output_file_handle.write(
@@ -49,7 +49,7 @@ class RasaAdapter(Adapter):
         )
 
     @classmethod
-    def __synonym_format(cls, synonyms):
+    def __format_synonyms(cls, synonyms):
         # {str: [str]} -> [{"value": str, "synonyms": [str]}]
         return [
             {

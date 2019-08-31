@@ -44,6 +44,10 @@ class RasaMdAdapter(Adapter):
             for text in prepared_examples[intent_name]:
                 output_file_handle.write(cast_to_unicode("- " + text + '\n'))
             output_file_handle.write(cast_to_unicode('\n'))
+        
+        output_file_handle.write(
+            cast_to_unicode(self.__format_synonyms(batch.synonyms))
+        )
 
 
     def prepare_example(self, example):
@@ -63,4 +67,20 @@ class RasaMdAdapter(Adapter):
                 result[entity._start_index:entity._start_index + entity._len] + \
                 "](" + entity.slot_name + ")" + \
                 result[entity._start_index + entity._len:]
+        return result
+    
+
+    def __format_synonyms(self, synonyms):
+        """
+        Returns a str that will be written in the output files for all
+        the synonyms `synonyms`.
+        """
+        result = ""
+        for syn_name in synonyms:
+            if len(synonyms[syn_name]) > 1:
+                result += "## synonym:" + syn_name + '\n'
+                for syn in synonyms[syn_name]:
+                    if syn != syn_name:
+                        result += "- " + syn + '\n'
+                result += '\n'
         return result

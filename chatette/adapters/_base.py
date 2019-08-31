@@ -118,4 +118,6 @@ class Adapter(with_metaclass(ABCMeta, object)):
         concrete implementation of the adapter.
         Some adapters shouldn't accept an extendable base.
         """
-        raise ValueError(self.__class__.__name__ + " does not support base files.")
+        raise ValueError(
+            self.__class__.__name__ + " does not support base files."
+        )
