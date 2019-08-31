@@ -73,9 +73,9 @@ class ChoiceBuilder(ItemBuilder):
     def create_concrete(self):
         self._check_information()
         return Choice(
-            "No name", self.leading_space, self._build_modifiers_repr(),
+            self.leading_space, self._build_modifiers_repr(),
             self.rules
-        )  # TODO fix the problem with the name here
+        )
 
 class UnitRefBuilder(ItemBuilder):
     def __init__(self):

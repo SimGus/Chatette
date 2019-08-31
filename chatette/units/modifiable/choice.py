@@ -18,14 +18,14 @@ class Choice(ModifiableItem):
     """
     Represents a choice that can choose between rules and generate one of them.
     """
-    def __init__(self, name, leading_space, modifiers, rules=None):  # TODO fix the problem that choice have no by design name
-        super(Choice, self).__init__(name, leading_space, modifiers)
+    def __init__(self, leading_space, modifiers, rules=None):
+        super(Choice, self).__init__("<choice>", leading_space, modifiers)
         self._rules = []
         if rules is not None:
             self._rules.extend(rules)
 
     def _compute_full_name(self):
-        return "choice '" + self._name + "'"
+        return "choice"
     
     def _compute_nb_possibilities(self):
         acc = 0
