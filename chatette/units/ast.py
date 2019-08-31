@@ -8,7 +8,8 @@ NOTE: this is not exactly an AST as it is not a tree, but it has the same
       of the parsed information used to generate the output.
 """
 
-from chatette.utils import Singleton, UnitType
+from chatette.utils import \
+    Singleton, UnitType, remove_duplicates, extend_list_in_dict
 from chatette.statistics import Stats
 
 from chatette.units.modifiable.definitions.alias import \
@@ -178,6 +179,22 @@ class AST(Singleton):
         else:
             relevant_dict[unit_name].delete_variation(variation_name)
             self.stats.one_variation_unit_removed(unit_type)
+    
+
+    def get_entities_synonyms(self):  # TODO move that into AST
+        """
+        Makes a dict of all the synonyms of entities
+        based on the slot value they are assigned.
+        """
+        synonyms = dict()
+        for slot_definition in self._slot_definitions:
+            current_synonyms_dict = \
+                self._slot_definitions[slot_definition].get_synonyms_dict()
+            for slot_value in current_synonyms_dict:
+                extend_list_in_dict(
+                    synonyms, slot_value, current_synonyms_dict[slot_value]
+                )
+        return remove_duplicates(synonyms)
     
 
     def print_DBG(self):

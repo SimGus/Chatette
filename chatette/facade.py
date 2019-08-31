@@ -112,7 +112,7 @@ class Facade(Singleton):
             adapter = adapter_factory.create_adapter(adapter_str)
 
         self.generator = Generator()
-        synonyms = self.generator.get_entities_synonyms()
+        synonyms = AST.get_or_create().get_entities_synonyms()
 
         if os.path.exists(self.output_dir_path):
             if self.force_overwriting or self._ask_confirmation():

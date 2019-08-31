@@ -1,9 +1,7 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+# coding: utf-8
 
-# TODO shouldn't generate twice the same statement
-
-from chatette.utils import print_DBG, remove_duplicates, UnitType
+from chatette.utils import print_DBG, UnitType
 from chatette.units.ast import AST
 
 
@@ -45,22 +43,6 @@ class Generator(object):
                 examples = intent.generate_test(training_examples)
                 for example in examples:
                     yield example
-
-    def get_entities_synonyms(self):  # TODO move that into AST
-        """
-        Makes a dict of all the synonyms of entities
-        based on the slot value they are assigned.
-        """
-        synonyms = dict()
-        for slot_definition in self.ast[UnitType.slot]:
-            current_synonyms_dict = \
-                self.ast[UnitType.slot][slot_definition].get_synonyms_dict()
-            for slot_value in current_synonyms_dict:
-                if slot_value not in synonyms:
-                    synonyms[slot_value] = current_synonyms_dict[slot_value]
-                else:
-                    synonyms[slot_value].extend(current_synonyms_dict[slot_value])
-        return remove_duplicates(synonyms)
 
 
 if __name__ == "__main__":

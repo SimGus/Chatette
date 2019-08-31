@@ -60,7 +60,7 @@ class ChatetteFacade(object):
         else:
             raise ValueError(adapter+" is not a valid adapter.")
 
-        synonyms = self.generator.get_entities_synonyms()
+        synonyms = AST.get_or_create().get_entities_synonyms()
 
         if self.train_examples:
             adapter.write(
@@ -192,7 +192,7 @@ class TestSystem(object):
                 )
             legal_syn = TestSystem.get_legal_synonyms(file_path)
             if legal_syn is not None:
-                synonyms = facade.generator.get_entities_synonyms()
+                synonyms = AST.get_or_create().get_entities_synonyms()
                 for key in synonyms:
                     if key not in legal_syn:
                         pytest.fail(
@@ -244,7 +244,7 @@ class TestSystem(object):
             
             legal_syn = TestSystem.get_legal_synonyms(file_path)
             if legal_syn is not None:
-                synonyms = facade.generator.get_entities_synonyms()
+                synonyms = AST.get_or_create().get_entities_synonyms()
                 for key in synonyms:
                     if key not in legal_syn:
                         pytest.fail(

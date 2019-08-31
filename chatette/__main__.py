@@ -44,7 +44,7 @@ def make_argument_parser():
         help="Print the version number of the module"
     )
     _add_optional_arguments(argument_parser)
-    
+
     return argument_parser
 
 def _add_positional_arguments(argument_parser, should_be_optional=False):
