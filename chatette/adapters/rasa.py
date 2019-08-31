@@ -19,6 +19,20 @@ class RasaAdapter(Adapter):
         return "json"
 
 
+    def _write_batch(self, output_file_handle, batch):
+        rasa_entities = [self.prepare_example(ex) for ex in batch.examples]
+
+        json_data = self._get_base_to_extend()
+        json_data["rasa_nlu_data"]["common_examples"] = rasa_entities
+        json_data["rasa_nlu_data"]["entity_synonyms"] = \
+            self.__format_synonyms(batch.synonyms)
+        json_data = cast_to_unicode(json_data)
+
+        output_file_handle.write(
+            json.dumps(json_data, ensure_ascii=False, indent=2, sort_keys=True)
+        )
+
+
     def prepare_example(self, example):
         def entity_to_rasa(entity):
             return {
@@ -33,20 +47,6 @@ class RasaAdapter(Adapter):
             "text": example.text,
             "entities": [entity_to_rasa(entity) for entity in example.entities]
         }
-
-
-    def _write_batch(self, output_file_handle, batch):
-        rasa_entities = [self.prepare_example(ex) for ex in batch.examples]
-
-        json_data = self._get_base_to_extend()
-        json_data["rasa_nlu_data"]["common_examples"] = rasa_entities
-        json_data["rasa_nlu_data"]["entity_synonyms"] = \
-            self.__format_synonyms(batch.synonyms)
-        json_data = cast_to_unicode(json_data)
-
-        output_file_handle.write(
-            json.dumps(json_data, ensure_ascii=False, indent=2, sort_keys=True)
-        )
 
     @classmethod
     def __format_synonyms(cls, synonyms):
@@ -90,8 +90,9 @@ class RasaAdapter(Adapter):
         if not isinstance(self._base_file_contents, dict):
             self._base_file_contents = None
             raise SyntaxError(
-                "Couldn't load data from base file '" + \
-                self._base_filepath + "'")
+                "Couldn't load valid data from base file '" + \
+                self._base_filepath + "'"
+            )
         else:
             if "rasa_nlu_data" not in self._base_file_contents:
                 self._base_file_contents = None

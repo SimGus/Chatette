@@ -6,6 +6,7 @@ for Rasa NLU.
 """
 
 import os
+from six import string_types
 
 from chatette.adapters._base import Adapter
 from chatette.utils import append_to_list_in_dict, cast_to_unicode
@@ -14,6 +15,7 @@ from chatette.utils import append_to_list_in_dict, cast_to_unicode
 class RasaMdAdapter(Adapter):
     def __init__(self, base_filepath=None):
         super(RasaMdAdapter, self).__init__(base_filepath, None)
+        self._base_file_contents = None
 
 
     def _get_file_extension(self):
@@ -48,6 +50,10 @@ class RasaMdAdapter(Adapter):
         output_file_handle.write(
             cast_to_unicode(self.__format_synonyms(batch.synonyms))
         )
+
+        remainder = self._get_base_to_extend()
+        if remainder is not None:
+            output_file_handle.write(cast_to_unicode(remainder) + '\n')
 
 
     def prepare_example(self, example):
@@ -84,3 +90,26 @@ class RasaMdAdapter(Adapter):
                         result += "- " + syn + '\n'
                 result += '\n'
         return result
+    
+
+    def _get_base_to_extend(self):
+        if self._base_file_contents is None:
+            if self._base_filepath is None:
+                return self._get_empty_base()
+            with open(self._base_filepath, 'r') as base_file:
+                self._base_file_contents = ''.join(base_file.readlines())
+            self.check_base_file_contents()
+        return self._base_file_contents
+
+    def _get_empty_base(self):
+        return ""
+    
+    def check_base_file_contents(self):
+        if self._base_file_contents is None:
+            return
+        if not isinstance(self._base_file_contents, string_types):
+            self._base_file_contents = None
+            raise SyntaxError(
+                "Couldn't load valid data from base file '" + \
+                self._base_file_contents + "'"
+            )
