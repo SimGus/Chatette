@@ -1,7 +1,6 @@
 # TODOs
 
 - [ ] add sections in TODO list to make it more readable
-- [ ] *Requirements* add `six`
 
 - [ ] parse in a better way asked number of generation of intents
 - [ ] accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax?
@@ -140,15 +139,13 @@
 - [x] replace `range` by `six.moves.range`
 - [x] complete refactor of the code: the code is almost unmaintainable
 - [x] refactor units to remove duplicated code: make modifiers act after the string has been generated
+- [x] *Requirements* add `six`
 
 # Bugs
 
-- **BUG**: arguments are not given down when an argument is transmitted as the argument of a token
-- **BUG**: random generation modifiers' names are not taken into account when generating all examples
-
 ## To confirm
-- Some intents don't generate any string even though they should
 - **BUG**: a leading space is generated even though a unit has a random gen modifier and the unit wasn't generated
+- **BUG**: arguments are not given down when an argument is transmitted as the argument of a token
 
 ## Fixed bugs
 
@@ -187,6 +184,7 @@
 - **fixed**: the interactive console seems to crash at `input()`?
 - **fixed**: space at the end of lines in json outputs (fixed in newest versions of `json`: https://bugs.python.org/issue16333)
 - **fixed**: `{my [own?]/a} ~[religion]` can generate a double space
+- **fixed**: random generation modifiers' names are not taken into account when generating all examples
 
 # Ideas
 
