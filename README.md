@@ -115,20 +115,20 @@ The two projects actually have different goals:
 *Chatito* aims to be a generic but powerful *DSL*, that should stay very legible. While it is perfectly fine for small projects, when projects get larger, the simplicity of its *DSL* may become a burden: your template file becomes overwhelmingly large, to the point you get lost inside it.
 
 *Chatette* defines a more complex *DSL* to be able to manage larger projects and tries to stay as interoperable with *Chatito* as possible.
-Here is a non-exhaustive list of features *Chatette* has and that can help manage large projects:
+Here is a non-exhaustive list of features *Chatette* has and that *Chatito* does not:
 
-- Ability to break down templates into multiple files
-- Possibility to specify the probability of generating some parts of the sentences
-- Conditional generation of some parts of the sentences, given which other parts were generated
-- Choice syntax to prevent copy-pasting rules with only a few changes and to easily modify the generation behavior of parts of sentences
-- Ability to define the value of each slot whatever the generated example
-- Syntax for generating words with different case for the leading letter
-- Argument support so that some templates may be filled by different strings in different situations
-- Indentation is permissive and must only be somewhat coherent
-- Support for synonyms
-- Interactive command interpreter
-- Output for Rasa in *JSON* or in *Markdown* formats
-- Faster generation for large projects
+- Ability to break down templates into **multiple files**
+- Possibility to specify the **probability of generating some parts** of the sentences
+- **Conditional generation of some parts** of the sentences, given which other parts were generated
+- **Choice syntax** to prevent copy-pasting rules with only a few changes and to easily modify the generation behavior of parts of sentences
+- Ability to **define the value of each slot (entity)** whatever the generated example
+- Syntax for generating words with **different case** for the leading letter
+- **Argument support** so that some templates may be filled by different strings in different situations
+- **Indentation is permissive** and must only be somewhat coherent
+- Support for **synonyms**
+- **Interactive command interpreter**
+- Output for Rasa in ***JSON* or in *Markdown* formats**
+- **Faster generation** for large projects
 
 As the *Chatette*'s DSL is a superset of *Chatito*'s one, input files used for *Chatito* are most of the time completely usable with *Chatette* (not the other way around). Hence, it is easy to start using *Chatette* if you used *Chatito* before.
 
