@@ -1,10 +1,10 @@
 # TODOs
 
-- [ ] add section in TODOs
+- [ ] add sections in TODO list to make it more readable
 - [ ] *Requirements* add `six`
 
 - [ ] parse in a better way asked number of generation of intents
-- [ ] accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax
+- [ ] accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax?
 - [ ] add some kind of optional version number within template files
 - [ ] add a way to specify a rule on several consecutive lines
 - [ ] add a way to give several different names to units
@@ -82,7 +82,6 @@
 - [ ] *Docs* add a lexicon page in the wiki
 - [ ] *Docs* add a "quickstart" section for the people who already know *Chatito*
 
-- [ ] add sections in TODO list to make it more readable
 - [ ] make an installer to use the script directly from the command line (at least in *nix systems)
 
 ## Done
