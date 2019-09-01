@@ -115,7 +115,7 @@ The two projects actually have different goals:
 *Chatito* aims to be a generic but powerful *DSL*, that should stay very legible. While it is perfectly fine for small projects, when projects get larger, the simplicity of its *DSL* may become a burden: your template file becomes overwhelmingly large, to the point you get lost inside it.
 
 *Chatette* defines a more complex *DSL* to be able to manage larger projects and tries to stay as interoperable with *Chatito* as possible.
-Here is a non-exhaustive list of features *Chatette* has and that *Chatito* does not:
+Here is a non-exhaustive list of features *Chatette* has and that *Chatito* does not have:
 
 - Ability to break down templates into **multiple files**
 - Possibility to specify the **probability of generating some parts** of the sentences
