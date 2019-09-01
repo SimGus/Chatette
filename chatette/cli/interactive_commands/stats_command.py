@@ -5,19 +5,18 @@ Contains the strategy class that represents the interactive mode command
 """
 
 from chatette.cli.interactive_commands.command_strategy import CommandStrategy
+from chatette.statistics import Stats
 
 
 class StatsCommand(CommandStrategy):
 
-    def execute(self, facade):
+    def execute(self):
         """Implements the command `stats`, printing parsing statistics."""
-        self.print_wrapper.write("Statistics:")
-        stats = facade.get_stats_as_str()
-        self.print_wrapper.write(stats)
+        self.print_wrapper.write(str(Stats.get_or_create()))
 
 
     # Override abstract methods
-    def execute_on_unit(self, facade, unit_type, unit_name, variation_name=None):
+    def execute_on_unit(self, unit_type, unit_name, variation_name=None):
         raise NotImplementedError()
-    def finish_execution(self, facade):
+    def finish_execution(self):
         raise NotImplementedError()

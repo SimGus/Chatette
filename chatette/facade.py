@@ -1,3 +1,4 @@
+# coding: utf-8
 """
 Module `chatette.facade`
 Contains a facade to the system, allowing to run the parsing, generation and
@@ -9,23 +10,29 @@ import shutil
 from random import seed as random_seed
 from six.moves import input, getcwd
 
-from chatette.utils import print_DBG, print_warn
+from chatette.utils import Singleton, print_DBG, print_warn, random_string
 from chatette.parsing.parser import Parser
 from chatette.generator import Generator
 import chatette.adapters.factory as adapter_factory
 
+from chatette.statistics import Stats
+from chatette.deprecations import Deprecations
+from chatette.units.ast import AST
+from chatette.parsing.input_file_manager import InputFileManager
 
-class Facade(object):
+
+class Facade(Singleton):
     """
     Facade of the whole program in charge of instantiating the different
     components required for the parsing, generation and writing of the
     relevant informations.
     Implements the design patterns facade and singleton.
     """
-    instance = None
-    def __init__(self, master_file_path, output_dir_path, adapter_str="rasa",
-                 base_filepath=None, local=False, seed=None,
-                 force_overwriting=False):
+    _instance = None
+    def __init__(self,
+        master_file_path, output_dir_path=None, adapter_str="rasa",
+        base_filepath=None, local=False, seed=None, force_overwriting=False
+    ):
         if local:
             self.output_dir_path = os.path.dirname(master_file_path)
         else:
@@ -39,32 +46,41 @@ class Facade(object):
         self.force_overwriting = force_overwriting
 
         # Initialize the random number generator
-        if seed is not None:
-            random_seed(seed)
+        if seed is None:
+            seed = random_string()
+            print("Executing Chatette with random seed '" + seed + "'.")
+        else:
+            print("Executing Chatette with seed '" + seed + "'.")
+        random_seed(seed)
 
-        self.adapter = adapter_factory.create_adapter(adapter_str,
-                                                      base_filepath)
+        self.adapter = adapter_factory.create_adapter(
+            adapter_str, base_filepath
+        )
 
         self.parser = Parser(master_file_path)
-        self.ast_definitions = None
         self.generator = None
+
     @classmethod
     def from_args(cls, args):
-        return cls(args.input, args.output, args.adapter, args.base_filepath,
-                   args.local, args.seed, args.force)
+        return cls(
+            args.input, args.output, args.adapter, args.base_filepath,
+            args.local, args.seed, args.force
+        )
+    @classmethod
+    def get_or_create_from_args(cls, args):
+        if cls._instance is None:
+            cls._instance = cls.from_args(args)
+        return cls._instance
+    
 
-    @staticmethod
-    def get_or_create(master_file_path, output_dir_path, adapter_str=None,
-                      local=False, seed=None):
-        if Facade.instance is None:
-            Facade.instance = Facade(master_file_path, output_dir_path,
-                                     adapter_str, local, seed)
-        return Facade.instance
-    @staticmethod
-    def get_or_create_from_args(args):
-        if Facade.instance is None:
-            instance = Facade.from_args(args)
-        return instance
+    @classmethod
+    def reset_system(cls, *args, **kwargs):
+        Stats.reset_instance()
+        Deprecations.reset_instance()
+        AST.reset_instance()
+        InputFileManager.reset_instance(None)
+        return cls.reset_instance(*args, **kwargs)
+    
 
     def run(self):
         """
@@ -75,14 +91,14 @@ class Facade(object):
 
     def run_parsing(self):
         """Executes the parsing alone."""
-        self.ast_definitions = self.parser.parse()
+        self.parser.parse()
 
-    def parse_file(self, filepath):
+    def parse_file(self, file_path):
         """
-        Parses the new template file at `filepath` with the current parser.
+        Parses the new template file at `file_path` with the current parser.
         """
-        self.parser.open_new_master_file(filepath)
-        self.ast_definitions = self.parser.parse()
+        self.parser.open_new_file(file_path)
+        self.parser.parse()
 
     def run_generation(self, adapter_str=None):
         """"
@@ -95,8 +111,8 @@ class Facade(object):
         else:
             adapter = adapter_factory.create_adapter(adapter_str)
 
-        self.generator = Generator(self.ast_definitions)
-        synonyms = self.generator.get_entities_synonyms()
+        self.generator = Generator()
+        synonyms = AST.get_or_create().get_entities_synonyms()
 
         if os.path.exists(self.output_dir_path):
             if self.force_overwriting or self._ask_confirmation():

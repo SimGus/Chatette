@@ -8,29 +8,33 @@ import io
 from six.moves import input
 
 from chatette import __version__
-from chatette.utils import print_DBG
+from chatette.utils import Singleton, print_DBG
+from chatette.facade import Facade
 
-from chatette.cli.interactive_commands import exit_command, stats_command, \
-                                              parse_command, exist_command, \
-                                              rename_command, delete_command, \
-                                              examples_command, hide_command, \
-                                              unhide_command, execute_command, \
-                                              show_command, rule_command, \
-                                              generate_command, \
-                                              add_rule_command, declare_command, \
-                                              set_modifier_command, save_command
+from chatette.cli.interactive_commands import \
+    exit_command, stats_command, parse_command, exist_command, rename_command, \
+    delete_command, examples_command, hide_command, unhide_command, \
+    execute_command, show_command, rule_command, generate_command, \
+    add_rule_command, declare_command, set_modifier_command, save_command
 
 
-class CommandLineInterpreter(object):
-    def __init__(self, facade, commands_file_path):
-        self.facade = facade
+class CommandLineInterpreter(Singleton):
+    _instance = None
+    def __init__(self, args):
+        commands_file_path = args.interactive_commands_file
         self._dont_enter_interactive_mode = True
+        if args.input is None:
+            self.facade = None
+        else:
+            self.facade = Facade.get_or_create_from_args(args)
+        
         self.introduce()
         if commands_file_path is not None:
             self._dont_enter_interactive_mode = \
                 self._execute_commands_file(commands_file_path)
         else:
             self._dont_enter_interactive_mode = False
+
 
 
     def _execute_commands_file(self, commands_file_path):
@@ -60,7 +64,8 @@ class CommandLineInterpreter(object):
         asks the facade to execute the parsing of the master file if needed.
         """
         print("Chatette v"+__version__+" running in *interactive mode*.")
-        self.facade.run_parsing()
+        if self.facade is not None:
+            self.facade.run_parsing()
 
     def wait_for_input(self):
         """
@@ -93,7 +98,7 @@ class CommandLineInterpreter(object):
             return False
         if command.should_exit():
             return True
-        result = command.execute(self.facade)
+        result = command.execute()
         if isinstance(command, execute_command.ExecuteCommand):
             self.execute_commands(result)
         command.flush_output()

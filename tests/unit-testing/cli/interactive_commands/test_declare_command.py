@@ -11,7 +11,8 @@ from test_command_strategy import new_facade
 from chatette.cli.interactive_commands.command_strategy import CommandStrategy
 from chatette.cli.interactive_commands.declare_command import DeclareCommand
 
-from chatette.parsing.parser_utils import UnitType
+from chatette.utils import UnitType
+from chatette.units.ast import AST
 
 
 def test_obj():
@@ -28,69 +29,72 @@ def test_err(capsys):
     facade = new_facade()
 
     cmd = DeclareCommand("declare")
-    cmd.execute(facade)
+    cmd.execute()
     captured = capsys.readouterr()
     assert "[ERROR]\tMissing some arguments\n\tUsage: " + \
            'declare <unit-type> "<unit-name>"' in captured.out
 
     cmd = DeclareCommand("declare nothing /a/")
-    cmd.execute(facade)
+    cmd.execute()
     captured = capsys.readouterr()
     assert "[ERROR]\tUnknown unit type: 'nothing'." in captured.out
 
     cmd = DeclareCommand('declare alias "var#a#b"')
-    cmd.execute(facade)
+    cmd.execute()
     captured = capsys.readouterr()
     assert "[ERROR]\tUnit identifier couldn't be interpreted. " + \
            "Did you mean to escape some hashtags '#'?" in captured.out
 
     cmd = DeclareCommand('declare alias "a#var"')
-    cmd.execute(facade)
+    cmd.execute()
     captured = capsys.readouterr()
     assert "[ERROR]\tVariation name detected, " + \
            "while units cannot be declared with a variation. " + \
            "Did you mean to escape some hashtags '#'?" in captured.out
 
     cmd = DeclareCommand('declare alias "var"')
-    cmd.execute(facade)
+    cmd.execute()
     captured = capsys.readouterr()
     assert "Alias 'var' is already defined."
 
 
 def test_execute(capsys):
-    cmd = DeclareCommand('declare alias "machin"')
+    print("AAAAAAAAAAAA")
     facade = new_facade()
-    cmd.execute(facade)
+    cmd = DeclareCommand('declare alias "machin"')
+    cmd.execute()
     try:
-        unit = facade.parser.ast.get_definition("machin", UnitType.alias)
-        assert len(unit.variations) == 0
-        assert len(unit.rules) == 0
+        unit = AST.get_or_create()[UnitType.alias]["machin"]
+        assert len(unit._variation_rules) == 0
+        assert len(unit._all_rules) == 0
     except (KeyError, ValueError):
         pytest.fail("Unexpected error, 'declare' command didn't work.")
     
     captured = capsys.readouterr()
     assert "Alias 'machin' was successfully declared." in captured.out
 
-    cmd = DeclareCommand('declare slot "machin"')
+    print("AAAAAAAAAAAA")
     facade = new_facade()
-    cmd.execute(facade)
+    cmd = DeclareCommand('declare slot "machin"')
+    cmd.execute()
     try:
-        unit = facade.parser.ast.get_definition("machin", UnitType.slot)
-        assert len(unit.variations) == 0
-        assert len(unit.rules) == 0
+        unit = AST.get_or_create()[UnitType.slot]["machin"]
+        assert len(unit._variation_rules) == 0
+        assert len(unit._all_rules) == 0
     except (KeyError, ValueError):
         pytest.fail("Unexpected error, 'declare' command didn't work.")
     
     captured = capsys.readouterr()
     assert "Slot 'machin' was successfully declared." in captured.out
 
-    cmd = DeclareCommand('declare intent "machin"')
+    print("AAAAAAAAAAAA")
     facade = new_facade()
-    cmd.execute(facade)
+    cmd = DeclareCommand('declare intent "machin"')
+    cmd.execute()
     try:
-        unit = facade.parser.ast.get_definition("machin", UnitType.intent)
-        assert len(unit.variations) == 0
-        assert len(unit.rules) == 0
+        unit = AST.get_or_create()[UnitType.intent]["machin"]
+        assert len(unit._variation_rules) == 0
+        assert len(unit._all_rules) == 0
     except (KeyError, ValueError):
         pytest.fail("Unexpected error, 'declare' command didn't work.")
     
@@ -103,5 +107,5 @@ def test_abstract_methods():
     with pytest.raises(NotImplementedError):
         cmd.execute_on_unit(None, None, None)
     with pytest.raises(NotImplementedError):
-        cmd.finish_execution(None)
+        cmd.finish_execution()
     

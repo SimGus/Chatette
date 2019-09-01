@@ -5,15 +5,33 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- New adapter to output *Markdown* a file that can be used as input for *Rasa NLU*
+- New choice syntax: `[choice1|choice2]`
+
 ### Changed
-- Refactor part of the parser to separate the parsing process from the definitions (AST)
+- Command `set-modifier` now accepts `randgen`, `randgen-name` and `randgen-percent`
+- Running the interactive command line interpreter without asking to parse a file is now allowed, using the command `python -m chatette -i`
+- Show the seed used during execution to allow to re-execute the program in the exact same way
+- Allow the percent symbol `%` to be appended to random generation percentages
+- Accept non-integer percentages for random generation percentages
+- Choices can contain other choices
+- Choices can now take random generation names and random generation percentages
+- Merge word groups and choices together to make the new choice syntax
+- Large refactor of the parser and generator to improve the quality, maintainability and readability of the code
 - Manage parsing statistics by creating a class intended for that
-- Improve readability of parser
 - Only require `rasa_nlu_data` as a top-level field in base file (not `common_examples` and `entity_synonyms` anymore)
 
+### Removed
+- Completely removed the limits on the number of examples that can be generated
+
 ### Fixed
+- Take random generation names into account when generating all possible examples (issue #19)
 - Prevent some compatibility issues when using different versions of Python
 - Double space generated in choices in some very precise cases
+
+### Deprecated
+- Deprecate old choice syntax `{choice1/choice2}` in favor of the new syntax `[choice1|choice2]`
 
 ## [1.5.0] - 2019-06-13
 ### Added

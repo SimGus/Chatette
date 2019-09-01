@@ -10,27 +10,39 @@ import pytest
 from chatette.facade import Facade
 from chatette.cli.interactive_commands.command_strategy import CommandStrategy
 from chatette.cli.terminal_writer import RedirectionType
-from chatette.parsing.parser_utils import UnitType
+from chatette.utils import UnitType
 
 
-FACADE = None
 def get_facade():
-    global FACADE
-    if FACADE is None:
-        FACADE = \
-            Facade("tests/unit-testing/cli/interactive_commands/toilets.chatette",
-                   "tests/unit-testing/cli/interactive_commands/", None, False,
-                   None)
-        FACADE.run_parsing()
-    return FACADE
+    if not Facade.was_instantiated():
+        facade = \
+            Facade(
+                "tests/unit-testing/cli/interactive_commands/toilets.chatette",
+                "tests/unit-testing/cli/interactive_commands/", None, False,
+                None
+            )
+        facade.run_parsing()
+    return Facade.get_or_create()
 
 def new_facade():
-    facade = \
-        Facade("tests/unit-testing/cli/interactive_commands/toilets.chatette",
-               "tests/unit-testing/cli/interactive_commands/", None, False,
-               None)
+    if Facade.was_instantiated():
+        print("reset facade")
+        facade = \
+            Facade.reset_system(
+                "tests/unit-testing/cli/interactive_commands/toilets.chatette",
+                "tests/unit-testing/cli/interactive_commands/", None, False,
+                None
+            )
+    else:
+        print("new facade")
+        facade = \
+            Facade(
+                "tests/unit-testing/cli/interactive_commands/toilets.chatette",
+                "tests/unit-testing/cli/interactive_commands/", None, False,
+                None
+            )
     facade.run_parsing()
-    return facade
+    return Facade.get_or_create()
 
 
 class TestTokenize(object):
@@ -49,9 +61,13 @@ class TestTokenize(object):
     def test_long_commands(self):
         assert CommandStrategy.tokenize('rule "~[a rule] tested"') == \
                ["rule", '"~[a rule] tested"']
-        assert CommandStrategy.tokenize('set-modifier alias "something else" ' +
-                                        'casegen "True"\t') == \
-               ["set-modifier", "alias", '"something else"', "casegen", '"True"']
+        assert \
+            CommandStrategy.tokenize(
+                'set-modifier alias "something else" casegen "True"\t'
+            ) == [
+                "set-modifier", "alias",
+                '"something else"', "casegen", '"True"'
+            ]
 
     def test_escapement(self):
         assert CommandStrategy.tokenize('test "escaped \\" was here"') == \
@@ -214,7 +230,7 @@ class TestExecute(object):
     # NOTE: for coverage
     def test(self):
         with pytest.raises(NotImplementedError):
-            CommandStrategy("NOTHING alias a, b, c").execute(None)
+            CommandStrategy("NOTHING alias a, b, c").execute()
 
 
 class TestExecuteOnUnit(object):
@@ -226,4 +242,4 @@ class TestExecuteOnUnit(object):
 class TestFinishExecution(object):
     # NOTE: for coverage
     def test(self):
-        CommandStrategy("").finish_execution(None)
+        CommandStrategy("").finish_execution()

@@ -1,5 +1,8 @@
 # TODOs
 
+- [ ] add section in TODOs
+- [ ] *Requirements* add `six`
+
 - [ ] parse in a better way asked number of generation of intents
 - [ ] accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax
 - [ ] add some kind of optional version number within template files
@@ -29,6 +32,8 @@
 - [ ] make double quotes an ignored character in annotations
 - [ ] accept anything inside an arg, especially unit references
 - [ ] add percentages of all possible examples for training and test (rather than simple numbers)
+- [ ] add "auto-aliases" feature (cf. *Chatito* v2.3.4)
+- [ ] add several files import in one line?
 
 - [ ] add regex to rasa JSON file
 
@@ -36,6 +41,7 @@
 - [ ] add bulk generation
 - [ ] add program options to change the names of the output files
 - [ ] add a command line option to run in case insensitive
+- [ ] add a development command line option that runs the debug in verbose and prevents `.pyc` and `__pycache__/` from being created
 
 - [ ] design patterns
 - [ ] make the division between processing and lookup more important in parser
@@ -49,11 +55,16 @@
 - [ ] check that intent definitions don't overlap
 - [ ] cache the possible number of generatable examples for each unit
 - [ ] use multithreading or multiprocessing to optimize the execution time (+ program option to set that on/off)
+- [ ] cache the examples when they are all generated and they are not too numerous
+- [ ] print the seed when starting the program, even if no seed was provided
+- [ ] improve lexing error messages
+- [ ] improve the systems of singletons to reduce code duplication
+- [ ] use decorators to make caches and improve code readability
+- [ ] fix the code duplication between `GeneratingItem` and `ModifiableItem`
+- [ ] use re-exports to simplify the import statements
 
 - [ ] replace `print` by `six.print_`?
 
-- [ ] complete refactor of the code: the code is almost unmaintainable
-- [ ] refactor units to remove duplicated code: make modifiers act after the string has been generated
 - [ ] add more unit tests
 
 - [ ] *Interactive mode* add support for argument values in relevant commands
@@ -68,6 +79,8 @@
 - [ ] *Docs* document the differences between *Chatito* and *Chatette*
 - [ ] *Docs* make docs available from `help()` function
 - [ ] *Docs* explain that each rule has the same probability of being chosen, whatever the number of things it can generate
+- [ ] *Docs* add a lexicon page in the wiki
+- [ ] *Docs* add a "quickstart" section for the people who already know *Chatito*
 
 - [ ] add sections in TODO list to make it more readable
 - [ ] make an installer to use the script directly from the command line (at least in *nix systems)
@@ -126,6 +139,8 @@
 - [x] use more list/dict comprehensions (faster than using `append`)
 - [x] replace `getcwd` by `six.moves.getcwd` to be sure to have python 2 and 3 compliant code
 - [x] replace `range` by `six.moves.range`
+- [x] complete refactor of the code: the code is almost unmaintainable
+- [x] refactor units to remove duplicated code: make modifiers act after the string has been generated
 
 # Bugs
 
