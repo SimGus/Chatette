@@ -82,6 +82,7 @@
 - [ ] *Docs* add a "quickstart" section for the people who already know *Chatito*
 
 - [ ] make an installer to use the script directly from the command line (at least in *nix systems)
+- [ ] *Examples* remove all deprecated syntax
 
 ## Done
 
