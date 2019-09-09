@@ -80,6 +80,7 @@
 - [ ] *Docs* explain that each rule has the same probability of being chosen, whatever the number of things it can generate
 - [ ] *Docs* add a lexicon page in the wiki
 - [ ] *Docs* add a "quickstart" section for the people who already know *Chatito*
+- [ ] *Docs* make a "get started" section that is a simple hands-on example (kind of like the Angular quickstart tutorial)
 
 - [ ] make an installer to use the script directly from the command line (at least in *nix systems)
 - [ ] *Examples* remove all deprecated syntax
