@@ -120,10 +120,10 @@ class Stats(Singleton):
             raise InvalidStatsState(
                 "Tried to decrement statistics for unit declarations below 0."
             )
-        self.nb_aliases_declared -= 1
-        if self.nb_aliases_declared < 0:
+        self.nb_intents_declared -= 1
+        if self.nb_intents_declared < 0:
             raise InvalidStatsState(
-                "Tried to decrement statistics for alias declarations below 0."
+                "Tried to decrement statistics for intent declarations below 0."
             )
     def one_slot_removed(self):
         self.nb_units_declared -= 1
@@ -171,11 +171,11 @@ class Stats(Singleton):
                 "Tried to decrement statistics for variations of " + \
                 "unit declarations below 0."
             )
-        self.nb_variation_aliases -= 1
-        if self.nb_variation_aliases < 0:
+        self.nb_variation_intents -= 1
+        if self.nb_variation_intents < 0:
             raise InvalidStatsState(
                 "Tried to decrement statistics for variations of " + \
-                "alias declarations below 0."
+                "intent declarations below 0."
             )
     def one_variation_slot_removed(self):
         self.nb_variation_units -= 1
