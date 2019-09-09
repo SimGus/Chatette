@@ -152,6 +152,21 @@ class TestStats(object):
             instance.one_unit_removed(UnitType.slot)
         with pytest.raises(InvalidStatsState):
             instance.one_unit_removed(UnitType.intent)
+        
+        instance.new_unit_declared(UnitType.alias)
+        instance.nb_units_declared = 0
+        with pytest.raises(InvalidStatsState):
+            instance.one_unit_removed(UnitType.alias)
+
+        instance.new_unit_declared(UnitType.slot)
+        instance.nb_units_declared = 0
+        with pytest.raises(InvalidStatsState):
+            instance.one_unit_removed(UnitType.slot)
+
+        instance.new_unit_declared(UnitType.intent)
+        instance.nb_units_declared = 0
+        with pytest.raises(InvalidStatsState):
+            instance.one_unit_removed(UnitType.intent)
     
     def test_remove_variation(self):
         instance = Stats.reset_instance()
@@ -162,18 +177,18 @@ class TestStats(object):
 
         instance.new_variation_unit_declared(UnitType.alias)
         instance.one_variation_unit_removed(UnitType.alias)
-        assert instance.nb_units_declared == 0
-        assert instance.nb_aliases_declared == 0
+        assert instance.nb_variation_units == 0
+        assert instance.nb_variation_aliases == 0
 
         instance.new_variation_unit_declared(UnitType.slot)
         instance.one_variation_unit_removed(UnitType.slot)
-        assert instance.nb_units_declared == 0
-        assert instance.nb_slots_declared == 0
+        assert instance.nb_variation_units == 0
+        assert instance.nb_variation_slots == 0
 
         instance.new_variation_unit_declared(UnitType.intent)
         instance.one_variation_unit_removed(UnitType.intent)
-        assert instance.nb_units_declared == 0
-        assert instance.nb_intents_declared == 0
+        assert instance.nb_variation_units == 0
+        assert instance.nb_variation_intents == 0
 
         with pytest.raises(TypeError):
             instance.one_variation_unit_removed("invalid")
@@ -182,6 +197,21 @@ class TestStats(object):
             instance.one_variation_unit_removed(UnitType.alias)
         with pytest.raises(InvalidStatsState):
             instance.one_variation_unit_removed(UnitType.slot)
+        with pytest.raises(InvalidStatsState):
+            instance.one_variation_unit_removed(UnitType.intent)
+        
+        instance.new_variation_unit_declared(UnitType.alias)
+        instance.nb_variation_units = 0
+        with pytest.raises(InvalidStatsState):
+            instance.one_variation_unit_removed(UnitType.alias)
+
+        instance.new_variation_unit_declared(UnitType.slot)
+        instance.nb_variation_units = 0
+        with pytest.raises(InvalidStatsState):
+            instance.one_variation_unit_removed(UnitType.slot)
+            
+        instance.new_variation_unit_declared(UnitType.intent)
+        instance.nb_variation_units = 0
         with pytest.raises(InvalidStatsState):
             instance.one_variation_unit_removed(UnitType.intent)
 
