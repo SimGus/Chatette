@@ -1,3 +1,4 @@
+# coding: utf-8
 """
 Test module.
 Tests the functions and classes in module 'chatette.utils'.
