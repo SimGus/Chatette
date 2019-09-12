@@ -8,33 +8,6 @@ from chatette.parsing.utils import \
      OLD_CHOICE_START, OLD_CHOICE_END, CHOICE_START, CHOICE_END
 
 
-# ============ Deprecation of semi-colon syntax for comments ===============
-# Comments starting with semi-colons ';' are now deprecated to have a closer
-# syntax to *Chatito* v2.1.x
-_SEMICOLON_COMMENTS_DEPRECATION_WARNED = False
-
-
-def warn_semicolon_comments():
-    """
-    Warns the user on stdout that one of their files contains semicolons
-    comments (which are a deprecated way of making comments).
-    Rather use '//' comments instead of ';' comments.
-    """
-    global _SEMICOLON_COMMENTS_DEPRECATION_WARNED
-    if not _SEMICOLON_COMMENTS_DEPRECATION_WARNED:
-        # pylint: disable=bad-continuation
-        print_warn("Comments starting with a semi-colon ';' are "+
-                   "now deprecated. Rather use the new double slash '//'"+
-                   " syntax. This syntax allows to have a syntax closer to "+
-                   "Chatito v2.1.x.")
-        warn("Comments starting with a semi-colon ';' are now deprecated. " +
-             "Rather use the new double slash '//' syntax. This " +
-             "syntax allows to have a syntax closer to Chatito v2.1.x.",
-             DeprecationWarning)
-        _SEMICOLON_COMMENTS_DEPRECATION_WARNED = True
-
-
-# REFACTOR
 class Deprecations(Singleton):
      _instance = None
      def __init__(self):
@@ -76,8 +49,8 @@ class Deprecations(Singleton):
           comments (which are a deprecated way of making comments).
           Rather use '//' comments instead of ';' comments.
           """
-          if not self._old_comment_warned:
-               self._old_comment_warned = True
+          if not self._old_choice_warned:
+               self._old_choice_warned = True
                message = \
                     "Choices starting with '" + OLD_CHOICE_START + \
                     "' and ending with '" + OLD_CHOICE_END + \
