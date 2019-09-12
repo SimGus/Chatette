@@ -15,7 +15,7 @@ class TestDeprecations(object):
         assert not instance._old_comment_warned
         assert not instance._old_choice_warned
     
-    def test_warn_old_comment(self):
+    def test_warn_old_comment(self, capsys):
         instance = Deprecations.reset_instance()
         assert not instance._old_comment_warned
         assert not instance._old_choice_warned
@@ -24,7 +24,10 @@ class TestDeprecations(object):
         assert instance._old_comment_warned
         assert not instance._old_choice_warned
 
-    def test_warn_old_choice(self):
+        captured = capsys.readouterr()
+        assert "Comments starting with a semi-colon" in captured.err
+
+    def test_warn_old_choice(self, capsys):
         instance = Deprecations.reset_instance()
         assert not instance._old_comment_warned
         assert not instance._old_choice_warned
@@ -32,3 +35,6 @@ class TestDeprecations(object):
         instance.warn_old_choice()
         assert not instance._old_comment_warned
         assert instance._old_choice_warned
+
+        captured = capsys.readouterr()
+        assert "Choices starting with " in captured.err
