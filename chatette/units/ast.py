@@ -12,12 +12,9 @@ from chatette.utils import \
     Singleton, UnitType, remove_duplicates, extend_list_in_dict
 from chatette.statistics import Stats
 
-from chatette.units.modifiable.definitions.alias import \
-    AliasDefinition
-from chatette.units.modifiable.definitions.slot import \
-    SlotDefinition
-from chatette.units.modifiable.definitions.intent import \
-    IntentDefinition
+from chatette.units.modifiable.definitions.alias import AliasDefinition
+from chatette.units.modifiable.definitions.slot import SlotDefinition
+from chatette.units.modifiable.definitions.intent import IntentDefinition
 
 from chatette.statistics import Stats
 

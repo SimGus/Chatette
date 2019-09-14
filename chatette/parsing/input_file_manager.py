@@ -136,10 +136,13 @@ class InputFileManager(Singleton):
         
         self.close_all_files()
         if self._current_file is not None:
-            raise SyntaxError(
+            raise SyntaxError(  # BUG the file name and line read are sometimes not displayed (only the line number)
                 message,
-                (self._current_file.name, self._current_file.line_nb,
-                char_index, self._last_read_line)
+                (
+                    self._current_file.name,
+                    self._current_file.line_nb, char_index,
+                    self._last_read_line
+                )
             )
         raise SyntaxError(
             message,

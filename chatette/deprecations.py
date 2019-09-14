@@ -29,8 +29,8 @@ class Deprecations(Singleton):
                     "' syntax instead."
                if filename is not None:
                     message += \
-                         "\nThis syntax was found in file '" + str(cast_to_unicode(filename)) + \
-                         "'"
+                         "\nThis syntax was found in file '" + \
+                         cast_to_unicode(filename) + "'"
                     if line_nb is not None and line is not None:
                          message += \
                               " at line " + str(line_nb) + ": '" + \
@@ -59,8 +59,8 @@ class Deprecations(Singleton):
                     CHOICE_END + "' instead."
                if filename is not None:
                     message += \
-                         "\nThis syntax was found in file '" + str(cast_to_unicode(filename)) + \
-                         "'"
+                         "\nThis syntax was found in file '" + \
+                         cast_to_unicode(filename) + "'"
                     if line_nb is not None and line is not None:
                          message += \
                               " at line " + str(line_nb) + ": '" + \

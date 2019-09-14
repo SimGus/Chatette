@@ -5,6 +5,8 @@ Contains a wrapper of `io.File` that counts on which line it is currently.
 
 import io
 
+from chatette.utils import cast_to_unicode
+
 
 class LineCountFileWrapper(object):
     """
@@ -12,7 +14,7 @@ class LineCountFileWrapper(object):
     """
     
     def __init__(self, filepath, mode='r'):
-        self.name = filepath
+        self.name = cast_to_unicode(filepath)
         self.f = io.open(filepath, mode)
         self.line_nb = 0
 
