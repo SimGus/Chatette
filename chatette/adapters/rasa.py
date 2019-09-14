@@ -4,6 +4,8 @@ Module `chatette.adapters.rasa`
 Contains the definition of the adapter that writes output in JSON
 for Rasa NLU.
 """
+
+import io
 import json
 
 from chatette.utils import cast_to_unicode
@@ -65,7 +67,7 @@ class RasaAdapter(Adapter):
         if self._base_file_contents is None:
             if self._base_filepath is None:
                 return self._get_empty_base()
-            with open(self._base_filepath, 'r') as base_file:
+            with io.open(self._base_filepath, 'r') as base_file:
                 self._base_file_contents = json.load(base_file)
             self.check_base_file_contents()
         return self._base_file_contents

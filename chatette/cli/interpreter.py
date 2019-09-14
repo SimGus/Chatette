@@ -48,7 +48,7 @@ class CommandLineInterpreter(Singleton):
         """
         print("Executing commands from file " + commands_file_path)
         stop = False
-        with io.open(commands_file_path, 'r') as f:
+        with io.open(commands_file_path, 'r', encoding="utf-8") as f:
             for l in f:
                 if not l.isspace() and not l.lstrip().startswith("//"):
                     stop = self.interpret_command(l.rstrip(), quiet=True)

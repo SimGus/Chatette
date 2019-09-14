@@ -8,10 +8,14 @@ to template files.
 
 import os.path
 
-from chatette.utils import Singleton
+from chatette.utils import Singleton, cast_to_unicode
 from chatette.parsing.line_count_file_wrapper import \
     LineCountFileWrapper
 from chatette.statistics import Stats
+
+
+class FileAlreadyOpened(ValueError):
+    pass
 
 
 class InputFileManager(Singleton):
@@ -52,20 +56,23 @@ class InputFileManager(Singleton):
         file (rather than working directory),
         unless it is an absolute path or there is no file currently being
         parsed.
-        @raises: - `ValueError` if the file at `file_path` was already opened.
+        @raises: - `FileAlreadyOpened` if the file at `file_path`
+                   was already opened.
         """
+        file_path = cast_to_unicode(file_path)
         if not os.path.isabs(file_path):
             if self._current_file is None:
-                file_path = os.path.abspath(file_path)
+                file_path = cast_to_unicode(os.path.abspath(file_path))
             else:
                 file_path = \
                     os.path.join(
-                        os.path.dirname(self._current_file.name), file_path
+                        cast_to_unicode(os.path.dirname(self._current_file.name)),
+                        file_path
                     )
 
         opened_file_paths = [f.name for f in self._opened_files]
         if file_path in opened_file_paths:
-            raise ValueError(
+            raise FileAlreadyOpened(
                 "Tried to read file '" + file_path + "' several times."
             )
 

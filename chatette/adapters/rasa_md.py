@@ -6,6 +6,7 @@ for Rasa NLU.
 """
 
 import os
+import io
 from six import string_types
 
 from chatette.adapters._base import Adapter
@@ -96,7 +97,7 @@ class RasaMdAdapter(Adapter):
         if self._base_file_contents is None:
             if self._base_filepath is None:
                 return self._get_empty_base()
-            with open(self._base_filepath, 'r') as base_file:
+            with io.open(self._base_filepath, 'r') as base_file:
                 self._base_file_contents = ''.join(base_file.readlines())
             self.check_base_file_contents()
         return self._base_file_contents

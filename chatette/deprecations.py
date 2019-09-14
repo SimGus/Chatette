@@ -2,7 +2,7 @@
 
 from warnings import warn
 
-from chatette.utils import Singleton, print_warn
+from chatette.utils import Singleton, print_warn, cast_to_unicode
 from chatette.parsing.utils import \
      OLD_COMMENT_SYM, COMMENT_SYM, \
      OLD_CHOICE_START, OLD_CHOICE_END, CHOICE_START, CHOICE_END
@@ -29,7 +29,7 @@ class Deprecations(Singleton):
                     "' syntax instead."
                if filename is not None:
                     message += \
-                         "\nThis syntax was found in file '" + str(filename) + \
+                         "\nThis syntax was found in file '" + str(cast_to_unicode(filename)) + \
                          "'"
                     if line_nb is not None and line is not None:
                          message += \
@@ -59,7 +59,7 @@ class Deprecations(Singleton):
                     CHOICE_END + "' instead."
                if filename is not None:
                     message += \
-                         "\nThis syntax was found in file '" + str(filename) + \
+                         "\nThis syntax was found in file '" + str(cast_to_unicode(filename)) + \
                          "'"
                     if line_nb is not None and line is not None:
                          message += \

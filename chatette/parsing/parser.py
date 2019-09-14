@@ -10,22 +10,20 @@ those files.
 from __future__ import print_function
 from six import string_types
 
-from chatette.utils import print_DBG, print_warn, UnitType
+from chatette.utils import print_DBG, print_warn, UnitType, cast_to_unicode
 from chatette.parsing import utils
 from chatette.statistics import Stats
 
-from chatette.parsing.input_file_manager import InputFileManager
+from chatette.parsing.input_file_manager import \
+    InputFileManager, FileAlreadyOpened
 from chatette.parsing.lexing.lexer import Lexer
 from chatette.parsing.lexing import TerminalType
 from chatette.units.ast import AST
 
 from chatette.modifiers.representation import ModifiersRepresentation
-from chatette.units.modifiable.definitions.alias import \
-    AliasDefinition
-from chatette.units.modifiable.definitions.slot import \
-    SlotDefinition
-from chatette.units.modifiable.definitions.intent import \
-    IntentDefinition
+from chatette.units.modifiable.definitions.alias import AliasDefinition
+from chatette.units.modifiable.definitions.slot import SlotDefinition
+from chatette.units.modifiable.definitions.intent import IntentDefinition
 from chatette.units.word import Word
 from chatette.units.rule import Rule
 
@@ -64,10 +62,10 @@ class Parser(object):
             self.input_file_manager.open_file(filepath)
         except IOError as e:
             raise IOError(
-                "There was an error while opening file '" + str(filepath) + \
-                "': " + str(e) + "."
+                "There was an error while opening file '" + \
+                str(cast_to_unicode(filepath)) + "': " + str(e) + "."
             )
-        except ValueError as e:
+        except FileAlreadyOpened as e:
             err_msg = str(e)
             current_file_name = self.input_file_manager.get_current_file_name()
             if current_file_name is not None:
