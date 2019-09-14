@@ -29,17 +29,17 @@ class Deprecations(Singleton):
                     "' syntax instead."
                if filename is not None:
                     message += \
-                         "\nThis syntax was found in file '" + filename + \
+                         "\nThis syntax was found in file '" + str(filename) + \
                          "'"
                     if line_nb is not None and line is not None:
                          message += \
                               " at line " + str(line_nb) + ": '" + \
-                              line.strip() + "'"
+                              str(line).strip() + "'"
                     message += '.'
                elif line_nb is not None and line is not None:
                     message += \
                          "\nThis syntax was found at line " + str(line_nb) + \
-                         ": '" + line.strip() + "'."
+                         ": '" + str(line).strip() + "'."
                warn(message, DeprecationWarning)
                print_warn(message)
 
@@ -59,16 +59,16 @@ class Deprecations(Singleton):
                     CHOICE_END + "' instead."
                if filename is not None:
                     message += \
-                         "\nThis syntax was found in file '" + filename + \
+                         "\nThis syntax was found in file '" + str(filename) + \
                          "'"
                     if line_nb is not None and line is not None:
                          message += \
                               " at line " + str(line_nb) + ": '" + \
-                              line.strip() + "'"
+                              str(line).strip() + "'"
                     message += '.'
                elif line_nb is not None and line is not None:
                     message += \
                          "\nThis syntax was found at line " + str(line_nb) + \
-                         ": '" + line.strip() + "'."
+                         ": '" + str(line).strip() + "'."
                warn(message, DeprecationWarning)
                print_warn(message)
