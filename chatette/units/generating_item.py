@@ -94,7 +94,7 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
                 ex.prepend(' ')
         if len(self._cached_examples) == 0:
             # TODO don't cache it all in all cases
-            self._cached_examples = deepcopy(all_examples)  # BUG THERE IS A BUG HERE? (pytest)
+            self._cached_examples = deepcopy(all_examples)
             self._total_nb_possibilities = len(all_examples)
         return all_examples
     @abstractmethod
@@ -121,9 +121,7 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
             return sample(self._cached_examples, nb_possibilities)
         if nb_possibilities < float(max_nb_possibilities) / 5.0:  # QUESTION: is 5 a good idea?
             return self._generate_n_strategy(nb_possibilities, **kwargs)
-        all_ex = self.generate_all(**kwargs)
-        result = sample_indulgent(all_ex, nb_possibilities)
-        # return sample_indulgent(self.generate_all(), nb_possibilities)
+        return sample_indulgent(self.generate_all(**kwargs), nb_possibilities)
         return result
     def _generate_n_strategy(self, n, **kwargs):
         """
