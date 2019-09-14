@@ -29,7 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Don't crash when file paths and names contain unicode characters in Python 2.7
-- Take random generation names into account when generating all possible examples (issue #19)
+- Take random generation names into account when generating all possible examples (issue [#19](https://github.com/SimGus/Chatette/issues/19))
 - Prevent some compatibility issues when using different versions of Python
 - Double space generated in choices in some very precise cases
 
