@@ -40,7 +40,7 @@
     <a href="#credits">Credits</a>
 </p>
 
-*Chatette* is a Python script that generates training datasets for the Python package [*Rasa NLU*](https://github.com/RasaHQ/rasa_nlu "rasa-nlu GitHub repository") from template files.
+*Chatette* is a Python program that generates training datasets for [*Rasa NLU*](https://github.com/RasaHQ/rasa_nlu "rasa-nlu GitHub repository") given template files.
 If you want to make large datasets of example data for Natural Language Understanding tasks without too much of a headache, *Chatette* is a project for you.
 
 <p align="center">
