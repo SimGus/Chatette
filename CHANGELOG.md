@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New choice syntax: `[choice1|choice2]`
 
 ### Changed
+- Shadowing a unit definition (i.e. redefining a unit a second time) is not allowed anymore
 - File inclusion is done with respect to the file currently being parsed rather than the master file
 - Command `set-modifier` now accepts `randgen`, `randgen-name` and `randgen-percent`
 - Running the interactive command line interpreter without asking to parse a file is now allowed, using the command `python -m chatette -i`
@@ -27,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Completely removed the limits on the number of examples that can be generated
 
 ### Fixed
+- Don't crash when file paths and names contain unicode characters in Python 2.7
 - Take random generation names into account when generating all possible examples (issue #19)
 - Prevent some compatibility issues when using different versions of Python
 - Double space generated in choices in some very precise cases
