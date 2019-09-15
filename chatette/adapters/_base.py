@@ -4,6 +4,7 @@ Module `chatette.adapters._base`
 Contains the definition of the superclass for all adapters and
 for the batches of examples written to output files.
 """
+
 import io
 import os
 import shutil

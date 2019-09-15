@@ -1,3 +1,4 @@
+# coding: utf-8
 """
 Test module.
 Tests the functionalities that are present in module
