@@ -2,26 +2,26 @@
 """
 Test module.
 Tests the functionalities present in module
-`chatette.adapters.jsonl`.
+`chatette.adapters.rasa`.
 """
 
-from chatette.adapters.jsonl import JsonListAdapter
+from chatette.adapters.rasa import RasaAdapter
 
 
-class TestJsonListAdapter(object):
+class TestRasaAdapter(object):
     def test_constructor(self):
-        adapter = JsonListAdapter()
+        adapter = RasaAdapter()
         assert adapter._batch_size == 10000
         assert adapter._base_filepath is None
 
-        adapter = JsonListAdapter("path", 10)
+        adapter = RasaAdapter("path", 10)
         assert adapter._batch_size == 10
         assert adapter._base_filepath == "path"
     
-    def test_file_extension(self):
-        assert JsonListAdapter._get_file_extension() == "jsonl"
-    
-    def test_synonym_format(self):
+    def test_get_file_extension(self):
+        assert RasaAdapter._get_file_extension() == "json"
+
+    def test_format_synonyms(self):
         synonyms = {
             u'Edinburgh': [u'Edinburgh'],
             u'Paris': [u'Paris'], u'Berlin': [u'Berlin'],
@@ -30,6 +30,8 @@ class TestJsonListAdapter(object):
             u'today': [u'now', u'today']
         }
         formatted_synonyms = \
-            JsonListAdapter._JsonListAdapter__format_synonyms(synonyms)
-        assert formatted_synonyms == {u'today': [u'now', u'today']}
-        
+            RasaAdapter._RasaAdapter__format_synonyms(synonyms)
+        assert \
+            formatted_synonyms == [
+                {"value": u'today', "synonyms": [u'now', u'today']}
+            ]
