@@ -78,7 +78,8 @@ class RasaMdAdapter(Adapter):
         return result
     
 
-    def __format_synonyms(self, synonyms):
+    @classmethod
+    def __format_synonyms(cls, synonyms):
         """
         Returns a str that will be written in the output files for all
         the synonyms `synonyms`.
