@@ -57,8 +57,9 @@ class Adapter(with_metaclass(ABCMeta, object)):
             with io.open(output_file_path, 'w') as output_file:
                 self._write_batch(output_file, batch)
 
+    @classmethod
     @abstractmethod
-    def _get_file_extension(self):
+    def _get_file_extension(cls):
         raise NotImplementedError()
     def __get_file_name(self, batch, output_directory, single_file):
         # pylint: disable=bad-continuation

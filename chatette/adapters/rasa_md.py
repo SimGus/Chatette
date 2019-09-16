@@ -19,7 +19,8 @@ class RasaMdAdapter(Adapter):
         self._base_file_contents = None
 
 
-    def _get_file_extension(self):
+    @classmethod
+    def _get_file_extension(cls):
         return "md"
     def __get_file_name(self, batch, output_directory, single_file):
         if single_file:

@@ -17,7 +17,8 @@ class RasaAdapter(Adapter):
         super(RasaAdapter, self).__init__(base_filepath, batch_size)
         self._base_file_contents = None
 
-    def _get_file_extension(self):
+    @classmethod
+    def _get_file_extension(cls):
         return "json"
 
 
