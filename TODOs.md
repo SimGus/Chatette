@@ -85,6 +85,8 @@
 - [ ] make an installer to use the script directly from the command line (at least in *nix systems)
 - [ ] *Examples* remove all deprecated syntax
 
+- [ ] Add image for social networks on GitHub (how the logo to have a brand image, and an image that illustrates what the program is for)
+
 ## Done
 
 - [x] fix line number count for different files
