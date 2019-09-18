@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.6.0] - 2019-09-18
 ### Added
 - New adapter to output a *Markdown* file that can be used as input for *Rasa NLU*
 - New choice syntax: `[choice1|choice2]`
@@ -295,7 +297,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for slot value names
 - Generator able to generate an output file in *Rasa NLU* format (without support for synonyms or regex features)
 
-[Unreleased]: https://github.com/SimGus/Chatette/compare/v1.5.0...HEAD
+[Unreleased]: https://github.com/SimGus/Chatette/compare/v1.6.0...HEAD
+[1.6.0]: https://github.com/SimGus/Chatette/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/SimGus/Chatette/compare/v1.4.2...v1.5.0
 [1.4.2]: https://github.com/SimGus/Chatette/compare/v1.4.1...v1.4.2
 [1.4.1]: https://github.com/SimGus/Chatette/compare/v1.4.0...v1.4.1

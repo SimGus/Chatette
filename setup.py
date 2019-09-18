@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+# coding: utf-8
 
 from os.path import dirname, join
 
@@ -10,7 +10,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="chatette",
-    version="1.5.0",
+    version="1.6.0",
     description="A dataset generator for Rasa NLU",
     author="SimGus",
     license="MIT",
