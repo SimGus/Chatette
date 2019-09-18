@@ -23,31 +23,32 @@ def test_obj():
 
 
 def test_err(capsys):
+    new_facade()
+
     cmd = ParseCommand("error")
     assert cmd.command_tokens == ["error"]
-    cmd.execute(new_facade())
+    cmd.execute()
     captured = capsys.readouterr()
     assert "[ERROR]\tMissing template file path\n" + \
-           "\tUsage: 'parse <filepath>'" in captured.out
+           "\tUsage: 'parse <file_path>'" in captured.out
 
 
 def test_execute(capsys):
-    cmd = ParseCommand(
-            "parse tests/unit-testing/cli/interactive_commands/toilets.chatette"
+    cmd = \
+        ParseCommand(
+            "parse tests/unit-testing/cli/interactive_commands/other.chatette"
         )
-    assert cmd.command_tokens == \
-        ["parse",
-         "tests/unit-testing/cli/interactive_commands/toilets.chatette"]
-    cmd.execute(new_facade())
+    assert cmd.command_tokens == [
+        "parse", "tests/unit-testing/cli/interactive_commands/other.chatette"
+    ]
+    cmd.execute()
     captured = capsys.readouterr()
-    assert "[DBG] Parsing master file: " + \
-           "tests/unit-testing/cli/interactive_commands/toilets.chatette\n" + \
-           "[DBG] Parsing finished!" in captured.out
+    assert "tests/unit-testing/cli/interactive_commands/other.chatette" in captured.out
 
 
 def test_abstract_methods():
     cmd = ParseCommand('exit')
     with pytest.raises(NotImplementedError):
-        cmd.execute_on_unit(None, None, None)
+        cmd.execute_on_unit(None, None)
     with pytest.raises(NotImplementedError):
-        cmd.finish_execution(None)
+        cmd.finish_execution()

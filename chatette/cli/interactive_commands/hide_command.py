@@ -7,6 +7,8 @@ unhide them later).
 
 from chatette.cli.interactive_commands.command_strategy import CommandStrategy
 
+from chatette.units.ast import AST
+
 
 class HideCommand(CommandStrategy):
     usage_str = 'hide <unit-type> "<unit-name>"'
@@ -17,41 +19,49 @@ class HideCommand(CommandStrategy):
         self._units_to_delete = []
         self._var_to_delete = []
     
-    def execute_on_unit(self, facade, unit_type, unit_name, variation_name=None):
+    def execute_on_unit(self, unit_type, unit_name, variation_name=None):
         try:
-            unit = facade.parser.get_definition(unit_name, unit_type)
+            unit = AST.get_or_create()[unit_type][unit_name]
             if variation_name is None:
                 self.stored_units[unit_type.name][unit_name] = unit
                 self._units_to_delete.append((unit_type, unit_name))
-                self.print_wrapper.write(unit_type.name.capitalize() + " '" +
-                                        unit_name + "' was successfully hidden.")
+                self.print_wrapper.write(
+                    unit_type.name.capitalize() + " '" + unit_name + \
+                    "' was successfully hidden."
+                )
             else:
-                if variation_name not in unit.variations:
-                    self.print_wrapper.error_log("Couldn't find variation '" + \
-                                                 variation_name + "' in " + \
-                                                 unit_type.name + " '" + \
-                                                 unit_name + "'.")
+                if variation_name not in unit._variation_rules:
+                    self.print_wrapper.error_log(
+                        "Couldn't find variation '" + variation_name + \
+                        "' in " + unit_type.name + " '" + unit_name + "'."
+                    )
                     return
                 self._var_to_delete.append((unit_type, unit_name, variation_name))
-                rules = unit.variations[variation_name]
+                rules = unit._variation_rules[variation_name]
                 if unit_name not in self.stored_variations[unit_type.name]:
                     self.stored_variations[unit_type.name][unit_name] = \
                         {variation_name: rules}
                 else:
                     self.stored_variations[unit_type.name][unit_name][variation_name] = \
                         rules
-                self.print_wrapper.write("Variation '" + variation_name + "' of " + \
-                                         unit_type.name + " '" + unit_name + \
-                                         "' was successfully hidden.")
+                self.print_wrapper.write(
+                    "Variation '" + variation_name + "' of " + \
+                    unit_type.name + " '" + unit_name + \
+                    "' was successfully hidden."
+                )
         except KeyError:
-            self.print_wrapper.write(unit_type.name.capitalize() + " '" +
-                                     unit_name + "' was not defined.")
+            self.print_wrapper.write(
+                unit_type.name.capitalize() + " '" + unit_name + \
+                "' was not defined."
+            )
     
-    def finish_execution(self, facade):
+    def finish_execution(self):
         for (unit_type, unit_name) in self._units_to_delete:
-            facade.parser.delete(unit_type, unit_name)
+            AST.get_or_create().delete_unit(unit_type, unit_name)
         self._units_to_delete = []
 
         for (unit_type, unit_name, variation_name) in self._var_to_delete:
-            facade.parser.delete(unit_type, unit_name, variation_name)
+            AST.get_or_create().delete_unit(
+                unit_type, unit_name, variation_name
+            )
         self._var_to_delete = []

@@ -10,7 +10,8 @@ from test_command_strategy import new_facade, get_facade
 
 from chatette.cli.interactive_commands.command_strategy import CommandStrategy
 from chatette.cli.interactive_commands.rename_command import RenameCommand
-from chatette.parsing.parser_utils import UnitType
+from chatette.utils import UnitType
+from chatette.units.ast import AST
 
 
 def test_obj():
@@ -27,28 +28,28 @@ def test_err(capsys):
     facade = get_facade()
     cmd = RenameCommand('rename NOTHING "a" "b"')
     assert cmd.command_tokens == ["rename", "NOTHING", '"a"', '"b"']
-    cmd.execute(facade)
+    cmd.execute()
     captured = capsys.readouterr()
     assert "[ERROR]\tUnknown unit type: 'NOTHING'." in captured.out
 
     cmd = RenameCommand("a")
-    cmd.execute(facade)
+    cmd.execute()
     captured = capsys.readouterr()
     assert "[ERROR]\tMissing some arguments\n\tUsage: " + \
            'rename <unit-type> "<old-name>" "<new-name>"' in captured.out
 
     cmd = RenameCommand('rename alias "a" "b"')
-    cmd.execute(facade)
+    cmd.execute()
     captured = capsys.readouterr()
     assert "[ERROR]\tCouldn't find a unit named 'a'." in captured.out
 
     cmd = RenameCommand('rename alias "can you" ""')
-    cmd.execute(facade)
+    cmd.execute()
     captured = capsys.readouterr()
     assert "[ERROR]\tAn empty name is not a valid alias name." in captured.out
 
     cmd = RenameCommand('rename alias "can you" "tell me"')
-    cmd.execute(facade)
+    cmd.execute()
     captured = capsys.readouterr()
     assert "[ERROR]\tAlias 'tell me' is already in use." in captured.out
 
@@ -57,22 +58,22 @@ def test_execute():
     cmd = RenameCommand('rename alias "can you" "could you"')
     assert cmd.command_tokens == ["rename", "alias", '"can you"', '"could you"']
     facade = new_facade()
-    cmd.execute(facade)
+    cmd.execute()
     with pytest.raises(KeyError):
-        facade.parser.get_definition("can you", UnitType.alias)
+        AST.get_or_create()[UnitType.alias]["can you"]
     try:
-        facade.parser.get_definition("could you", UnitType.alias)
+        AST.get_or_create()[UnitType.alias]["could you"]
     except KeyError:
         pytest.fail("Unexpected KeyError exception. Renaming didn't properly work.")
 
     cmd = RenameCommand('rename ~ "tell me" "a"')
     assert cmd.command_tokens == ["rename", "~", '"tell me"', '"a"']
     facade = new_facade()
-    cmd.execute(facade)
+    cmd.execute()
     with pytest.raises(KeyError):
-        facade.parser.get_definition("tell me", UnitType.alias)
+        AST.get_or_create()[UnitType.alias]["tell me"]
     try:
-        facade.parser.get_definition("a", UnitType.alias)
+        AST.get_or_create()[UnitType.alias]["a"]
     except KeyError:
         pytest.fail("Unexpected KeyError exception. Renaming didn't properly work.")
 
@@ -82,4 +83,4 @@ def test_abstract_methods():
     with pytest.raises(NotImplementedError):
         cmd.execute_on_unit(None, None, None)
     with pytest.raises(NotImplementedError):
-        cmd.finish_execution(None)
+        cmd.finish_execution()

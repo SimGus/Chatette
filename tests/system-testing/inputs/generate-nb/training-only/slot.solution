@@ -1,18 +1,24 @@
 # Contains all possible examples for the Chatette template file with the same name.
-single>>><<CHATETTE_ENTITY>>slot one
-single>>><<CHATETTE_ENTITY>>slot1
-multiple>>><<CHATETTE_ENTITY>>slot one <<CHATETTE_ENTITY>>other
-multiple>>><<CHATETTE_ENTITY>>slot1 <<CHATETTE_ENTITY>>other
-multiple>>><<CHATETTE_ENTITY>>slot one <<CHATETTE_ENTITY>>other slot
-multiple>>><<CHATETTE_ENTITY>>slot1 <<CHATETTE_ENTITY>>other slot
-multiple>>><<CHATETTE_ENTITY>>slot one <<CHATETTE_ENTITY>>Other
-multiple>>><<CHATETTE_ENTITY>>slot1 <<CHATETTE_ENTITY>>Other
-multiple>>><<CHATETTE_ENTITY>>slot one <<CHATETTE_ENTITY>>Other slot
-multiple>>><<CHATETTE_ENTITY>>slot1 <<CHATETTE_ENTITY>>Other slot
+single>>>slot one
+single>>>slot1
+single>>>Slot one
+single>>>Slot1
+multiple>>>slot one other
+multiple>>>slot1 other
+multiple>>>slot one other slot
+multiple>>>slot1 other slot
+multiple>>>slot one Other
+multiple>>>slot1 Other
+multiple>>>slot one Other slot
+multiple>>>slot1 Other slot
 
-multiple>>><<CHATETTE_ENTITY>>slot one
-multiple>>><<CHATETTE_ENTITY>>slot1
-multiple>>><<CHATETTE_ENTITY>>slot one <<CHATETTE_ENTITY>>slot one
-multiple>>><<CHATETTE_ENTITY>>slot one <<CHATETTE_ENTITY>>slot1
-multiple>>><<CHATETTE_ENTITY>>slot1 <<CHATETTE_ENTITY>>slot one
-multiple>>><<CHATETTE_ENTITY>>slot1 <<CHATETTE_ENTITY>>slot1
+multiple>>>slot one
+multiple>>>slot1
+multiple>>>slot one slot one
+multiple>>>slot one slot1
+multiple>>>slot1 slot one
+multiple>>>slot1 slot1
+multiple>>>slot one Slot one
+multiple>>>slot one Slot1
+multiple>>>slot1 Slot one
+multiple>>>slot1 Slot1

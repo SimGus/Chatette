@@ -7,35 +7,26 @@ its rules (all if possible).
 
 from chatette.cli.interactive_commands.command_strategy import CommandStrategy
 
+from chatette.units.ast import AST
+
 
 class ShowCommand(CommandStrategy):
     usage_str = 'show <unit-type> "<unit-name>"'
     max_nb_rules_to_display = 12
 
-    def execute_on_unit(self, facade, unit_type, unit_name, variation_name=None):
+    def execute_on_unit(self, unit_type, unit_name, variation_name=None):
         try:
-            unit = facade.parser.get_definition(unit_name, unit_type)
-            self.print_wrapper.write(unit.short_desc_str())
+            unit = AST.get_or_create()[unit_type][unit_name]
+            self.print_wrapper.write(unit.short_description())
 
             if variation_name is None:
-                rules = unit.rules
-                self.print_wrapper.write("Rules:")
-            else:
-                if variation_name not in unit.variations:
-                    self.print_wrapper.error_log("Variation '" + variation_name + \
-                                                 "' is not defined in " + \
-                                                 unit.type + " " + unit_name + '.')
-                    return
-                rules = unit.variations[variation_name]
-                self.print_wrapper.write("Rules for variation '" + \
-                                         variation_name + "':")
-            
-            for (i, rule) in enumerate(rules):
-                if i >= self.max_nb_rules_to_display:
-                    break
-                rule_str = ''.join([sub_rule.as_string() for sub_rule in rule])
-                self.print_wrapper.write('\t'+rule_str)
-            self.print_wrapper.write("")
+                self.print_wrapper.write(
+                    "Template rules:\n" + str(unit.as_template_str())
+                )
+            else:  # TODO
+                pass
         except KeyError:
-            self.print_wrapper.write(unit_type.name.capitalize() + " '" +
-                                     unit_name + "' is not defined.")
+            self.print_wrapper.write(
+                unit_type.name.capitalize() + " '" + unit_name + \
+                "' is not defined."
+            )

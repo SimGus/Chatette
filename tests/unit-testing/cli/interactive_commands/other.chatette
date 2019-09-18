@@ -1,0 +1,10 @@
+// This template defines different ways to ask for the location of toilets
+%[&hello](3)
+    ~[greetings] [people|guys?]
+
+~[greetings]
+    greetings
+    hello
+    hey
+    hi
+

@@ -1,7 +1,9 @@
 # TODOs
 
+- [ ] add sections in TODO list to make it more readable
+
 - [ ] parse in a better way asked number of generation of intents
-- [ ] accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax
+- [ ] accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax?
 - [ ] add some kind of optional version number within template files
 - [ ] add a way to specify a rule on several consecutive lines
 - [ ] add a way to give several different names to units
@@ -18,7 +20,8 @@
 - [ ] add opposite `randgen` names
 - [ ] support several arguments in one rule
 - [ ] reverse regex
-- [ ] add probabilities of generation for rules in defintions (cf. https://github.com/rodrigopivi/Chatito/issues/48 and new implementation) 
+- [ ] add probabilities weighting of generation for rules in defintions (cf. https://github.com/rodrigopivi/Chatito/issues/48 and new implementation)
+- [ ] add a flag to make the generators take into account the variability of each rule (cf. https://github.com/rodrigopivi/Chatito/issues/72)
 - [ ] add support for Chatito's augmentations (cf. https://github.com/rodrigopivi/Chatito/issues/48)
 - [ ] add an annotation for generating typos
 - [ ] add a flag to enable/disable the slot = slot synonym behavior (cf. https://github.com/rodrigopivi/Chatito/issues/50)
@@ -28,6 +31,8 @@
 - [ ] make double quotes an ignored character in annotations
 - [ ] accept anything inside an arg, especially unit references
 - [ ] add percentages of all possible examples for training and test (rather than simple numbers)
+- [ ] add "auto-aliases" feature (cf. *Chatito* v2.3.4)
+- [ ] add several files import in one line?
 
 - [ ] add regex to rasa JSON file
 
@@ -35,6 +40,7 @@
 - [ ] add bulk generation
 - [ ] add program options to change the names of the output files
 - [ ] add a command line option to run in case insensitive
+- [ ] add a development command line option that runs the debug in verbose and prevents `.pyc` and `__pycache__/` from being created
 
 - [ ] design patterns
 - [ ] make the division between processing and lookup more important in parser
@@ -48,14 +54,16 @@
 - [ ] check that intent definitions don't overlap
 - [ ] cache the possible number of generatable examples for each unit
 - [ ] use multithreading or multiprocessing to optimize the execution time (+ program option to set that on/off)
+- [ ] cache the examples when they are all generated and they are not too numerous
+- [ ] print the seed when starting the program, even if no seed was provided
+- [ ] improve lexing error messages
+- [ ] improve the systems of singletons to reduce code duplication
+- [ ] use decorators to make caches and improve code readability
+- [ ] fix the code duplication between `GeneratingItem` and `ModifiableItem`
+- [ ] use re-exports to simplify the import statements
 
-- [ ] replace `getcwd` by `six.moves.getcwd` to be sure to have python 2 and 3 compliant code
 - [ ] replace `print` by `six.print_`?
-- [ ] replace `range` by `six.moves.range`
-- [ ] replace `zip` by `six.moves.zip`
 
-- [ ] complete refactor of the code: the code is almost unmaintainable
-- [ ] refactor units to remove duplicated code: make modifiers act after the string has been generated
 - [ ] add more unit tests
 
 - [ ] *Interactive mode* add support for argument values in relevant commands
@@ -69,9 +77,15 @@
 - [ ] *Docs* explain that redefining a unit silently appends the rules to the already declared unit (with the same modifiers as the first time)
 - [ ] *Docs* document the differences between *Chatito* and *Chatette*
 - [ ] *Docs* make docs available from `help()` function
+- [ ] *Docs* explain that each rule has the same probability of being chosen, whatever the number of things it can generate
+- [ ] *Docs* add a lexicon page in the wiki
+- [ ] *Docs* add a "quickstart" section for the people who already know *Chatito*
+- [ ] *Docs* make a "get started" section that is a simple hands-on example (kind of like the Angular quickstart tutorial)
 
-- [ ] add sections in TODO list to make it more readable
 - [ ] make an installer to use the script directly from the command line (at least in *nix systems)
+- [ ] *Examples* remove all deprecated syntax
+
+- [ ] Add image for social networks on GitHub (how the logo to have a brand image, and an image that illustrates what the program is for)
 
 ## Done
 
@@ -125,18 +139,17 @@
 - [x] *Interactive mode*: show list of variation names in command `show`
 - [x] check for circular includes
 - [x] use more list/dict comprehensions (faster than using `append`)
+- [x] replace `getcwd` by `six.moves.getcwd` to be sure to have python 2 and 3 compliant code
+- [x] replace `range` by `six.moves.range`
+- [x] complete refactor of the code: the code is almost unmaintainable
+- [x] refactor units to remove duplicated code: make modifiers act after the string has been generated
+- [x] *Requirements* add `six`
 
 # Bugs
 
-- **BUG**: arguments are not given down when an argument is transmitted as the argument of a token
-- **BUG**: random generation modifiers' names are not taken into account when generating all examples
-- **BUG**: a leading space is generated even though a unit has a random gen modifier and the unit wasn't generated
-- **BUG**: it seems that `generate_all` of choice is called before the generation starts
-- **BUG**: `{my [own?]/a} ~[religion]` can generate a double space
-- **BUG**: space at the end of lines in json outputs
-
 ## To confirm
-- Some intents don't generate any string even though they should
+- **BUG**: a leading space is generated even though a unit has a random gen modifier and the unit wasn't generated
+- **BUG**: arguments are not given down when an argument is transmitted as the argument of a token
 
 ## Fixed bugs
 
@@ -173,6 +186,9 @@
 - **fixed**: possible to have several times the same example generated
 - **fixed**: encoding errors under Windows
 - **fixed**: the interactive console seems to crash at `input()`?
+- **fixed**: space at the end of lines in json outputs (fixed in newest versions of `json`: https://bugs.python.org/issue16333)
+- **fixed**: `{my [own?]/a} ~[religion]` can generate a double space
+- **fixed**: random generation modifiers' names are not taken into account when generating all examples
 
 # Ideas
 

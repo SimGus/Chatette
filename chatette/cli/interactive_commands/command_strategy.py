@@ -7,11 +7,12 @@ in order to implement the strategy design pattern.
 
 import re
 
-from chatette.utils import rchop
-from chatette.parsing.parser_utils import UnitType, \
-                                          ALIAS_SYM, SLOT_SYM, INTENT_SYM, \
-                                          VARIATION_SYM, ESCAPE_SYM
+from chatette.utils import rchop, UnitType
+from chatette.parsing.utils import \
+    ALIAS_SYM, SLOT_SYM, INTENT_SYM, VARIATION_SYM, ESCAPEMENT_SYM
 from chatette.cli.terminal_writer import TerminalWriter, RedirectionType
+
+from chatette.units.ast import AST
 
 
 REDIRECTION_SYM = ">"
@@ -30,8 +31,8 @@ class CommandStrategy(object):
         if redirection_tuple is not None:
             self.remove_redirection_tokens()
             (redirection_type, redirection_filepath) = redirection_tuple
-            self.print_wrapper = TerminalWriter(redirection_type,
-                                                redirection_filepath)
+            self.print_wrapper = \
+                TerminalWriter(redirection_type, redirection_filepath)
         elif quiet:
             self.print_wrapper = \
                 TerminalWriter(redirection_type=RedirectionType.quiet)
@@ -65,8 +66,10 @@ class CommandStrategy(object):
                     inside_regex = False
                     tokens.append(current_token)
                     current_token = ""
-            elif (    word.startswith('"') and word.endswith('"') \
-                  and (len(word) < 2 or word[-2] != '\\')):
+            elif (
+                word.startswith('"') and word.endswith('"')
+                and (len(word) < 2 or word[-2] != '\\')
+            ):
                 tokens.append(word)
             elif word.startswith('"'):
                 inside_token = True
@@ -84,9 +87,10 @@ class CommandStrategy(object):
     @staticmethod
     def _is_end_regex(word):
         """Returns `True` if `word` is the end of a regex."""
-        return    word.endswith("/") or word.endswith("/g") \
-               or word.endswith("/i") or word.endswith("/ig") \
-               or word.endswith("/gi")
+        return \
+            word.endswith("/") or word.endswith("/g") \
+            or word.endswith("/i") or word.endswith("/ig") \
+            or word.endswith("/gi")
 
     @staticmethod
     def find_redirection_file_path(tokens):
@@ -108,8 +112,10 @@ class CommandStrategy(object):
             return (RedirectionType.append, tokens[-1])
         if tokens[-2] == REDIRECTION_SYM:
             return (RedirectionType.truncate, tokens[-1])
-        if (   tokens[-1] == REDIRECTION_APPEND_SYM
-            or tokens[-1] == REDIRECTION_SYM):
+        if (
+            tokens[-1] == REDIRECTION_APPEND_SYM
+            or tokens[-1] == REDIRECTION_SYM
+        ):
             return (RedirectionType.quiet, None)
         return None
 
@@ -136,7 +142,7 @@ class CommandStrategy(object):
         Removes the double quotes at the beginning and end of `text` and
         returns it. Double quotes that shouldn't be considered are escaped.
         """
-        return text[1:-1].replace(ESCAPE_SYM + '"', '"')
+        return text[1:-1].replace(ESCAPEMENT_SYM + '"', '"')
 
     @staticmethod
     def split_exact_unit_name(text):
@@ -146,15 +152,14 @@ class CommandStrategy(object):
         Those two parts are separated in `text` by a hashtag `#` (unescaped).
         Returns a list with both those str inside it or the unit name and
         `None` for the variation identifier if it wasn't found.
-        If `text` is not valid (several hashtags),
-        raises a `SyntaxError`.
+        @raises: - `SyntaxError` if `text` is not valid (several hashtags),
         """
-        no_quote_text = text[1:-1].replace(ESCAPE_SYM + '"', '"')
+        no_quote_text = text[1:-1].replace(ESCAPEMENT_SYM + '"', '"')
         splitted = no_quote_text.split(VARIATION_SYM)
         processed_splitted = []
         current_word = ""
         for word in splitted:
-            if word.endswith(ESCAPE_SYM):
+            if word.endswith(ESCAPEMENT_SYM):
                 if current_word == "":
                     current_word = word[:-1]
                 else:
@@ -178,9 +183,13 @@ class CommandStrategy(object):
         that matches some pattern.
         Returns `None` otherwise.
         """
-        if name.startswith(REGEX_SYM) and (   name.endswith(REGEX_SYM)
-                                           or name[-2] == REGEX_SYM
-                                           or name[-3] == REGEX_SYM):
+        if (
+            name.startswith(REGEX_SYM)
+            and (
+                name.endswith(REGEX_SYM)
+                or name[-2] == REGEX_SYM
+                or name[-3] == REGEX_SYM)
+        ):
             splitted_str = [e for e in name.split(REGEX_SYM) if e != ""]
             if len(splitted_str) == 1:
                 return re.compile(name[1:-1].replace('\\'+REGEX_SYM, REGEX_SYM))
@@ -189,25 +198,23 @@ class CommandStrategy(object):
             text_without_flags = rchop(name, flags)
             self._is_regex_global = 'g' in flags
             if 'i' in flags:
-                return re.compile(text_without_flags[1:-1].replace('\\'+REGEX_SYM, REGEX_SYM),
-                                    re.IGNORECASE)
-            return re.compile(text_without_flags[1:-1].replace('\\'+REGEX_SYM, REGEX_SYM))
+                return re.compile(
+                    text_without_flags[1:-1].replace(
+                        '\\'+REGEX_SYM, REGEX_SYM
+                    ),
+                    re.IGNORECASE
+                )
+            return re.compile(
+                text_without_flags[1:-1].replace('\\'+REGEX_SYM, REGEX_SYM)
+            )
         return None
 
-    def next_matching_unit_name(self, parser, unit_type, regex):
+    def next_matching_unit_name(self, unit_type, regex):
         """
         Yields the next unit name of type `unit_type`
         whose name matches `regex`.
         """
-        if unit_type == UnitType.alias:
-            relevant_dict = parser.alias_definitions
-        elif unit_type == UnitType.slot:
-            relevant_dict = parser.slot_definitions
-        elif unit_type == UnitType.intent:
-            relevant_dict = parser.intent_definitions
-        else:
-            raise ValueError("Unexpected unit type when matching regex: " +
-                             str(unit_type))
+        relevant_dict = AST.get_or_create()._get_relevant_dict(unit_type)
         if self._is_regex_global:
             for unit_name in relevant_dict:
                 if regex.search(unit_name):
@@ -216,7 +223,7 @@ class CommandStrategy(object):
             for unit_name in relevant_dict:
                 if regex.match(unit_name):
                     yield unit_name
-    def get_all_matching_unit_names(self, parser, unit_type, regex):
+    def get_all_matching_unit_names(self, unit_type, regex):
         """
         Returns a list of unit names of type `unit_type`
         whose name matches `regex`.
@@ -224,15 +231,7 @@ class CommandStrategy(object):
               returns the same data cannot be used in that case (dict changes
               size during iteration).
         """
-        if unit_type == UnitType.alias:
-            relevant_dict = parser.alias_definitions
-        elif unit_type == UnitType.slot:
-            relevant_dict = parser.slot_definitions
-        elif unit_type == UnitType.intent:
-            relevant_dict = parser.intent_definitions
-        else:
-            raise ValueError("Unexpected unit type when matching regex: " +
-                             str(unit_type))
+        relevant_dict = AST.get_or_create()[unit_type]
         if self._is_regex_global:
             return [name for name in relevant_dict if regex.search(name)]
         return [name for name in relevant_dict if regex.match(name)]
@@ -243,8 +242,10 @@ class CommandStrategy(object):
         from `self.command_tokens`.
         @pre: There are redirection tokens in the tokens.
         """
-        if (   self.command_tokens[-2] == REDIRECTION_APPEND_SYM
-            or self.command_tokens[-2] == REDIRECTION_SYM):
+        if (
+            self.command_tokens[-2] == REDIRECTION_APPEND_SYM
+            or self.command_tokens[-2] == REDIRECTION_SYM
+        ):
             self.command_tokens = self.command_tokens[:-2]
         else:
             self.command_tokens = self.command_tokens[:-1]
@@ -265,48 +266,51 @@ class CommandStrategy(object):
         """
         return False
 
-    def execute(self, facade):
+    def execute(self):
         """
         Executes the whole command represented by this object.
-        `facade` is a facade to the whole system (contains links to the parser).
         This method can be overriden by subclasses if a different algorithm is
         required.
         """
         # TODO support variations
         if len(self.command_tokens) < 3:
-            self.print_wrapper.error_log("Missing some arguments\nUsage: " +
-                                         self.usage_str)
+            self.print_wrapper.error_log(
+                "Missing some arguments\nUsage: " + self.usage_str
+            )
             return
 
         unit_type = CommandStrategy.get_unit_type_from_str(self.command_tokens[1])
         if unit_type is None:
-            self.print_wrapper.error_log("Unknown unit type: '" +
-                                         str(self.command_tokens[1]) + "'.")
+            self.print_wrapper.error_log(
+                "Unknown unit type: '" + str(self.command_tokens[1]) + "'."
+            )
             return
 
         unit_regex = self.get_regex_name(self.command_tokens[2])
         if unit_regex is None:
             try:
                 [unit_name, variation_name] = \
-                    CommandStrategy.split_exact_unit_name(self.command_tokens[2])
+                    CommandStrategy.split_exact_unit_name(
+                        self.command_tokens[2]
+                    )
             except SyntaxError:
-                self.print_wrapper.error_log("Unit identifier couldn't be " + \
-                                             "interpreted. Did you mean to " + \
-                                             "escape some hashtags '#'?")
+                self.print_wrapper.error_log(
+                    "Unit identifier couldn't be interpreted. " + \
+                    "Did you mean to escape some hashtags '#'?")
                 return
-            self.execute_on_unit(facade, unit_type, unit_name, variation_name)
+            self.execute_on_unit(unit_type, unit_name, variation_name)
         else:
             count = 0
-            for unit_name in self.next_matching_unit_name(facade.parser,
-                                                          unit_type,
-                                                          unit_regex):
-                self.execute_on_unit(facade, unit_type, unit_name)
+            for unit_name in self.next_matching_unit_name(
+                unit_type, unit_regex
+            ):
+                self.execute_on_unit(unit_type, unit_name)
                 count += 1
             if count == 0:
                 self.print_wrapper.write("No " + unit_type.name + " matched.")
-        self.finish_execution(facade)
+        self.finish_execution()
 
-    def execute_on_unit(self, facade, unit_type, unit_name, variation_name=None):
+    def execute_on_unit(self, unit_type, unit_name, variation_name=None):
         """
         Executes the command on a specific unit.
         This method HAS to be overriden by subclasses if they don't override
@@ -314,7 +318,7 @@ class CommandStrategy(object):
         """
         raise NotImplementedError()
 
-    def finish_execution(self, facade):
+    def finish_execution(self):
         """
         This function is executed at the end of the command and
         can be overriden to implement things such as cleaning up or changing

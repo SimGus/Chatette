@@ -1,14 +1,61 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
+# coding: utf-8
 """
 Module `chatette.utils`
-Contains utility functions used everywhere in the project.
+Contains utility functions and classes used everywhere in the project.
 """
 
 from __future__ import print_function
 import sys
-from random import randint
+from random import randint, sample
+from copy import deepcopy
+
+from random import choice
+from string import ascii_letters
+
+from enum import Enum
+
+
+class UnitType(Enum):
+    alias = "alias"
+    slot = "slot"
+    intent = "intent"
+
+
+class Singleton(object):
+    """
+    The base class for all singleton objects.
+    Every class that subclasses this class will have the behavior
+    of a singleton: their constructor will always return the same instance.
+    @pre: In order to work, a sub-class needs to have an `_instance` class
+          variable.
+    """
+    _instance = None
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super(Singleton, cls).__new__(cls)
+        return cls._instance
+
+    @classmethod
+    def get_or_create(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = cls(*args, **kwargs)
+        return cls._instance
+
+    @classmethod
+    def reset_instance(cls, *args, **kwargs):
+        """
+        Completely resets the instance of the class
+        (representing the singleton), makes a new one and 
+        returns this instance.
+        """
+        cls._instance = None
+        cls._instance = cls(*args, **kwargs)
+        return cls._instance
+    
+    @classmethod
+    def was_instantiated(cls):
+        return (cls._instance is not None)
 
 
 # pylint: disable=invalid-name
@@ -19,7 +66,7 @@ def print_DBG(txt):
 
 def print_warn(txt):
     """Warns the user using stdout."""
-    print("[WARN] " + txt)
+    print("\n[WARN] " + txt + "\n", file=sys.stderr)
 
 
 def cast_to_unicode(anything):
@@ -49,16 +96,15 @@ def cast_to_unicode(anything):
     return anything
 
 
-def choose(array):
+def sample_indulgent(array, nb_items):
     """
-    Same as `random.choice(array)` but doesn't throw an error
-    if `array` is empty
+    Same as `random.sample` but doesn't raise an error if `nb_items`
+    is larger than the length of `array`: in that case,
+    simply returns (a copy of) the whole array.
     """
-    # ([anything]) -> anything or None
-    array_len = len(array)
-    if array_len <= 0:
-        return None  # None and not [] (it is used later on in the code)
-    return array[randint(0, array_len - 1)]
+    if nb_items <= len(array):
+        return sample(array, nb_items)
+    return deepcopy(array)
 
 
 def rchop(string, ending):
@@ -85,11 +131,55 @@ def remove_duplicates(dict_of_lists):
     """Removes duplicates from a dictionary containing lists."""
     return {key: list(set(value)) for (key, value) in dict_of_lists.items()}
 
+def min_if_exist(n1, n2):
+    """
+    Returns the minimum between two numbers, or the only defined number
+    (in case the other is `None`) or `None` if none of the numbers are defined.
+    """
+    if n1 is None and n2 is None:
+        return None
+    elif n1 is None:
+        return n2
+    elif n2 is None:
+        return n1
+    return min(n1, n2)
+
+
+def random_string(length=6):
+    """
+    Returns a random string of length `length` containing only ASCII letters.
+    """
+    return ''.join([choice(ascii_letters) for _ in range(length)])
+
+
+def append_to_list_in_dict(dict_of_lists, key, value):
+    """
+    Given the dict of key->lists `dict_of_lists`, appends the value `value` to
+    the list at key `key` if this list exist. Otherwise, creates a list
+    containing `value` and puts it at key `key`.
+    """
+    if key not in dict_of_lists:
+        dict_of_lists[key] = [value]
+    else:
+        dict_of_lists[key].append(value)
+
+def extend_list_in_dict(dict_of_lists, key, values):
+    """
+    Given the dict of key->lists `dict_of_lists`, extends the list at key `key`
+    with the values `values` if this list exist. Otherwise, puts the list
+    `values` at key `key`.
+    """
+    if key not in dict_of_lists:
+        dict_of_lists[key] = values
+    else:
+        dict_of_lists[key].extend(values)
 
 
 if __name__ == "__main__":
     # pylint: disable=wrong-import-position
     import warnings
 
-    warnings.warn("You are running the wrong file ('utils.py')." +
-                  "The file that should be run is 'run.py'.")
+    warnings.warn(
+        "You are running the wrong file ('utils.py')." +
+        "The file that should be run is 'run.py'."
+    )
