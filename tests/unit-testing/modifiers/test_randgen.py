@@ -68,11 +68,10 @@ class TestMakeAllPossibilities(object):
         with pytest.raises(KeyError):
             make_all_possibilities(examples, empty, "name")
 
-        examples[1] = Example("test2")
         setattr(empty, RANDGEN_MAPPING_KEY, {"name": True})
 
         with pytest.raises(KeyError):
-            make_all_possibilities(examples, empty, "name")
+            make_all_possibilities([], empty, "name")
 
 
 class TestCanConcatExamples(object):
