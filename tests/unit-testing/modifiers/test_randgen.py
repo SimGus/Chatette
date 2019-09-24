@@ -5,11 +5,11 @@ Tests the functionalities that are present in module
 `chatette.modifiers.randgen`
 """
 
-
 import pytest
 
 from chatette.modifiers.randgen import *
 from chatette.units import Example
+
 
 class TestModifyNbPossibilities(object):
     def test_modify_nb_possibilities(self):

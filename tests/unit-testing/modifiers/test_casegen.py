@@ -5,7 +5,6 @@ Tests the functionalities that are present in module
 `chatette.modifiers.casegen`
 """
 
-
 from chatette.modifiers.casegen import *
 from chatette.units import Example
 
