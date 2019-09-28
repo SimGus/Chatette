@@ -42,8 +42,8 @@ class TestChoiceBuilder(object):
 
         with pytest.raises(ValueError):
             builder.create_concrete()
-
         builder.randgen = True
+
         modifiers = builder._build_modifiers_repr()
         assert isinstance(modifiers, ModifiersRepresentation)
         assert not modifiers.casegen
@@ -85,3 +85,101 @@ class TestUnitRefBuilder(object):
         assert not unit_ref._leading_space
         assert unit_ref._unit_type == UnitType.alias
         assert unit_ref._name == "id"
+
+class TestUnitDefBuilder(object):
+    def test_creation(self):
+        with pytest.raises(TypeError):
+            builder = UnitDefBuilder()
+
+class TestAliasDefBuilder(object):
+    def test_creation(self):
+        builder = AliasDefBuilder()
+        assert not builder.leading_space
+        assert not builder.casegen
+        assert not builder.randgen
+        assert builder.randgen_name is None
+        assert builder.randgen_percent == 50
+
+    def test_create_concrete(self):
+        builder = AliasDefBuilder()
+        builder.identifier = "id"
+        builder.randgen_name = "name"
+
+        with pytest.raises(ValueError):
+            builder.create_concrete()
+        builder.randgen = True
+
+        modifiers = builder._build_modifiers_repr()
+        assert isinstance(modifiers, ModifiersRepresentation)
+        assert not modifiers.casegen
+        assert modifiers.randgen
+        assert modifiers.randgen_name == "name"
+        assert modifiers.randgen_percent == 50
+
+        alias = builder.create_concrete()
+        assert isinstance(alias, AliasDefinition)
+        assert not alias._leading_space
+        assert alias._name == "id"
+
+class TestSlotDefBuilder(object):
+    def test_creation(self):
+        builder = SlotDefBuilder()
+        assert not builder.leading_space
+        assert not builder.casegen
+        assert not builder.randgen
+        assert builder.randgen_name is None
+        assert builder.randgen_percent == 50
+
+    def test_create_concrete(self):
+        builder = SlotDefBuilder()
+        builder.identifier = "id"
+        builder.randgen_name = "name"
+
+        with pytest.raises(ValueError):
+            builder.create_concrete()
+        builder.randgen = True
+
+        modifiers = builder._build_modifiers_repr()
+        assert isinstance(modifiers, ModifiersRepresentation)
+        assert not modifiers.casegen
+        assert modifiers.randgen
+        assert modifiers.randgen_name == "name"
+        assert modifiers.randgen_percent == 50
+
+        slot = builder.create_concrete()
+        assert isinstance(slot, SlotDefinition)
+        assert not slot._leading_space
+        assert slot._name == "id"
+
+class TestIntentDefBuilder(object):
+    def test_creation(self):
+        builder = IntentDefBuilder()
+        assert not builder.leading_space
+        assert not builder.casegen
+        assert not builder.randgen
+        assert builder.randgen_name is None
+        assert builder.randgen_percent == 50
+
+    def test_create_concrete(self):
+        builder = IntentDefBuilder()
+        builder.identifier = "id"
+        builder.randgen_name = "name"
+        builder.nb_training_ex = 100
+
+        with pytest.raises(ValueError):
+            builder.create_concrete()
+        builder.randgen = True
+
+        modifiers = builder._build_modifiers_repr()
+        assert isinstance(modifiers, ModifiersRepresentation)
+        assert not modifiers.casegen
+        assert modifiers.randgen
+        assert modifiers.randgen_name == "name"
+        assert modifiers.randgen_percent == 50
+
+        intent = builder.create_concrete()
+        assert isinstance(intent, IntentDefinition)
+        assert not intent._leading_space
+        assert intent._name == "id"
+        assert intent._nb_training_ex_asked == 100
+        assert intent._nb_testing_ex_asked is None
