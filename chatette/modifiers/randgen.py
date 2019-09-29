@@ -55,7 +55,8 @@ def make_all_possibilities(examples, empty_example, randgen_name=None):
             if randgen_name in current_randgen_mapping:
                 raise KeyError(
                     "Didn't expect the random generation name '" + randgen_name + \
-                    "' to already be set."
+                    "' to already be set (for example with text '" + \
+                    str(ex.text) + "')."
                 )
             current_randgen_mapping[randgen_name] = True
             setattr(ex, RANDGEN_MAPPING_KEY, current_randgen_mapping)
@@ -65,7 +66,7 @@ def make_all_possibilities(examples, empty_example, randgen_name=None):
         if randgen_name in current_randgen_mapping:
             raise KeyError(
                 "Didn't expect the random generation name '" + randgen_name + \
-                "' to already be set."
+                "' to already be set (for empty example)."
             )
         current_randgen_mapping[randgen_name] = False
         setattr(empty_example, RANDGEN_MAPPING_KEY, current_randgen_mapping)

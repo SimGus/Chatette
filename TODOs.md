@@ -10,7 +10,6 @@
 - [ ] add a way to force a rule at least once in the training/testing set
 
 - [ ] add an adapter to output raw lists of questions (rather than a JSON file) (without entities?)
-- [ ] add an adapter for *Rasa markdown*
 - [ ] add an adapter for *Snips* (cf. Chatito)
 - [ ] add an adapter for *Google DialogFlow*
 - [ ] add an adapter for *IBM Watson*
@@ -144,6 +143,7 @@
 - [x] complete refactor of the code: the code is almost unmaintainable
 - [x] refactor units to remove duplicated code: make modifiers act after the string has been generated
 - [x] *Requirements* add `six`
+- [x] add an adapter for *Rasa markdown*
 
 # Bugs
 
