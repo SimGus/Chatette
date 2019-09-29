@@ -1,19 +1,12 @@
 # TODOs
-
-- [ ] add sections in TODO list to make it more readable
-
+## To Do
+### Bulk
 - [ ] parse in a better way asked number of generation of intents
 - [ ] accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax?
 - [ ] add some kind of optional version number within template files
 - [ ] add a way to specify a rule on several consecutive lines
 - [ ] add a way to give several different names to units
 - [ ] add a way to force a rule at least once in the training/testing set
-
-- [ ] add an adapter to output raw lists of questions (rather than a JSON file) (without entities?)
-- [ ] add an adapter for *Snips* (cf. Chatito)
-- [ ] add an adapter for *Google DialogFlow*
-- [ ] add an adapter for *IBM Watson*
-- [ ] add an adapter for *Microsoft LUIS* as described [here](https://github.com/rodrigopivi/Chatito/issues/61) (cf. Chatito)
 - [ ] add default aliases and slots
 
 - [ ] add opposite `randgen` names
@@ -35,39 +28,53 @@
 
 - [ ] add regex to rasa JSON file
 
-- [ ] add a command line option to specifiy the max number of examples to generate
 - [ ] add bulk generation
+
+- [ ] make an installer to use the script directly from the command line (at least in *nix systems)
+
+### Adapters
+- [ ] add an adapter to output raw lists of questions (rather than a JSON file) (without entities?)
+- [ ] add an adapter for *Snips* (cf. Chatito)
+- [ ] add an adapter for *Google DialogFlow*
+- [ ] add an adapter for *IBM Watson*
+- [ ] add an adapter for *Microsoft LUIS* as described [here](https://github.com/rodrigopivi/Chatito/issues/61) (cf. Chatito)
+
+### Command line options
+- [ ] add a command line option to specifiy the max number of examples to generate
 - [ ] add program options to change the names of the output files
 - [ ] add a command line option to run in case insensitive
 - [ ] add a development command line option that runs the debug in verbose and prevents `.pyc` and `__pycache__/` from being created
 
+### Improve code
 - [ ] design patterns
-- [ ] make the division between processing and lookup more important in parser
 - [ ] improve logging (remove `print`s and use a logging library)
 <!-- - [ ] rewrite docstrings formatted as explained in *PEP257* -->
-- [ ] detect and warn about circular references
-- [ ] warn if there are slots within slots
-- [ ] warn if the limit of examples generated was reached
-- [ ] warn if a unit reference is used within its own declaration
-- [ ] warn if an argument has no value
-- [ ] check that intent definitions don't overlap
+- [ ] replace `print` by `six.print_`?
+- [ ] add more unit tests
+
+### Improve performance
 - [ ] cache the possible number of generatable examples for each unit
 - [ ] use multithreading or multiprocessing to optimize the execution time (+ program option to set that on/off)
 - [ ] cache the examples when they are all generated and they are not too numerous
-- [ ] print the seed when starting the program, even if no seed was provided
 - [ ] improve lexing error messages
 - [ ] improve the systems of singletons to reduce code duplication
 - [ ] use decorators to make caches and improve code readability
 - [ ] fix the code duplication between `GeneratingItem` and `ModifiableItem`
 - [ ] use re-exports to simplify the import statements
 
-- [ ] replace `print` by `six.print_`?
+### Warnings
+- [ ] detect and warn about circular references
+- [ ] warn if there are slots within slots
+- [ ] warn if the limit of examples generated was reached
+- [ ] warn if a unit reference is used within its own declaration
+- [ ] warn if an argument has no value
+- [ ] check that intent definitions don't overlap
 
-- [ ] add more unit tests
-
+### Interactive mode
 - [ ] *Interactive mode* add support for argument values in relevant commands
 - [ ] *Interactive mode* use `tabulate` to make tables and make command output more readable
 
+### Documentation
 - [ ] *Docs* clearly state the objective (scope) of the program
 - [ ] *Docs* add a "contributors" part
 - [ ] *Docs* add a representation of the architecture of the project
@@ -81,13 +88,12 @@
 - [ ] *Docs* add a "quickstart" section for the people who already know *Chatito*
 - [ ] *Docs* make a "get started" section that is a simple hands-on example (kind of like the Angular quickstart tutorial)
 
-- [ ] make an installer to use the script directly from the command line (at least in *nix systems)
 - [ ] *Examples* remove all deprecated syntax
 
+### Branding
 - [ ] Add image for social networks on GitHub (how the logo to have a brand image, and an image that illustrates what the program is for)
 
 ## Done
-
 - [x] fix line number count for different files
 - [x] add unicode support for all files (`io.open` autodetects encoding i think)
 - [x] add argument support
@@ -144,15 +150,16 @@
 - [x] refactor units to remove duplicated code: make modifiers act after the string has been generated
 - [x] *Requirements* add `six`
 - [x] add an adapter for *Rasa markdown*
+- [x] make the division between processing and lookup more important in parser
+- [x] print the seed when starting the program, even if no seed was provided
+- [x] add sections in TODO list to make it more readable
 
 # Bugs
-
 ## To confirm
 - **BUG**: a leading space is generated even though a unit has a random gen modifier and the unit wasn't generated
 - **BUG**: arguments are not given down when an argument is transmitted as the argument of a token
 
 ## Fixed bugs
-
 - **fixed**: no case changing when asked with uppercase feeding
 - **fixed**: escapment not currently working
 - **fixed**: slots starting with a word crash the script
@@ -191,10 +198,7 @@
 - **fixed**: random generation modifiers' names are not taken into account when generating all examples
 
 # Ideas
-
-
 ## Rejected
-
 - **rejected**: use overrides pip package (no, doesn't work in python 2)
 - **rejected**: make arguments several layers deep? no, it is not useful as you can pass arguments down the references
 - **rejected**: maybe add more modifiers to choices? no, rather merge it into word groups
