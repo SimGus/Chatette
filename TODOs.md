@@ -1,7 +1,6 @@
 # TODOs
 ## To Do
 ### Bulk
-- [ ] make an installer to use the script directly from the command line (at least in *nix systems)
 
 ### New syntax
 - [ ] accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax?
@@ -88,6 +87,10 @@
 - [ ] *Docs* make a "get started" section that is a simple hands-on example (kind of like the Angular quickstart tutorial)
 
 - [ ] *Examples* remove all deprecated syntax
+
+### Installation
+- [ ] make an installer to use the script directly from the command line (at least in *nix systems)
+- [ ] make a dockerfile for easy installation and put it on docker hub
 
 ### Branding
 - [ ] Add image for social networks on GitHub (how the logo to have a brand image, and an image that illustrates what the program is for)
