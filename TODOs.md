@@ -1,49 +1,60 @@
 # TODOs
 ## To Do
 ### Bulk
-- [ ] parse in a better way asked number of generation of intents
-- [ ] accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax?
-- [ ] add some kind of optional version number within template files
-- [ ] add a way to specify a rule on several consecutive lines
-- [ ] add a way to give several different names to units
-- [ ] add a way to force a rule at least once in the training/testing set
-- [ ] add default aliases and slots
+- [ ] make an installer to use the script directly from the command line (at least in *nix systems)
 
+### New syntax
+- [ ] accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax?
 - [ ] add opposite `randgen` names
+- [ ] add a way to specify a rule on several consecutive lines
+- [ ] add a way to give several different names to units (unit name aliases)
 - [ ] support several arguments in one rule
 - [ ] reverse regex
 - [ ] add probabilities weighting of generation for rules in defintions (cf. https://github.com/rodrigopivi/Chatito/issues/48 and new implementation)
-- [ ] add a flag to make the generators take into account the variability of each rule (cf. https://github.com/rodrigopivi/Chatito/issues/72)
 - [ ] add support for Chatito's augmentations (cf. https://github.com/rodrigopivi/Chatito/issues/48)
-- [ ] add an annotation for generating typos
-- [ ] add a flag to enable/disable the slot = slot synonym behavior (cf. https://github.com/rodrigopivi/Chatito/issues/50)
+- [ ] add an annotation for generating typos (linked to Chatito's augmentations)
 - [ ] add a way to make some generation mandatory in the training set, test set or both (cf. https://github.com/rodrigopivi/Chatito/issues/51)
 - [ ] add custom annotations as *Chatito* does
-- [ ] add support for any sub-rule's modifier for choices
-- [ ] make double quotes an ignored character in annotations
-- [ ] accept anything inside an arg, especially unit references
 - [ ] add percentages of all possible examples for training and test (rather than simple numbers)
-- [ ] add "auto-aliases" feature (cf. *Chatito* v2.3.4)
 - [ ] add several files import in one line?
 
+- [ ] add some kind of optional version number within template files
+
+### New generation features
+- [ ] add a way to force a rule at least once in the training/testing set
+- [ ] add default aliases and slots
+- [ ] accept anything inside an arg, especially unit references
 - [ ] add regex to rasa JSON file
-
-- [ ] add bulk generation
-
-- [ ] make an installer to use the script directly from the command line (at least in *nix systems)
 
 ### Adapters
 - [ ] add an adapter to output raw lists of questions (rather than a JSON file) (without entities?)
+- [ ] add an adapter for *Rasa* answer templates (the bot's utterances)
 - [ ] add an adapter for *Snips* (cf. Chatito)
 - [ ] add an adapter for *Google DialogFlow*
 - [ ] add an adapter for *IBM Watson*
 - [ ] add an adapter for *Microsoft LUIS* as described [here](https://github.com/rodrigopivi/Chatito/issues/61) (cf. Chatito)
+
+### Warnings
+- [ ] detect and warn about circular references
+- [ ] warn if there are slots within slots
+- [ ] warn if the limit of examples generated was reached
+- [ ] warn if a unit reference is used within its own declaration
+- [ ] warn if an argument has no value
+- [ ] check that intent definitions don't overlap
 
 ### Command line options
 - [ ] add a command line option to specifiy the max number of examples to generate
 - [ ] add program options to change the names of the output files
 - [ ] add a command line option to run in case insensitive
 - [ ] add a development command line option that runs the debug in verbose and prevents `.pyc` and `__pycache__/` from being created
+- [ ] add a flag to make the generators take into account the variability of each rule (cf. https://github.com/rodrigopivi/Chatito/issues/72)
+- [ ] add a flag to enable/disable the slot = slot synonym behavior (cf. https://github.com/rodrigopivi/Chatito/issues/50) (or a new syntax => annotation?)
+- [ ] add "auto-aliases" feature (cf. *Chatito* v2.3.4) (or/and as an annotation?)
+- [ ] add bulk generation
+
+### Interactive mode
+- [ ] *Interactive mode* add support for argument values in relevant commands
+- [ ] *Interactive mode* use `tabulate` to make tables and make command output more readable
 
 ### Improve code
 - [ ] design patterns
@@ -61,18 +72,6 @@
 - [ ] use decorators to make caches and improve code readability
 - [ ] fix the code duplication between `GeneratingItem` and `ModifiableItem`
 - [ ] use re-exports to simplify the import statements
-
-### Warnings
-- [ ] detect and warn about circular references
-- [ ] warn if there are slots within slots
-- [ ] warn if the limit of examples generated was reached
-- [ ] warn if a unit reference is used within its own declaration
-- [ ] warn if an argument has no value
-- [ ] check that intent definitions don't overlap
-
-### Interactive mode
-- [ ] *Interactive mode* add support for argument values in relevant commands
-- [ ] *Interactive mode* use `tabulate` to make tables and make command output more readable
 
 ### Documentation
 - [ ] *Docs* clearly state the objective (scope) of the program
@@ -153,6 +152,9 @@
 - [x] make the division between processing and lookup more important in parser
 - [x] print the seed when starting the program, even if no seed was provided
 - [x] add sections in TODO list to make it more readable
+- [x] parse in a better way asked number of generation of intents
+- [x] add support for any sub-rule modifier for choices
+- [x] make double quotes an ignored character in annotations
 
 # Bugs
 ## To confirm
