@@ -32,6 +32,7 @@
 - [ ] add an adapter for *Google DialogFlow*
 - [ ] add an adapter for *IBM Watson*
 - [ ] add an adapter for *Microsoft LUIS* as described [here](https://github.com/rodrigopivi/Chatito/issues/61) (cf. Chatito)
+- [ ] add an adapter for [*Flair*](https://github.com/zalandoresearch/flair)
 
 ### Warnings
 - [ ] detect and warn about circular references
