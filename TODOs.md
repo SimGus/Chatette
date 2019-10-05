@@ -85,6 +85,7 @@
 - [ ] *Docs* add a lexicon page in the wiki
 - [ ] *Docs* add a "quickstart" section for the people who already know *Chatito*
 - [ ] *Docs* make a "get started" section that is a simple hands-on example (kind of like the Angular quickstart tutorial)
+- [ ] Add a *FAQ* page
 
 - [ ] *Examples* remove all deprecated syntax
 
