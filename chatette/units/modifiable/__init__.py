@@ -135,6 +135,7 @@ class ModifiableItem(GeneratingItem):
                 randgen.should_generate(
                     self._modifiers_repr.randgen_name,
                     self._modifiers_repr.randgen_percent,
+                    # TODO opposite randgen
                     randgen_mapping
                 )
         return True

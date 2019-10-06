@@ -23,22 +23,28 @@ def modify_nb_possibilities(unmodified_nb_possibilities):
     return unmodified_nb_possibilities + 1
 
 
-def should_generate(randgen_name, percentgen, randgen_mappings=None):
+def should_generate(
+    randgen_name, percentgen, opposite=False, randgen_mappings=None
+):
     """
     Returns `True` if the current item should generate
     given the name of the current random generation `randgen_name`
     (if there is one), the percentage `percentgen`
-    associated to the current item and the choices of random generation names
-    made previously `randgen_mappings`.
+    associated to the current item, whether it is an "opposite randgen" and
+    the choices of random generation names made previously `randgen_mappings`.
     """
     if randgen_name is None:
         return randrange(100) < percentgen
     if randgen_name not in randgen_mappings:
         randgen_mappings[randgen_name] = (randrange(100) < percentgen)
+    if opposite:
+        return not randgen_mappings[randgen_name]
     return randgen_mappings[randgen_name]
 
 
-def make_all_possibilities(examples, empty_example, randgen_name=None):
+def make_all_possibilities(
+    examples, empty_example, randgen_name=None, opposite=False
+):
     """
     Given the list of examples `examples`, constructs and returns a list
     of all possible examples after the random generation modifier applied.
@@ -49,8 +55,10 @@ def make_all_possibilities(examples, empty_example, randgen_name=None):
     @raises: - `KeyError` if `randgen_name` is already present in a random
                generation mapping.
     """
+    print("\ncalled all pos with name " + str(randgen_name) + " and ex " + str(examples))
     if randgen_name is not None:
         for ex in examples:
+            print("for " + str(ex.text) + " setting " + str(randgen_name) + "to True")
             current_randgen_mapping = getattr(ex, RANDGEN_MAPPING_KEY, dict())
             if randgen_name in current_randgen_mapping:
                 raise KeyError(
@@ -58,7 +66,7 @@ def make_all_possibilities(examples, empty_example, randgen_name=None):
                     "' to already be set (for example with text '" + \
                     str(ex.text) + "')."
                 )
-            current_randgen_mapping[randgen_name] = True
+            current_randgen_mapping[randgen_name] = not opposite
             setattr(ex, RANDGEN_MAPPING_KEY, current_randgen_mapping)
         
         current_randgen_mapping = \
@@ -68,9 +76,10 @@ def make_all_possibilities(examples, empty_example, randgen_name=None):
                 "Didn't expect the random generation name '" + randgen_name + \
                 "' to already be set (for empty example)."
             )
-        current_randgen_mapping[randgen_name] = False
+        current_randgen_mapping[randgen_name] = opposite
         setattr(empty_example, RANDGEN_MAPPING_KEY, current_randgen_mapping)
 
+    print("DONE\n")
     return add_example_no_dup(examples, empty_example)
 
 
