@@ -55,10 +55,8 @@ def make_all_possibilities(
     @raises: - `KeyError` if `randgen_name` is already present in a random
                generation mapping.
     """
-    print("\ncalled all pos with name " + str(randgen_name) + " and ex " + str(examples))
     if randgen_name is not None:
         for ex in examples:
-            print("for " + str(ex.text) + " setting " + str(randgen_name) + "to True")
             current_randgen_mapping = getattr(ex, RANDGEN_MAPPING_KEY, dict())
             if randgen_name in current_randgen_mapping:
                 raise KeyError(
@@ -79,7 +77,6 @@ def make_all_possibilities(
         current_randgen_mapping[randgen_name] = opposite
         setattr(empty_example, RANDGEN_MAPPING_KEY, current_randgen_mapping)
 
-    print("DONE\n")
     return add_example_no_dup(examples, empty_example)
 
 

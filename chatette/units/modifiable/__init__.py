@@ -133,9 +133,9 @@ class ModifiableItem(GeneratingItem):
         if self._modifiers_repr.randgen:
             return \
                 randgen.should_generate(
-                    self._modifiers_repr.randgen_name,
-                    self._modifiers_repr.randgen_percent,
-                    # TODO opposite randgen
+                    self._modifiers_repr.randgen.name,
+                    self._modifiers_repr.randgen.percentage,
+                    self._modifiers_repr.randgen.opposite,
                     randgen_mapping
                 )
         return True
@@ -172,7 +172,8 @@ class ModifiableItem(GeneratingItem):
             examples = \
                 randgen.make_all_possibilities(
                     examples, self._make_empty_example(),
-                    self._modifiers_repr.randgen_name
+                    self._modifiers_repr.randgen.name,
+                    self._modifiers_repr.randgen.opposite
                 )
         return examples
     
