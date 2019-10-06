@@ -21,7 +21,8 @@ from chatette.units.modifiable.definitions.alias import AliasDefinition
 from chatette.units.modifiable.definitions.slot import SlotDefinition
 from chatette.units.modifiable.definitions.intent import IntentDefinition
 
-from chatette.modifiers.representation import ModifiersRepresentation
+from chatette.modifiers.representation import \
+    ModifiersRepresentation, RandgenRepresentation
 
 from chatette.units.ast import AST
 from chatette.utils import UnitType
@@ -39,6 +40,7 @@ class ItemBuilder(with_metaclass(ABCMeta, object)):
         self.casegen = False
         self.randgen = False
         self.randgen_name = None
+        self.randgen_opposite = False
         self.randgen_percent = 50
 
     def _check_information(self):
@@ -56,9 +58,14 @@ class ItemBuilder(with_metaclass(ABCMeta, object)):
         """
         modifiers = ModifiersRepresentation()
         modifiers.casegen = self.casegen
-        modifiers.randgen = self.randgen
-        modifiers.randgen_name = self.randgen_name
-        modifiers.randgen_percent = self.randgen_percent
+
+        randgen = RandgenRepresentation()
+        randgen._present = self.randgen
+        randgen.name = self.randgen_name
+        randgen.opposite = self.randgen_opposite
+        randgen.percentage = self.randgen_percent
+        modifiers.randgen = randgen
+
         return modifiers
 
     @abstractmethod

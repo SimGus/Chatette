@@ -20,7 +20,6 @@ from chatette.parsing.lexing.lexer import Lexer
 from chatette.parsing.lexing import TerminalType
 from chatette.units.ast import AST
 
-from chatette.modifiers.representation import ModifiersRepresentation
 from chatette.units.modifiable.definitions.alias import AliasDefinition
 from chatette.units.modifiable.definitions.slot import SlotDefinition
 from chatette.units.modifiable.definitions.intent import IntentDefinition

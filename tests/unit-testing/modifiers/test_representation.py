@@ -6,7 +6,8 @@ Tests the functionalities that are present in module
 """
 
 
-from chatette.modifiers.representation import ModifiersRepresentation
+from chatette.modifiers.representation import \
+    ModifiersRepresentation, RandgenRepresentation
 
 
 class TestModifiersRepr(object):
@@ -15,8 +16,6 @@ class TestModifiersRepr(object):
         assert not repr.casegen
         assert repr.variation_name is None
         assert not repr.randgen
-        assert repr.randgen_name is None
-        assert repr.randgen_percent == 50
         assert repr.argument_name is None
         assert repr.argument_value is None
 
@@ -24,7 +23,7 @@ class TestModifiersRepr(object):
         repr = ModifiersRepresentation()
         assert \
             str(repr) == \
-                "ModifiersRepresentation(casegen: False randgen: None (50) " + \
+                "ModifiersRepresentation(casegen: False randgen: No " + \
                 "arg name: None arg value: None)"
     
     def test_short_desc(self):
@@ -35,18 +34,47 @@ class TestModifiersRepr(object):
         assert repr.short_description() == "Modifiers:\n- case generation\n"
 
         repr.casegen = False
-        repr.randgen = True
-        repr.randgen_name = "test"
+        repr.randgen = RandgenRepresentation()
+        repr.randgen._present = True
+        repr.randgen.name = "test"
         assert \
             repr.short_description() == \
                 "Modifiers:\n- random generation: test (50%)\n"
         
-        repr.randgen = False
+        repr.randgen._present = False
         repr.argument_name = "test"
         assert \
-            repr.short_description() == "Modifiers:\n- argument name: test\n"
+            repr.short_description() == \
+                "Modifiers:\n- argument name: test\n"
         
         repr.argument_name = None
         repr.argument_value = "test"
         assert \
             repr.short_description() == "Modifiers:\n- argument value: test\n"
+
+
+class TestRandgenRepr(object):
+    def test_default(self):
+        repr = RandgenRepresentation()
+        assert not repr
+        assert not repr._present
+        assert repr.name is None
+        assert not repr.opposite
+        assert repr.percentage == 50
+
+    def test_bool(self):
+        repr = RandgenRepresentation()
+        assert not repr
+        repr._present = True
+        assert bool(repr)
+    
+    def test_str(self):
+        repr = RandgenRepresentation()
+        assert str(repr) == "No"
+
+        repr._present = True
+        repr.name = "name"
+        assert str(repr) == "Yes 'name' (50%)"
+
+        repr.opposite = True
+        assert str(repr) == "Yes 'name' (opposite, 50%)"
