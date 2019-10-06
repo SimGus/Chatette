@@ -27,14 +27,14 @@ class TestShouldGenerate(object):
         
         for _ in range(5):
             mapping = dict()
-            should_generate("randgen name", 50, mapping)
+            should_generate("randgen name", 50, False, mapping)
             assert "randgen name" in mapping
         for _ in range(5):
             mapping = {"name": True}
-            assert should_generate("name", 50, mapping)
+            assert should_generate("name", 50, False, mapping)
         for _ in range(5):
             mapping = {"name": False}
-            assert not should_generate("name", 50, mapping)
+            assert not should_generate("name", 50, False, mapping)
     
 class TestMakeAllPossibilities(object):
     def test_make_all_possibilities(self):
