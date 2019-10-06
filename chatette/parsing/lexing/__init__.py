@@ -57,10 +57,11 @@ class TerminalType(Enum):
     arg_end = 37  # ')'
     randgen_marker = 38
     randgen_name = 39
-    percentgen_marker = 40
-    percentgen = 41
-    variation_marker = 42
-    variation_name = 43
+    opposite_randgen_marker = 40
+    percentgen_marker = 41
+    percentgen = 42
+    variation_marker = 43
+    variation_name = 44
 
 
 class LexicalToken(object):

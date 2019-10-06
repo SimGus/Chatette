@@ -134,6 +134,7 @@ class Facade(Singleton):
     def _ask_confirmation(self):
         print_warn("Folder '" + self.output_dir_path + "' already exists.")
         answer = input("Overwrite the whole folder? [y/n] ").lower()
+        print('')
         if answer == "" or answer.startswith('y'):
             return True
         return False

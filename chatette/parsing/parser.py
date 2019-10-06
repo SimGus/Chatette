@@ -20,7 +20,6 @@ from chatette.parsing.lexing.lexer import Lexer
 from chatette.parsing.lexing import TerminalType
 from chatette.units.ast import AST
 
-from chatette.modifiers.representation import ModifiersRepresentation
 from chatette.units.modifiable.definitions.alias import AliasDefinition
 from chatette.units.modifiable.definitions.slot import SlotDefinition
 from chatette.units.modifiable.definitions.intent import IntentDefinition
@@ -358,6 +357,7 @@ class Parser(object):
         definition).
         Returns the rule (`Rule`) that `tokens` represent.
         """
+        # TODO replace this with a (stateful) iterator to make it more readable
         rule_contents = []
         current_builder = None
         leading_space = False
@@ -407,7 +407,7 @@ class Parser(object):
                 current_builder = ChoiceBuilder()
                 current_builder.leading_space = leading_space
                 last_internal_choice_token = \
-                    utils.index_end_choice_rules(tokens, i)
+                    utils.find_index_last_choice_content(tokens, i)
                 if last_internal_choice_token is not None:
                     i += 1
                     if tokens[i].type == TerminalType.casegen_marker:
@@ -421,7 +421,7 @@ class Parser(object):
                     i = last_internal_choice_token
                 else:
                     self.input_file_manager.syntax_error(
-                        "Inconsistent choice starts and endings."
+                        "Inconsistent choice start and ending."
                     )
             elif token.type == TerminalType.choice_end:
                 rule_contents.append(current_builder.create_concrete())
@@ -432,6 +432,8 @@ class Parser(object):
                 current_builder.casegen = True
             elif token.type == TerminalType.randgen_marker:
                 current_builder.randgen = True
+            elif token.type == TerminalType.opposite_randgen_marker:
+                current_builder.randgen_opposite = True
             elif token.type == TerminalType.randgen_name:
                 current_builder.randgen_name = token.text
             elif token.type == TerminalType.percentgen_marker:

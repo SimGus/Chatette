@@ -42,6 +42,7 @@ OLD_CHOICE_SEP = '/'
 CASE_GEN_SYM = '&'
 RAND_GEN_SYM = '?'
 RAND_GEN_PERCENT_SYM = '/'
+RAND_GEN_OPPOSITE_SYM = '!'
 ARG_SYM = '$'
 VARIATION_SYM = '#'
 
@@ -228,7 +229,7 @@ def find_matching_choice_end(tokens, start_index):
         i += 1
     return None
 
-def index_end_choice_rules(tokens, start_index):
+def find_index_last_choice_content(tokens, start_index):
     """
     Returns the index of the last token that makes up the internal rules
     of the choice starting at index `start_index`. In other words,
@@ -244,6 +245,8 @@ def index_end_choice_rules(tokens, start_index):
     if i > 0 and tokens[i].type == TerminalType.percentgen_marker:
         i -= 1
     if i > 0 and tokens[i].type == TerminalType.randgen_name:
+        i -= 1
+    if i > 0 and tokens[i].type == TerminalType.opposite_randgen_marker:
         i -= 1
     if i > 0 and tokens[i].type == TerminalType.randgen_marker:
         i -= 1

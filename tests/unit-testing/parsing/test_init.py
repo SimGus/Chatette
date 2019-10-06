@@ -50,8 +50,9 @@ class TestChoiceBuilder(object):
         assert isinstance(modifiers, ModifiersRepresentation)
         assert not modifiers.casegen
         assert modifiers.randgen
-        assert modifiers.randgen_name == "name"
-        assert modifiers.randgen_percent == 50
+        assert modifiers.randgen.name == "name"
+        assert modifiers.randgen.percentage == 50
+        assert not modifiers.randgen.opposite
 
         choice = builder.create_concrete()
         assert isinstance(choice, Choice)
@@ -79,8 +80,9 @@ class TestUnitRefBuilder(object):
         assert isinstance(modifiers, ModifiersRepresentation)
         assert not modifiers.casegen
         assert not modifiers.randgen
-        assert modifiers.randgen_name is None
-        assert modifiers.randgen_percent == 50
+        assert modifiers.randgen.name is None
+        assert modifiers.randgen.percentage == 50
+        assert not modifiers.randgen.opposite
 
         unit_ref = builder.create_concrete()
         assert isinstance(unit_ref, UnitReference)
@@ -113,7 +115,9 @@ class TestAliasDefBuilder(object):
         assert isinstance(modifiers, ModifiersRepresentation)
         assert not modifiers.casegen
         assert not modifiers.randgen
-        assert modifiers.randgen_percent == 50
+        assert modifiers.randgen.name is None
+        assert modifiers.randgen.percentage == 50
+        assert not modifiers.randgen.opposite
 
         alias = builder.create_concrete()
         assert isinstance(alias, AliasDefinition)
@@ -155,8 +159,9 @@ class TestSlotDefBuilder(object):
         assert isinstance(modifiers, ModifiersRepresentation)
         assert not modifiers.casegen
         assert modifiers.randgen
-        assert modifiers.randgen_name == "name"
-        assert modifiers.randgen_percent == 50
+        assert modifiers.randgen.name == "name"
+        assert modifiers.randgen.percentage == 50
+        assert not modifiers.randgen.opposite
 
         slot = builder.create_concrete()
         assert isinstance(slot, SlotDefinition)
@@ -199,8 +204,9 @@ class TestIntentDefBuilder(object):
         assert isinstance(modifiers, ModifiersRepresentation)
         assert not modifiers.casegen
         assert modifiers.randgen
-        assert modifiers.randgen_name == "name"
-        assert modifiers.randgen_percent == 50
+        assert modifiers.randgen.name == "name"
+        assert modifiers.randgen.percentage == 50
+        assert not modifiers.randgen.opposite
 
         intent = builder.create_concrete()
         assert isinstance(intent, IntentDefinition)

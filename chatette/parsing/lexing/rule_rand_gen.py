@@ -10,7 +10,7 @@ from chatette.parsing.lexing.lexing_rule import LexingRule
 from chatette.parsing.lexing import LexicalToken, TerminalType
 from chatette.parsing.utils import \
     extract_identifier, \
-    RAND_GEN_SYM, RAND_GEN_PERCENT_SYM
+    RAND_GEN_SYM, RAND_GEN_PERCENT_SYM, RAND_GEN_OPPOSITE_SYM
 
 from chatette.parsing.lexing.rule_percent_gen import RulePercentGen
 
@@ -27,6 +27,15 @@ class RuleRandGen(LexingRule):
         self._tokens.append(
             LexicalToken(TerminalType.randgen_marker, RAND_GEN_SYM)
         )
+
+        if self._text.startswith(RAND_GEN_OPPOSITE_SYM, self._next_index):
+            self._next_index += 1
+            self._update_furthest_matched_index()
+            self._tokens.append(
+                LexicalToken(
+                    TerminalType.opposite_randgen_marker, RAND_GEN_OPPOSITE_SYM
+                )
+            )
 
         # TODO not sure `extract_identifier` is the best thing to use here
         randgen_name = extract_identifier(self._text, self._next_index)
