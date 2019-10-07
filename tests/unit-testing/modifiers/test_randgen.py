@@ -35,6 +35,9 @@ class TestShouldGenerate(object):
         for _ in range(5):
             mapping = {"name": False}
             assert not should_generate("name", 50, False, mapping)
+        for _ in range(5):
+            mapping = {"name": False}
+            assert should_generate("name", 50, True, mapping)
     
 class TestMakeAllPossibilities(object):
     def test_make_all_possibilities(self):
@@ -53,6 +56,16 @@ class TestMakeAllPossibilities(object):
                 assert not current_mapping["randgen"]
             else:
                 assert current_mapping["randgen"]
+
+        empty = Example()
+        examples = [Example("test1"), Example("test2")]
+        all_examples = make_all_possibilities(examples, empty, "randgen", True)
+        for ex in all_examples:
+            current_mapping = getattr(ex, RANDGEN_MAPPING_KEY, dict())
+            if ex == empty:
+                assert current_mapping["randgen"]
+            else:
+                assert not current_mapping["randgen"]
     
     def test_errors(self):
         empty = Example()
