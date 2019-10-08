@@ -1,0 +1,15 @@
+%[askPopulation]('training': '5')
+    ~[greet?] ~[population] @[city]
+
+@[city]
+    new york
+    tokyo
+
+~[greet]
+    hi
+    hello
+
+~[population]
+    what is the population of
+    how many people are there in
+
