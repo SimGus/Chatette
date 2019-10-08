@@ -88,6 +88,8 @@
 - [ ] *Docs* make a "get started" section that is a simple hands-on example (kind of like the Angular quickstart tutorial)
 - [ ] Add a *FAQ* page
 
+- [ ] *Readme* cite the vs code color plugin for chatito
+
 - [ ] *Examples* remove all deprecated syntax
 
 ### Installation
