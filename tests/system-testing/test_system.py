@@ -224,7 +224,8 @@ class TestSystem(object):
             "tests/system-testing/inputs/generate-nb/training-only/"
         input_filenames = [
             "only-words.chatette", "words-and-groups.chatette",
-            "alias.chatette", "include.chatette", "slot.chatette"
+            "alias.chatette", "include.chatette", "slot.chatette",
+            "bugfixes/bug-22-slot-position.chatette"
         ]
         for filename in input_filenames:
             file_path = os.path.join(input_dir_path, filename)
@@ -278,6 +279,26 @@ class TestSystem(object):
                 str(facade.train_examples)
             )
 
+    def test_bug_fixes(self):
+        facade = ChatetteFacade.get_or_create()
+
+        file_path = "tests/system-testing/inputs/generate-nb/training-only/bugfixes/bug-22-slot-position.chatette"
+        facade.run(file_path)
+        for ex in facade.train_examples:
+            for entity in ex.entities:
+                if entity._len != 5 and entity._len != 8:
+                    pytest.fail(
+                        "Incorrect length for entity '" + str(entity.value) + \
+                        "': " + str(entity._len)
+                    )
+                if entity._start_index < 26 and entity._start_index > 35:
+                    pytest.fail(
+                        "Incorrect starting index for entity '" + \
+                        str(entity.value) + "' in '" + str(ex.text) + \
+                        "': " + str(entity._start_index)
+                    )
+
+    
     def test_generate_nb_testing(self):
         """
         Tests templates that generate a subset of all possible examples

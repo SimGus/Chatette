@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - New opposite random generation modifier (using syntax `[unit?!randgen name]`)
 
+### Fixed
+- Entity positions were incorrectly updated in some cases (issue [#22](https://github.com/SimGus/Chatette/issues/22))
+
 ## [1.6.0] - 2019-09-18
 ### Added
 - New adapter to output a *Markdown* file that can be used as input for *Rasa NLU*

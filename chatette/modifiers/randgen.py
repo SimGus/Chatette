@@ -125,7 +125,7 @@ def concat_examples_with_randgen(example, example_to_append):
     @pre: the randgen mappings of those examples can be merged.
     """
     result = deepcopy(example)
-    result.append(example_to_append)
+    result.append(deepcopy(example_to_append))
     mapping = merge_randgen_mappings(example, example_to_append)
     if mapping is not None:
         setattr(result, RANDGEN_MAPPING_KEY, mapping)
