@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- Entity positions were incorrectly updated in some cases (issue [#22](https://github.com/SimGus/Chatette/issues/22))
 
 ## [1.6.0] - 2019-09-18
 ### Added
