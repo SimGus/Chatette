@@ -8,7 +8,7 @@ to tokenize a unit reference.
 from chatette.parsing.lexing.lexing_rule import LexingRule
 from chatette.parsing.lexing import LexicalToken, TerminalType
 from chatette.parsing.utils import \
-    extract_identifier, \
+    extract_unit_identifier, \
     CASE_GEN_SYM, UNIT_END_SYM
 
 from chatette.parsing.lexing.rule_unit_start import RuleUnitStart
@@ -36,7 +36,7 @@ class RuleUnitRef(LexingRule):
             self._next_index += 1
             self._update_furthest_matched_index()
 
-        identifier = extract_identifier(self._text, self._next_index)
+        identifier = extract_unit_identifier(self._text, self._next_index)
         if identifier is not None:
             self._tokens.append(
                 LexicalToken(TerminalType.unit_identifier, identifier)

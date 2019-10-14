@@ -8,7 +8,7 @@ to tokenize a declaration of a unit (from '[' to ']').
 from chatette.parsing.lexing.lexing_rule import LexingRule
 from chatette.parsing.lexing import LexicalToken, TerminalType
 from chatette.parsing.utils import \
-    CASE_GEN_SYM, UNIT_END_SYM, extract_identifier
+    CASE_GEN_SYM, UNIT_END_SYM, extract_unit_identifier
 
 from chatette.parsing.lexing.rule_unit_start import RuleUnitStart
 from chatette.parsing.lexing.rule_arg_decl import RuleArgDecl
@@ -27,7 +27,7 @@ class RuleUnitDecl(LexingRule):
                 LexicalToken(TerminalType.casegen_marker, CASE_GEN_SYM)
             )
         
-        identifier = extract_identifier(self._text, self._next_index)
+        identifier = extract_unit_identifier(self._text, self._next_index)
         if identifier is not None:
             self._next_index += len(identifier)
             self._update_furthest_matched_index()

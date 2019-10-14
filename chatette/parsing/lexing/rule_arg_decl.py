@@ -8,7 +8,8 @@ to tokenize the declaration of an argument in a unit declaration.
 from chatette.parsing.lexing.lexing_rule import LexingRule
 from chatette.parsing.lexing import LexicalToken, TerminalType
 from chatette.parsing.utils import \
-    ARG_SYM, ARG_LIST_START, ARG_LIST_END, ARG_LIST_SEP, extract_identifier
+    ARG_SYM, ARG_LIST_START, ARG_LIST_END, ARG_LIST_SEP, \
+    extract_key_value_identifier
 
 
 class RuleArgDecl(LexingRule):
@@ -25,7 +26,7 @@ class RuleArgDecl(LexingRule):
         )
         
         if not self._text.startswith(ARG_LIST_START, self._next_index):
-            arg_name = extract_identifier(self._text, self._next_index)
+            arg_name = extract_unit_identifier(self._text, self._next_index)
             if arg_name is None:
                 self.error_msg = \
                     "Didn't expect the line to end there. Expected an argument name."
@@ -46,9 +47,8 @@ class RuleArgDecl(LexingRule):
             print("found ", ARG_LIST_START)
 
             while True:
-                # TODO extract identifier should be done in a better way
-                arg_name = extract_identifier(self._text, self._next_index)
-                print("identifier: ", str(arg_name))
+                arg_name = \
+                    extract_key_value_identifier(self._text, self._next_index)
                 if arg_name is None:
                     break
                 self._next_index += len(arg_name)
@@ -56,20 +56,18 @@ class RuleArgDecl(LexingRule):
                 self._tokens.append(
                     LexicalToken(TerminalType.arg_name, arg_name)
                 )
-                if not self._text.startswith(ARG_LIST_SEP):
+                if not self._text.startswith(ARG_LIST_SEP, self._next_index):
                     break
-                print("found ", ARG_LIST_SEP)
                 self._next_index += 1
                 self._update_furthest_matched_index()
                 self._tokens.append(
                     LexicalToken(TerminalType.separator, ARG_LIST_SEP)
                 )
             
-            if not self._text.startswith(ARG_LIST_END):
+            if not self._text.startswith(ARG_LIST_END, self._next_index):
                 self.error_msg = \
                     "Missing closing parenthesis for argument list."
                 return False
-            print("found ", ARG_LIST_END)
             self._next_index += 1
             self._update_furthest_matched_index()
             self._tokens.append(

@@ -108,10 +108,11 @@ def find_next_comment(text, start_index=0, end_index=None):
     return min_if_exist(comment_index, old_comment_index)
 
 
-def extract_identifier(text, start_index=0):
+# TODO make different extractor for different cases
+def extract_unit_identifier(text, start_index=0):
     """
     Returns the part of `text` that starts at `start_index` and
-    correponds to an identifier, key, value, argument name, randgen name,...
+    correponds to a unit identifier, randgen name,...
     Returns an empty string if no identifier was found.
     Returns `None` if `start_index` points to the end of the string.
     @raises: `ValueError` if `start_index` points to further than the end of
@@ -135,6 +136,41 @@ def extract_identifier(text, start_index=0):
         elif (
             is_special_identifier_char(text[i]) \
             or text.startswith(COMMENT_SYM, i)
+        ):
+            break
+        i += 1
+    if i == start_index:
+        return ""
+    return text[start_index:i].rstrip()
+
+def extract_key_value_identifier(text, start_index=0):
+    """
+    Returns the part of `text` that starts at `start_index` and
+    correponds to a key, value, argument name,...
+    Returns an empty string if no identifier was found.
+    Returns `None` if `start_index` points to the end of the string.
+    @raises: `ValueError` if `start_index` points to further than the end of
+             `text`.
+    """
+    length = len(text)
+    if start_index == length:
+        return None
+    elif start_index > length:
+        raise ValueError("Tried to extract an identifier from outside a string.")
+    
+    i = start_index
+    escaped = False
+    while i < length:
+        if escaped:
+            escaped = False
+            i += 1
+            continue
+        if text[i] == ESCAPEMENT_SYM:
+            escaped = True
+        elif (
+            is_special_identifier_char(text[i]) \
+            or text.startswith(COMMENT_SYM, i) \
+            or text[i] in (ARG_LIST_END, ARG_LIST_SEP, KEY_VAL_CONNECTOR)
         ):
             break
         i += 1

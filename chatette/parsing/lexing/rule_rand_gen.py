@@ -9,7 +9,7 @@ choice).
 from chatette.parsing.lexing.lexing_rule import LexingRule
 from chatette.parsing.lexing import LexicalToken, TerminalType
 from chatette.parsing.utils import \
-    extract_identifier, \
+    extract_unit_identifier, \
     RAND_GEN_SYM, RAND_GEN_PERCENT_SYM, RAND_GEN_OPPOSITE_SYM
 
 from chatette.parsing.lexing.rule_percent_gen import RulePercentGen
@@ -37,8 +37,8 @@ class RuleRandGen(LexingRule):
                 )
             )
 
-        # TODO not sure `extract_identifier` is the best thing to use here
-        randgen_name = extract_identifier(self._text, self._next_index)
+        # TODO not sure `extract_unit_identifier` is the best thing to use here
+        randgen_name = extract_unit_identifier(self._text, self._next_index)
         if randgen_name is None:
             self.error_msg = \
                 "Didn't expect the line to end there. Expected a name for " + \

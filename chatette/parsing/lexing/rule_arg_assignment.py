@@ -7,7 +7,7 @@ an argument assignment (inside a unit reference).
 
 from chatette.parsing.lexing.lexing_rule import LexingRule
 from chatette.parsing.lexing import LexicalToken, TerminalType
-from chatette.parsing.utils import ARG_SYM, extract_identifier
+from chatette.parsing.utils import ARG_SYM, extract_unit_identifier
 
 
 class RuleArgAssignment(LexingRule):
@@ -21,7 +21,7 @@ class RuleArgAssignment(LexingRule):
         self._update_furthest_matched_index()
         self._tokens.append(LexicalToken(TerminalType.arg_marker, ARG_SYM))
 
-        arg_value = extract_identifier(self._text, self._next_index)
+        arg_value = extract_unit_identifier(self._text, self._next_index)
         if arg_value is None:
             self.error_msg = \
                 "Didn't expect the line to end there. Expected an argument name."

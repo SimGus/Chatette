@@ -7,7 +7,7 @@ to tokenize a variation (in a unit declaration or reference).
 
 from chatette.parsing.lexing.lexing_rule import LexingRule
 from chatette.parsing.lexing import LexicalToken, TerminalType
-from chatette.parsing.utils import VARIATION_SYM, extract_identifier
+from chatette.parsing.utils import VARIATION_SYM, extract_unit_identifier
 
 
 class RuleVariation(LexingRule):
@@ -23,7 +23,7 @@ class RuleVariation(LexingRule):
             LexicalToken(TerminalType.variation_marker, VARIATION_SYM)
         )
         
-        variation_name = extract_identifier(self._text, self._next_index)
+        variation_name = extract_unit_identifier(self._text, self._next_index)
         if variation_name is None:
             self.error_msg = \
                 "Didn't expect an end of line there. Expected a variation name."
