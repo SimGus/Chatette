@@ -184,6 +184,7 @@ class Parser(object):
         i = 1
         while i < len(lexical_tokens):
             token = lexical_tokens[i]
+            print("token ", str(token))
             if token.type == TerminalType.unit_identifier:
                 builder.identifier = token.text
             elif token.type == TerminalType.casegen_marker:
@@ -196,7 +197,10 @@ class Parser(object):
                 pass
             elif token.type == TerminalType.variation_name:
                 builder.variation = token.text
-            elif token.type == TerminalType.arg_marker:
+            elif token.type in (
+                TerminalType.arg_start, TerminalType.arg_marker,
+                TerminalType.separator, TerminalType.arg_end
+            ):
                 pass
             elif token.type == TerminalType.arg_name:
                 builder.arg_name = token.text

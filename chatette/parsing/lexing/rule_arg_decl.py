@@ -9,7 +9,7 @@ from chatette.parsing.lexing.lexing_rule import LexingRule
 from chatette.parsing.lexing import LexicalToken, TerminalType
 from chatette.parsing.utils import \
     ARG_SYM, ARG_LIST_START, ARG_LIST_END, ARG_LIST_SEP, \
-    extract_key_value_identifier
+    extract_unit_identifier, extract_key_value_identifier
 
 
 class RuleArgDecl(LexingRule):
@@ -44,7 +44,6 @@ class RuleArgDecl(LexingRule):
             self._tokens.append(
                 LexicalToken(TerminalType.arg_start, ARG_LIST_START)
             )
-            print("found ", ARG_LIST_START)
 
             while True:
                 arg_name = \
