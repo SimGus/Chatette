@@ -16,6 +16,8 @@
 - [ ] add custom annotations as *Chatito* does
 - [ ] add percentages of all possible examples for training and test (rather than simple numbers)
 - [ ] add several files import in one line?
+- [ ] add an annotation to consider each rule of the unit as a raw string
+- [ ] add an annotation to allow a unit to shadow another one
 
 - [ ] add some kind of optional version number within template files
 
@@ -41,6 +43,10 @@
 - [ ] warn if a unit reference is used within its own declaration
 - [ ] warn if an argument has no value
 - [ ] check that intent definitions don't overlap
+
+### User interface
+- [ ] improve the error message and the display of the error when specifying an unexisting file as a master template
+- [ ] add colors to the terminal
 
 ### Command line options
 - [ ] add a command line option to specifiy the max number of examples to generate
