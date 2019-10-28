@@ -1,6 +1,8 @@
 %[intent]
-    alias: ~[alias$(argument1,argument2)]
-    
+    ~[alias$(argument1,argument2)]
+//    ~[alias$(ARG1=arg1, ARG2=arg2)]
+//    ~[alias$("ARG2"="arg,2", 'ARG1' = 'arg,1')]
+
 ~[alias$(ARG1,ARG2)]
-    $ARG1 is $ARG2
+    alias with $ARG1 and $ARG2
 
