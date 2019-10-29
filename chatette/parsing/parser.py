@@ -184,7 +184,7 @@ class Parser(object):
         i = 1
         while i < len(lexical_tokens):
             token = lexical_tokens[i]
-            print("token ", str(token))
+            print("unit token ", str(token))
             if token.type == TerminalType.unit_identifier:
                 builder.identifier = token.text
             elif token.type == TerminalType.casegen_marker:
@@ -369,6 +369,7 @@ class Parser(object):
         i = 0
         while i < len(tokens):
             token = tokens[i]
+            print("rule token " + str(token))
             if token.type == TerminalType.whitespace:
                 leading_space = True
                 if current_builder is not None:
