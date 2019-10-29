@@ -23,7 +23,7 @@ class RasaAdapter(Adapter):
 
 
     def _write_batch(self, output_file_handle, batch):
-        rasa_entities = [self.prepare_example(ex) for ex in batch.examples]
+        rasa_entities = [self.prepare_example(ex) for ex in batch.examples]  # TODO rename this?
 
         json_data = self._get_base_to_extend()
         json_data["rasa_nlu_data"]["common_examples"] = rasa_entities

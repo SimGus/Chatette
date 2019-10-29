@@ -7,7 +7,7 @@ Contains utility functions that are used by various parsing components.
 from enum import Enum
 
 from chatette.utils import min_if_exist, UnitType
-from chatette.parsing.lexing import TerminalType
+from chatette.parsing.lexing import TerminalType  # TODO move this out of this file and into the lexing file itself
 
 
 ######## Symbols definitions ########
@@ -45,6 +45,17 @@ RAND_GEN_PERCENT_SYM = '/'
 RAND_GEN_OPPOSITE_SYM = '!'
 ARG_SYM = '$'
 VARIATION_SYM = '#'
+
+
+escapable_chars = [
+    ESCAPEMENT_SYM,
+    COMMENT_SYM, OLD_COMMENT_SYM,
+    UNIT_START_SYM, UNIT_START_SYM,
+    RAND_GEN_SYM, RAND_GEN_PERCENT_SYM,
+    VARIATION_SYM,
+    ARG_SYM,
+    CASE_GEN_SYM,
+]
 
 
 def find_unescaped(text, str_to_find, start_index=0, end_index=None):
