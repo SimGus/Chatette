@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New opposite random generation modifier (using syntax `[unit?!randgen name]`)
 
 ### Fixed
+- Escapement characters not being removed in all cases (issue [#24](https://github.com/SimGus/Chatette/issues/24))
 - Entity positions were incorrectly updated in some cases (issue [#22](https://github.com/SimGus/Chatette/issues/22))
 
 ## [1.6.0] - 2019-09-18
