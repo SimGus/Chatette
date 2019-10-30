@@ -13,7 +13,8 @@ from six import string_types
 from chatette.utils import print_DBG, print_warn, UnitType, cast_to_unicode
 from chatette.parsing import utils
 from chatette.parsing.lexing import \
-    remove_comment_tokens, find_matching_choice_end
+    remove_comment_tokens, find_matching_choice_end, \
+    find_index_last_choice_content
 from chatette.statistics import Stats
 
 from chatette.parsing.input_file_manager import \
@@ -409,7 +410,7 @@ class Parser(object):
                 current_builder = ChoiceBuilder()
                 current_builder.leading_space = leading_space
                 last_internal_choice_token = \
-                    utils.find_index_last_choice_content(tokens, i)
+                    find_index_last_choice_content(tokens, i)
                 if last_internal_choice_token is not None:
                     i += 1
                     if tokens[i].type == TerminalType.casegen_marker:
