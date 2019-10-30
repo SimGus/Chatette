@@ -89,6 +89,106 @@ class LexicalToken(object):
                 and self.text[i+1] in escapable_chars
             ):
                 processed_text += self.text[i]
-        print("text was " + self.text)
-        print("now is " + processed_text)
+        processed_text += self.text[-1]
         self.text = processed_text
+
+
+def remove_comment_tokens(tokens):
+    """
+    Returns all the tokens except the ones that correspond to comments (and
+    the preceding whitespaces if any).
+    """
+    if len(tokens) == 0:
+        return tokens
+    
+    comment_index = None
+    for (i, token) in enumerate(tokens):
+        if token.type == TerminalType.comment:
+            comment_index = i
+            break
+    
+    if comment_index is None:
+        return tokens
+    if comment_index == 0:
+        return []
+    if tokens[comment_index - 1].type == TerminalType.whitespace:
+        return tokens[:comment_index - 1]
+    return tokens[:comment_index]
+
+
+# TODO: unused function?
+def extract_annotation_tokens(tokens):
+    """
+    Given the list of tokens `tokens`,
+    returns a list of tokens that correspond to an annotation.
+    Returns `None` if there was no annotation in `tokens`.
+    """
+    if len(tokens) < 2:
+        return None
+
+    start_index = None
+    end_index = None
+    for (i, token) in enumerate(tokens):
+        if token.type == TerminalType.annotation_start:
+            start_index = i
+        if token.type == TerminalType.annotation_end:
+            end_index = i
+            break
+
+    if start_index is None:
+        return None    
+    if end_index is None:
+        return tokens[start_index:]
+    return tokens[start_index:end_index + 1]
+
+
+def find_matching_choice_end(tokens, start_index):
+    """
+    Returns the index of the choice end that matches the choice start at
+    index `start_index`.
+    Returns `None` if there is no matching choice end.
+    @raises: - `ValueError` if there is no choice starting at `start_index`.
+             - `ValueError` if arguments are inconsistent.
+    """
+    if tokens[start_index].type != TerminalType.choice_start:
+        raise ValueError(
+            "Tried to get the matching choice end of something else than a " + \
+            "choice start."
+        )
+
+    nb_starts_to_match = 0
+    i = start_index + 1
+    while i < len(tokens):
+        token = tokens[i]
+        if token.type == TerminalType.choice_start:
+            nb_starts_to_match += 1
+        elif token.type == TerminalType.choice_end:
+            if nb_starts_to_match > 0:
+                nb_starts_to_match -= 1
+            else:
+                return i
+        i += 1
+    return None
+
+def find_index_last_choice_content(tokens, start_index):
+    """
+    Returns the index of the last token that makes up the internal rules
+    of the choice starting at index `start_index`. In other words,
+    the returned index points to the last token before the end of the choice
+    or its random generation markers.
+    Returns `None` if the choice is incorrectly closed.
+    @raises: - `ValueError` if there isno choice starting at `start_index`.
+    """
+    end_choice_index = find_matching_choice_end(tokens, start_index)
+    i = end_choice_index - 1
+    if i > 0 and tokens[i].type == TerminalType.percentgen:
+        i -= 1
+    if i > 0 and tokens[i].type == TerminalType.percentgen_marker:
+        i -= 1
+    if i > 0 and tokens[i].type == TerminalType.randgen_name:
+        i -= 1
+    if i > 0 and tokens[i].type == TerminalType.opposite_randgen_marker:
+        i -= 1
+    if i > 0 and tokens[i].type == TerminalType.randgen_marker:
+        i -= 1
+    return i

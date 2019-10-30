@@ -33,7 +33,7 @@ class Lexer(object):
         if not rule.matches(parsing_slot_def=parsing_slot_def):
             rule.print_error()
         else:
-            return [
+            tokens = rule.get_lexical_tokens()
+            for token in tokens:
                 token.remove_escapement()
-                for token in rule.get_lexical_tokens()
-            ]
+            return tokens

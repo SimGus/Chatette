@@ -12,6 +12,8 @@ from six import string_types
 
 from chatette.utils import print_DBG, print_warn, UnitType, cast_to_unicode
 from chatette.parsing import utils
+from chatette.parsing.lexing import \
+    remove_comment_tokens, find_matching_choice_end
 from chatette.statistics import Stats
 
 from chatette.parsing.input_file_manager import \
@@ -92,7 +94,7 @@ class Parser(object):
                 and self._current_unit_declaration.unit_type == UnitType.slot
             )
             lexical_tokens = self.lexer.lex(line, currently_parsing_slot)
-            lexical_tokens = utils.remove_comment_tokens(lexical_tokens)
+            lexical_tokens = remove_comment_tokens(lexical_tokens)
 
             if len(lexical_tokens) == 0:
                 continue
@@ -184,7 +186,6 @@ class Parser(object):
         i = 1
         while i < len(lexical_tokens):
             token = lexical_tokens[i]
-            print("token: " + repr(token))
             if token.type == TerminalType.unit_identifier:
                 builder.identifier = token.text
             elif token.type == TerminalType.casegen_marker:
@@ -366,7 +367,6 @@ class Parser(object):
         i = 0
         while i < len(tokens):
             token = tokens[i]
-            print("token: " + repr(token))
             if token.type == TerminalType.whitespace:
                 leading_space = True
                 if current_builder is not None:
@@ -489,7 +489,7 @@ class Parser(object):
                 )
                 current_rule_start_index = i + 1
             if token.type == TerminalType.choice_start:
-                end_choice_index = utils.find_matching_choice_end(tokens, i)
+                end_choice_index = find_matching_choice_end(tokens, i)
                 if end_choice_index is None:
                     self.input_file_manager.syntax_error(
                         "Inconsistent choice starts and endings."
