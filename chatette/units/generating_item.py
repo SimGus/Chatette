@@ -28,6 +28,7 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
 
         self._leading_space = leading_space
 
+        self._max_nb_cached_ex = None
         self._total_nb_possibilities = None
 
         # Cache: can contain a certain number of examples previously generated
@@ -53,6 +54,34 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
     def _compute_nb_possibilities(self):
         """Returns the number of possible examples this item can generate."""
         raise NotImplementedError()
+
+    def get_max_cache_size(self):
+        """
+        Returns the maximum number of examples
+        that should be cached for this item.
+        """
+        if self._max_nb_cached_ex is None:
+            # raise ValueError("max number of cached examples was not set")
+            return 0
+        return self._max_nb_cached_ex
+    def configure_max_cache_level(self, level):
+        """
+        Sets the maximum number of examples given the level of caching
+        that it is provided.
+        This number can be reconfigured if it was already set.
+        `level` is a number out of 100,
+        with 0 meaning no caching at all and 100 meaning caching everything.
+        The levels in-between are not clearly defined
+        and leave room for implementation.
+        @pre: `level` is a number between 0 and 100 (included).
+        """
+        self._max_nb_cached_ex = \
+            float(self.get_max_nb_possibilities * level) / 100
+    
+    def _reset_caches(self):
+        """Resets the caches of examples and number of possibilities."""
+        self._total_nb_possibilities = None
+        self._cached_examples = []
     
 
     def generate_random(self, **kwargs):
@@ -92,7 +121,7 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
         if self._leading_space:
             for ex in all_examples:
                 ex.prepend(' ')
-        if len(self._cached_examples) == 0:
+        if len(self._cached_examples) == 0 and self.get_max_cache_size() > 0:
             # TODO don't cache it all in all cases
             self._cached_examples = deepcopy(all_examples)
             self._total_nb_possibilities = len(all_examples)
@@ -140,11 +169,6 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
             if loop_count > 10*n:  # QUESTION is that a good idea?
                 break
         return generated_examples
-    
-    def _reset_caches(self):
-        """Resets the caches of examples and number of possibilities."""
-        self._total_nb_possibilities = None
-        self._cached_examples = []
 
     # @abstractmethod
     # def short_description(self):

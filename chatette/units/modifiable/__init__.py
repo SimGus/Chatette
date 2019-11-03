@@ -95,13 +95,16 @@ class ModifiableItem(GeneratingItem):
     # TODO this is quite hacky to avoid code duplication in subclasses (and not use the decorator pattern to avoid having too many objects)
     def generate_all(self, **kwargs):
         """Overriding."""
-        if len(self._cached_examples) == 0:
+        if len(self._cached_examples) < self.get_max_nb_possibilities():
             basic_examples = self._generate_all_strategy(**kwargs)
             if self._leading_space:
                 for ex in basic_examples:
                     ex.prepend(' ')
-            self._cached_examples = \
-                self._apply_modifiers_to_all(basic_examples)
+            all_examples = self._apply_modifiers_to_all(basic_examples)
+            if self.get_max_cache_size() > 0:
+                self._cached_examples = \
+                    self._apply_modifiers_to_all(basic_examples)
+            return all_examples
         return deepcopy(self._cached_examples)
     
 
