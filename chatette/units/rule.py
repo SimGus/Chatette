@@ -26,12 +26,17 @@ class Rule(GeneratingItem):
         super(Rule, self).__init__(None, leading_space=False)
         self._contents = contents
 
+        self._max_nb_cached_ex = 0
+
         self.slot_value = slot_value
     
     def _compute_full_name(self):
         if self.parent_name is not None:
             return "rule contained in " + self.parent_name
         return "rule not contained in anything"
+
+    def get_max_cache_size(self):
+        return 0
     
     def _compute_nb_possibilities(self):
         if len(self._contents) == 0:
