@@ -12,6 +12,7 @@ from random import uniform, choice, sample
 from copy import deepcopy
 
 from chatette.utils import sample_indulgent
+from chatette.configuration import Configuration
 from chatette.units import add_example_no_dup
 
 
@@ -61,8 +62,10 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
         that should be cached for this item.
         """
         if self._max_nb_cached_ex is None:
-            # raise ValueError("max number of cached examples was not set")
-            return 0
+            self.configure_max_cache_level(
+                Configuration.get_or_create().caching_level
+            )
+        print("for " + self._name + " caching max: " + str(self._max_nb_cached_ex))
         return self._max_nb_cached_ex
     def configure_max_cache_level(self, level):
         """
@@ -76,7 +79,7 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
         @pre: `level` is a number between 0 and 100 (included).
         """
         self._max_nb_cached_ex = \
-            float(self.get_max_nb_possibilities * level) / 100
+            float(self.get_max_nb_possibilities() * level) / 100
     
     def _reset_caches(self):
         """Resets the caches of examples and number of possibilities."""
