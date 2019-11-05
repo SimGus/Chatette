@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # coding: utf-8
 
+from chatette.configuration import Configuration
 from chatette.utils import print_DBG, UnitType
 from chatette.units.ast import AST
 
@@ -14,6 +15,11 @@ class Generator(object):
     """
     def __init__(self):
         self.ast = AST.get_or_create()
+
+        total_nb_units = len(self.ast[UnitType.intent]) + len(self.ast[UnitType.slot]) + len(self.ast[UnitType.alias])
+        if total_nb_units >= 100:
+            print("total nb of units: " + str(total_nb_units))
+            Configuration.get_or_create().set_caching_level(0)
 
     def generate_train(self):
         print_DBG("Generating training examples...")
