@@ -65,7 +65,6 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
             self.configure_max_cache_level(
                 Configuration.get_or_create().caching_level
             )
-        print("for " + self._name + " caching max: " + str(self._max_nb_cached_ex))
         return self._max_nb_cached_ex
     def configure_max_cache_level(self, level):
         """
