@@ -17,7 +17,7 @@ class Generator(object):
         self.ast = AST.get_or_create()
 
         total_nb_units = len(self.ast[UnitType.intent]) + len(self.ast[UnitType.slot]) + len(self.ast[UnitType.alias])
-        if total_nb_units >= 70:
+        if total_nb_units >= 50:
             Configuration.get_or_create().set_caching_level(0)
 
     def generate_train(self):
