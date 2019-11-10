@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New opposite random generation modifier (using syntax `[unit?!randgen name]`)
 
 ### Changed
+- *Temporarily*, caching is disabled when there are more than 50 units declared, in order to prevent performance issues with large template files
 - Rules don't cache their examples at all any longer, as it ended up mostly duplicating caches for very few performance increase
 
 ### Fixed
