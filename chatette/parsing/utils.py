@@ -46,15 +46,15 @@ ARG_SYM = '$'
 VARIATION_SYM = '#'
 
 
-escapable_chars = [
+escapable_chars = {
     ESCAPEMENT_SYM,
     COMMENT_SYM, OLD_COMMENT_SYM,
-    UNIT_START_SYM, UNIT_START_SYM,
+    UNIT_START_SYM, UNIT_END_SYM,
     RAND_GEN_SYM, RAND_GEN_PERCENT_SYM,
     VARIATION_SYM,
     ARG_SYM,
     CASE_GEN_SYM,
-]
+}
 
 
 def find_unescaped(text, str_to_find, start_index=0, end_index=None):
