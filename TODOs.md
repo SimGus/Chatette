@@ -39,7 +39,8 @@
 ### Warnings
 - [ ] detect and warn about circular references
 - [ ] warn if there are slots within slots
-- [ ] warn if the limit of examples generated was reached
+- [ ] warn if the limit of examples generated was reached(?)
+- [ ] warn if the number of examples asked is larger than the maximum number of combinations generatable
 - [ ] warn if a unit reference is used within its own declaration
 - [ ] warn if an argument has no value
 - [ ] check that intent definitions don't overlap
