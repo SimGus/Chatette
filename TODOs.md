@@ -4,10 +4,10 @@
 
 ### New syntax
 - [ ] accept `#` as intent symbol (as well as `%` currently) to get closer to IBM Watson's syntax?
-- [ ] add opposite `randgen` names
 - [ ] add a way to specify a rule on several consecutive lines
 - [ ] add a way to give several different names to units (unit name aliases)
 - [ ] support several arguments in one rule
+- [ ] support rules as arguments
 - [ ] reverse regex
 - [ ] add probabilities weighting of generation for rules in defintions (cf. https://github.com/rodrigopivi/Chatito/issues/48 and new implementation)
 - [ ] add support for Chatito's augmentations (cf. https://github.com/rodrigopivi/Chatito/issues/48)
@@ -167,6 +167,7 @@
 - [x] parse in a better way asked number of generation of intents
 - [x] add support for any sub-rule modifier for choices
 - [x] make double quotes an ignored character in annotations
+- [x] add opposite `randgen` names
 
 # Bugs
 ## To confirm
