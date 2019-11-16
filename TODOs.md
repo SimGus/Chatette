@@ -23,7 +23,7 @@
 
 ### New generation features
 - [ ] add a way to force a rule at least once in the training/testing set
-- [ ] add default aliases and slots
+- [ ] add default aliases and slots (problem: not language agnostic)
 - [ ] accept anything inside an arg, especially unit references
 - [ ] add regex to rasa JSON file
 
