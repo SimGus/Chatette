@@ -27,6 +27,8 @@
 - [ ] accept anything inside an arg, especially unit references
 - [ ] add regex to rasa JSON file
 
+- [ ] add examples with multiple intents (see [here](https://forum.rasa.com/t/multiple-slot-filling-from-multi-intent-intent-x-intent-y/10759/15))
+
 ### Adapters
 - [ ] add an adapter to output raw lists of questions (rather than a JSON file) (without entities?)
 - [ ] add an adapter for *Rasa* answer templates (the bot's utterances)
