@@ -64,6 +64,7 @@
 ### Interactive mode
 - [ ] *Interactive mode* add support for argument values in relevant commands
 - [ ] *Interactive mode* use `tabulate` to make tables and make command output more readable
+- [ ] fix inconsistent spacing between results and next prompt
 
 ### Improve code
 - [ ] design patterns
