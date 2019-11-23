@@ -97,6 +97,7 @@
 - [ ] *Docs* add a "quickstart" section for the people who already know *Chatito*
 - [ ] *Docs* make a "get started" section that is a simple hands-on example (kind of like the Angular quickstart tutorial)
 - [ ] Add a *FAQ* page
+- [ ] Add a *adapters* page which describes all the current adapters
 
 - [ ] *Examples* remove all deprecated syntax
 
