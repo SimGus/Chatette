@@ -72,6 +72,7 @@
 <!-- - [ ] rewrite docstrings formatted as explained in *PEP257* -->
 - [ ] replace `print` by `six.print_`?
 - [ ] add more unit tests
+- [ ] refactor facade (and its interactions with parser, generator and adapter)
 
 ### Improve performance
 - [ ] cache the possible number of generatable examples for each unit
