@@ -43,8 +43,8 @@ class ChatetteFacade(object):
     def run(self, template_filepath):
         AST.reset_instance()
 
-        parser = Parser(template_filepath)
-        parser.parse()
+        parser = Parser()
+        parser.parse_file(template_filepath)
 
         self.generator = Generator()
         self.train_examples = list(self.generator.generate_train())

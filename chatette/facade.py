@@ -33,6 +33,7 @@ class Facade(Singleton):
         master_file_path, output_dir_path=None, adapter_str="rasa",
         base_filepath=None, local=False, seed=None, force_overwriting=False
     ):
+        self.master_file_path = master_file_path
         if local:
             self.output_dir_path = os.path.dirname(master_file_path)
         else:
@@ -57,7 +58,7 @@ class Facade(Singleton):
             adapter_str, base_filepath
         )
 
-        self.parser = Parser(master_file_path)
+        self.parser = Parser()
         self.generator = None
 
     @classmethod
@@ -91,14 +92,13 @@ class Facade(Singleton):
 
     def run_parsing(self):
         """Executes the parsing alone."""
-        self.parser.parse()
+        self.parser.parse_file(self.master_file_path)
 
     def parse_file(self, file_path):
         """
         Parses the new template file at `file_path` with the current parser.
         """
-        self.parser.open_new_file(file_path)
-        self.parser.parse()
+        self.parser.parse_file(file_path)
 
     def run_generation(self, adapter_str=None):
         """"
