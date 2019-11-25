@@ -35,7 +35,7 @@ from chatette.parsing import \
 
 
 class Parser(object):
-    def __init__(self, master_file_path):
+    def __init__(self, master_file_path=None):
         if (
             master_file_path is not None
             and not isinstance(master_file_path, string_types)
@@ -47,7 +47,7 @@ class Parser(object):
         self._master_filepath = master_file_path
 
         self.input_file_manager = \
-            InputFileManager.get_or_create(master_file_path)
+            InputFileManager.get_or_create()
         self.lexer = Lexer()
         self.ast = AST.get_or_create()
 
@@ -77,12 +77,14 @@ class Parser(object):
             print_warn(err_msg)
     
 
-    def parse(self):
+    def parse_file(self, file_path):
         """
-        Parses the template file(s) and translates them into an AST.
+        Parses the template file(s) at `file_path`
+        and translates them into an AST.
         """
+        self.open_new_file(file_path)
         print_DBG(
-            "Parsing master file: " + \
+            "Parsing file: " + \
             self.input_file_manager.get_current_file_name()
         )
 
