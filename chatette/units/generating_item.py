@@ -7,9 +7,9 @@ that are able to generate examples.
 
 
 from abc import ABCMeta, abstractmethod
-from future.utils import with_metaclass
 from random import uniform, choice, sample
 from copy import deepcopy
+from future.utils import with_metaclass
 
 from chatette.utils import sample_indulgent
 from chatette.configuration import Configuration
@@ -153,7 +153,6 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
         if nb_possibilities < float(max_nb_possibilities) / 5.0:  # QUESTION: is 5 a good idea?
             return self._generate_n_strategy(nb_possibilities, **kwargs)
         return sample_indulgent(self.generate_all(**kwargs), nb_possibilities)
-        return result
     def _generate_n_strategy(self, n, **kwargs):
         """
         Strategy to generate `n` examples without using the cache.
