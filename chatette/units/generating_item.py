@@ -42,7 +42,7 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
         This name can be found in `self.full_name` after `__init__` was executed.
         """
         raise NotImplementedError()
-    
+
     def get_max_nb_possibilities(self):
         """
         Returns the number of possible examples this item can generate.
@@ -79,12 +79,12 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
         """
         self._max_nb_cached_ex = \
             float(self.get_max_nb_possibilities() * level) / 100
-    
+
     def _reset_caches(self):
         """Resets the caches of examples and number of possibilities."""
         self._total_nb_possibilities = None
         self._cached_examples = []
-    
+
 
     def generate_random(self, **kwargs):
         """
@@ -109,7 +109,7 @@ class GeneratingItem(with_metaclass(ABCMeta, object)):
         Returns the generated example.
         """
         raise NotImplementedError()
-    
+
     def generate_all(self):
         """
         Returns the list of all examples this item can generate.

@@ -34,6 +34,7 @@ class RuleCommand(CommandStrategy):
 
         parser = Parser(None)
         rule_tokens = parser.lexer.lex("\t" + rule_str)
+        # pylint: disable=protected-access
         rule = parser._parse_rule(rule_tokens[1:])
 
         if nb_examples is None:

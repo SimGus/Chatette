@@ -43,7 +43,7 @@ class Facade(Singleton):
         else:
             self.output_dir_path = os.path.join(self.output_dir_path,
                                                 output_dir_path)
-        
+
         self.force_overwriting = force_overwriting
 
         # Initialize the random number generator
@@ -72,7 +72,7 @@ class Facade(Singleton):
         if cls._instance is None:
             cls._instance = cls.from_args(args)
         return cls._instance
-    
+
 
     @classmethod
     def reset_system(cls, *args, **kwargs):
@@ -81,7 +81,7 @@ class Facade(Singleton):
         AST.reset_instance()
         InputFileManager.reset_instance(None)
         return cls.reset_instance(*args, **kwargs)
-    
+
 
     def run(self):
         """
@@ -141,9 +141,7 @@ class Facade(Singleton):
 
 
     def get_stats_as_str(self):
-        if self.ast_definitions is None:
-            return "\tNo file parsed."
-        stats = self.ast_definitions.stats
+        stats = Stats.get_or_create()
         result = '\t' + str(stats.get_nb_files()) + " files parsed\n" + \
                  '\t' + str(stats.get_nb_declarations()) + " declarations: " + \
                  str(stats.get_nb_intents()) + " intents, " + \

@@ -6,9 +6,6 @@ Contains a class representing rules
 (as they will be contained in choices and unit definitions).
 """
 
-
-from copy import deepcopy
-
 from chatette.units.generating_item import GeneratingItem
 from chatette.units import Example, sort_by_texts, add_example_no_dup
 from chatette.modifiers.randgen import \
@@ -29,7 +26,7 @@ class Rule(GeneratingItem):
         self._max_nb_cached_ex = 0
 
         self.slot_value = slot_value
-    
+
     def _compute_full_name(self):
         if self.parent_name is not None:
             return "rule contained in " + self.parent_name
@@ -37,7 +34,7 @@ class Rule(GeneratingItem):
 
     def get_max_cache_size(self):
         return 0
-    
+
     def _compute_nb_possibilities(self):
         if len(self._contents) == 0:
             return 1
@@ -48,7 +45,7 @@ class Rule(GeneratingItem):
             else:
                 acc *= content.get_max_nb_possibilities()
         return acc
-    
+
     def _generate_random_strategy(self):
         generated_example = Example()
         randgen_mapping = dict()
@@ -57,7 +54,7 @@ class Rule(GeneratingItem):
                 content.generate_random(randgen_mapping=randgen_mapping)
             )
         return generated_example
-    
+
     def _generate_all_strategy(self):
         if len(self._contents) == 0:
             return []
@@ -78,7 +75,7 @@ class Rule(GeneratingItem):
         if generated_examples is None:
             return []
         return sort_by_texts(generated_examples)
-    
+
 
     def __str__(self):
         result = self.full_name + ": "
@@ -88,7 +85,7 @@ class Rule(GeneratingItem):
             for content in self._contents:
                 result += str(content) + ", "
         return '<' + result + '>'
-    
+
     def as_template_str(self):
         result = ""
         for content in self._contents:

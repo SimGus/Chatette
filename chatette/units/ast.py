@@ -16,8 +16,6 @@ from chatette.units.modifiable.definitions.alias import AliasDefinition
 from chatette.units.modifiable.definitions.slot import SlotDefinition
 from chatette.units.modifiable.definitions.intent import IntentDefinition
 
-from chatette.statistics import Stats
-
 
 class AST(Singleton):
     _instance = None
@@ -27,7 +25,7 @@ class AST(Singleton):
         self._intent_definitions = dict()
 
         self.stats = Stats.get_or_create()
-    
+
 
     def _get_relevant_dict(self, unit_type):
         """Returns the dict that stores units of type `unit_type`."""
@@ -66,7 +64,7 @@ class AST(Singleton):
                 "Invalid type of key: " + unit_type.__class__.__name__ + "."
             )
         return self._get_relevant_dict(unit_type)
-    
+
 
     def _add_unit(self, unit_type, unit):
         """
@@ -90,7 +88,7 @@ class AST(Singleton):
         """
         # NOTE there might be a better way to check that the alias is not already defined without needing to call `get_relevant_dict`
         self._add_unit(UnitType.alias, alias)
-        
+
     def add_slot(self, slot):
         """
         Adds the slot definition `slot` in the relevant dict.
@@ -126,7 +124,7 @@ class AST(Singleton):
                     "to the AST."
                 )
         self._add_unit(unit_type, unit)
-    
+
 
     def rename_unit(self, unit_type, old_name, new_name):
         """
@@ -152,7 +150,7 @@ class AST(Singleton):
         del relevant_dict[old_name]
         unit.set_identifier(new_name)
         relevant_dict[new_name] = unit
-    
+
     def delete_unit(self, unit_type, unit_name, variation_name=None):
         """
         Deletes the declared unit `unit_name` of type `unit_type`.
@@ -176,7 +174,7 @@ class AST(Singleton):
         else:
             relevant_dict[unit_name].delete_variation(variation_name)
             self.stats.one_variation_unit_removed(unit_type)
-    
+
 
     def get_entities_synonyms(self):  # TODO move that into AST
         """
@@ -192,7 +190,7 @@ class AST(Singleton):
                     synonyms, slot_value, current_synonyms_dict[slot_value]
                 )
         return remove_duplicates(synonyms)
-    
+
 
     def print_DBG(self):
         print("Aliases (" + str(len(self._alias_definitions)) + "):")
