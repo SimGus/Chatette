@@ -11,7 +11,6 @@ from chatette.parsing.parser import Parser
 
 
 class RuleCommand(CommandStrategy):
-
     def execute(self):
         """
         Implements the command `rule` which generates a certain number of
@@ -40,7 +39,7 @@ class RuleCommand(CommandStrategy):
         if nb_examples is None:
             examples = rule.generate_all()
         else:
-            examples = rule.generate_nb_examples(nb_examples)
+            examples = rule.generate_nb_possibilities(nb_examples)
         self.print_wrapper.write("Generated examples:")
         for ex in examples:
             self.print_wrapper.write(str(ex))
