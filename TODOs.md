@@ -31,6 +31,7 @@
 
 ### Other features
 - [ ] add a new part to the library that allows to build template files programmatically
+- [ ] find a way to make template files edition on phone less cumbersome?
 
 ### Adapters
 - [ ] add an adapter to output raw lists of questions (rather than a JSON file) (without entities?)
