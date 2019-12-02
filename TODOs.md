@@ -103,6 +103,7 @@
 - [ ] *Docs* make a "get started" section that is a simple hands-on example (kind of like the Angular quickstart tutorial)
 - [ ] Add a *FAQ* page
 - [ ] Add a *adapters* page which describes all the current adapters
+- [ ] Update documentation by more separating different topics
 
 - [ ] *Examples* remove all deprecated syntax
 
