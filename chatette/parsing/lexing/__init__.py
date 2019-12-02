@@ -6,7 +6,7 @@ Contains every class that has to do with lexing
 """
 
 from enum import Enum
-from chatette.parsing.utils import ESCAPEMENT_SYM, escapable_chars
+from chatette.parsing.utils import ESCAPEMENT_SYM, ESCAPABLE_CHARS
 
 
 # Supported tokens
@@ -86,7 +86,7 @@ class LexicalToken(object):
         for i in range(len(self.text) - 1):
             if not (
                 self.text[i] == ESCAPEMENT_SYM
-                and self.text[i+1] in escapable_chars
+                and self.text[i+1] in ESCAPABLE_CHARS
             ):
                 processed_text += self.text[i]
         processed_text += self.text[-1]
