@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Fixed
+- Several escapable characters (`~`, `@`, `%`, `|`, `{` and `}`) were not considered escapable (reopened issue [#24](https://github.com/SimGus/Chatette/issues/24))
 - `rule` command crashed when called with a number of examples to generate (issue [#29](https://github.com/SimGus/Chatette/issues/29))
 - Parser opened file upon being created rather than when starting to parse, leading to parsing of the same file several types after resetting the system (issue [#28](https://github.com/SimGus/Chatette/issues/28))
 - One escapable character was missing, leading to escape character not being removed for `]` (issue [#27](https://github.com/SimGus/Chatette/issues/27))
