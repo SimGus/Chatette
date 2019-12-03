@@ -38,7 +38,7 @@ class ModifiableItem(GeneratingItem):
         """
         return Example()
 
-    
+
     def get_max_nb_possibilities(self, **kwargs):
         """
         Overriding.
@@ -52,7 +52,7 @@ class ModifiableItem(GeneratingItem):
             self._total_nb_possibilities = \
                 self._modify_nb_possibilities(basic_nb_possibilities)
         return self._total_nb_possibilities
-    
+
 
     # TODO this is quite hacky to avoid code duplication in subclasses (and not use the decorator pattern to avoid having too many objects)
     def generate_random(self, **kwargs):
@@ -90,7 +90,7 @@ class ModifiableItem(GeneratingItem):
         if self._leading_space:
             basic_example.prepend(' ')
         return self._apply_modifiers(basic_example)
-    
+
 
     # TODO this is quite hacky to avoid code duplication in subclasses (and not use the decorator pattern to avoid having too many objects)
     def generate_all(self, **kwargs):
@@ -102,11 +102,10 @@ class ModifiableItem(GeneratingItem):
                     ex.prepend(' ')
             all_examples = self._apply_modifiers_to_all(basic_examples)
             if self.get_max_cache_size() > 0:
-                self._cached_examples = \
-                    self._apply_modifiers_to_all(basic_examples)
+                self._cached_examples = deepcopy(all_examples)
             return all_examples
         return deepcopy(self._cached_examples)
-    
+
 
     def _modify_nb_possibilities(self, nb_possibilities):
         """
@@ -124,7 +123,7 @@ class ModifiableItem(GeneratingItem):
             nb_possibilities = \
                 randgen.modify_nb_possibilities(nb_possibilities)
         return nb_possibilities
-    
+
 
     def _should_generate(self, randgen_mapping):
         """
@@ -142,8 +141,8 @@ class ModifiableItem(GeneratingItem):
                     randgen_mapping
                 )
         return True
-    
-    
+
+
     def _apply_modifiers(self, example):
         """
         Returns the modified `example`
@@ -157,7 +156,7 @@ class ModifiableItem(GeneratingItem):
                     example, self._modifiers_repr.argument_value
                 )
         return example
-    
+
     def _apply_modifiers_to_all(self, examples):
         """
         Returns the list of examples `examples` with some additional examples,
@@ -179,7 +178,7 @@ class ModifiableItem(GeneratingItem):
                     self._modifiers_repr.randgen.opposite
                 )
         return examples
-    
+
 
     def set_arg_name(self, new_arg_name):
         """
