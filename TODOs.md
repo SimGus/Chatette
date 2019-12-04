@@ -34,6 +34,7 @@
 - [ ] find a way to make template files edition on phone less cumbersome?
 
 ### Adapters
+- [ ] *Rasa markdown adapter* add a small comment at the top of the output file that states it was made with Chatette
 - [ ] add an adapter to output raw lists of questions (rather than a JSON file) (without entities?)
 - [ ] add an adapter for *Rasa* answer templates (the bot's utterances)
 - [ ] add an adapter for *Snips* (cf. Chatito)
