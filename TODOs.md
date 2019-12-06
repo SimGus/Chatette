@@ -76,6 +76,7 @@
 - [ ] design patterns
 - [ ] add more unit tests
 - [ ] improve logging (remove `print`s and use a logging library)
+- [ ] prepare code to be "threadable" by separating generating items in an immutable generator and a mutable builder
 <!-- - [ ] rewrite docstrings formatted as explained in *PEP257* -->
 - [ ] replace `print` by `six.print_`?
 - [ ] refactor facade (and its interactions with parser, generator and adapter)
