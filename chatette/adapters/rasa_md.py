@@ -9,6 +9,7 @@ import os
 import io
 from six import string_types
 
+from chatette import __version__
 from chatette.adapters._base import Adapter
 from chatette.utils import append_to_list_in_dict, cast_to_unicode
 
@@ -34,6 +35,11 @@ class RasaMdAdapter(Adapter):
         
     
     def _write_batch(self, output_file_handle, batch):
+        output_file_handle.write(
+            "<!-- Generated using Chatette v" + cast_to_unicode(__version__) + \
+            " -->\n\n"
+        )
+
         prepared_examples = dict()
         for example in batch.examples:
             append_to_list_in_dict(
