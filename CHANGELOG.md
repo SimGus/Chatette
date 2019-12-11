@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Parser opened file upon being created rather than when starting to parse, leading to parsing of the same file several types after resetting the system (issue [#28](https://github.com/SimGus/Chatette/issues/28))
 - One escapable character was missing, leading to escape character not being removed for `]` (issue [#27](https://github.com/SimGus/Chatette/issues/27))
 
+### Added
+- Comment at the beginning of each Rasa Mrakdown output file, stating that the file was generated using Chatette
+
 ## [1.6.1] - 2019-11-11
 ### Added
 - New opposite random generation modifier (using syntax `[unit?!randgen name]`)
