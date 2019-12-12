@@ -14,7 +14,7 @@
 
 //================== Alias definitions =======================
 ~[greet]
-    {hi/hello}
+    [hi|hello]
 
 ~[i want to]
     [&i] ~[want#no elision]

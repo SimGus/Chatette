@@ -7,11 +7,11 @@
     aid
     
 ~[me]
-    {me/us}
+    [me|us]
    
 ~[i need]
-    [&i]{'d/ would?} {need/want}
-    [&i]{'d/ would} like
+    [&i]['d| would?] [need|want]
+    [&i]['d| would] like
 
 ~[can you]
     can you
