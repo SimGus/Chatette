@@ -214,5 +214,6 @@ Run pytest:
 
 ### Contributors
 - [Vadim Fedorenko](https://github.com/meiblorn)
+- [Valentin Calomme](https://github.com/ValentinCalomme)
 
-Many thanks to him!
+Many thanks to them!
