@@ -13,7 +13,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - One escapable character was missing, leading to escape character not being removed for `]` (issue [#27](https://github.com/SimGus/Chatette/issues/27))
 
 ### Added
-- Comment at the beginning of each Rasa Mrakdown output file, stating that the file was generated using Chatette
+- When using the JSONL adapter, entities have a new `end-index` field representing the first index after the entity that is not part of it
+- Comment at the beginning of each Rasa Markdown output file, stating that the file was generated using Chatette
 
 ## [1.6.1] - 2019-11-11
 ### Added
