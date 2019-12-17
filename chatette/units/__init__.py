@@ -149,7 +149,8 @@ class Entity(object):
         return {
             "slot-name": self.slot_name,
             "value": self.value,
-            "start-index": self._start_index
+            "start-index": self._start_index,
+            "end-index": self._start_index + self._len
         }
     
     def __repr__(self):
