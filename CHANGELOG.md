@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.6.2] - 2019-12-18
 ### Fixed
 - Using random generation name could crash the program in some cases because it was set twice (issue [#31](https://github.com/SimGus/Chatette/issues/31))
 - Several escapable characters (`~`, `@`, `%`, `|`, `{` and `}`) were not considered escapable (reopened issue [#24](https://github.com/SimGus/Chatette/issues/24))
@@ -319,7 +321,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for slot value names
 - Generator able to generate an output file in *Rasa NLU* format (without support for synonyms or regex features)
 
-[Unreleased]: https://github.com/SimGus/Chatette/compare/v1.6.1...HEAD
+[Unreleased]: https://github.com/SimGus/Chatette/compare/v1.6.2...HEAD
+[1.6.2]:  https://github.com/SimGus/Chatette/compare/v1.6.1...v1.6.2
 [1.6.1]:  https://github.com/SimGus/Chatette/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/SimGus/Chatette/compare/v1.5.0...v1.6.0
 [1.5.0]: https://github.com/SimGus/Chatette/compare/v1.4.2...v1.5.0
