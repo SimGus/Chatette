@@ -34,7 +34,7 @@ class Example(object):
     def as_dict(self):
         result = {"text": self.text, "entities": []}
         if self._slot_value is not None:
-            result["slot-value": self._slot_value]  # TODO this looks weird, look into this
+            result["slot-value"] = self._slot_value
         for entity in self.entities:
             result["entities"].append(entity.as_dict())
         return result
