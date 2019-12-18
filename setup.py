@@ -32,6 +32,6 @@ setup(
     install_requires=[
         "enum-compat",
         "future",
-        "six"
+        "six",
     ]
 )
