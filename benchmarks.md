@@ -196,6 +196,15 @@ std dev              18.72 ms   (4.391 ms .. 23.89 ms)
 variance introduced by outliers: 19% (moderately inflated)
 ```
 
+### v1.6.2
+```
+benchmarking python3 -m chatette examples/complex/metal-work/master.chatette -f
+time                 1.808 s    (1.699 s .. 2.065 s)
+                     0.998 R²   (0.995 R² .. 1.000 R²)
+mean                 1.861 s    (1.823 s .. 1.922 s)
+std dev              57.30 ms   (17.70 μs .. 70.03 ms)
+```
+
 ## Analysis and discussion
 Even though `bench` is a very well made tool, its results shouldn't be taken as
 the "ground truth" but need to be discussed and put in perspective.
