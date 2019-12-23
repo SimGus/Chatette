@@ -55,6 +55,7 @@
 ### User interface
 - [ ] improve the error message and the display of the error when specifying an unexisting file as a master template
 - [ ] add colors to the terminal
+- [ ] make console help (`--help`) automatically reflect the possible values of the arguments (e.g. `rasamd` for the `--adapter`)
 
 ### Command line options
 - [ ] add bulk generation
@@ -106,6 +107,8 @@
 - [ ] Update documentation by more separating different topics
 
 - [ ] *Examples* remove all deprecated syntax
+
+- [ ] *Contribute* add a part stating how big a contribution needs to be in order for a person to be cited as a contributor
 
 ### Installation
 - [ ] make a dockerfile for easy installation and put it on docker hub
