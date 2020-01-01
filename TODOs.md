@@ -32,6 +32,7 @@
 ### Other features
 - [ ] add a new part to the library that allows to build template files programmatically
 - [ ] find a way to make template files edition on phone less cumbersome?
+- [ ] add a way to pass some arguments from the command to the generator (cf. https://github.com/rodrigopivi/Chatito/issues/84)
 
 ### Adapters
 - [ ] *Rasa markdown adapter* add a small comment at the top of the output file that states it was made with Chatette
