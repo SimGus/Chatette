@@ -197,13 +197,13 @@ For developers, you can clone the [repo](https://github.com/SimGus/Chatette) and
 Then, install the module as editable:
 ```pip install -e <path-to-chatette-module>```
 
-Run pylint:
+- Run [pylint](https://www.pylint.org/):
 ```tox -e pylint```
 
-Run pycodestyle:
+- Run [pycodestyle](https://github.com/PyCQA/pycodestyle):
 ```tox -e pycodestyle```
 
-Run pytest:
+- Run [pytest](https://docs.pytest.org/en/latest/):
 ```tox -e pytest```
 
 ## Credits
