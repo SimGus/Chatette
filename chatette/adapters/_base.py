@@ -53,7 +53,7 @@ class Adapter(with_metaclass(ABCMeta, object)):
                 self.__get_file_name(
                     batch, output_directory, single_file_output
                 )
-            with io.open(output_file_path, 'w') as output_file:
+            with io.open(output_file_path, 'w', encoding='utf-8') as output_file:
                 self._write_batch(output_file, batch)
 
     @classmethod

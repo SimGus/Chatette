@@ -15,7 +15,7 @@ class LineCountFileWrapper(object):
     
     def __init__(self, filepath, mode='r'):
         self.name = cast_to_unicode(filepath)
-        self.f = io.open(filepath, mode)
+        self.f = io.open(filepath, mode, encoding='utf-8')
         self.line_nb = 0
 
     def close(self):
