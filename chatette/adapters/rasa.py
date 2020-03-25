@@ -68,7 +68,7 @@ class RasaAdapter(Adapter):
         if self._base_file_contents is None:
             if self._base_filepath is None:
                 return self._get_empty_base()
-            with io.open(self._base_filepath, 'r') as base_file:
+            with io.open(self._base_filepath, 'r', encoding='utf-8') as base_file:
                 self._base_file_contents = json.load(base_file)
             self.check_base_file_contents()
         return self._base_file_contents
