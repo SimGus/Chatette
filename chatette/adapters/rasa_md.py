@@ -32,8 +32,8 @@ class RasaMdAdapter(Adapter):
         raise ValueError(
             "Tried to generate several files with Rasa Markdown adapter."
         )
-        
-    
+
+
     def _write_batch(self, output_file_handle, batch):
         output_file_handle.write(
             "<!-- Generated using Chatette v" + cast_to_unicode(__version__) + \
@@ -46,7 +46,7 @@ class RasaMdAdapter(Adapter):
                 prepared_examples,
                 example.intent_name, self.prepare_example(example)
             )
-        
+
         for intent_name in prepared_examples:
             output_file_handle.write(
                 "## intent:" + cast_to_unicode(intent_name) + '\n'
@@ -54,7 +54,7 @@ class RasaMdAdapter(Adapter):
             for text in prepared_examples[intent_name]:
                 output_file_handle.write(cast_to_unicode("- " + text + '\n'))
             output_file_handle.write(cast_to_unicode('\n'))
-        
+
         output_file_handle.write(
             cast_to_unicode(self.__format_synonyms(batch.synonyms))
         )
@@ -82,7 +82,7 @@ class RasaMdAdapter(Adapter):
                 "](" + entity.slot_name + ")" + \
                 result[entity._start_index + entity._len:]
         return result
-    
+
 
     @classmethod
     def __format_synonyms(cls, synonyms):
@@ -99,7 +99,7 @@ class RasaMdAdapter(Adapter):
                         result += "- " + syn + '\n'
                 result += '\n'
         return result
-    
+
 
     def _get_base_to_extend(self):
         if self._base_file_contents is None:
@@ -112,7 +112,7 @@ class RasaMdAdapter(Adapter):
 
     def _get_empty_base(self):
         return ""
-    
+
     def check_base_file_contents(self):
         if self._base_file_contents is None:
             return

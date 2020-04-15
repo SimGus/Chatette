@@ -7,7 +7,6 @@ for the batches of examples written to output files.
 
 import io
 import os
-import shutil
 
 from abc import ABCMeta, abstractmethod
 from future.utils import with_metaclass
@@ -106,7 +105,7 @@ class Adapter(with_metaclass(ABCMeta, object)):
                         synonyms
                     )
 
-    
+
     @abstractmethod
     def prepare_example(self, example):
         """Transforms an example into a str writable to an output file."""
