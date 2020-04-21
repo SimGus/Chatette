@@ -1,6 +1,7 @@
 # TODOs
 ## To Do
 ### Bulk
+- [ ] fix encoding issue when using a Windows system and a language which needs Unicode support (like most languages), as was highlighted with [this commit](https://github.com/tomgun132/Chatette/commit/5b1cd72ecf0f49903d3af7025a9325bf3a0f3286)
 
 ### New syntax
 - [ ] add a way to specify a rule on several consecutive lines
