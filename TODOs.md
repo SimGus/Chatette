@@ -229,6 +229,7 @@
 - **fixed**: space at the end of lines in json outputs (fixed in newest versions of `json`: https://bugs.python.org/issue16333)
 - **fixed**: `{my [own?]/a} ~[religion]` can generate a double space
 - **fixed**: random generation modifiers' names are not taken into account when generating all examples
+- **fixed**: issues with random generation modifier (see PR #49)
 
 # Ideas
 ## Rejected
