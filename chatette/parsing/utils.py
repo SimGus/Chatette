@@ -188,17 +188,17 @@ def get_template_pre_modifiers(modifiers_repr):
     return ""
 def get_template_post_modifiers(modifiers_repr):
     """
-    Returns the string of pre-modifiers as a string that would be found in
+    Returns the string of post-modifiers as a string that would be found in
     a template file.
     """
     result = ""
     if modifiers_repr.randgen:
         result += RAND_GEN_SYM
-        if modifiers_repr.randgen_name is not None:
-            result += modifiers_repr.randgen_name
-        if modifiers_repr.randgen_percent != 50:
+        if modifiers_repr.randgen.name is not None:
+            result += modifiers_repr.randgen.name
+        if modifiers_repr.randgen.percentage != 50:
             result += \
-                RAND_GEN_PERCENT_SYM + str(modifiers_repr.randgen_percent) + '%'
+                RAND_GEN_PERCENT_SYM + str(modifiers_repr.randgen.percentage) + '%'
     if modifiers_repr.variation_name is not None:
         result += VARIATION_SYM + modifiers_repr.variation_name
     if modifiers_repr.argument_name is not None:
