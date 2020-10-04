@@ -76,6 +76,7 @@
 - [ ] *Interactive mode* use `tabulate` to make tables and make command output more readable
 
 ### Improve code
+- [ ] fix issues with random generation modifier (see PR #49)
 - [ ] design patterns
 - [ ] add more unit tests
 - [ ] improve logging (remove `print`s and use a logging library)

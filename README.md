@@ -213,7 +213,9 @@ Then, install the module as editable:
 *Disclaimer: This is a side-project I'm not paid for, don't expect me to work 24/7 on it.*
 
 ### Contributors
-- [Vadim Fedorenko](https://github.com/meiblorn)
+- [meiblorn](https://github.com/meiblorn)
 - [Valentin Calomme](https://github.com/ValentinCalomme)
+- [Jeff Greenberg](https://github.com/ziligy)
+- [Dávid Kizivat](https://github.com/kizivat)
 
 Many thanks to them!
