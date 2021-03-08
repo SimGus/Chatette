@@ -11,6 +11,7 @@ from chatette.parsing.utils import \
     extract_identifier, \
     CASE_GEN_SYM, UNIT_END_SYM
 
+from chatette.parsing.lexing.rule_annotation import RuleAnnotation
 from chatette.parsing.lexing.rule_unit_start import RuleUnitStart
 from chatette.parsing.lexing.rule_variation import RuleVariation
 from chatette.parsing.lexing.rule_rand_gen import RuleRandGen
@@ -55,11 +56,13 @@ class RuleUnitRef(LexingRule):
                 "using character '" + UNIT_END_SYM + "')."
             return False
 
+        is_slot = False
         # TODO maybe making a function for this would be useful
         if self._tokens[0].type == TerminalType.alias_ref_start:
             unit_end_type = TerminalType.alias_ref_end
         elif self._tokens[0].type == TerminalType.slot_ref_start:
             unit_end_type = TerminalType.slot_ref_end
+            is_slot = True
         elif self._tokens[0].type == TerminalType.intent_ref_start:
             unit_end_type = TerminalType.intent_ref_end
         else:  # Should never happen
@@ -72,5 +75,13 @@ class RuleUnitRef(LexingRule):
         self._next_index += 1
         self._update_furthest_matched_index()
         self._tokens.append(LexicalToken(unit_end_type, UNIT_END_SYM))
-        
+
+        # This is for adding new rasa training mode that has role and group entity
+        # Reference: https://rasa.com/docs/rasa/nlu-training-data/#entities-roles-and-groups
+        annotation_rule = RuleAnnotation(self._text, self._next_index)
+        if is_slot and annotation_rule.matches():
+            self._next_index = annotation_rule.get_next_index_to_match()
+            self._update_furthest_matched_index()
+            self._tokens.extend(annotation_rule.get_lexical_tokens())
+
         return True
