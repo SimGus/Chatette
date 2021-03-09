@@ -505,3 +505,26 @@ class Parser(object):
         )
 
         return rules
+
+    def _check_for_annotations(self, tokens, i):
+
+        if (
+            i == len(tokens)
+            and tokens[i+1].type != TerminalType.annotation_start
+        ):
+            return None, i-1
+        
+        end_annotation_idx = 0
+        for j, token in enumerate(tokens[i:]):
+            if token.type == TerminalType.annotation_end:
+                end_annotation_idx = i+j
+
+        if end_annotation_idx > i:
+            annotation_tokens = tokens[i:end_annotation_idx+1]
+            annotation = self._annotation_tokens_to_dict(annotation_tokens)
+            return annotation, end_annotation_idx
+        else:
+            raise ValueError(  # Should never happen
+                    "Something wrong happens when parsing annotation" +\
+                    "for entity role or group."
+                )
