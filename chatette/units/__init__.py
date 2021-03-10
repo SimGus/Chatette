@@ -125,11 +125,13 @@ class Entity(object):
     Represents an entity as it will be contained in examples
     (instances of `Example`).
     """
-    def __init__(self, name, length, value=None, start_index=0):
+    def __init__(self, name, length, value=None, start_index=0, role=None, group=None):
         self.slot_name = name  # name of the entity (not the associated text)
         self.value = value
         self._len = length
         self._start_index = start_index
+        self.role = role
+        self.group = group
 
     def _remove_leading_space(self):
         """
@@ -146,17 +148,27 @@ class Entity(object):
         return True
     
     def as_dict(self):
-        return {
+        entity_dict = {
             "slot-name": self.slot_name,
             "value": self.value,
             "start-index": self._start_index,
             "end-index": self._start_index + self._len
         }
+        if self.role is not None:
+            entity_dict['role'] = self.role
+        if self.group is not None:
+            entity_dict['group'] = self.group
+        return entity_dict
     
     def __repr__(self):
         representation = "entity '" + self.slot_name + "'"
         if self.value is not None:
             representation += ":'" + self.value + "'"
+        # ? There might be better representation format?
+        if self.role is not None:
+            representation += ":'" + self.role + "'"
+        if self.group is not None:
+            representation += ":'" + self.group + "'"
         return representation
     def __str__(self):
         return \
