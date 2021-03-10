@@ -79,6 +79,8 @@ class RuleUnitRef(LexingRule):
         # This is for adding new rasa training mode that has role and group entity
         # Reference: https://rasa.com/docs/rasa/nlu-training-data/#entities-roles-and-groups
         annotation_rule = RuleAnnotation(self._text, self._next_index)
+
+        # ? Should we raise error if RuleAnnotation doesn't match, i.e. wrong pattern
         if is_slot and annotation_rule.matches():
             self._next_index = annotation_rule.get_next_index_to_match()
             self._update_furthest_matched_index()
