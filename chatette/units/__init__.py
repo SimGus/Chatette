@@ -166,9 +166,9 @@ class Entity(object):
             representation += ":'" + self.value + "'"
         # ? There might be better representation format?
         if self.role is not None:
-            representation += ":'" + self.role + "'"
+            representation += ", 'role' :'" + self.role + "'"
         if self.group is not None:
-            representation += ":'" + self.group + "'"
+            representation += ", 'group' :'" + self.group + "'"
         return representation
     def __str__(self):
         return \
