@@ -16,7 +16,7 @@ from abc import ABCMeta, abstractmethod
 from future.utils import with_metaclass
 
 from chatette.units.modifiable.choice import Choice
-from chatette.units.modifiable.unit_reference import UnitReference
+from chatette.units.modifiable.unit_reference import UnitReference, SlotRoleGroupReference
 from chatette.units.modifiable.definitions.alias import AliasDefinition
 from chatette.units.modifiable.definitions.slot import SlotDefinition
 from chatette.units.modifiable.definitions.intent import IntentDefinition
@@ -91,6 +91,7 @@ class UnitRefBuilder(ItemBuilder):
         self.identifier = None
         self.variation = None
         self.arg_value = None
+        self.slot_rolegroup = None
 
     def _check_information(self):
         super(UnitRefBuilder, self)._check_information()
@@ -108,6 +109,12 @@ class UnitRefBuilder(ItemBuilder):
 
     def create_concrete(self):
         self._check_information()
+        if self.slot_rolegroup is not None:
+            return SlotRoleGroupReference(
+                self.identifier, self.type,
+                self.leading_space, self._build_modifiers_repr(),
+                self.slot_rolegroup
+            )
         return UnitReference(
             self.identifier, self.type,
             self.leading_space, self._build_modifiers_repr()
