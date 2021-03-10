@@ -126,3 +126,54 @@ class UnitReference(ModifiableItem):
         if self._leading_space:
             result = ' ' + result
         return result
+
+
+class SlotRoleGroupReference(UnitReference):
+    """
+    Represents a reference to a unit definition that can be contained
+    in a template rule.
+    """
+    def __init__(self, identifier, unit_type, leading_space, modifiers, rolegroup):
+        super(SlotRoleGroupReference, self).__init__(
+            identifier, unit_type, leading_space, modifiers
+        )
+        self._unit_type = 'slot'
+
+        # dictionary {"role": "value"}, or {"group": "value"}, or both
+        self._role = rolegroup.get('role', None)
+        self._group = rolegroup.get('group', None)
+
+    def _generate_random_strategy(self):
+        generated_example = super()._generate_random_strategy()
+
+        for ent in generated_example.entities:
+            if self._role is not None:
+                ent.role = self._role
+            if self._group is not None:
+                ent.group = self._group
+        return generated_example
+        
+    
+    def _generate_all_strategy(self):
+        generated_examples = super()._generate_all_strategy()
+
+        for ex in generated_examples:
+            for ent in ex.entities:
+                if self._role is not None:
+                    ent.role = self._role
+                if self._group is not None:
+                    ent.group = self._group
+
+        return generated_examples
+    
+    def _generate_n_strategy(self, n):
+        generated_examples = super()._generate_n_strategy()
+
+        for ex in generated_examples:
+            for ent in ex.entities:
+                if self._role is not None:
+                    ent.role = self._role
+                if self._group is not None:
+                    ent.group = self._group
+
+        return generated_examples
