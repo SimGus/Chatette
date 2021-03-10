@@ -30,7 +30,7 @@ from chatette.units.word import Word
 from chatette.units.rule import Rule
 
 from chatette.parsing import \
-    ChoiceBuilder, UnitRefBuilder, \
+    ChoiceBuilder, UnitRefBuilder,\
     AliasDefBuilder, SlotDefBuilder, IntentDefBuilder
 
 
@@ -398,9 +398,14 @@ class Parser(object):
             elif (
                 token.type in \
                 (TerminalType.alias_ref_end,
-                 TerminalType.slot_ref_end,
                  TerminalType.intent_ref_end)
             ):
+                rule_contents.append(current_builder.create_concrete())
+                current_builder = None
+                leading_space = False
+            elif token.type == TerminalType.slot_ref_end:
+                rolegroup_annotation, i = self._check_for_annotations(tokens, i)
+                current_builder.slot_rolegroup = rolegroup_annotation
                 rule_contents.append(current_builder.create_concrete())
                 current_builder = None
                 leading_space = False
@@ -512,19 +517,22 @@ class Parser(object):
             i == len(tokens)
             and tokens[i+1].type != TerminalType.annotation_start
         ):
-            return None, i-1
+            return None, i
         
-        end_annotation_idx = 0
-        for j, token in enumerate(tokens[i:]):
+        annotation = {}
+        current_key = None
+        for j, token in enumerate(tokens[i+1:]):
             if token.type == TerminalType.annotation_end:
-                end_annotation_idx = i+j
-
-        if end_annotation_idx > i:
-            annotation_tokens = tokens[i:end_annotation_idx+1]
-            annotation = self._annotation_tokens_to_dict(annotation_tokens)
-            return annotation, end_annotation_idx
-        else:
-            raise ValueError(  # Should never happen
-                    "Something wrong happens when parsing annotation" +\
-                    "for entity role or group."
-                )
+                i += j+1
+                break
+            elif token.type == TerminalType.key:
+                current_key = token.text
+            elif token.type == TerminalType.value:
+                if current_key in annotation:
+                    self.input_file_manager.syntax_error(
+                        "Annotation contained the key '" + current_key + \
+                        "' twice."
+                    )
+                annotation[current_key] = token.text
+        
+        return annotation, i
