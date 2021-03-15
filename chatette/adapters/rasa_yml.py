@@ -68,10 +68,17 @@ class RasaYMLAdapter(Adapter):
             )
         result = example.text[:]
         for entity in sorted_entities:
+            entity_annotation_text = ']{"entity": "' + entity.slot_name
+            entity_text = result[entity._start_index:entity._start_index + entity._len]
+            if entity_text != entity.value:
+                entity_annotation_text += f', "value": "{entity.value}'
+            if entity.role is not None:
+                entity_annotation_text += f', "role": "{entity.role}'
+            if entity.group is not None:
+                entity_annotation_text += f', "group": "{entity.group}'
             result = \
                 result[:entity._start_index] + "[" + \
-                result[entity._start_index:entity._start_index + entity._len] + \
-                ']{"entity": "' + entity.slot_name + '"}' + \
+                entity_text + entity_annotation_text + '"}' + \
                 result[entity._start_index + entity._len:] # New rasa entity format
         return result
 

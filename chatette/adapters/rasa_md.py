@@ -76,11 +76,18 @@ class RasaMdAdapter(Adapter):
             )
         result = example.text[:]
         for entity in sorted_entities:
+            entity_annotation_text = ']{"entity": "' + entity.slot_name
+            entity_text = result[entity._start_index:entity._start_index + entity._len]
+            if entity_text != entity.value:
+                entity_annotation_text += f', "value": "{entity.value}'
+            if entity.role is not None:
+                entity_annotation_text += f', "role": "{entity.role}'
+            if entity.group is not None:
+                entity_annotation_text += f', "group": "{entity.group}'
             result = \
                 result[:entity._start_index] + "[" + \
-                result[entity._start_index:entity._start_index + entity._len] + \
-                "](" + entity.slot_name + ")" + \
-                result[entity._start_index + entity._len:]
+                entity_text + entity_annotation_text + '"}' + \
+                result[entity._start_index + entity._len:] # New rasa entity format
         return result
     
 
@@ -105,7 +112,7 @@ class RasaMdAdapter(Adapter):
         if self._base_file_contents is None:
             if self._base_filepath is None:
                 return self._get_empty_base()
-            with io.open(self._base_filepath, 'r') as base_file:
+            with io.open(self._base_filepath, 'r', encoding='utf-8') as base_file:
                 self._base_file_contents = ''.join(base_file.readlines())
             self.check_base_file_contents()
         return self._base_file_contents
