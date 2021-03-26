@@ -404,6 +404,7 @@ class Parser(object):
                 current_builder = None
                 leading_space = False
             elif token.type == TerminalType.slot_ref_end:
+                # checking annotation after slot reference
                 rolegroup_annotation, i = self._check_for_annotations(tokens, i)
                 current_builder.slot_rolegroup = rolegroup_annotation
                 rule_contents.append(current_builder.create_concrete())
@@ -512,10 +513,9 @@ class Parser(object):
         return rules
 
     def _check_for_annotations(self, tokens, i):
-
         if (
-            i == len(tokens)
-            and tokens[i+1].type != TerminalType.annotation_start
+            i+1 == len(tokens)
+            or tokens[i+1].type != TerminalType.annotation_start
         ):
             return None, i
         
