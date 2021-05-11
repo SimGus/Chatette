@@ -4,7 +4,7 @@
 import argparse
 import sys
 
-from chatette import __version__
+from chatette import __version__, prechecks
 from chatette.facade import Facade
 from chatette.cli.interpreter import CommandLineInterpreter
 
@@ -16,6 +16,9 @@ def main():
         argument_parser.exit()
 
     args = argument_parser.parse_args()
+
+    prechecks.ensure_preconditions()
+    prechecks.check_for_deprecations()
 
     if not args.interactive_mode and args.interactive_commands_file is None:
         facade = Facade.get_or_create_from_args(args)
