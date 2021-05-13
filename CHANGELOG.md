@@ -5,10 +5,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Python version is checked before running the script
+
 ### Fixed
 - "rasamd" adapter value missing from console help
 - Slot value missing in JSONL examples
 - Potential error when using random generation modifier (PR [#49](https://github.com/SimGus/Chatette/pull/49))
+
+### Deprecated
+- Python versions 2.7 and <=3.2
 
 ## [1.6.2] - 2019-12-18
 ### Fixed
