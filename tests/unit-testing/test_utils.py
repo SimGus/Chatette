@@ -18,9 +18,9 @@ from chatette.utils import \
 class TestUnitType(object):
     def test_existence(self):
         assert "UnitType" in dir(chatette.utils)
-        UnitType.alias
-        UnitType.slot
-        UnitType.intent
+        assert "alias" in UnitType.__members__
+        assert "slot" in UnitType.__members__
+        assert "intent" in UnitType.__members__
 
 
 class TestSingleton(object):
@@ -35,7 +35,7 @@ class TestSingleton(object):
         assert singleton == other
         third = Singleton.get_or_create()
         assert third == singleton
-    
+
     def test_reset(self):
         singleton = Singleton()
         reset = Singleton.reset_instance()
@@ -46,7 +46,7 @@ class TestPrints(object):
     def test_existences(self):
         assert "print_DBG" in dir(chatette.utils)
         assert "print_warn" in dir(chatette.utils)
-    
+
     def test_no_return(self):
         assert chatette.utils.print_DBG("Test") is None
         assert chatette.utils.print_warn("Test") is None
@@ -113,7 +113,7 @@ class TestSampleIndulgent(object):
             assert item in array
         for item in sample_indulgent(array, 1000):
             assert item in array
-    
+
     def test_empty(self):
         assert len(sample_indulgent([], 5)) == 0
 
@@ -122,7 +122,7 @@ class TestRChop(object):
     def test_ending(self):
         assert rchop("this is a test", "test") == "this is a "
         assert rchop("another example", "ample") == "another ex"
-    
+
     def test_not_ending(self):
         assert rchop("this is a test", "nothing") == "this is a test"
         assert rchop("Hello", "hello") == "Hello"
@@ -138,7 +138,7 @@ class TestStrToBool(object):
         assert str_to_bool("FALSE") == False
         assert str_to_bool("tRuE") == True
         assert str_to_bool("FaLSe") == False
-    
+
     def test_not_bool(self):
         with pytest.raises(ValueError):
             str_to_bool("Test")
@@ -150,7 +150,7 @@ class TestRemoveDuplicates(object):
         assert "a" in dictionary
         assert "one" in dictionary["a"]
         assert "two" in dictionary["a"]
-    
+
     def test_dup(self):
         dictionary = remove_duplicates({"a": [1, 1], "b": ["o"]})
         assert "a" in dictionary
