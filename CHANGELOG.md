@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - "rasamd" adapter value missing from console help
 - Slot value missing in JSONL examples
 - Potential error when using random generation modifier (PR [#49](https://github.com/SimGus/Chatette/pull/49))
+- Crash when having an annotation on a slot or alias
 
 ### Deprecated
 - Python versions 2.7 and <=3.2

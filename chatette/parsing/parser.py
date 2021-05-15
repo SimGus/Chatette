@@ -229,7 +229,7 @@ class Parser(object):
                     unit_type = "slot"
                 print_warn(
                     "Found an annotation when parsing " + unit_type + " '" + \
-                    identifier + "'\n" + \
+                    builder.identifier + "'\n" + \
                     "Annotations are currently only supported for intent " + \
                     "definitions. Any other annotation is ignored."
                 )
