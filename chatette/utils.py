@@ -7,10 +7,9 @@ Contains utility functions and classes used everywhere in the project.
 
 from __future__ import print_function
 import sys
-from random import randint, sample
+from random import sample, choice
 from copy import deepcopy
 
-from random import choice
 from string import ascii_letters
 
 from enum import Enum
@@ -46,13 +45,13 @@ class Singleton(object):
     def reset_instance(cls, *args, **kwargs):
         """
         Completely resets the instance of the class
-        (representing the singleton), makes a new one and 
+        (representing the singleton), makes a new one and
         returns this instance.
         """
         cls._instance = None
         cls._instance = cls(*args, **kwargs)
         return cls._instance
-    
+
     @classmethod
     def was_instantiated(cls):
         return (cls._instance is not None)

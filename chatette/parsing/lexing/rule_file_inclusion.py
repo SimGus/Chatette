@@ -7,9 +7,7 @@ that has to do with a line that includes a file.
 
 from chatette.parsing.lexing.lexing_rule import LexingRule
 from chatette.parsing.lexing import LexicalToken, TerminalType
-from chatette.parsing.utils import \
-    FILE_INCLUSION_SYM, COMMENT_SYM, OLD_COMMENT_SYM, find_next_comment
-from chatette.utils import min_if_exist
+from chatette.parsing.utils import FILE_INCLUSION_SYM, find_next_comment
 
 
 class RuleFileInclusion(LexingRule):

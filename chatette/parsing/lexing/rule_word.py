@@ -8,7 +8,6 @@ to tokenize a word (inside a rule).
 from chatette.parsing.lexing.lexing_rule import LexingRule
 from chatette.parsing.lexing import LexicalToken, TerminalType
 from chatette.parsing.utils import \
-    ESCAPEMENT_SYM, \
     FILE_INCLUSION_SYM, \
     UNIT_START_SYM, UNIT_END_SYM, \
     ALIAS_SYM, SLOT_SYM, INTENT_SYM, \

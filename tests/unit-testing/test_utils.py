@@ -5,8 +5,8 @@ Tests the functions and classes in module 'chatette.utils'.
 """
 
 import sys
-import pytest
 import imp
+import pytest
 
 import chatette.utils
 from chatette.utils import \

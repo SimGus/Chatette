@@ -12,7 +12,6 @@ from six import string_types
 
 from chatette.utils import UnitType, cast_to_unicode
 from chatette.log import print_DBG, print_warn
-from chatette.parsing import utils
 from chatette.parsing.lexing import \
     remove_comment_tokens, find_matching_choice_end, \
     find_index_last_choice_content
@@ -24,9 +23,6 @@ from chatette.parsing.lexing.lexer import Lexer
 from chatette.parsing.lexing import TerminalType
 from chatette.units.ast import AST
 
-from chatette.units.modifiable.definitions.alias import AliasDefinition
-from chatette.units.modifiable.definitions.slot import SlotDefinition
-from chatette.units.modifiable.definitions.intent import IntentDefinition
 from chatette.units.word import Word
 from chatette.units.rule import Rule
 
