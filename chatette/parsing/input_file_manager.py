@@ -131,8 +131,8 @@ class InputFileManager(Singleton):
         Closes all files and raises a `SyntaxError`
         pointing at the index `char_index` in the last read line.
         """
-        if word_to_find is not None and line is not None:
-            char_index = line.find(word_to_find)
+        if word_to_find is not None and self._last_read_line is not None:
+            char_index = self._last_read_line.find(word_to_find)
 
         self.close_all_files()
         if self._current_file is not None:
