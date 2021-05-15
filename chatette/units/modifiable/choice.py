@@ -9,8 +9,7 @@ from random import choice
 from chatette.units.modifiable import ModifiableItem
 from chatette.units import extend_no_dup
 
-from chatette.parsing.utils import \
-    CHOICE_START, CHOICE_END, CHOICE_SEP
+from chatette.parsing.utils import CHOICE_START, CHOICE_END, CHOICE_SEP
 from chatette.parsing import utils as putils
 
 
@@ -44,7 +43,7 @@ class Choice(ModifiableItem):
         """Removes the rule at `index`th rule."""
         if index < 0 or index >= len(self._rules):
             raise ValueError("Tried to remove rule at invalid index.")
-        del self._rule[index]
+        del self._rules[index]
 
     def _choose_rule(self):
         """
