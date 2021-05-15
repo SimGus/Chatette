@@ -3,7 +3,6 @@ Test module.
 Tests the functions in module 'chatette.utils'.
 """
 
-
 from chatette.deprecations import Deprecations
 
 
@@ -14,7 +13,7 @@ class TestDeprecations(object):
         assert instance == same
         assert not instance._old_comment_warned
         assert not instance._old_choice_warned
-    
+
     def test_warn_old_comment(self, capsys):
         instance = Deprecations.reset_instance()
         assert not instance._old_comment_warned
@@ -40,7 +39,7 @@ class TestDeprecations(object):
         assert \
             "This syntax was found in file 'filename'" + \
             " at line 12: 'line'." in captured.err
-        
+
         instance = Deprecations.reset_instance()
         instance.warn_old_comment(line_nb=12, line="line")
 
@@ -74,7 +73,7 @@ class TestDeprecations(object):
         assert \
             "This syntax was found in file 'filename'" + \
             " at line 12: 'line'." in captured.err
-        
+
         instance = Deprecations.reset_instance()
         instance.warn_old_choice(line_nb=12, line="line")
 

@@ -27,8 +27,8 @@ class UnitDefinition(ModifiableItem):
         self.identifier = identifier
         self._all_rules = []
         self._variation_rules = dict()
-    
-    
+
+
     def __contains__(self, variation_name):
         """
         Returns `True` if `variation_name` is a variation
@@ -73,7 +73,7 @@ class UnitDefinition(ModifiableItem):
                 "One of the rules in " + self.full_name + " was not valid: " + \
                 "it contained a slot value. The invalid rule is " + str(rule)
             )
-    
+
     def add_rule(self, rule, variation_name=None):
         """
         Adds the rule `rule` to the list of rules.
@@ -101,7 +101,7 @@ class UnitDefinition(ModifiableItem):
         else:
             self._variation_rules[variation_name] = rules
         self._all_rules.extend(rules)
-    
+
     def _recompute_all_rules(self):
         """
         Given all the rules in `self._variation_rules`,
@@ -111,14 +111,14 @@ class UnitDefinition(ModifiableItem):
         for rules in self._variation_rules:
             all_rules.extend(rules)
         self._all_rules = all_rules
-    
+
     def remove_rule(self, index, variation_name=None):
         """Removes the rule at `index`th rule."""
         # TODO decide what to do with `variation_name`
         if index < 0 or index >= len(self._all_rules):
             raise ValueError("Tried to remove rule at invalid index.")
         del self._rule[index]
-    
+
 
     def _choose_rule(self, variation_name=None):
         """
@@ -175,7 +175,7 @@ class UnitDefinition(ModifiableItem):
                     self.full_name.capitalize() + " does not have any rule " + \
                     "associated to variation '" + str(variation_name) + "'."
                 )
-        
+
         example = rule.generate_random()
         example.remove_leading_space()
         if self.unit_type == UnitType.slot:
@@ -198,7 +198,7 @@ class UnitDefinition(ModifiableItem):
         """Overriding to prevent caching of examples for just one variation."""
         if not self._variation_rules:
             return super(UnitDefinition, self).generate_all()
-        
+
         if isinstance(self._cached_examples, list):
             self._cached_examples = dict()
         if variation_name not in self._cached_examples:
@@ -211,7 +211,7 @@ class UnitDefinition(ModifiableItem):
                 self._apply_modifiers_to_all(basic_examples)
         return deepcopy(self._cached_examples[variation_name])
 
-    
+
     def _generate_all_strategy(self, variation_name=None):
         if variation_name is None:
             relevant_rules = self._all_rules
@@ -246,7 +246,7 @@ class UnitDefinition(ModifiableItem):
             generated_examples = \
                 extend_no_dup(generated_examples, current_examples)
         return generated_examples
-    
+
 
     def short_description(self):
         """
@@ -285,4 +285,3 @@ class UnitDefinition(ModifiableItem):
             for rule in self._variation_rules[variation_name]:
                 result += '\n\t' + rule.as_template_str()
         return result
-    

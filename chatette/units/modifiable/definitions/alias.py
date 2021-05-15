@@ -15,4 +15,3 @@ class AliasDefinition(UnitDefinition):
     unit_type = UnitType.alias
     def _compute_full_name(self):
         return "alias '" + self._name + "'"
-    

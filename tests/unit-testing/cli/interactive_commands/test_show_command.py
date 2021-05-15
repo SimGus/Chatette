@@ -89,7 +89,7 @@ def test_execute(capsys):
 #     assert "\t- two with space\n" in captured.out
 #     assert "\t- one\n" in captured.out
 #     assert "Rules for variation 'two with space':\n\ttwo\n\t2" in captured.out
-    
+
 #     cmd = ShowCommand('show alias "var#no var"')
 #     assert cmd.command_tokens == ["show", "alias", '"var#no var"']
 #     cmd.execute()

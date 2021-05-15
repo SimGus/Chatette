@@ -31,11 +31,11 @@ class LexingRule(with_metaclass(ABCMeta, object)):
         self._next_index = start_index
         self._furthest_matched_index = start_index  # inclusive
         self._tokens = []
-        
+
         self._matched = None
         self.error_msg = None
 
-    
+
     def matches(self, **kwargs):
         """
         Applies the rule to `self._text`
@@ -73,7 +73,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
         - if it didn't match: `self._furthest_matched_index`, `self.error_msg`
         """
         raise NotImplementedError()
-    
+
     # Helpers for matching rules
     def _try_to_match_rule(self, rule_class, index=None, **kwargs):
         """
@@ -122,7 +122,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
             )
         if index is None:
             index = self._next_index
-        
+
         best_failed_rule = None
         longest_match_last_index = None
         for rule_class in rule_classes:
@@ -137,7 +137,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
                 if best_failed_rule is None or match_last_index > longest_match_last_index:
                     best_failed_rule = rule
                     longest_match_last_index = match_last_index
-        
+
         self._update_furthest_matched_index(best_failed_rule)
 
         # No rule matched
@@ -149,7 +149,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
         else:
             self.error_msg = best_failed_rule.error_msg
         return False
-    
+
     def _match_any_order(self, rule_classes, index=None):
         """
         Matches as many rules as possible from `rule_classes` and this in any
@@ -178,7 +178,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
             index = self._next_index
         no_match_allowed = False
         matched_some_rule = False
-        
+
         remaining_rules = list(rule_classes)
         last_nb_remaining_rules = len(remaining_rules)  # Checked everytime every rules have been tested
         i = 0
@@ -249,7 +249,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
         else:
             self._furthest_matched_index = \
                 max(self._furthest_matched_index, rule._furthest_matched_index)
-    
+
     # Getters
     def get_lexical_tokens(self):
         """
@@ -279,7 +279,7 @@ class LexingRule(with_metaclass(ABCMeta, object)):
         if self._matched is None:
             self.matches()
         return self._next_index
-    
+
 
     def print_error(self):
         """

@@ -32,7 +32,7 @@ class Stats(Singleton):
 
         # Rule counts
         self.nb_rules_parsed = 0
-    
+
     def __str__(self):
         return \
             "Statistics:\n\tParsed files: " + str(self.nb_input_files_parsed) + \
@@ -45,7 +45,7 @@ class Stats(Singleton):
             "\n\t\tDeclared aliases: " + str(self.nb_aliases_declared) + \
             " (" + str(self.nb_variation_aliases) + " variations)" + \
             "\n\tParsed rules: " + str(self.nb_rules_parsed)
-    
+
     def new_file_parsed(self):
         self.nb_input_files_parsed += 1
     # def new_file_written(self):
@@ -72,7 +72,7 @@ class Stats(Singleton):
     def new_alias_declared(self):
         self.nb_units_declared += 1
         self.nb_aliases_declared += 1
-    
+
     def new_variation_unit_declared(self, unit_type):
         if unit_type == UnitType.alias:
             self.new_variation_alias_declared()
@@ -100,7 +100,7 @@ class Stats(Singleton):
         self.nb_rules_parsed += 1
     def new_rules_parsed(self, nb_rules):
         self.nb_rules_parsed += nb_rules
-    
+
     def one_unit_removed(self, unit_type):
         if unit_type == UnitType.alias:
             self.one_alias_removed()
@@ -216,4 +216,3 @@ class Stats(Singleton):
             raise InvalidStatsState(
                 "Tried to decrement statistics for parsed rules below 0."
             )
-        

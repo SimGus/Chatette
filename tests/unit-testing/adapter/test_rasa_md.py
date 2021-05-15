@@ -17,7 +17,7 @@ class TestRasaMdAdapter(object):
         adapter = RasaMdAdapter("path")
         assert adapter._batch_size is None
         assert adapter._base_filepath == "path"
-    
+
     def test_get_file_extension(self):
         assert RasaMdAdapter._get_file_extension() == "md"
 

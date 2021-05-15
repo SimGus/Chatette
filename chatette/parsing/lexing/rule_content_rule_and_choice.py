@@ -40,7 +40,7 @@ class RuleContentRule(LexingRule):
 
         return False
 
-# NOTE Required to put it here rather than in its own module 
+# NOTE Required to put it here rather than in its own module
 #      to prevent circular imports.
 #      Indeed, instances of `RuleContentRule` can contain instances of
 #      `RuleChoice`, which in turn can contain instances of `RuleContentRule`.
@@ -60,7 +60,7 @@ class RuleChoice(LexingRule):
             start_char = CHOICE_START
             sep_char = CHOICE_SEP
             end_char = CHOICE_END
-        
+
         if start_char is None:
             self.error_msg = \
                 "Invalid token. Expected a choice to start there (starting " + \
@@ -100,10 +100,10 @@ class RuleChoice(LexingRule):
             self._next_index = rule_content_rule.get_next_index_to_match()
             self._update_furthest_matched_index(rule_content_rule)
             self._tokens.extend(rule_content_rule.get_lexical_tokens())
-        
+
         if not self._try_to_match_rule(RuleRandGen):
             self.error_msg = None
-        
+
         if not self._text.startswith(end_char, self._next_index):
             self.error_msg = \
                 "Invalid token. Unmatched choice opening character. " + \

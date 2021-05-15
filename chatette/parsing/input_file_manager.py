@@ -38,7 +38,7 @@ class InputFileManager(Singleton):
         elif file_path is not None:
             cls._instance.open_file(file_path)
         return cls._instance
-    
+
     def __init__(self, file_path=None):
         self._current_file = None
         self._opened_files = []
@@ -47,7 +47,7 @@ class InputFileManager(Singleton):
 
         if file_path is not None:
             self.open_file(file_path)
-    
+
     def open_file(self, file_path):
         """
         Opens the file at `file_path` if and only if it wasn't opened before.
@@ -85,7 +85,7 @@ class InputFileManager(Singleton):
             if len(self._opened_files) > 0:
                 self._current_file = self._opened_files.pop()
             raise e
-    
+
     def close_all_files(self):
         """Closes all the opened files."""
         for f in self._opened_files:
@@ -105,13 +105,13 @@ class InputFileManager(Singleton):
             self._current_file = self._opened_files.pop()
         else:
             self._current_file = None
-    
+
 
     def get_current_file_information(self):
         if self._current_file is None:
             return (None, None)
         return (self._current_file.name, self._current_file.line_nb)
-        
+
     def get_current_file_name(self):
         if self._current_file is None:
             return None
@@ -124,7 +124,7 @@ class InputFileManager(Singleton):
             self._current_file.name, self._current_file.line_nb,
             self._last_read_line
         )
-    
+
 
     def syntax_error(self, message, char_index=0, word_to_find=None):
         """
@@ -133,7 +133,7 @@ class InputFileManager(Singleton):
         """
         if word_to_find is not None and line is not None:
             char_index = line.find(word_to_find)
-        
+
         self.close_all_files()
         if self._current_file is not None:
             raise SyntaxError(  # BUG the file name and line read are sometimes not displayed (only the line number)

@@ -55,7 +55,7 @@ class RuleUnitStart(LexingRule):
             self._next_index += 1
             self._update_furthest_matched_index()
             return True
-        
+
         self.error_msg = \
             "Invalid token. Expected a start of unit here (starting with '" + \
             UNIT_START_SYM + "'). Did you mean to escape the previous '" + \

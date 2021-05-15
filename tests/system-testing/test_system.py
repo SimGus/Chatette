@@ -67,7 +67,7 @@ class ChatetteFacade(object):
                 os.path.join(self.output_dirpath, "train"),
                 self.train_examples, synonyms
             )
-        
+
         if self.test_examples:
             adapter.write(
                 os.path.join(self.output_dirpath, "train"),
@@ -139,7 +139,7 @@ class TestSystem(object):
 
         return result
 
-    
+
     @staticmethod
     def check_no_duplicates(examples):
         """Returns `True` if there are no duplicates in the list"""
@@ -242,7 +242,7 @@ class TestSystem(object):
                         str(formatted_ex) + " is not a legal example for '" + \
                         file_path + "'"
                     )
-            
+
             legal_syn = TestSystem.get_legal_synonyms(file_path)
             if legal_syn is not None:
                 synonyms = AST.get_or_create().get_entities_synonyms()
@@ -298,7 +298,7 @@ class TestSystem(object):
                         "': " + str(entity._start_index)
                     )
 
-    
+
     def test_generate_nb_testing(self):
         """
         Tests templates that generate a subset of all possible examples

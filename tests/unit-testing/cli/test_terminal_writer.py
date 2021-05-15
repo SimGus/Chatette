@@ -66,7 +66,7 @@ class TestGetRedirection(object):
 
         obj = TerminalWriter(redirection_file_path="test")
         assert obj.get_redirection() == (RedirectionType.append, "test")
-    
+
     def test_incorrect_state(self):
         obj = TerminalWriter()
         obj._file_mode = "incorrect"
@@ -85,7 +85,7 @@ class TestWrite(object):
         obj = TerminalWriter(RedirectionType.quiet)
         obj.write("something")
         assert obj.buffered_text is None
-    
+
     def test_not_quiet(self):
         obj = TerminalWriter(RedirectionType.append)
         obj.write("something")
@@ -106,7 +106,7 @@ class TestErrorLog(object):
         obj = TerminalWriter(RedirectionType.quiet)
         obj.error_log("something")
         assert obj.buffered_text is None
-    
+
     def test_not_quiet(self):
         obj = TerminalWriter(RedirectionType.append)
         obj.error_log("something")

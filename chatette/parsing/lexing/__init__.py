@@ -72,14 +72,14 @@ class LexicalToken(object):
         if len(token_text) == 0 and (self.type != TerminalType.ignore):
             raise ValueError("Tried to create a lexed item of 0 characters.")
         self.text = token_text
-    
+
     def __str__(self):
         return self.__repr__()
     def __repr__(self):
         return \
             "LexicalToken(type: " + self.type.name + \
             ", tokens: \"" + self.text + "\")"
-    
+
     def remove_escapement(self):
         """Removes all the escapement from the text of this token."""
         processed_text = ""
@@ -100,13 +100,13 @@ def remove_comment_tokens(tokens):
     """
     if len(tokens) == 0:
         return tokens
-    
+
     comment_index = None
     for (i, token) in enumerate(tokens):
         if token.type == TerminalType.comment:
             comment_index = i
             break
-    
+
     if comment_index is None:
         return tokens
     if comment_index == 0:
@@ -136,7 +136,7 @@ def extract_annotation_tokens(tokens):
             break
 
     if start_index is None:
-        return None    
+        return None
     if end_index is None:
         return tokens[start_index:]
     return tokens[start_index:end_index + 1]

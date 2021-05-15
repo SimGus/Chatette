@@ -39,14 +39,14 @@ class RulePercentGen(LexingRule):
                     "non-integral part."
                 return False
             percentage += self._text[start_index_non_int_part:self._next_index]
-            
+
         if not self._try_to_match_rule(RuleWhitespaces):
             self.error_msg = None
             # Ignore tokens as this whitespace is not meaningful
         if self._text[self._next_index] == '%':
             self._next_index += 1
             self._update_furthest_matched_index()
-        
+
         self._tokens.append(LexicalToken(TerminalType.percentgen, percentage))
 
         return True

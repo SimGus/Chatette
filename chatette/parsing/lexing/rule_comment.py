@@ -25,7 +25,7 @@ class RuleComment(LexingRule):
             # ignore the tokens it found since this whitespace is not meaningful
         if self._next_index >= len(text):
             return True
-        
+
         if (   text.startswith(COMMENT_SYM, self._next_index)
             or text.startswith(OLD_COMMENT_SYM, self._next_index)
         ):

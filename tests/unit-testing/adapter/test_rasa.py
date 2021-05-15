@@ -17,7 +17,7 @@ class TestRasaAdapter(object):
         adapter = RasaAdapter("path", 10)
         assert adapter._batch_size == 10
         assert adapter._base_filepath == "path"
-    
+
     def test_get_file_extension(self):
         assert RasaAdapter._get_file_extension() == "json"
 

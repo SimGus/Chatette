@@ -22,7 +22,7 @@ class RuleArgDecl(LexingRule):
         self._tokens.append(
             LexicalToken(TerminalType.arg_marker, ARG_SYM)
         )
-        
+
         arg_name = extract_identifier(self._text, self._next_index)
         if arg_name is None:
             self.error_msg = \

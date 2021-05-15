@@ -1,15 +1,15 @@
 %[single word group]
     [a word group]
-    
+
 %[words and word groups]
     a word [a group]
     [a group] a word
     word [group] word [group] [group]
-    
+
 %[casegen groups]
     [&casegened!]
     word [&casegened] [&another]
-    
+
 %[&casegen intent]
     [word group]
     word [word group]
@@ -17,7 +17,7 @@
 %[randgen]
     word [maybe group?]
     [group] [maybe group?]
-    
+
 %[both]
     word [&maybe casegened group?]
     [group] [&maybe casegened group?]

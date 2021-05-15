@@ -31,6 +31,6 @@ class RuleWhitespaces(LexingRule):
             matched_text = text[self._start_index:self._next_index]
             self._tokens.append(LexicalToken(terminal_type, matched_text))
             return True
-        
+
         self.error_msg = "Invalid token. Expected at least one whitespace there."
         return False

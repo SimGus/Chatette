@@ -214,7 +214,7 @@ class TestIntentDefBuilder(object):
         assert intent._name == "id"
         assert intent._nb_training_ex_asked == 100
         assert intent._nb_testing_ex_asked is None
-    
+
     def test_new_variation(self):
         builder = IntentDefBuilder()
         builder.identifier = "id"

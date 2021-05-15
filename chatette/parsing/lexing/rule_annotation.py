@@ -27,13 +27,13 @@ class RuleAnnotation(LexingRule):
                 "Invalid token. Expected an annotation there (starting with '" + \
                 ANNOTATION_START + "')."
             return False
-        
+
         whitespaces_rule = RuleWhitespaces(self._text, self._next_index)
         if whitespaces_rule.matches():
             self._next_index = whitespaces_rule.get_next_index_to_match()
             self._update_furthest_matched_index(whitespaces_rule)
             # Ignoring the tokens because whitespaces here are not meaningful
-        
+
         # Empty annotation
         if self._text.startswith(ANNOTATION_END, self._next_index):
             self._next_index += 1
@@ -82,7 +82,7 @@ class RuleAnnotation(LexingRule):
                 self.error_msg = first_val_rule.error_msg
                 self._update_furthest_matched_index(first_val_rule)
                 return False
-            
+
             self._next_index = first_val_rule.get_next_index_to_match()
             self._update_furthest_matched_index(first_val_rule)
             self._tokens.extend(first_val_rule.get_lexical_tokens())
@@ -92,7 +92,7 @@ class RuleAnnotation(LexingRule):
                 self._next_index = whitespaces_rule.get_next_index_to_match()
                 self._update_furthest_matched_index()
                 # Ignoring the tokens because whitespaces here are not meaningful
-            
+
             while self._text.startswith(ANNOTATION_SEP, self._next_index):
                 self._next_index += 1
                 self._update_furthest_matched_index()
@@ -120,7 +120,7 @@ class RuleAnnotation(LexingRule):
                     self._next_index = whitespaces_rule.get_next_index_to_match()
                     self._update_furthest_matched_index()
                     # Ignoring the tokens because whitespaces here are not meaningful
-                
+
                 if not self._text.startswith(KEY_VAL_CONNECTOR, self._next_index):
                     self.error_msg = \
                         "Cannot mix key-value pairs and single values " + \
@@ -155,7 +155,7 @@ class RuleAnnotation(LexingRule):
                     self._next_index = whitespaces_rule.get_next_index_to_match()
                     self._update_furthest_matched_index()
                     # Ignoring the tokens because whitespaces here are not meaningful
-        
+
         if not self._text.startswith(ANNOTATION_END, self._next_index):
             self.error_msg = \
                 "Invalid token. Expected the annotation to end there (using " + \

@@ -17,7 +17,7 @@ class RuleUnitDeclLine(LexingRule):
     def _apply_strategy(self, **kwargs):
         if not self._try_to_match_rule(RuleUnitDecl):
             return False
-        
+
         annotation_rule = RuleAnnotation(self._text, self._next_index)
         if annotation_rule.matches():
             self._next_index = annotation_rule.get_next_index_to_match()

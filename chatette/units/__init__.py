@@ -18,11 +18,11 @@ class Example(object):
             entities = []
         if text is None:
             text = ""
-        
+
         self.text = text
         self.entities = entities
         self._slot_value = None  # HACK used by slot to prevent code duplication
-    
+
     def __repr__(self):
         # return "<'" + self.text + "' " + str(self.entities) + '>'
         return str(self)
@@ -55,7 +55,7 @@ class Example(object):
         A duplicate is an example with the same text.
         """
         return self.text == other.text
-    
+
     def prepend(self, text_to_prepend):
         """
         Prepends `text_to_prepend` to the example
@@ -78,7 +78,7 @@ class Example(object):
         for entity in example_to_append.entities:
             entity._start_index += starting_index
             self.entities.append(entity)
-        
+
     def remove_leading_space(self):
         """Removes the leading space of `self.text` if there is one."""
         if len(self.text) > 0 and self.text[0].isspace():
@@ -99,7 +99,7 @@ class IntentExample(Example):
         result = super(IntentExample, self).as_dict()
         result["intent-name"] = self.intent_name
         return result
-    
+
     def __repr__(self):
         return \
             "<intent: " + self.intent_name + \
@@ -109,7 +109,7 @@ class IntentExample(Example):
             "Intent: '" + self.intent_name + \
             "'\n\tText: '" + self.text + \
             "'\n\tEntities: " + str(self.entities)
-    
+
     def __eq__(self, other):
         if isinstance(other, Example) and not isinstance(other, IntentExample):
             raise TypeError("Tried to compare an Example and an IntentExample")
@@ -144,7 +144,7 @@ class Entity(object):
         else:
             self._start_index -= 1
         return True
-    
+
     def as_dict(self):
         return {
             "slot-name": self.slot_name,
@@ -152,7 +152,7 @@ class Entity(object):
             "start-index": self._start_index,
             "end-index": self._start_index + self._len
         }
-    
+
     def __repr__(self):
         representation = "entity '" + self.slot_name + "'"
         if self.value is not None:
@@ -161,16 +161,16 @@ class Entity(object):
     def __str__(self):
         return \
             self.slot_name + "@" + str(self._start_index) + "\t=>\t" + str(self.value)
-    
+
     def __hash__(self):
         return \
             hash(self.slot_name +"@" + str(self._start_index) + ":" + str(self.value))
-    
+
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
     def __ne__(self, other):
         return not self.__eq__(other)
-    
+
 
 def add_example_no_dup(example_list, new_example):
     """
@@ -197,7 +197,7 @@ def add_example_no_dup(example_list, new_example):
             hi = float(i - 1)
         else:  # current_text < new_example.text
             lo = float(i + 1)
-        
+
         i = int(floor(abs(hi - lo)/2) + lo)
 
     # Add example if needed

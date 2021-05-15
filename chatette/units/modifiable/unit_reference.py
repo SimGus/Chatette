@@ -28,12 +28,12 @@ class UnitReference(ModifiableItem):
             self._fix_arg_value_modifier()
         except KeyError:
             self._definition = None
-        
-    
+
+
     def _compute_full_name(self):
         return "reference to " + self._unit_type.value + " '" + \
             self._name + "'"
-    
+
 
     def get_definition(self):
         if self._definition is None:
@@ -48,28 +48,28 @@ class UnitReference(ModifiableItem):
                 )
         return self._definition
 
-    
+
     def _compute_nb_possibilities(self):
         return \
             self.get_definition() \
                 .get_max_nb_possibilities(
                     variation_name=self._modifiers_repr.variation_name
                 )
-    
+
     def _generate_random_strategy(self):
         return \
             self.get_definition() \
                 .generate_random(
                     variation_name=self._modifiers_repr.variation_name
                 )
-    
+
     def _generate_all_strategy(self):
         return \
             self.get_definition() \
                 .generate_all(
                     variation_name=self._modifiers_repr.variation_name
                 )
-    
+
     def _generate_n_strategy(self, n):
         return \
             self.get_definition() \

@@ -25,7 +25,7 @@ class ModifiersRepresentation(object):
             str(self.argument_value) + ")"
     def __str__(self):
         return self.__repr__()
-    
+
     def short_description(self):
         """
         Returns a short description (as a `str`) that can be displayed to the
@@ -69,7 +69,7 @@ class RandgenRepresentation(object):
         return self._present
     def __nonzero__(self):  # For Python 2.7
         return self.__bool__()
-    
+
     def __repr__(self):
         if not self._present:
             return "No"

@@ -75,7 +75,7 @@ def find_unescaped(text, str_to_find, start_index=0, end_index=None):
         return None
     if end_index is None:
         end_index = length
-    
+
     current_index = start_index
     to_find_index = 0
     escaped = False
@@ -94,7 +94,7 @@ def find_unescaped(text, str_to_find, start_index=0, end_index=None):
         current_index += 1
         if to_find_index == len(str_to_find):
             break
-    
+
     if to_find_index == len(str_to_find):
         return current_index - len(str_to_find)
     return None
@@ -110,7 +110,7 @@ def find_next_comment(text, start_index=0, end_index=None):
     """
     if end_index is None:
         end_index = len(text)
-        
+
     comment_index = find_unescaped(text, COMMENT_SYM, start_index, end_index)
     old_comment_index = find_unescaped(
         text, OLD_COMMENT_SYM, start_index, end_index
@@ -132,7 +132,7 @@ def extract_identifier(text, start_index=0):
         return None
     elif start_index > length:
         raise ValueError("Tried to extract an identifier from outside a string.")
-    
+
     i = start_index
     escaped = False
     while i < length:
@@ -151,7 +151,7 @@ def extract_identifier(text, start_index=0):
     if i == start_index:
         return ""
     return text[start_index:i].rstrip()
-        
+
 
 def is_special_identifier_char(c):
     """

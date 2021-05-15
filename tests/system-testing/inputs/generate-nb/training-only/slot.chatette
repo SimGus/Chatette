@@ -4,7 +4,7 @@
 %[multiple]('train' : '2')
     @[slot] @[other]
     @[slot] @[slot?]
-    
+
 @[slot]
     slot one = slot1
     slot1

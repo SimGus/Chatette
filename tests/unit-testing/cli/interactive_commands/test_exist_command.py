@@ -72,7 +72,7 @@ def test_variations(capsys):
     assert "\t- two with space\n" in captured.out
     assert "\t- one\n" in captured.out
     assert "Variation 'two with space' is defined for this alias." in captured.out
-    
+
     cmd = ExistCommand('exist alias "var#no var"')
     assert cmd.command_tokens == ["exist", "alias", '"var#no var"']
     facade = get_facade()

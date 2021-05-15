@@ -3,7 +3,7 @@
 Module `chatette.parsing.parser`
 Contains the definition of the parser
 that is in charge of parsing the different template files
-and to produce an Abstract Syntax Tree that represents the information from 
+and to produce an Abstract Syntax Tree that represents the information from
 those files.
 """
 
@@ -56,7 +56,7 @@ class Parser(object):
 
         self._current_unit_declaration = None
         self._current_variation_name = None
-    
+
 
     def open_new_file(self, filepath):
         """Opens the new (master) file, making the parser ready to parse it."""
@@ -75,7 +75,7 @@ class Parser(object):
                     "\nContinuing the parsing of '" + str(current_file_name) + \
                     "'."
             print_warn(err_msg)
-    
+
 
     def parse_file(self, file_path):
         """
@@ -185,7 +185,7 @@ class Parser(object):
                 "Tried to parse a line as if it was a unit declaration " + \
                 "while it wasn't."
             )
-        
+
         i = 1
         while i < len(lexical_tokens):
             token = lexical_tokens[i]
@@ -243,7 +243,7 @@ class Parser(object):
                     self._parse_intent_annotation(annotation)
                 builder.nb_training_ex = nb_training_ex
                 builder.nb_testing_ex = nb_testing_ex
-        
+
         return (builder.create_concrete(), builder.variation)
 
     def _annotation_tokens_to_dict(self, tokens):
@@ -348,7 +348,7 @@ class Parser(object):
             self.input_file_manager.syntax_error(
                 "Detected a rule outside a unit declaration."
             )
-        
+
         rule = self._parse_rule(lexical_tokens[1:])
         self._current_unit_declaration.add_rule(
             rule, self._current_variation_name

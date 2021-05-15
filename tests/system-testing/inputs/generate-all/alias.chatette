@@ -3,16 +3,16 @@
     ~[complex alias]
     ~[cascading]
     ~[variation]
-    
+
 %[multiple]
     word ~[alias?]
     ~[cascading] ~[cascading]
     ~[variation#one] => ~[variation#two?/60]
-    
+
 %[arg]
     ~[arged#1$ARGUMENT]
     ~[arged#2$other argument]
-    
+
 ~[alias]
     alias
 ~[complex alias]

@@ -51,7 +51,7 @@ class RuleRandGen(LexingRule):
             self._tokens.append(
                 LexicalToken(TerminalType.randgen_name, randgen_name)
             )
-        
+
         if self._text.startswith(RAND_GEN_PERCENT_SYM, self._next_index):
             self._next_index += 1
             self._update_furthest_matched_index()

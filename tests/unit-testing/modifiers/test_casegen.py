@@ -22,7 +22,7 @@ class TestModifyExample(object):
         for _ in range(5):
             modify_example(example)
             assert example.text in ("text", "Text")
-        
+
         example = Example("  \talinea")
         for _ in range(5):
             modify_example(example)
@@ -39,7 +39,7 @@ class TestMakeAllPossibilities(object):
 class TestMayChangeLeadingCase(object):
     def test_empty(self):
         assert not may_change_leading_case("")
-    
+
     def test_other(self):
         assert not may_change_leading_case("  ")
         assert not may_change_leading_case("\t ")
@@ -54,7 +54,7 @@ class TestWithLeadingUpper(object):
         example = Example()
         example = with_leading_upper(example)
         assert example.text == ""
-    
+
     def test_other(self):
         example = Example("test")
         example = with_leading_upper(example)
@@ -70,7 +70,7 @@ class TestWithLeadingLower(object):
         example = Example()
         example = with_leading_lower(example)
         assert example.text == ""
-    
+
     def test_other(self):
         example = Example("test")
         example = with_leading_lower(example)

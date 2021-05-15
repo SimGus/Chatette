@@ -77,13 +77,13 @@ class TestTokenize(object):
 class TestIsEndRegex(object):
     def test_empty(self):
         assert not CommandStrategy._is_end_regex("")
-    
+
     def test_not_regex(self):
         assert not CommandStrategy._is_end_regex("test")
         assert not CommandStrategy._is_end_regex("something")
         assert not CommandStrategy._is_end_regex("a longer thing")
         assert not CommandStrategy._is_end_regex("/special characters$^")
-    
+
     def test_regexes(self):
         assert CommandStrategy._is_end_regex("/something.*/")
         assert CommandStrategy._is_end_regex("/something else/i")

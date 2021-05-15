@@ -18,7 +18,7 @@ class RuleLine(LexingRule):
     _empty_match_allowed = True
     def __init__(self, text):
         super(RuleLine, self).__init__(text, 0)
-    
+
     def _apply_strategy(self, **kwargs):
         if self._match_one_of(
             [RuleComment, RuleFileInclusion, RuleUnitDeclLine, RuleUnitRule],
@@ -41,4 +41,3 @@ class RuleLine(LexingRule):
             return True
 
         return False
-    

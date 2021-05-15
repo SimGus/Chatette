@@ -31,7 +31,7 @@ class RuleFileInclusion(LexingRule):
             self.error_msg = \
                 "Invalid token. Expected a file path here, got a whitespace."
             return False
-        
+
         comment_start = find_next_comment(self._text, self._next_index)
         if comment_start is not None:
             file_path = self._text[self._next_index:comment_start].rstrip()

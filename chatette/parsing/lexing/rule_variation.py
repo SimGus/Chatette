@@ -22,7 +22,7 @@ class RuleVariation(LexingRule):
         self._tokens.append(
             LexicalToken(TerminalType.variation_marker, VARIATION_SYM)
         )
-        
+
         variation_name = extract_identifier(self._text, self._next_index)
         if variation_name is None:
             self.error_msg = \

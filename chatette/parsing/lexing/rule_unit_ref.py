@@ -28,7 +28,7 @@ class RuleUnitRef(LexingRule):
         self._next_index = unit_start_rule.get_next_index_to_match()
         self._update_furthest_matched_index(unit_start_rule)
         self._tokens.extend(unit_start_rule.get_lexical_tokens())
-        
+
         if self._text.startswith(CASE_GEN_SYM, self._next_index):
             self._tokens.append(
                 LexicalToken(TerminalType.casegen_marker, CASE_GEN_SYM)
@@ -43,12 +43,12 @@ class RuleUnitRef(LexingRule):
             )
             self._next_index += len(identifier)
             self._update_furthest_matched_index()
-        
+
         if not self._match_any_order(
             [None, RuleVariation, RuleRandGen, RuleArgAssignment]
         ):
             return False
-        
+
         if not self._text.startswith(UNIT_END_SYM, self._next_index):
             self.error_msg = \
                 "Invalid token. Expected the unit reference to end here (" + \
@@ -72,5 +72,5 @@ class RuleUnitRef(LexingRule):
         self._next_index += 1
         self._update_furthest_matched_index()
         self._tokens.append(LexicalToken(unit_end_type, UNIT_END_SYM))
-        
+
         return True

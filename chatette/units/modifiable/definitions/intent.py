@@ -24,10 +24,10 @@ class IntentDefinition(UnitDefinition):
         super(IntentDefinition, self).__init__(identifier, modifiers)
         self._nb_training_ex_asked = nb_training_examples
         self._nb_testing_ex_asked = nb_testing_examples
-    
+
     def _compute_full_name(self):
         return "intent '" + self._name + "'"
-    
+
     def set_nb_examples_asked(self, nb_training_ex, nb_testing_ex):
         """
         Sets the number of examples for this intent
@@ -35,7 +35,7 @@ class IntentDefinition(UnitDefinition):
         """
         self._nb_training_ex_asked = nb_training_ex
         self._nb_testing_ex_asked = nb_testing_ex
-    
+
     def get_nb_training_examples_asked(self):
         return self._nb_training_ex_asked
     def get_nb_testing_examples_asked(self):
@@ -52,20 +52,20 @@ class IntentDefinition(UnitDefinition):
         """
         return IntentExample.from_example(example, self._name)
 
-    
+
     def _generate_random_strategy(self, variation_name=None):
         example = \
             super(IntentDefinition, self) \
                 ._generate_random_strategy(variation_name=variation_name)
         return self._example_to_intent_example(example)
-    
+
     def _generate_all_strategy(self, variation_name=None):
         examples = \
             super(IntentDefinition, self) \
                 ._generate_all_strategy(variation_name=variation_name)
         return [self._example_to_intent_example(ex) for ex in examples]
 
-    
+
     def generate_train(self):
         """
         Returns a list of examples to make up the training set.

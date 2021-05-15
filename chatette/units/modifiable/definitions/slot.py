@@ -31,7 +31,7 @@ class SlotDefinition(UnitDefinition):
             super(SlotDefinition, self)._generate_random_strategy(
                 variation_name=variation_name
             )
-        
+
         slot_value = generated_example._slot_value
         if slot_value is None:
             slot_value = generated_example.text
@@ -41,13 +41,13 @@ class SlotDefinition(UnitDefinition):
         generated_example._slot_value = None
 
         return generated_example
-    
+
     def _generate_all_strategy(self, variation_name=None):
         generated_examples = \
             super(SlotDefinition, self)._generate_all_strategy(
                 variation_name=variation_name
             )
-        
+
         for ex in generated_examples:
             slot_value = ex._slot_value
             if slot_value is None:

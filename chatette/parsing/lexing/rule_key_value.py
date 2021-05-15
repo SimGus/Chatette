@@ -18,7 +18,7 @@ class RuleKeyValue(LexingRule):
     def _apply_strategy(self, **kwargs):
         """
         `kwargs` can contain a value with key `extracting_key`.
-        `extracting_key` is a boolean that is `True` if this rule should extract 
+        `extracting_key` is a boolean that is `True` if this rule should extract
         a key and `False` if this rule should extract a value.
         If `kwargs` doesn't contain `extracting_key`, defaults to `True`.
         """
@@ -35,7 +35,7 @@ class RuleKeyValue(LexingRule):
                 self._update_furthest_matched_index()
                 encloser = current_encloser
                 break
-        
+
         if encloser is not None:
             # Enclosed key/value
             next_encloser_index = \
@@ -75,7 +75,7 @@ class RuleKeyValue(LexingRule):
                     "Couldn't find the end of key/value. " + \
                     "Didn't expect the end of the line there."
                 return False
-            
+
             extracted_text = \
                 self._text[self._start_index:end_key_value_index].rstrip()
             self._next_index += len(extracted_text)

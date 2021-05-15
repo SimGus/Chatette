@@ -25,7 +25,7 @@ class RuleWord(LexingRule):
         FILE_INCLUSION_SYM,
         UNIT_START_SYM, UNIT_END_SYM,
         ALIAS_SYM, SLOT_SYM, INTENT_SYM,
-        CHOICE_START, CHOICE_END, 
+        CHOICE_START, CHOICE_END,
         OLD_CHOICE_START, OLD_CHOICE_END
     ]
     _should_be_escaped_in_choices_chars = [
@@ -62,7 +62,7 @@ class RuleWord(LexingRule):
             ):
                 break
             next_word_index += 1
-        
+
         next_word_index = \
             min_if_exist(
                 next_word_index,
@@ -80,7 +80,7 @@ class RuleWord(LexingRule):
                     next_word_index,
                     find_unescaped(self._text, current_char, self._start_index)
                 )
-        
+
         if inside_choice and next_word_index > self._start_index:
             for char_to_escape in RuleWord._should_be_escaped_in_choices_chars:
                 next_word_index = \
@@ -90,7 +90,7 @@ class RuleWord(LexingRule):
                             self._text, char_to_escape, self._start_index
                         )
                     )
-        
+
         if parsing_slot_def and next_word_index > self._start_index:
             for char_to_escape in RuleWord._should_be_escaped_in_slot_def_chars:
                 next_word_index = \

@@ -83,7 +83,7 @@ class RasaAdapter(Adapter):
             }
         }
 
-    def check_base_file_contents(self): 
+    def check_base_file_contents(self):
         """
         Checks that `self._base_file_contents` contains well formatted JSON.
         Throws a `SyntaxError` if the data is incorrect.

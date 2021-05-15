@@ -69,7 +69,7 @@ def test_execute(capsys):
         assert len(unit._all_rules) == 0
     except (KeyError, ValueError):
         pytest.fail("Unexpected error, 'declare' command didn't work.")
-    
+
     captured = capsys.readouterr()
     assert "Alias 'machin' was successfully declared." in captured.out
 
@@ -83,7 +83,7 @@ def test_execute(capsys):
         assert len(unit._all_rules) == 0
     except (KeyError, ValueError):
         pytest.fail("Unexpected error, 'declare' command didn't work.")
-    
+
     captured = capsys.readouterr()
     assert "Slot 'machin' was successfully declared." in captured.out
 
@@ -97,7 +97,7 @@ def test_execute(capsys):
         assert len(unit._all_rules) == 0
     except (KeyError, ValueError):
         pytest.fail("Unexpected error, 'declare' command didn't work.")
-    
+
     captured = capsys.readouterr()
     assert "Intent 'machin' was successfully declared." in captured.out
 
@@ -108,4 +108,4 @@ def test_abstract_methods():
         cmd.execute_on_unit(None, None, None)
     with pytest.raises(NotImplementedError):
         cmd.finish_execution()
-    
+

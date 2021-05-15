@@ -66,7 +66,7 @@ def make_all_possibilities(
                 )
             current_randgen_mapping[randgen_name] = not opposite
             setattr(ex, RANDGEN_MAPPING_KEY, current_randgen_mapping)
-        
+
         current_randgen_mapping = \
             getattr(empty_example, RANDGEN_MAPPING_KEY, dict())
         if randgen_name in current_randgen_mapping:
@@ -111,7 +111,7 @@ def merge_randgen_mappings(example1, example2):
         return deepcopy(mapping2)
     if mapping2 is None:
         return deepcopy(mapping1)
-    
+
     result = deepcopy(mapping1)
     for randgen_name in mapping2:
         if randgen_name not in result:

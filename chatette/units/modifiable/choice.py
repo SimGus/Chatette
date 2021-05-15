@@ -26,26 +26,26 @@ class Choice(ModifiableItem):
 
     def _compute_full_name(self):
         return "choice"
-    
+
     def _compute_nb_possibilities(self):
         acc = 0
         for rule in self._rules:
             acc += rule.get_max_nb_possibilities()
         return acc
-    
+
     def add_rule(self, rule):
         """Adds the rule `rule` to the list of rules."""
         self._rules.append(rule)
     def add_rules(self, rules):
         """Adds each of the rules `rule` to the list of rules."""
         self._rules.extend(rules)
-    
+
     def remove_rule(self, index):
         """Removes the rule at `index`th rule."""
         if index < 0 or index >= len(self._rules):
             raise ValueError("Tried to remove rule at invalid index.")
         del self._rule[index]
-    
+
     def _choose_rule(self):
         """
         Returns a rule at random from the list of rules for this definition.
@@ -62,9 +62,9 @@ class Choice(ModifiableItem):
                 self.full_name.capitalize() + " does not have any rule to " + \
                 "generate."
             )
-        
+
         return rule.generate_random()
-    
+
     def _generate_all_strategy(self):
         generated_examples = []
         for rule in self._rules:

@@ -27,7 +27,7 @@ class CommandLineInterpreter(Singleton):
             self.facade = None
         else:
             self.facade = Facade.get_or_create_from_args(args)
-        
+
         self.introduce()
         if commands_file_path is not None:
             self._dont_enter_interactive_mode = \
@@ -43,7 +43,7 @@ class CommandLineInterpreter(Singleton):
         execute all the commands that are inside it, one command per line
         (except lines starting with `//`). Stops the execution if a line is not
         a valid command.
-        Returns `True` if the interactive mode shouldn't be entered and 
+        Returns `True` if the interactive mode shouldn't be entered and
         `False` otherwise.
         """
         print("Executing commands from file " + commands_file_path)

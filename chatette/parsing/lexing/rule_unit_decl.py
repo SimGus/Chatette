@@ -19,14 +19,14 @@ class RuleUnitDecl(LexingRule):
     def _apply_strategy(self, **kwargs):
         if not self._try_to_match_rule(RuleUnitStart):
             return False
-        
+
         if self._text.startswith(CASE_GEN_SYM, self._next_index):
             self._next_index += 1
             self._update_furthest_matched_index()
             self._tokens.append(
                 LexicalToken(TerminalType.casegen_marker, CASE_GEN_SYM)
             )
-        
+
         identifier = extract_identifier(self._text, self._next_index)
         if identifier is not None:
             self._next_index += len(identifier)
@@ -34,10 +34,10 @@ class RuleUnitDecl(LexingRule):
             self._tokens.append(
                 LexicalToken(TerminalType.unit_identifier, identifier)
             )
-        
+
         if not self._match_any_order([None, RuleArgDecl, RuleVariation]):
             return False
-        
+
         if not self._text.startswith(UNIT_END_SYM, self._next_index):
             self.error_msg = \
                 "Invalid token. Expected the end of the unit declaration " + \
@@ -63,4 +63,3 @@ class RuleUnitDecl(LexingRule):
         self._tokens.append(LexicalToken(unit_end_type, UNIT_END_SYM))
 
         return True
-        

@@ -12,7 +12,7 @@ class LineCountFileWrapper(object):
     """
     A wrapper of `io.File` that keeps track of the line number it is reading.
     """
-    
+
     def __init__(self, filepath, mode='r'):
         self.name = cast_to_unicode(filepath)
         self.f = io.open(filepath, mode)
@@ -27,7 +27,7 @@ class LineCountFileWrapper(object):
         self.line_nb += 1
         return self.f.readline()
 
-    # to allow using in 'with' statements 
+    # to allow using in 'with' statements
     def __enter__(self):
         return self
 

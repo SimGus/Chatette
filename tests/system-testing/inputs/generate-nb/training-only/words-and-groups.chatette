@@ -1,15 +1,15 @@
 %[single word group](1)
     [a word group]
-    
+
 %[words and word groups](train:'2')
     a word [a group]
     [a group] a word
     word [group] word [group] [group]
-    
+
 %[casegen groups]('train':2)
     [&casegened!]
     word [&casegened] [&another]
-    
+
 %[&casegen intent](training:'1')
     [word group]
     word [word group]
@@ -17,7 +17,7 @@
 %[randgen](train:3)
     word [maybe group?]
     [group] [maybe group?]
-    
+
 %[both](training:4)
     word [&maybe casegened group?]
     [group] [&maybe casegened group?]

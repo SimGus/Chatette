@@ -31,7 +31,7 @@ class RuleUnitRule(LexingRule):
             self.error_msg = \
                 "Invalid token. Expected indentation within unit definitions."
             return False
-        
+
         while True:
             if self._next_index == len(self._text):
                 return True
@@ -44,19 +44,19 @@ class RuleUnitRule(LexingRule):
                 self._update_furthest_matched_index(content_rule)
                 self.error_msg = content_rule.error_msg
                 break
-        
+
         if parsing_slot_def:
             old_error_msg = self.error_msg
             if not self._try_to_match_rule(RuleSlotVal, **kwargs):
                 self.error_msg = old_error_msg
-        
+
         if self._next_index < len(self._text):
             old_error_msg = self.error_msg
             if (
                 not self._try_to_match_rule(RuleComment) and old_error_msg is not None
             ):
                 self.error_msg = old_error_msg
-        
+
         if self._next_index < len(self._text):
             return False
         return True

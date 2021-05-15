@@ -18,7 +18,7 @@ class HideCommand(CommandStrategy):
         super(HideCommand, self).__init__(command_str, quiet)
         self._units_to_delete = []
         self._var_to_delete = []
-    
+
     def execute_on_unit(self, unit_type, unit_name, variation_name=None):
         try:
             unit = AST.get_or_create()[unit_type][unit_name]
@@ -54,7 +54,7 @@ class HideCommand(CommandStrategy):
                 unit_type.name.capitalize() + " '" + unit_name + \
                 "' was not defined."
             )
-    
+
     def finish_execution(self):
         for (unit_type, unit_name) in self._units_to_delete:
             AST.get_or_create().delete_unit(unit_type, unit_name)

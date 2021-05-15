@@ -25,7 +25,7 @@ class TestModifiersRepr(object):
             str(repr) == \
                 "ModifiersRepresentation(casegen: False randgen: No " + \
                 "arg name: None arg value: None)"
-    
+
     def test_short_desc(self):
         repr = ModifiersRepresentation()
         assert repr.short_description() == "No modifiers\n"
@@ -40,13 +40,13 @@ class TestModifiersRepr(object):
         assert \
             repr.short_description() == \
                 "Modifiers:\n- random generation: test (50%)\n"
-        
+
         repr.randgen._present = False
         repr.argument_name = "test"
         assert \
             repr.short_description() == \
                 "Modifiers:\n- argument name: test\n"
-        
+
         repr.argument_name = None
         repr.argument_value = "test"
         assert \
@@ -67,7 +67,7 @@ class TestRandgenRepr(object):
         assert not repr
         repr._present = True
         assert bool(repr)
-    
+
     def test_str(self):
         repr = RandgenRepresentation()
         assert str(repr) == "No"

@@ -24,7 +24,7 @@ class TestShouldGenerate(object):
             assert not should_generate(None, 0)
         for _ in range(5):
             assert should_generate(None, 100)
-        
+
         for _ in range(5):
             mapping = dict()
             should_generate("randgen name", 50, False, mapping)
@@ -38,7 +38,7 @@ class TestShouldGenerate(object):
         for _ in range(5):
             mapping = {"name": False}
             assert should_generate("name", 50, True, mapping)
-    
+
 class TestMakeAllPossibilities(object):
     def test_make_all_possibilities(self):
         empty = Example()
@@ -66,7 +66,7 @@ class TestMakeAllPossibilities(object):
                 assert current_mapping["randgen"]
             else:
                 assert not current_mapping["randgen"]
-    
+
     def test_errors(self):
         empty = Example()
         examples = [Example("test1"), Example("test2")]
@@ -96,7 +96,7 @@ class TestCanConcatExamples(object):
         setattr(ex1, RANDGEN_MAPPING_KEY, {"randgen name": True})
         assert can_concat_examples(ex1, ex2)
         assert can_concat_examples(ex2, ex1)
-    
+
     def test_mapping_compatible(self):
         ex1 = Example("test1")
         ex2 = Example("test2")
@@ -130,7 +130,7 @@ class TestCanConcatExamples(object):
         setattr(ex2, RANDGEN_MAPPING_KEY, {"name": False, "name2": True})
         assert can_concat_examples(ex1, ex2)
         assert can_concat_examples(ex2, ex1)
-    
+
     def test_mapping_incompatible(self):
         ex1 = Example("test1")
         ex2 = Example("test2")
@@ -204,7 +204,7 @@ class TestConcatExamplesRandgen(object):
         concated = concat_examples_with_randgen(ex1, ex2)
         assert concated.text == ex1.text
         assert getattr(concated, RANDGEN_MAPPING_KEY, None) == mapping
-    
+
     def test_concat(self):
         ex1 = Example("test1")
         ex2 = Example("test2")
