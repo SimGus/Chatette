@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Potential error when using random generation modifier (PR [#49](https://github.com/SimGus/Chatette/pull/49))
 - Crash when having an annotation on a slot or alias
 - Potential crash when logging a syntax error
+- Usage of deprecated syntax in complex examples
 
 ### Deprecated
 - Python versions 2.7 and <=3.2

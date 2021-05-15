@@ -1,11 +1,10 @@
-; This file shouldn't be fed directly to the Chatette generator
-; (it will be included inside the master file)
-; Contains information about the client
-; !!! Client: La Louvière !!!
+// This file shouldn't be fed directly to the Chatette generator
+// (it will be included inside the master file)
+// Contains information about the client
 
 ~[client factory name]
   [&La] [&Louviere]
-;[&La] [&Louvière]  ; Non-ascii characters may be a problem with python 2
+//[&La] [&Louvière]  // Non-ascii characters may be a problem with python 2
 
 ~[partner factory name]
   [&Strasbourg]

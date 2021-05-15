@@ -1,7 +1,6 @@
-; This file shouldn't be fed directly to the Chatette generator
-; (it will be included inside the master file)
-; Contains the definitions of the production lines
-; !!! Client: La Louvière !!!
+// This file shouldn't be fed directly to the Chatette generator
+// (it will be included inside the master file)
+// Contains the definitions of the production lines
 
 ~[prodline$ACRONYM]
   ~[production line] $ACRONYM
@@ -14,7 +13,7 @@
 ~[LAL_HSM#long]
     ~[prodline$LAL_HSM]
     ~[prodline$lal_hsm]
-    {our/the [internal?]} ~[line name#hot strip mill] ~[production line?]
+    [our|the [internal?]] ~[line name#hot strip mill] ~[production line?]
     the ~[line name#hot strip mill] ~[production line?] of ~[client factory name]
 ~[LAL_SKP#long]
     ~[prodline$LAL_SKP]
@@ -25,7 +24,7 @@
 ~[LAL_PCK#long]
     ~[prodline$LAL_PCK]
     ~[prodline$lal_pck]
-    {our/the internal} ~[line name#pickling] ~[production line?]
+    [our|the internal] ~[line name#pickling] ~[production line?]
     the ~[line name#pickling] ~[production line?] of ~[client factory name]
 ~[EXT_PCK#long]
     ~[prodline$EXT_PCK]
@@ -34,7 +33,7 @@
 ~[LAL_CRM#long]
     ~[prodline$LAL_CRM]
     ~[prodline$lal_crm]
-    {our/the internal} ~[line name#cold rolling mill] ~[production line?]
+    [our|the internal] ~[line name#cold rolling mill] ~[production line?]
     the ~[line name#cold rolling mill] ~[production line?] of ~[client factory name]
 ~[EXT_CRM#long]
     ~[prodline$EXT_CRM]
@@ -43,12 +42,12 @@
 ~[LAL_PAC#long]
     ~[prodline$LAL_PAC]
     ~[prodline$lal_pac]
-    {our/the internal} ~[line name#packing] ~[production line?]
+    [our|the internal] ~[line name#packing] ~[production line?]
     the ~[line name#packing] ~[production line?] of ~[client factory name]
 ~[LAL_SHP#long]
     ~[prodline$LAL_SHP]
     ~[prodline$lal_shp]
-    {our/the internal} ~[line name#shipping] ~[production line?]
+    [our|the internal] ~[line name#shipping] ~[production line?]
     the ~[line name#shipping] ~[production line?] of ~[client factory name]
 ~[STR_GLV#long]
     ~[prodline$STR_GLV]

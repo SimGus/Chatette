@@ -1,34 +1,34 @@
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-; File to feed to the Chatette generator (https://github.com/SimGus/Chatette) ;
-; Contains templates to generate datasets for Rasa NLU                        ;
-; Master file                                                                 ;
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+/////////////////////////////////////////////////////////////////////////////////
+// File to feed to the Chatette generator (https:||github.com|SimGus|Chatette) //
+// Contains templates to generate datasets for Rasa NLU                        //
+// Master file                                                                 //
+/////////////////////////////////////////////////////////////////////////////////
 
-;=============== Includes ===================
+//=============== Includes ===================
 |client_info.chatette
 |aliases.chatette
 |slots.chatette
 
-;=============== Intents definitions ======================
-;-------------- Intermediate answers -----------------
+//=============== Intents definitions ======================
+//-------------- Intermediate answers -----------------
 %[affirm](20)
   ~[agree]
 %[deny](15)
   ~[disagree]
 
 %[&inform_production_line](200)
-  {~[yes],/~[no],?} ~[i said?] @[production_line#long] @[line_number#long?][.?]
-  {~[yes],/~[no],?} ~[i said?] @[production_line#acronym] @[line_number#short?][.?]
+  [~[yes],|~[no],?] ~[i said?] @[production_line#long] @[line_number#long?][.?]
+  [~[yes],|~[no],?] ~[i said?] @[production_line#acronym] @[line_number#short?][.?]
 %[&inform_line_number](70)
-  {~[yes],/~[no],?} ~[i said?] @[line_number]
+  [~[yes],|~[no],?] ~[i said?] @[line_number]
 
 %[&inform_filter_time](120)
-  {~[yes],/~[no],?} ~[i said?] @[filter_time]
-; Missing completion here
+  [~[yes],|~[no],?] ~[i said?] @[filter_time]
+// Missing completion here
 %[&inform_utilization](180)
-  {~[yes],/~[no],?} ~[i said?] @[utilization#number only]
+  [~[yes],|~[no],?] ~[i said?] @[utilization#number only]
 
-;--------------- Queries ----------------------
+//--------------- Queries ----------------------
 %[&query_machine_planning](1300)
   ~[what is#singular] the ~[planning of] @[production_line#long] @[line_number#long?]~[question mark?]
   ~[what is#singular] the ~[planning of] @[production_line#acronym] @[line_number#short?]~[question mark?]
@@ -43,15 +43,13 @@
   ~[ask?] [all?] the ~[order#plural] ~[such that are] @[filter_completion][ please?]~[question mark?]
 
 
-;--------------- Analysis ----------------------
+//--------------- Analysis ----------------------
 %[&why_machine_utilization](1500)
-  ~[why] is @[production_line#long] @[line_number#long?] {@[utilization#positive]/@[utilization#negative]}~[question mark?]
-  ~[why] is @[production_line#acronym] @[line_number#short?] {@[utilization#positive]/@[utilization#negative]}~[question mark?]
-  ~[why] ~[auxiliary#no elision] @[production_line#long] @[line_number#long?] be {@[utilization#positive]/@[utilization#negative]}~[question mark?]
-  ~[why] ~[auxiliary#no elision] @[production_line#acronym] @[line_number#short?] be {@[utilization#positive]/@[utilization#negative]}~[question mark?]
+  ~[why] is @[production_line#long] @[line_number#long?] [@[utilization#positive]|@[utilization#negative]]~[question mark?]
+  ~[why] is @[production_line#acronym] @[line_number#short?] [@[utilization#positive]|@[utilization#negative]]~[question mark?]
+  ~[why] ~[auxiliary#no elision] @[production_line#long] @[line_number#long?] be [@[utilization#positive]|@[utilization#negative]]~[question mark?]
+  ~[why] ~[auxiliary#no elision] @[production_line#acronym] @[line_number#short?] be [@[utilization#positive]|@[utilization#negative]]~[question mark?]
   ~[ask] ~[why] @[production_line#long] @[line_number#long?] ~[is#no elision] @[utilization#positive]~[question mark?]
   ~[ask] ~[why] @[production_line#acronym] @[line_number#short?] ~[is#no elision] @[utilization#positive]~[question mark?]
-  ~[what caused] @[production_line#long] @[line_number#long?] to be {@[utilization#positive]/@[utilization#negative]}~[question mark?]
-  ~[what caused] @[production_line#acronym] @[line_number#short?] to be {@[utilization#positive]/@[utilization#negative]}~[question mark?]
-
-;--------------- Recommendations ----------------
+  ~[what caused] @[production_line#long] @[line_number#long?] to be [@[utilization#positive]|@[utilization#negative]]~[question mark?]
+  ~[what caused] @[production_line#acronym] @[line_number#short?] to be [@[utilization#positive]|@[utilization#negative]]~[question mark?]

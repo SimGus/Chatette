@@ -1,10 +1,9 @@
-; This file shouldn't be fed directly to the Chatette generator
-; (it will be included inside the master file)
-; Contains the slots definitions
-; !!! Client: La Louvière !!!
+// This file shouldn't be fed directly to the Chatette generator
+// (it will be included inside the master file)
+// Contains the slots definitions
 
-;=============== Slots definitions =====================
-;--------------- Production lines ---------------------
+//=============== Slots definitions =====================
+//--------------- Production lines ---------------------
 @[production_line#long]
   ~[GLO_SSP#long] = /
   ~[LAL_HSM#long] = /
@@ -45,15 +44,15 @@
   ~[GLO_CLI#acronym] = /
 
 @[line_number#long]
-  {[number ]/\#}1 = 1
-  {[number ]/\#}2 = 2
-  {[number ]/\#}3 = 3
-  {[number ]/\#}4 = 4
-  {[number ]/\#}5 = 5
-  {[number ]/\#}6 = 6
-  {[number ]/\#}7 = 7
-  {[number ]/\#}8 = 8
-  {[number ]/\#}9 = 9
+  [[number ]|\#]1 = 1
+  [[number ]|\#]2 = 2
+  [[number ]|\#]3 = 3
+  [[number ]|\#]4 = 4
+  [[number ]|\#]5 = 5
+  [[number ]|\#]6 = 6
+  [[number ]|\#]7 = 7
+  [[number ]|\#]8 = 8
+  [[number ]|\#]9 = 9
 @[line_number#short]
     1
     2
@@ -65,12 +64,12 @@
     8
     9
 
-;----------------- Time ----------------------
+//----------------- Time ----------------------
 @[filter_time]
   ~[late]
   ~[on time]
 
-;---------------- Completion ------------------
+//---------------- Completion ------------------
 @[filter_completion]
   ~[fully planned] = 1.0
   ~[planned at$1.0] = 1.0
@@ -86,7 +85,7 @@
   ~[planned at$0.0] = 0.0
   ~[not planned] = 0.0
 
-;------------------ Utilization ------------------
+//------------------ Utilization ------------------
 @[utilization#positive]
   ~[fully used] = 1.0
   ~[used at$100] = 1.0

@@ -5,44 +5,44 @@
 ~[help#noun]
     help
     aid
-    
+
 ~[me]
-    {me/us}
-   
+    [me|us]
+
 ~[i need]
-    [&i]{'d/ would?} {need/want}
-    [&i]{'d/ would} like
+    [&i]['d| would?] [need|want]
+    [&i]['d| would] like
 
 ~[can you]
     can you
     could you
     would you [be so kind and?]
-    
+
 ~[thing#singular]
-    {thing/stuff}
+    [thing|stuff]
 ~[thing#plural]
-    {kind of/type of} {things/stuff}
-    
-    
+    [kind of|type of] [things|stuff]
+
+
 ~[book]
     book
     register
-    
+
 ~[from airport]
     from @[source-airport]
 ~[to airport]
     [to go?] to @[source-airport]
-    
+
 
 ~[this]
     this
     that
     it
-    
+
 ~[be]
     is
-    {will/would} be
-    
+    [will|would] be
+
 ~[for nb people]
-    for {@[nb-people$one]/@[nb-people$1]}
-    
+    for @[nb-people]
+
