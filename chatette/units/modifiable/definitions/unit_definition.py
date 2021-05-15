@@ -94,6 +94,7 @@ class UnitDefinition(ModifiableItem):
         variation.
         @raises: `ValueError` if one of the rules in `rules` is not valid.
         """
+        rule = None
         for rule in rules:
             self._check_rule_validity(rule)
         if variation_name in self._variation_rules:
@@ -117,7 +118,7 @@ class UnitDefinition(ModifiableItem):
         # TODO decide what to do with `variation_name`
         if index < 0 or index >= len(self._all_rules):
             raise ValueError("Tried to remove rule at invalid index.")
-        del self._rule[index]
+        del self._all_rules[index]
 
 
     def _choose_rule(self, variation_name=None):
