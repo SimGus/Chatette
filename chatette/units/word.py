@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+# coding: utf-8
 
 """
 Module `chatette.units.word`
 Contains the definition of words as contents of rules.
 """
-
 
 from chatette.units import Example
 from chatette.units.generating_item import GeneratingItem
@@ -41,7 +40,7 @@ class Word(GeneratingItem):
 
     def generate_nb_possibilities(self, nb_possibilities):
         return self._generate_n_strategy()
-    def _generate_n_strategy(self, n):
+    def _generate_n_strategy(self, n=None):
         if self._leading_space:
             return [Example(' ' + self._name)]
         return [Example(self._name)]
