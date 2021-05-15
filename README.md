@@ -34,6 +34,7 @@
 
 <p align="center">
     <a href="#installation">Installation</a> •
+    <a href="#uninstallation">Uninstallation</a> •
     <a href="#how-to-use-chatette">How to use <i>Chatette</i>?</a> •
     <a href="#chatette-vs-chatito"><i>Chatette</i> vs <i>Chatito</i>?</a> •
     <a href="#development">Development</a> •
@@ -76,6 +77,12 @@ You can then install the project (as an editable package) using pip, by executin
 pip install -e .
 ```
 You can then run the module by using the commands below in the cloned directory.
+
+## Uninstallation
+You can just use pip to uninstall *Chatette*:
+```sh
+pip uninstall chatette
+```
 
 ## How to use *Chatette*?
 
