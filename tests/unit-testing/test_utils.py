@@ -42,16 +42,6 @@ class TestSingleton(object):
         assert singleton != reset
 
 
-class TestPrints(object):
-    def test_existences(self):
-        assert "print_DBG" in dir(chatette.utils)
-        assert "print_warn" in dir(chatette.utils)
-
-    def test_no_return(self):
-        assert chatette.utils.print_DBG("Test") is None
-        assert chatette.utils.print_warn("Test") is None
-
-
 class TestCastToUnicode(object):
     def test_nb(self):
         """Tests that the cast doesn't do anything for numeric types."""

@@ -8,7 +8,7 @@ import io
 from six.moves import input
 
 from chatette import __version__
-from chatette.utils import Singleton, print_DBG
+from chatette.utils import Singleton
 from chatette.facade import Facade
 
 from chatette.cli.interactive_commands import \

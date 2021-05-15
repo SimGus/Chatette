@@ -58,17 +58,6 @@ class Singleton(object):
         return (cls._instance is not None)
 
 
-# pylint: disable=invalid-name
-def print_DBG(txt):
-    """Prints debug information on stdout."""
-    print("[DBG] " + txt)
-
-
-def print_warn(txt):
-    """Warns the user using stdout."""
-    print("\n[WARN] " + txt + "\n", file=sys.stderr)
-
-
 def cast_to_unicode(anything):
     """
     If executed with Python 2.7, cast any string that is in `anything`

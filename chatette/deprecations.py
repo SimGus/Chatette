@@ -2,7 +2,8 @@
 
 from warnings import warn
 
-from chatette.utils import Singleton, print_warn, cast_to_unicode
+from chatette.utils import Singleton, cast_to_unicode
+from chatette.log import print_warn
 from chatette.parsing.utils import \
     OLD_COMMENT_SYM, COMMENT_SYM, \
     OLD_CHOICE_START, OLD_CHOICE_END, CHOICE_START, CHOICE_END

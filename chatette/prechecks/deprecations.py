@@ -1,5 +1,5 @@
 from .pyversion import _is_deprecated_python_version, _get_python_version_as_str
-from chatette.utils import print_warn
+from chatette.log import print_warn
 
 
 def check_for_deprecations():

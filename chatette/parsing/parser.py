@@ -10,7 +10,8 @@ those files.
 from __future__ import print_function
 from six import string_types
 
-from chatette.utils import print_DBG, print_warn, UnitType, cast_to_unicode
+from chatette.utils import UnitType, cast_to_unicode
+from chatette.log import print_DBG, print_warn
 from chatette.parsing import utils
 from chatette.parsing.lexing import \
     remove_comment_tokens, find_matching_choice_end, \

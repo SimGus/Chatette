@@ -10,7 +10,8 @@ import shutil
 from random import seed as random_seed
 from six.moves import input, getcwd
 
-from chatette.utils import Singleton, print_DBG, print_warn, random_string
+from chatette.utils import Singleton, random_string
+from chatette.log import print_DBG, print_warn
 from chatette.parsing.parser import Parser
 from chatette.generator import Generator
 import chatette.adapters.factory as adapter_factory

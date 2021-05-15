@@ -2,7 +2,8 @@
 # coding: utf-8
 
 from chatette.configuration import Configuration
-from chatette.utils import print_DBG, UnitType
+from chatette.utils import UnitType
+from chatette.log import print_DBG
 from chatette.units.ast import AST
 
 

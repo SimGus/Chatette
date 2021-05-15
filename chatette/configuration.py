@@ -5,7 +5,8 @@ Contains the singleton storing the current configuration
 of the program.
 """
 
-from chatette.utils import Singleton, print_warn
+from chatette.utils import Singleton
+from chatette.log import print_warn
 
 
 class Configuration(Singleton):
