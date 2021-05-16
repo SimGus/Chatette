@@ -45,7 +45,7 @@
 If you want to make large datasets of example data for Natural Language Understanding tasks without too much of a headache, *Chatette* is a project for you.
 
 <p align="center">
-    <img src="https://raw.githubusercontent.com/SimGus/Chatette/dev/public/images/preview.png" alt="Preview of Chatette's capabilities">
+    <img src="https://raw.githubusercontent.com/SimGus/Chatette/master/public/images/preview.png" alt="Preview of Chatette's capabilities">
 </p>
 <!-- TODO change dev branch to master in link -->
 
