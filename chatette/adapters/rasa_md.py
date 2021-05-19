@@ -117,7 +117,6 @@ class RasaMdAdapter(Adapter):
         if self._base_file_contents is None:
             return
         if not isinstance(self._base_file_contents, string_types):
-            self._base_file_contents = None
             raise SyntaxError(
                 "Couldn't load valid data from base file '" + \
                 self._base_file_contents + "'"
