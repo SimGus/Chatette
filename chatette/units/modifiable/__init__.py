@@ -7,7 +7,6 @@ All those classes extend the abstract class `ModifiableItem`
 which is a sub-class of `GeneratingItem`.
 """
 
-from abc import abstractmethod
 from random import choice as random_choice, uniform
 from copy import deepcopy
 

@@ -4,7 +4,6 @@ Module `chatette.parsing`
 Contains the lexer used by the parser and the definition of the tokens it uses.
 """
 
-from chatette.parsing import utils as putils
 from chatette.parsing.input_file_manager import InputFileManager
 from chatette.parsing.lexing.rule_line import RuleLine
 

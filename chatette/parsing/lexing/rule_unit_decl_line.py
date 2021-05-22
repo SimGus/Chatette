@@ -6,8 +6,6 @@ to tokenize a line that declares a unit.
 """
 
 from chatette.parsing.lexing.lexing_rule import LexingRule
-from chatette.parsing.lexing import LexicalToken, TerminalType
-from chatette.parsing.utils import CASE_GEN_SYM, UNIT_END_SYM
 
 from chatette.parsing.lexing.rule_unit_decl import RuleUnitDecl
 from chatette.parsing.lexing.rule_annotation import RuleAnnotation

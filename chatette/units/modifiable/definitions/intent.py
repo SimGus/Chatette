@@ -7,7 +7,7 @@ Contains the class representing an intent definition.
 from random import shuffle
 
 from chatette.utils import UnitType
-from chatette.units import Example, IntentExample, add_example_no_dup
+from chatette.units import IntentExample, add_example_no_dup
 from chatette.units.modifiable.definitions.unit_definition import \
     UnitDefinition
 

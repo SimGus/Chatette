@@ -4,8 +4,6 @@ Module `chatette.parsing.utils`
 Contains utility functions that are used by various parsing components.
 """
 
-from enum import Enum
-
 from chatette.utils import min_if_exist, UnitType
 
 

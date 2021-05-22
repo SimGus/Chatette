@@ -6,8 +6,6 @@ to tokenize a rule that is part of a unit definition.
 """
 
 from chatette.parsing.lexing.lexing_rule import LexingRule
-from chatette.parsing.lexing import LexicalToken, TerminalType
-from chatette.parsing.utils import find_next_comment, SLOT_VAL_SYM
 
 from chatette.parsing.lexing.rule_whitespaces import RuleWhitespaces
 from chatette.parsing.lexing.rule_content_rule_and_choice import \

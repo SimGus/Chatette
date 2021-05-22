@@ -13,8 +13,7 @@ from chatette.parsing.input_file_manager import InputFileManager
 
 from chatette.parsing.lexing.lexing_rule import LexingRule
 from chatette.parsing.lexing import LexicalToken, TerminalType
-from chatette.parsing.utils import find_next_comment, \
-    SLOT_VAL_SYM, \
+from chatette.parsing.utils import \
     CHOICE_START, CHOICE_END, CHOICE_SEP, \
     OLD_CHOICE_START, OLD_CHOICE_END, OLD_CHOICE_SEP, \
     CASE_GEN_SYM

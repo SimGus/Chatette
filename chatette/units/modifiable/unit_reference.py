@@ -108,7 +108,6 @@ class UnitReference(ModifiableItem):
                         "unnamed argument, while the definition " + \
                         "it references defines several arguments."
                     )
-                mapping = {arg_name: self._modifiers_repr.argument_value}  # TODO make that an OrderedDict to avoid having problems with arg names that are the same as the start of other ones (order the keys in descendent length of arg name)
                 mapping = \
                     OrderedDict(
                         [(arg_name, self._modifiers_repr.argument_value)]

@@ -75,7 +75,6 @@ class Choice(ModifiableItem):
     def as_template_str(self):
         result = CHOICE_START
         result += putils.get_template_pre_modifiers(self._modifiers_repr)
-        i = 0
         for i in range(len(self._rules)):
             if i != 0:
                 result += CHOICE_SEP

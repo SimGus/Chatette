@@ -75,7 +75,6 @@ class UnhideCommand(CommandStrategy):
                     "' is already defined in the parser."
                 )
         else:
-            unit = None
             try:
                 unit = AST.get_or_create()[unit_type][unit_name]
             except KeyError:

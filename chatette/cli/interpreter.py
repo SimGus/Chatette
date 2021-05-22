@@ -73,7 +73,6 @@ class CommandLineInterpreter(Singleton):
         """
         if self._dont_enter_interactive_mode:
             return
-        stop = False
         while True:
             print(">>> ", end='')
             try:
@@ -81,8 +80,7 @@ class CommandLineInterpreter(Singleton):
             except EOFError:
                 print("Exiting interactive mode")
                 break
-            stop = self.interpret_command(command_str)
-            if stop:
+            if self.interpret_command(command_str):
                 print("Exiting interactive mode")
                 break
 
