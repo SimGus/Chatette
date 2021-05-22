@@ -31,7 +31,7 @@ def main():
 def make_argument_parser():
     # pylint: disable=bad-continuation
     argument_parser = argparse.ArgumentParser(
-        description="Chatette v"+__version__+" -- " +
+        description="Chatette v" + __version__ + " -- " +
                     "Generates NLU datasets from template files",
         epilog="SimGus -- 2018 -- Released under MIT license",
         prog="Chatette",
@@ -50,6 +50,7 @@ def make_argument_parser():
 
     return argument_parser
 
+
 def _add_positional_arguments(argument_parser, should_be_optional=False):
     if should_be_optional:
         argument_parser.add_argument(
@@ -63,6 +64,7 @@ def _add_positional_arguments(argument_parser, should_be_optional=False):
             help="Path to master template file"
         )
 
+
 def _add_optional_arguments(argument_parser):
     argument_parser.add_argument(
         "-o", "--out", dest="output", required=False, type=str, default=None,
@@ -72,26 +74,26 @@ def _add_optional_arguments(argument_parser):
         "-l", "--local", dest="local", required=False,
         action="store_true", default=False,
         help="Change the base directory for output files " + \
-            "from the current working directory to the directory containing " + \
-            "the template file"
+             "from the current working directory to the directory containing " + \
+             "the template file"
     )
     argument_parser.add_argument(
         "-a", "--adapter", dest="adapter", required=False,
         type=str, default="rasa",
         help="Write adapter. " + \
-            "Possible values: ['rasa', 'rasamd' or 'rasa-md', 'jsonl']"
+             "Possible values: ['rasa', 'rasamd' or 'rasa-md', 'jsonl']"
     )
     argument_parser.add_argument(
         "--base-file", dest="base_filepath",
         required=False, type=str, default=None,
         help="Path to base file to extend with examples and synonyms. " + \
-            "Only with Rasa adapter."
+             "Only with Rasa adapter."
     )
     argument_parser.add_argument(
         "-s", "--seed", dest="seed",
         required=False, type=str, default=None,
         help="Seed for the random generator (any string " + \
-            "without spaces will work)"
+             "without spaces will work)"
     )
     argument_parser.add_argument(
         "-i", "--interactive", dest="interactive_mode",
@@ -102,7 +104,7 @@ def _add_optional_arguments(argument_parser):
         "-I", "--interactive-commands-file", dest="interactive_commands_file",
         required=False, default=None, type=str,
         help="Path to a file containing interactive mode commands " + \
-            "that will be directly run"
+             "that will be directly run"
     )
     argument_parser.add_argument(
         "-f", "--force", dest="force",
