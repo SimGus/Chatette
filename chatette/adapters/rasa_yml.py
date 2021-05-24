@@ -2,9 +2,14 @@ import os
 import io
 from collections import OrderedDict
 import ruamel.yaml as yaml
+from ruamel.yaml.scalarstring import DoubleQuotedScalarString
+from ruamel.yaml.error import YAMLError
+from ruamel.yaml.constructor import DuplicateKeyError
 
 from chatette.adapters._base import Adapter
 from chatette.utils import append_to_list_in_dict, cast_to_unicode
+
+YAML_VERSION = (1, 2)
 
 def intent_dict_to_list_of_dict(data):
     list_data = []
@@ -17,6 +22,18 @@ def intent_dict_to_list_of_dict(data):
         )
 
     return list_data
+
+def fix_yaml_loader() -> None:
+    """Ensure that any string read by yaml is represented as unicode."""
+    """Code from Rasa yaml reader"""
+    def construct_yaml_str(self, node):
+        # Override the default string handling function
+        # to always return unicode objects
+        return self.construct_scalar(node)
+
+    yaml.Loader.add_constructor("tag:yaml.org,2002:str", construct_yaml_str)
+    yaml.SafeLoader.add_constructor("tag:yaml.org,2002:str", construct_yaml_str)
+
 
 class RasaYMLAdapter(Adapter):
     def __init__(self, base_filepath=None):
@@ -94,18 +111,80 @@ class RasaYMLAdapter(Adapter):
             if len(synonyms[slot_name]) > 1
         ]
 
+    def _read_yaml(self, content):
+        fix_yaml_loader()
+        yaml_parser = yaml.YAML(typ='safe')
+        yaml_parser.version = YAML_VERSION
+        yaml_parser.preserve_quotes = True
+        yaml.allow_duplicate_keys = False
+
+        return yaml_parser.load(content)
+
     def _get_base_to_extend(self):
-        ### TODO Implement later
-        return self._get_empty_base()        
-        # if self._base_file_contents is None:
-        #     if self._base_filepath is None:
-        #         return self._get_empty_base()
-        #     with io.open(self._base_filepath, 'r', encoding='utf-8') as base_file:
-        #         self._base_file_contents = json.load(base_file)
-        #     self.check_base_file_contents()
-        # return self._base_file_contents
+        if self._base_file_contents is None:
+            if self._base_filepath is None:
+                return self._get_empty_base()
+            with io.open(self._base_filepath, 'r', encoding='utf-8') as base_file:
+                try:
+                    self._base_file_contents = self._read_yaml(base_file.read())
+                except (YAMLError, DuplicateKeyError) as e:
+                    raise YamlSyntaxException(self._base_filepath, e) 
+            self.check_base_file_contents()
+        return self._base_file_contents
 
     def _get_empty_base(self):
-        return {
-            "nlu": list()
-        }
+        base = OrderedDict()
+        base['version'] = DoubleQuotedScalarString('2.0')
+        base['nlu'] = list()
+        return base
+
+    def check_base_file_contents(self): 
+        """
+        Checks that `self._base_file_contents` contains well formatted NLU dictionary.
+        Throws a `SyntaxError` if the data is incorrect.
+        """
+        if self._base_file_contents is None:
+            return
+        if not isinstance(self._base_file_contents, dict):
+            self._base_file_contents = None
+            raise SyntaxError(
+                "Couldn't load valid data from base file '" + \
+                self._base_filepath + "'"
+            )
+        else:
+            if "nlu" not in self._base_file_contents:
+                self._base_file_contents = None
+                raise SyntaxError(
+                    "Expected 'nlu' as a root of base file '" + \
+                    self._base_filepath + "'")
+
+
+class YamlSyntaxException(Exception):
+    """Raised when a YAML file can not be parsed properly due to a syntax error."""
+    """code from rasa.shared.exceptions.YamlSyntaxException"""
+
+    def __init__(self, filename, underlying_yaml_exception):
+        self.filename = filename
+        self.underlying_yaml_exception = underlying_yaml_exception
+
+    def __str__(self):
+        if self.filename:
+            exception_text = "Failed to read '{}'.".format(self.filename)
+        else:
+            exception_text = "Failed to read YAML."
+
+        if self.underlying_yaml_exception:
+            self.underlying_yaml_exception.warn = None
+            self.underlying_yaml_exception.note = None
+            exception_text += " {}".format(self.underlying_yaml_exception)
+
+        if self.filename:
+            exception_text = exception_text.replace(
+                'in "<unicode string>"', 'in "{}"'.format(self.filename)
+            )
+
+        exception_text += (
+            "\n\nYou can use https://yamlchecker.com/ to validate the "
+            "YAML syntax of your file."
+        )
+        return exception_text
