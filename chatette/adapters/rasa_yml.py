@@ -71,11 +71,11 @@ class RasaYMLAdapter(Adapter):
             entity_annotation_text = ']{"entity": "' + entity.slot_name
             entity_text = result[entity._start_index:entity._start_index + entity._len]
             if entity_text != entity.value:
-                entity_annotation_text += f', "value": "{entity.value}'
+                entity_annotation_text += ', "value": "{}'.format(entity.value)
             if entity.role is not None:
-                entity_annotation_text += f', "role": "{entity.role}'
+                entity_annotation_text += ', "role": "{}'.format(entity.role)
             if entity.group is not None:
-                entity_annotation_text += f', "group": "{entity.group}'
+                entity_annotation_text += ', "group": "{}'.format(entity.group)
             result = \
                 result[:entity._start_index] + "[" + \
                 entity_text + entity_annotation_text + '"}' + \
