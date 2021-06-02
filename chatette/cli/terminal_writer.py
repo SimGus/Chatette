@@ -21,8 +21,10 @@ class TerminalWriter(object):
     def __init__(self, redirection_type=RedirectionType.append,
                  redirection_file_path=None):
         self.redirection_file_path = redirection_file_path
-        self.set_redirection_type(redirection_type)
         self.buffered_text = None
+
+        self._file_mode = None
+        self.set_redirection_type(redirection_type)
 
     def reset(self):
         self.redirection_file_path = None
@@ -32,14 +34,11 @@ class TerminalWriter(object):
         Sets redirection type.
         @pre: `redirection_type` is of type `RedirectionType`.
         """
-        if redirection_type is None:
-            self._file_mode = None
-            return
         if redirection_type == RedirectionType.append:
             self._file_mode = 'a+'
         elif redirection_type == RedirectionType.truncate:
             self._file_mode = 'w+'
-        else:
+        elif redirection_type == RedirectionType.quiet:
             self._file_mode = 'quiet'
 
     def get_redirection(self):
