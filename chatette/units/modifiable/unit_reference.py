@@ -90,29 +90,28 @@ class UnitReference(ModifiableItem):
                  - `SyntaxError` if the definition has more than one argument
                    defined.
         """
-        if self._definition is not None:
-            if (
-                self._modifiers_repr.argument_value is not None
-                and not isinstance(self._modifiers_repr.argument_value, dict)
-            ):
-                arg_name = self._definition._modifiers_repr.argument_name
-                if arg_name is None:
-                    raise SyntaxError(
-                        self.full_name.capitalize() + " was given an argument " + \
-                        "while the definition it references has no argument " + \
-                        "defined."
-                    )
-                if isinstance(arg_name, list):
-                    raise SyntaxError(
-                        self.full_name.capitalize() + " was given a single " + \
-                        "unnamed argument, while the definition " + \
-                        "it references defines several arguments."
-                    )
-                mapping = \
-                    OrderedDict(
-                        [(arg_name, self._modifiers_repr.argument_value)]
-                    )
-                self._modifiers_repr.argument_value = mapping
+        if self._definition is not None and (
+            self._modifiers_repr.argument_value is not None
+            and not isinstance(self._modifiers_repr.argument_value, dict)
+        ):
+            arg_name = self._definition._modifiers_repr.argument_name
+            if arg_name is None:
+                raise SyntaxError(
+                    self.full_name.capitalize() + " was given an argument " + \
+                    "while the definition it references has no argument " + \
+                    "defined."
+                )
+            if isinstance(arg_name, list):
+                raise SyntaxError(
+                    self.full_name.capitalize() + " was given a single " + \
+                    "unnamed argument, while the definition " + \
+                    "it references defines several arguments."
+                )
+            mapping = \
+                OrderedDict(
+                    [(arg_name, self._modifiers_repr.argument_value)]
+                )
+            self._modifiers_repr.argument_value = mapping
 
     def as_template_str(self):
         result = ""
