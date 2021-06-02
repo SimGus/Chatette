@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Python version is checked before running the script
 
+### Changed
+- Slightly modernize logo
+
 ### Fixed
 - "rasamd" adapter value missing from console help
 - Slot value missing in JSONL examples
@@ -15,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Crash when having an annotation on a slot or alias
 - Potential crash when logging a syntax error
 - Usage of deprecated syntax in complex examples
+- Incorrect error message when using "rasamd" adapter
+- Minor code style issues
 
 ### Deprecated
 - Python versions 2.7 and <=3.2
