@@ -93,7 +93,7 @@ class TestUnitRefBuilder(object):
 class TestUnitDefBuilder(object):
     def test_creation(self):
         with pytest.raises(TypeError):
-            builder = UnitDefBuilder()
+            UnitDefBuilder()
 
 class TestAliasDefBuilder(object):
     def test_creation(self):

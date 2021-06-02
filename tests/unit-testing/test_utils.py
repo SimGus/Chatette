@@ -162,7 +162,7 @@ class TestMinIfExist(object):
 
 class TestRandomString(object):
     def test_random_string(self):
-        for i in range(12):
+        for _ in range(12):
             assert len(random_string(12)) == 12
 
 

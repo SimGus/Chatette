@@ -25,7 +25,7 @@ def test_obj():
 
 
 def test_err(capsys):
-    facade = get_facade()
+    get_facade()
     cmd = RenameCommand('rename NOTHING "a" "b"')
     assert cmd.command_tokens == ["rename", "NOTHING", '"a"', '"b"']
     cmd.execute()
@@ -57,7 +57,7 @@ def test_err(capsys):
 def test_execute():
     cmd = RenameCommand('rename alias "can you" "could you"')
     assert cmd.command_tokens == ["rename", "alias", '"can you"', '"could you"']
-    facade = new_facade()
+    new_facade()
     cmd.execute()
     with pytest.raises(KeyError):
         AST.get_or_create()[UnitType.alias]["can you"]
@@ -68,7 +68,7 @@ def test_execute():
 
     cmd = RenameCommand('rename ~ "tell me" "a"')
     assert cmd.command_tokens == ["rename", "~", '"tell me"', '"a"']
-    facade = new_facade()
+    new_facade()
     cmd.execute()
     with pytest.raises(KeyError):
         AST.get_or_create()[UnitType.alias]["tell me"]

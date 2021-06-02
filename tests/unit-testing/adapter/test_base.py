@@ -21,7 +21,7 @@ class TestBatch(object):
 class TestAdapter(object):
     def test_abstract(self):
         with pytest.raises(TypeError):
-            adapter = Adapter()
+            Adapter()
 
     def test_generate_batch(self):
         for batch in Adapter._Adapter__generate_batch(["ex"], [], None):

@@ -26,7 +26,7 @@ def test_obj():
 
 
 def test_err(capsys):
-    facade = new_facade()
+    new_facade()
 
     cmd = DeclareCommand("declare")
     cmd.execute()
@@ -54,13 +54,12 @@ def test_err(capsys):
 
     cmd = DeclareCommand('declare alias "var"')
     cmd.execute()
-    captured = capsys.readouterr()
+    capsys.readouterr()
     assert "Alias 'var' is already defined."
 
 
 def test_execute(capsys):
-    print("AAAAAAAAAAAA")
-    facade = new_facade()
+    new_facade()
     cmd = DeclareCommand('declare alias "machin"')
     cmd.execute()
     try:
@@ -74,7 +73,7 @@ def test_execute(capsys):
     assert "Alias 'machin' was successfully declared." in captured.out
 
     print("AAAAAAAAAAAA")
-    facade = new_facade()
+    new_facade()
     cmd = DeclareCommand('declare slot "machin"')
     cmd.execute()
     try:
@@ -88,7 +87,7 @@ def test_execute(capsys):
     assert "Slot 'machin' was successfully declared." in captured.out
 
     print("AAAAAAAAAAAA")
-    facade = new_facade()
+    new_facade()
     cmd = DeclareCommand('declare intent "machin"')
     cmd.execute()
     try:

@@ -34,7 +34,7 @@ def test_err(capsys):
 def test_execute(capsys):
     cmd = ExistCommand('exist alias "sorry"')
     assert cmd.command_tokens == ["exist", "alias", '"sorry"']
-    facade = get_facade()
+    get_facade()
     cmd.execute()
     captured = capsys.readouterr()
     assert "alias 'sorry'\nNo modifiers\n0 variation(s)" in captured.out
@@ -55,7 +55,7 @@ def test_execute(capsys):
 def test_variations(capsys):
     cmd = ExistCommand('exist alias "var#one"')
     assert cmd.command_tokens == ["exist", "alias", '"var#one"']
-    facade = get_facade()
+    get_facade()
     cmd.execute()
     captured = capsys.readouterr()
     assert "alias 'var'\nNo modifiers\n2 variation(s):" in captured.out
@@ -65,7 +65,7 @@ def test_variations(capsys):
 
     cmd = ExistCommand('exist ~ "var#two with space"')
     assert cmd.command_tokens == ["exist", "~", '"var#two with space"']
-    facade = get_facade()
+    get_facade()
     cmd.execute()
     captured = capsys.readouterr()
     assert "alias 'var'\nNo modifiers\n2 variation(s):" in captured.out
@@ -75,7 +75,7 @@ def test_variations(capsys):
 
     cmd = ExistCommand('exist alias "var#no var"')
     assert cmd.command_tokens == ["exist", "alias", '"var#no var"']
-    facade = get_facade()
+    get_facade()
     cmd.execute()
     captured = capsys.readouterr()
     assert "alias 'var'\nNo modifiers\n2 variation(s):" in captured.out

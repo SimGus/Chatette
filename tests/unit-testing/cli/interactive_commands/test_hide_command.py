@@ -22,7 +22,7 @@ def test_obj():
 
 
 def test_err(capsys):
-    facade = new_facade()
+    new_facade()
     cmd = HideCommand('hide alias "inexistant"')
     cmd.execute()
     captured = capsys.readouterr()
@@ -57,7 +57,7 @@ def test_err(capsys):
 
 
 def test_execute(capsys):
-    facade = new_facade()
+    new_facade()
     cmd = HideCommand('hide alias "tell me"')
     try:
         AST.get_or_create()[UnitType.alias]["tell me"]
@@ -92,11 +92,11 @@ def test_execute(capsys):
 
     # Hide a unit and try to restore it twice
     cmd = HideCommand('hide ~ "can you"')
-    facade = new_facade()
+    new_facade()
     cmd.execute()
 
     cmd = UnhideCommand('unhide alias "can you"')
-    other_facade = new_facade()
+    new_facade()
     cmd.execute()
 
     captured = capsys.readouterr()
@@ -105,7 +105,7 @@ def test_execute(capsys):
 
 def test_variations(capsys):
     cmd = HideCommand('hide alias "var#one"')
-    facade = new_facade()
+    new_facade()
     cmd.execute()
     try:
         unit = AST.get_or_create()[UnitType.alias]["var"]
@@ -143,11 +143,11 @@ def test_variations(capsys):
 
     # Hide a variation and try to restore it twice
     cmd = HideCommand('hide ~ "var#one"')
-    facade = new_facade()
+    new_facade()
     cmd.execute()
 
     cmd = HideCommand('hide ~ "var#one"')
-    other_facade = new_facade()
+    new_facade()
     cmd.execute()
 
     cmd = UnhideCommand('unhide ~ "var#one"')

@@ -30,7 +30,7 @@ def test_execute(capsys):
     assert "Alias 'inexistant' was not defined." in captured.out
 
     cmd = DeleteCommand('delete alias "tell me"')
-    facade = new_facade()
+    new_facade()
     try:
         AST.get_or_create()[UnitType.alias]["tell me"]
     except KeyError:
