@@ -11,4 +11,4 @@ def _is_supported_python_version():
 
 def _is_deprecated_python_version():
     return version_info[0] == 2 \
-        or version_info[0] == 3 and version_info[1] < 3
+        or version_info[0] == 3 and version_info[1] < 4

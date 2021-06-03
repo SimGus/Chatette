@@ -22,7 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Minor code style issues
 
 ### Deprecated
-- Python versions 2.7 and <=3.2
+- Python versions 2.7 and <= 3.3
 
 ## [1.6.2] - 2019-12-18
 ### Fixed
