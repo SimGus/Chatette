@@ -1,0 +1,22 @@
+# Contains all possible examples for the Chatette template file with the same name.
+single_role>>>slot one
+single_role>>>slot1
+single_group>>>slot one
+single_group>>>slot1
+single_role_group>>>slot one
+single_role_group>>>slot1
+multiple_role>>>slot one slot one
+multiple_role>>>slot one slot1
+multiple_role>>>slot1 slot one
+multiple_role>>>slot1 slot1
+multiple_group>>>slot one slot one
+multiple_group>>>slot one slot1
+multiple_group>>>slot1 slot one
+multiple_group>>>slot1 slot1
+multiple_role_group>>>slot one slot one
+multiple_role_group>>>slot one slot1
+multiple_role_group>>>slot1 slot one
+multiple_role_group>>>slot1 slot1
+
+not_role_group>>>slot one("role":"role"
+not_role_group>>>slot1("role":"role"

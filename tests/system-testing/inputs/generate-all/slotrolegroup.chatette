@@ -1,0 +1,25 @@
+%[single_role]
+    @[slot]("role":"role")
+
+%[single_group]
+    @[slot]("group":"group")
+
+%[single_role_group]
+    @[slot]("role":"role", "group":"group")
+
+%[multiple_role]
+    @[slot]("role":"role1") @[slot]("role":"role2")
+
+%[multiple_group]
+    @[slot]("group":"group1") @[slot]("group":"group2")
+
+%[multiple_role_group]
+    @[slot]("role":"role1", "group":"group1") @[slot]("role":"role2", "group":"group2")
+    
+%[not_role_group]
+    @[slot]("role":"role"
+
+@[slot]
+    slot one
+    slot1
+
