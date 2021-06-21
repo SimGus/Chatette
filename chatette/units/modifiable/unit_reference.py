@@ -137,7 +137,6 @@ class SlotRoleGroupReference(UnitReference):
         super(SlotRoleGroupReference, self).__init__(
             identifier, unit_type, leading_space, modifiers
         )
-        self._unit_type = 'slot'
 
         # dictionary {"role": "value"}, or {"group": "value"}, or both
         self._role = rolegroup.get('role', None)
