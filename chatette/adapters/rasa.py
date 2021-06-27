@@ -38,12 +38,18 @@ class RasaAdapter(Adapter):
 
     def prepare_example(self, example):
         def entity_to_rasa(entity):
-            return {
+            entity_dict = {
                 "entity": entity.slot_name,
                 "value": entity.value,
                 "start": entity._start_index,
                 "end": entity._start_index + entity._len,
             }
+            if entity.role is not None:
+                entity_dict['role'] = entity.role
+            if entity.group is not None:
+                entity_dict['group'] = entity.group
+
+            return entity_dict
 
         return {
             "intent": example.intent_name,

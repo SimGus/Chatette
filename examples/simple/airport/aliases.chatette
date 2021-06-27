@@ -23,6 +23,6 @@
     register
     
 ~[from airport]
-    from @[source-airport]
+    from @[airport#source]("role":"source")
 ~[to airport]
-    [to go?] to @[source-airport]
+    [to go?] to @[airport#dest]('role':'destination')

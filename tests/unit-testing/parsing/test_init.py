@@ -15,7 +15,7 @@ from chatette.utils import UnitType
 
 from chatette.modifiers.representation import ModifiersRepresentation
 from chatette.units.modifiable.choice import Choice
-from chatette.units.modifiable.unit_reference import UnitReference
+from chatette.units.modifiable.unit_reference import UnitReference, SlotRoleGroupReference
 from chatette.units.modifiable.definitions.alias import AliasDefinition
 from chatette.units.modifiable.definitions.slot import SlotDefinition
 from chatette.units.modifiable.definitions.intent import IntentDefinition
@@ -89,6 +89,32 @@ class TestUnitRefBuilder(object):
         assert not unit_ref._leading_space
         assert unit_ref._unit_type == UnitType.alias
         assert unit_ref._name == "id"
+
+    def test_create_concrete_rolegroup_ref(self):
+        builder = UnitRefBuilder()
+        builder.identifier = "id"
+
+        with pytest.raises(ValueError):
+            builder.create_concrete()
+
+        builder.type = UnitType.slot
+        modifiers = builder._build_modifiers_repr()
+        assert isinstance(modifiers, ModifiersRepresentation)
+        assert not modifiers.casegen
+        assert not modifiers.randgen
+        assert modifiers.randgen.name is None
+        assert modifiers.randgen.percentage == 50
+        assert not modifiers.randgen.opposite
+
+        annotation = {'role': 'role', 'group': 'group'}
+        builder.slot_rolegroup = annotation
+        unit_ref = builder.create_concrete()
+        assert isinstance(unit_ref, SlotRoleGroupReference)
+        assert not unit_ref._leading_space
+        assert unit_ref._unit_type == UnitType.slot
+        assert unit_ref._name == "id"
+        assert unit_ref._role == annotation['role']
+        assert unit_ref._group == annotation['group']
 
 class TestUnitDefBuilder(object):
     def test_creation(self):

@@ -157,7 +157,7 @@ class TestSystem(object):
         input_filenames = [
             "simplest.chatette", "only-words.chatette",
             "words-and-groups.chatette", "alias.chatette", "include.chatette",
-            "slot.chatette"
+            "slot.chatette", "slotrolegroup.chatette"
         ]
         for filename in input_filenames:
             file_path = os.path.join(input_dir_path, filename)

@@ -30,7 +30,7 @@ from chatette.units.word import Word
 from chatette.units.rule import Rule
 
 from chatette.parsing import \
-    ChoiceBuilder, UnitRefBuilder, \
+    ChoiceBuilder, UnitRefBuilder,\
     AliasDefBuilder, SlotDefBuilder, IntentDefBuilder
 
 
@@ -398,9 +398,15 @@ class Parser(object):
             elif (
                 token.type in \
                 (TerminalType.alias_ref_end,
-                 TerminalType.slot_ref_end,
                  TerminalType.intent_ref_end)
             ):
+                rule_contents.append(current_builder.create_concrete())
+                current_builder = None
+                leading_space = False
+            elif token.type == TerminalType.slot_ref_end:
+                # checking annotation after slot reference
+                rolegroup_annotation, i = self._check_for_annotations(tokens, i)
+                current_builder.slot_rolegroup = rolegroup_annotation
                 rule_contents.append(current_builder.create_concrete())
                 current_builder = None
                 leading_space = False
@@ -505,3 +511,28 @@ class Parser(object):
         )
 
         return rules
+
+    def _check_for_annotations(self, tokens, i):
+        if (
+            i+1 == len(tokens)
+            or tokens[i+1].type != TerminalType.annotation_start
+        ):
+            return None, i
+        
+        annotation = {}
+        current_key = None
+        for j, token in enumerate(tokens[i+1:]):
+            if token.type == TerminalType.annotation_end:
+                i += j+1
+                break
+            elif token.type == TerminalType.key:
+                current_key = token.text
+            elif token.type == TerminalType.value:
+                if current_key in annotation:
+                    self.input_file_manager.syntax_error(
+                        "Annotation contained the key '" + current_key + \
+                        "' twice."
+                    )
+                annotation[current_key] = token.text
+        
+        return annotation, i

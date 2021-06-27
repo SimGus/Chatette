@@ -33,5 +33,6 @@ setup(
         "enum-compat",
         "future",
         "six",
+        "ruamel.yaml",
     ]
 )
