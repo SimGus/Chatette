@@ -1,11 +1,10 @@
 import os
 import io
-from collections import OrderedDict
 import ruamel.yaml as yaml
 from ruamel.yaml.scalarstring import DoubleQuotedScalarString
 from ruamel.yaml.error import YAMLError
 from ruamel.yaml.constructor import DuplicateKeyError
-
+from ruamel.yaml.comments import CommentedMap as OrderedDict
 from chatette.adapters._base import Adapter
 from chatette.utils import append_to_list_in_dict, cast_to_unicode
 
